@@ -31,6 +31,11 @@
 		CD4214722C649FC500F7C3AE /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = CD4214712C649FC500F7C3AE /* Kingfisher */; };
 		CD4214742C64A35400F7C3AE /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4214732C64A35400F7C3AE /* UIImage+Extension.swift */; };
 		CD4214762C64A63D00F7C3AE /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4214752C64A63D00F7C3AE /* UIViewController+Extension.swift */; };
+		CD6662122C678FF7005E2887 /* HomeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6662112C678FF7005E2887 /* HomeModel.swift */; };
+		CD6662142C678FFD005E2887 /* CompetitionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6662132C678FFD005E2887 /* CompetitionModel.swift */; };
+		CD6662162C679007005E2887 /* RecordModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6662152C679007005E2887 /* RecordModel.swift */; };
+		CD6662182C67900B005E2887 /* DeviceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6662172C67900B005E2887 /* DeviceModel.swift */; };
+		CD66621A2C679010005E2887 /* MyPageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6662192C679010005E2887 /* MyPageModel.swift */; };
 		CDC0C1D62C65FD6A00349DC4 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = CDC0C1D52C65FD6A00349DC4 /* FirebaseAuth */; };
 		CDC0C1D82C65FD6A00349DC4 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = CDC0C1D72C65FD6A00349DC4 /* FirebaseFirestore */; };
 		CDC0C1DA2C65FD6A00349DC4 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = CDC0C1D92C65FD6A00349DC4 /* FirebaseStorage */; };
@@ -63,6 +68,11 @@
 		CD4214682C649F3600F7C3AE /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
 		CD4214732C64A35400F7C3AE /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		CD4214752C64A63D00F7C3AE /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		CD6662112C678FF7005E2887 /* HomeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeModel.swift; sourceTree = "<group>"; };
+		CD6662132C678FFD005E2887 /* CompetitionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionModel.swift; sourceTree = "<group>"; };
+		CD6662152C679007005E2887 /* RecordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordModel.swift; sourceTree = "<group>"; };
+		CD6662172C67900B005E2887 /* DeviceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceModel.swift; sourceTree = "<group>"; };
+		CD6662192C679010005E2887 /* MyPageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageModel.swift; sourceTree = "<group>"; };
 		CDC0C1D32C65FB4300349DC4 /* RideThis.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RideThis.entitlements; sourceTree = "<group>"; };
 		CDC0C1DB2C66056F00349DC4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CDC0C1DD2C664E7400349DC4 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
@@ -123,6 +133,7 @@
 		CD4213D62C64988B00F7C3AE /* Competition */ = {
 			isa = PBXGroup;
 			children = (
+				CD6662132C678FFD005E2887 /* CompetitionModel.swift */,
 			);
 			path = Competition;
 			sourceTree = "<group>";
@@ -130,6 +141,7 @@
 		CD4213D72C64988B00F7C3AE /* Device */ = {
 			isa = PBXGroup;
 			children = (
+				CD6662172C67900B005E2887 /* DeviceModel.swift */,
 			);
 			path = Device;
 			sourceTree = "<group>";
@@ -137,6 +149,7 @@
 		CD4213D82C64988B00F7C3AE /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				CD6662112C678FF7005E2887 /* HomeModel.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -144,6 +157,7 @@
 		CD4213D92C64988B00F7C3AE /* MyPage */ = {
 			isa = PBXGroup;
 			children = (
+				CD6662192C679010005E2887 /* MyPageModel.swift */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -151,6 +165,7 @@
 		CD4213DA2C64988B00F7C3AE /* Record */ = {
 			isa = PBXGroup;
 			children = (
+				CD6662152C679007005E2887 /* RecordModel.swift */,
 			);
 			path = Record;
 			sourceTree = "<group>";
@@ -430,14 +445,17 @@
 			files = (
 				CD42145E2C64998800F7C3AE /* CompetitionViewModel.swift in Sources */,
 				CD4214672C649D7800F7C3AE /* SplashView.swift in Sources */,
+				CD6662122C678FF7005E2887 /* HomeModel.swift in Sources */,
 				CD4214652C649D0100F7C3AE /* FirebaseService.swift in Sources */,
 				CD4214742C64A35400F7C3AE /* UIImage+Extension.swift in Sources */,
+				CD6662142C678FFD005E2887 /* CompetitionModel.swift in Sources */,
 				CD4214522C64990D00F7C3AE /* UILabel+Extension.swift in Sources */,
 				CD42145C2C64998200F7C3AE /* DeviceViewModel.swift in Sources */,
 				CD4214102C64988C00F7C3AE /* CompetitionView.swift in Sources */,
 				CD4213C32C64982000F7C3AE /* AppDelegate.swift in Sources */,
 				CD4214762C64A63D00F7C3AE /* UIViewController+Extension.swift in Sources */,
 				CD4214562C64994F00F7C3AE /* RecordViewModel.swift in Sources */,
+				CD6662182C67900B005E2887 /* DeviceModel.swift in Sources */,
 				CD4214582C64996700F7C3AE /* MyPageViewModel.swift in Sources */,
 				CD4214542C64991500F7C3AE /* UIColor+Extension.swift in Sources */,
 				CD4214692C649F3600F7C3AE /* UIFont+Extension.swift in Sources */,
@@ -445,7 +463,9 @@
 				CD42145A2C64997100F7C3AE /* HomeViewModel.swift in Sources */,
 				CD4214142C64988C00F7C3AE /* RecordView.swift in Sources */,
 				CD4214122C64988C00F7C3AE /* HomeView.swift in Sources */,
+				CD66621A2C679010005E2887 /* MyPageModel.swift in Sources */,
 				CD4213C52C64982000F7C3AE /* SceneDelegate.swift in Sources */,
+				CD6662162C679007005E2887 /* RecordModel.swift in Sources */,
 				CDC0C1DE2C664E7400349DC4 /* UIView+Extension.swift in Sources */,
 				CD4214132C64988C00F7C3AE /* MyPageView.swift in Sources */,
 				CDC0C1E02C664FFE00349DC4 /* UIButton+Extension.swift in Sources */,
