@@ -5,6 +5,10 @@
 ## User settings
 xcuserdata/
 
+*.DS_Store
+*.plist
+*.xcworkspacedata
+
 ## Obj-C/Swift specific
 *.hmap
 
