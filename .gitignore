@@ -6,7 +6,7 @@
 xcuserdata/
 
 *.DS_Store
-*.plist
+GoogleService-Info.plist
 *.xcworkspacedata
 
 ## Obj-C/Swift specific
