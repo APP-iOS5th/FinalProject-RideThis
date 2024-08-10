@@ -45,3 +45,22 @@ class RideThisSeparator: UIView {
         self.heightAnchor.constraint(equalToConstant: 1).isActive = true
     }
 }
+
+class CustomSeparator: UIView {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        configureSeperator()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        configureSeperator()
+    }
+    
+    func configureSeperator() {
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        self.layer.borderWidth = 1
+        self.layer.borderColor = UIColor.lightGray.cgColor
+    }
+}
