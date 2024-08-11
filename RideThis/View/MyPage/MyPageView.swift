@@ -4,7 +4,7 @@ import SnapKit
 // 마이페이지 초기 화면
 class MyPageView: RideThisViewController {
     
-    // UIComponents
+    // MARK: UIComponents
     private let scrollView: UIScrollView = {
         let scroll = UIScrollView()
         scroll.translatesAutoresizingMaskIntoConstraints = false
@@ -20,7 +20,7 @@ class MyPageView: RideThisViewController {
         return content
     }()
     
-    // Profile
+    // MARK: Profile
     private let profileContainer = RideThisContainer(height: 100)
     private lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
@@ -39,7 +39,7 @@ class MyPageView: RideThisViewController {
     private let followingCountLabel = RideThisLabel(fontType: .profileFont, text: "35")
     private let notLoginLabel = RideThisLabel(fontType: .recordInfoTitle, text: "로그인이 필요합니다.")
     
-    // User Info
+    // MARK: User Info
     private let userInfoLabel = RideThisLabel(fontType: .profileFont, text: "정보")
     private lazy var profileEditButton: UIButton = {
         let btn = UIButton()
@@ -61,6 +61,32 @@ class MyPageView: RideThisViewController {
     private let userHeight = RideThisLabel(text: "168")
     private let userWeight = RideThisLabel(text: "70")
     
+    // MARK: Total Record
+    private let totalRecordLabel = RideThisLabel(text: "With. RideThis")
+    private let totalRecordContainer = RideThisContainer(height: 100)
+    private let totalRunCount = RideThisLabel(fontColor: .recordTitleColor, text: "총 달린 횟수")
+    private let totalRunCountSeparator = RideThisSeparator()
+    private let totalRunCountData = RideThisLabel(fontType: .classification, text: "20회")
+    private let totalRunTime = RideThisLabel(fontColor: .recordTitleColor, text: "총 달린 시간")
+    private let totalRunTimeSeparator = RideThisSeparator()
+    private let totalRunTimeData = RideThisLabel(fontType: .classification, text: "2시간 15분")
+    private let totalRunDistance = RideThisLabel(fontColor: .recordTitleColor, text: "총 달린 거리")
+    private let totalRunDistanceSeparator = RideThisSeparator()
+    private let totalRunDistanceData = RideThisLabel(fontType: .classification, text: "300km")
+    
+    // MARK: Record By Period
+    private let recordByPeriodLabel = RideThisLabel(text: "기간별 기록")
+    private lazy var recordByPeriodDetailButton: UIButton = {
+        let btn = UIButton()
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.setTitle("자세히 보기", for: .normal)
+        btn.setTitleColor(.systemBlue, for: .normal)
+        btn.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+        btn.contentVerticalAlignment = .top
+        
+        return btn
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -78,6 +104,8 @@ class MyPageView: RideThisViewController {
         setScrollView()
         setProfileView()
         setUserInfoView()
+        setTotalRecordView()
+        setRecordByPeriodView()
     }
     
     func setScrollView() {
@@ -181,7 +209,6 @@ class MyPageView: RideThisViewController {
             container.top.equalTo(self.userInfoLabel.snp.bottom).offset(8)
             container.left.equalTo(self.userInfoLabel.snp.left)
             container.right.equalTo(self.profileEditButton.snp.right)
-            container.bottom.equalTo(self.contentView.snp.bottom)
         }
         
         [self.firstSeparator, self.secondSeparator, self.userNickNameLabel,
@@ -236,6 +263,101 @@ class MyPageView: RideThisViewController {
             guard let self = self else { return }            
             label.top.equalTo(self.userWeightLabel.snp.top)
             label.left.equalTo(self.userNickName.snp.left)
+        }
+    }
+    
+    func setTotalRecordView() {
+        [self.totalRecordLabel, self.totalRecordContainer].forEach{ self.view.addSubview($0) }
+        
+        totalRecordLabel.snp.makeConstraints { [weak self] label in
+            guard let self = self else { return }
+            label.top.equalTo(self.userInfoContainer.snp.bottom).offset(20)
+            label.left.equalTo(self.userInfoLabel.snp.left)
+        }
+        
+        totalRecordContainer.snp.makeConstraints { [weak self] container in
+            guard let self = self else { return }
+            container.top.equalTo(self.totalRecordLabel.snp.bottom).offset(8)
+            container.left.equalTo(self.userInfoContainer.snp.left)
+            container.right.equalTo(self.userInfoContainer.snp.right)
+            container.bottom.equalTo(self.contentView.snp.bottom)
+        }
+        
+        [self.totalRunCount, self.totalRunCountSeparator, self.totalRunCountData,
+         self.totalRunTime, self.totalRunTimeSeparator, self.totalRunTimeData,
+         self.totalRunDistance, self.totalRunDistanceSeparator, self.totalRunDistanceData].forEach{ self.totalRecordContainer.addSubview($0) }
+        
+        self.totalRunCount.snp.makeConstraints { [weak self] label in
+            guard let self = self else { return }
+            label.top.equalTo(self.totalRecordContainer.snp.top).offset(20)
+            label.left.equalTo(self.totalRecordContainer.snp.left).offset(10)
+        }
+        
+        self.totalRunCountSeparator.snp.makeConstraints { [weak self] separator in
+            guard let self = self else { return }
+            separator.top.equalTo(self.totalRunCount.snp.bottom).offset(8)
+            separator.centerX.equalTo(self.totalRunCount.snp.centerX)
+            separator.width.equalTo(20)
+        }
+        
+        self.totalRunCountData.snp.makeConstraints { [weak self] label in
+            guard let self = self else { return }
+            label.top.equalTo(self.totalRunCountSeparator.snp.bottom).offset(8)
+            label.centerX.equalTo(self.totalRunCount.snp.centerX)
+        }
+        
+        self.totalRunTime.snp.makeConstraints { [weak self] label in
+            guard let self = self else { return }
+            label.top.equalTo(self.totalRunCount.snp.top)
+            label.centerX.equalTo(self.totalRecordContainer.snp.centerX)
+        }
+        
+        self.totalRunTimeSeparator.snp.makeConstraints { [weak self] separator in
+            guard let self = self else { return }
+            separator.top.equalTo(self.totalRunCountSeparator.snp.top)
+            separator.centerX.equalTo(self.totalRecordContainer.snp.centerX)
+            separator.width.equalTo(self.totalRunCountSeparator.snp.width)
+        }
+        
+        self.totalRunTimeData.snp.makeConstraints { [weak self] label in
+            guard let self = self else { return }
+            label.top.equalTo(self.totalRunCountData.snp.top)
+            label.centerX.equalTo(self.totalRecordContainer.snp.centerX)
+        }
+        
+        self.totalRunDistance.snp.makeConstraints { [weak self] label in
+            guard let self = self else { return }
+            label.top.equalTo(self.totalRunCount.snp.top)
+            label.right.equalTo(self.totalRecordContainer.snp.right).offset(-10)
+        }
+        
+        self.totalRunDistanceSeparator.snp.makeConstraints { [weak self] separator in
+            guard let self = self else { return }
+            separator.top.equalTo(self.totalRunCountSeparator.snp.top)
+            separator.centerX.equalTo(self.totalRunDistance.snp.centerX)
+            separator.width.equalTo(20)
+        }
+        
+        self.totalRunDistanceData.snp.makeConstraints { [weak self] label in
+            guard let self = self else { return }
+            label.top.equalTo(self.totalRunCountData.snp.top)
+            label.centerX.equalTo(self.totalRunDistance.snp.centerX)
+        }
+    }
+    
+    func setRecordByPeriodView() {
+        [self.recordByPeriodLabel, self.recordByPeriodDetailButton].forEach{ self.view.addSubview($0) }
+        
+        self.recordByPeriodLabel.snp.makeConstraints { [weak self] label in
+            guard let self = self else { return }
+            label.top.equalTo(self.totalRecordContainer.snp.bottom).offset(20)
+            label.left.equalTo(self.totalRecordContainer.snp.left)
+        }
+        
+        self.recordByPeriodDetailButton.snp.makeConstraints { [weak self] button in
+            guard let self = self else { return }
+            button.centerY.equalTo(self.recordByPeriodLabel.snp.centerY)
+            button.right.equalTo(self.profileEditButton.snp.right)
         }
     }
     
