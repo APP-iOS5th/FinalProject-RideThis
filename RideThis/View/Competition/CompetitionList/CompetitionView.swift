@@ -14,17 +14,11 @@ class CompetitionView: RideThisViewController {
     
     // Segment(전체 순위, 팔로잉 순위)
     private lazy var segmentedControl: UISegmentedControl = {
-        let control = UISegmentedControl(items: self.viewModel.segmentStatus)
-        
-        // Segment의 글자 크기와 폰트 설정
-        let selectedFont = UIFont.systemFont(ofSize: 17, weight: .bold)
-        let normalFont = UIFont.systemFont(ofSize: 17, weight: .regular)
-        control.setTitleTextAttributes([NSAttributedString.Key.font: selectedFont], for: .selected)
-        control.setTitleTextAttributes([NSAttributedString.Key.font: normalFont], for: .normal)
+        let control = UISegmentedControl(items: RankingSegment.allCases.map { $0.rawValue })
+        control.setTitleTextAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17, weight: .bold)], for: .selected)
+        control.setTitleTextAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17, weight: .regular)], for: .normal)
         control.selectedSegmentIndex = 0
-        
         control.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
-        
         control.translatesAutoresizingMaskIntoConstraints = false
         return control
     }()
@@ -102,7 +96,6 @@ class CompetitionView: RideThisViewController {
     
     // MARK: setupUI
     private func setupUI() {
-        // self.view.backgroundColor = UIColor(named: "backgroundAsset")
         
         setupNavigationBar()
         setupLayout()
@@ -194,7 +187,7 @@ class CompetitionView: RideThisViewController {
     
     private func updateUI(for records: [RecordsMockData]) {
         let isLoggedIn = self.viewModel.isLogin
-        let isFollowingSegmentSelected = self.viewModel.selectedSegment == "팔로잉 순위"
+        let isFollowingSegmentSelected = self.viewModel.selectedSegment.rawValue == "팔로잉 순위"
         
         // isLoggedIn 명확하게 보기 위해 == false 사용
         if isLoggedIn == false && isFollowingSegmentSelected {
@@ -220,9 +213,9 @@ class CompetitionView: RideThisViewController {
     private func setupDropdownMenu() {
         var menuItems: [UIAction] = []
         
-        for distance in viewModel.distanceSelection {
-            let action = UIAction(title: "\(distance)Km") { [weak self] action in
-                self?.dropdownButton.setTitle("\(distance)Km", for: .normal)
+        for distance in DistanceSelection.allCases {
+            let action = UIAction(title: "\(distance.rawValue)Km") { [weak self] action in
+                self?.dropdownButton.setTitle("\(distance.rawValue)Km", for: .normal)
                 self?.viewModel.selectedDistance(selected: distance)
             }
             menuItems.append(action)
@@ -235,9 +228,9 @@ class CompetitionView: RideThisViewController {
     
     // MARK: Segment Control Action
     @objc private func segmentChanged(_ sender: UISegmentedControl) {
-        let selectedIndex = sender.selectedSegmentIndex
-        let selectedTitle = self.viewModel.segmentStatus[selectedIndex]
-        self.viewModel.selectedSegment(selected: selectedTitle)
+        if let selectedStatus = RankingSegment(rawValue: sender.titleForSegment(at: sender.selectedSegmentIndex) ?? "") {
+            self.viewModel.selectedSegment(selected: selectedStatus)
+        }
     }
     
     // MARK: Button Action

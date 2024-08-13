@@ -12,6 +12,7 @@
 		04E3C0CF2C6B32B8006B844F /* CompetitionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0CE2C6B32B8006B844F /* CompetitionCoordinator.swift */; };
 		04E3C0D32C6B37F7006B844F /* DistancSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0D22C6B37F7006B844F /* DistancSelectionViewController.swift */; };
 		04E3C0D52C6B3818006B844F /* DistanceSelectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0D42C6B3818006B844F /* DistanceSelectionCoordinator.swift */; };
+		04E3C0D72C6B8C30006B844F /* DistanceSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0D62C6B8C30006B844F /* DistanceSelectionViewModel.swift */; };
 		CD4213C32C64982000F7C3AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4213C22C64982000F7C3AE /* AppDelegate.swift */; };
 		CD4213C52C64982000F7C3AE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4213C42C64982000F7C3AE /* SceneDelegate.swift */; };
 		CD4213CC2C64982200F7C3AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD4213CB2C64982200F7C3AE /* Assets.xcassets */; };
@@ -54,6 +55,7 @@
 		04E3C0CE2C6B32B8006B844F /* CompetitionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionCoordinator.swift; sourceTree = "<group>"; };
 		04E3C0D22C6B37F7006B844F /* DistancSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistancSelectionViewController.swift; sourceTree = "<group>"; };
 		04E3C0D42C6B3818006B844F /* DistanceSelectionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceSelectionCoordinator.swift; sourceTree = "<group>"; };
+		04E3C0D62C6B8C30006B844F /* DistanceSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceSelectionViewModel.swift; sourceTree = "<group>"; };
 		CD4213BF2C64982000F7C3AE /* RideThis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RideThis.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD4213C22C64982000F7C3AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CD4213C42C64982000F7C3AE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -236,6 +238,7 @@
 			isa = PBXGroup;
 			children = (
 				CD42145D2C64998800F7C3AE /* CompetitionViewModel.swift */,
+				04E3C0D62C6B8C30006B844F /* DistanceSelectionViewModel.swift */,
 			);
 			path = Competition;
 			sourceTree = "<group>";
@@ -504,6 +507,7 @@
 				CD4214582C64996700F7C3AE /* MyPageViewModel.swift in Sources */,
 				CD4214542C64991500F7C3AE /* UIColor+Extension.swift in Sources */,
 				CD4214692C649F3600F7C3AE /* UIFont+Extension.swift in Sources */,
+				04E3C0D72C6B8C30006B844F /* DistanceSelectionViewModel.swift in Sources */,
 				CD4214112C64988C00F7C3AE /* DeviceView.swift in Sources */,
 				CD42145A2C64997100F7C3AE /* HomeViewModel.swift in Sources */,
 				CD4214142C64988C00F7C3AE /* RecordView.swift in Sources */,
