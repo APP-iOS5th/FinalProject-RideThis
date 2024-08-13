@@ -42,4 +42,22 @@ class RecordViewModel {
         // 2. 레이블 정지->시작 변경
         // 3. reset, finish 버튼은 계속 활성화된 상태
     }
+    
+    // MARK: - 기록 요약 화면 버튼 동작
+    // TODO: - 버튼 동작 구현
+    func cancelSaveRecording() {
+        print("save cancel pushed")
+        // 기록 요약 화면에서 취소 버튼 누르면
+        // 1. 이전 화면(기록 화면)으로 이동
+        // 2. 기록은 저장되지 않음
+    }
+    
+    func saveRecording() {
+        print("save")
+        // 기록 요약 화면에서 저장 버튼 누르면
+        // 1. 팝업 노출
+        // 1-1. 미로그인 시 로그인 안내 문구
+        // 1-2. 로그인 시 기록 저장 안내 문구
+        // 2. 취소 누르면 
+    }
 }

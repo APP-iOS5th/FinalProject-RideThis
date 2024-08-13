@@ -9,6 +9,8 @@ import UIKit
 import SnapKit
 
 class RecordSumUpView: RideThisViewController {
+    let viewModel = RecordViewModel()
+    
     // 컨테이너 선언
     let timerContainer = RideThisContainer()
     let cadenceContainer = RideThisContainer()
@@ -83,9 +85,13 @@ class RecordSumUpView: RideThisViewController {
         self.view.addSubview(saveButton)
         cancelButton.backgroundColor = .black
         
-        // TODO: - 버튼 액션 추가
+        cancelButton.addAction(UIAction { [weak self] _ in
+            self?.viewModel.cancelSaveRecording()
+        }, for: .touchUpInside)
+        saveButton.addAction(UIAction { [weak self] _ in
+            self?.viewModel.saveRecording()
+        }, for: .touchUpInside)
         
-        // MARK: - 제약조건 추가
         timerContainer.snp.makeConstraints { [weak self] cont in
             guard let self = self else { return }
             cont.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
