@@ -4,6 +4,8 @@ import SnapKit
 // 기록 탭 초기 화면
 class RecordView: RideThisViewController {
     // MARK: - 컴포넌트 선언부
+    let viewModel = RecordViewModel()
+    
     // 컨테이너 선언
     let timerContainer = RideThisContainer()
     let cadenceContainer = RideThisContainer()
@@ -53,9 +55,28 @@ class RecordView: RideThisViewController {
         finishButton.backgroundColor = .systemGray
         resetButton.isEnabled = false
         finishButton.isEnabled = false
-        // TODO: - 버튼 액션 추가
+        
+        // 버튼 액션
+        resetButton.addAction(UIAction { [weak self] _ in
+            self?.viewModel.resetRecording()
+        }, for: .touchUpInside)
+        
+        // TODO: - 클릭 시 버튼이 눌리는 모션이 보이지 않음(확인 필요)
+        // 커스텀이라 그런가
+        recordButton.addAction(UIAction { [weak self] _ in
+            // TODO: - 시작/정지 상태 처리
+            // 기록 시작 전일 때
+            self?.viewModel.startRecording()
+            // 기록 중일 때
+            self?.viewModel.pauseRecording()
+        }, for: .touchUpInside)
+        
+        finishButton.addAction(UIAction { [weak self] _ in
+            self?.viewModel.finishRecording()
+        }, for: .touchUpInside)
         
         // MARK: - addSubview
+        // TODO: - 컨테이너(레이블, Separator 등) 분리
         // 컨테이너 추가
         self.view.addSubview(timerContainer)
         self.view.addSubview(cadenceContainer)
@@ -70,7 +91,7 @@ class RecordView: RideThisViewController {
         self.distanceContainer.addSubview(distanceLabel)
         self.calorieContainer.addSubview(calorieLabel)
         
-        // Seperator 추가
+        // Separator 추가
         self.timerContainer.addSubview(timerSeperator)
         self.cadenceContainer.addSubview(cadenceSeperator)
         self.speedContainer.addSubview(speedSeperator)
