@@ -1,10 +1,13 @@
 import UIKit
 import SnapKit
+import DGCharts
 
 // 마이페이지 초기 화면
 class MyPageView: RideThisViewController {
     
     // MARK: UIComponents
+    
+    // MARK: ScrollView
     private let scrollView: UIScrollView = {
         let scroll = UIScrollView()
         scroll.translatesAutoresizingMaskIntoConstraints = false
@@ -96,13 +99,40 @@ class MyPageView: RideThisViewController {
         
         return picker
     }()
+    private let dataLabel = RideThisLabel(fontType: .profileFont, text: "Cadence")
+    private lazy var graphCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.itemSize = itemSize
+        layout.minimumLineSpacing = itemSpacing
+        layout.minimumInteritemSpacing = 0
+        
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collection.translatesAutoresizingMaskIntoConstraints = false
+        collection.dataSource = self
+        collection.delegate = self
+        collection.register(GraphCollectionViewCell.self, forCellWithReuseIdentifier: "GraphCollectionViewCell")
+        collection.isScrollEnabled = true
+        collection.showsHorizontalScrollIndicator = false
+        collection.showsVerticalScrollIndicator = false
+        collection.backgroundColor = .clear
+        collection.clipsToBounds = true
+        collection.isPagingEnabled = false
+        collection.contentInsetAdjustmentBehavior = .never
+        collection.decelerationRate = .fast
+        
+        return collection
+    }()
     
-//    private let bottomView = RideThisContainer(height: 500)
+    // MARK: Data for UI
+    lazy var itemSize = CGSize(width: self.view.frame.width - 40, height: 400)
+    lazy var insetX: CGFloat = (self.view.frame.width - itemSize.width) / 2.0
+    lazy var collectionViewContentInset: UIEdgeInsets = UIEdgeInsets(top: 0, left: insetX, bottom: 0, right: insetX)
+    let itemSpacing = 24.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        setRideThisTitle(text: "마이페이지")
         self.title = "마이페이지"
         setNavigationComponents()
         setUIComponents()
@@ -267,7 +297,7 @@ class MyPageView: RideThisViewController {
     }
     
     func setTotalRecordView() {
-        [self.totalRecordLabel, self.totalRecordContainer].forEach{ self.view.addSubview($0) }
+        [self.totalRecordLabel, self.totalRecordContainer].forEach{ self.contentView.addSubview($0) }
         
         totalRecordLabel.snp.makeConstraints {
             $0.top.equalTo(self.userInfoContainer.snp.bottom).offset(20)
@@ -334,7 +364,8 @@ class MyPageView: RideThisViewController {
     }
     
     func setRecordByPeriodView() {
-        [self.recordByPeriodLabel, self.recordByPeriodDetailButton, self.recordByPeriodPicker].forEach{ self.view.addSubview($0) }
+        [self.recordByPeriodLabel, self.recordByPeriodDetailButton, self.recordByPeriodPicker,
+         self.dataLabel, self.graphCollectionView].forEach{ self.contentView.addSubview($0) }
         
         self.recordByPeriodLabel.snp.makeConstraints {
             $0.top.equalTo(self.totalRecordContainer.snp.bottom).offset(20)
@@ -350,6 +381,18 @@ class MyPageView: RideThisViewController {
             $0.top.equalTo(self.recordByPeriodLabel.snp.bottom).offset(8)
             $0.left.equalTo(self.totalRecordContainer.snp.left)
             $0.right.equalTo(self.totalRecordContainer.snp.right)
+        }
+        
+        self.dataLabel.snp.makeConstraints {
+            $0.top.equalTo(self.recordByPeriodPicker.snp.bottom).offset(8)
+            $0.left.equalTo(self.recordByPeriodPicker.snp.left)
+        }
+        
+        self.graphCollectionView.snp.makeConstraints {
+            $0.top.equalTo(self.dataLabel.snp.bottom).offset(8)
+            $0.left.equalTo(self.recordByPeriodPicker.snp.left)
+            $0.right.equalTo(self.recordByPeriodPicker.snp.right)
+            $0.height.equalTo(400)
             $0.bottom.equalTo(self.contentView.snp.bottom)
         }
     }
@@ -357,5 +400,45 @@ class MyPageView: RideThisViewController {
     @objc func settingButtonTapAction() {
         let settingView = SettingView()
         self.navigationController?.pushViewController(settingView, animated: true)
+    }
+}
+
+extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 4
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GraphCollectionViewCell", for: indexPath) as? GraphCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        
+        return cell
+    }
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let scrolledOffsetX = targetContentOffset.pointee.x + scrollView.contentInset.left
+        let cellWidth = itemSize.width + itemSpacing
+        let index = round(scrolledOffsetX / cellWidth)
+        targetContentOffset.pointee = CGPoint(x: index * cellWidth - scrollView.contentInset.left, y: scrollView.contentInset.top)
+        
+        let indexInt = Int(index)
+        var changeDataLabelText = ""
+        switch indexInt {
+        case 0:
+            changeDataLabelText = "Cadence"
+        case 1:
+            changeDataLabelText = "Distance"
+        case 2:
+            changeDataLabelText = "Speed"
+        case 3:
+            changeDataLabelText = "Calories"
+        default:
+            break
+        }
+        
+        DispatchQueue.main.async {
+            self.dataLabel.text = changeDataLabelText
+        }
     }
 }
