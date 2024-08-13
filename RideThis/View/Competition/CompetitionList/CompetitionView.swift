@@ -102,7 +102,7 @@ class CompetitionView: RideThisViewController {
     
     // MARK: setupUI
     private func setupUI() {
-        self.view.backgroundColor = UIColor(named: "backgroundAsset")
+        // self.view.backgroundColor = UIColor(named: "backgroundAsset")
         
         setupNavigationBar()
         setupLayout()
@@ -248,13 +248,16 @@ class CompetitionView: RideThisViewController {
             if self.viewModel.isLogin {
                 if self.viewModel.isBluetooth {
                     print("경쟁하기 뷰 이동~")
+
+                    let distanceSelectionVC = DistanceSelectionViewController()
+                    self.navigationController?.pushViewController(distanceSelectionVC, animated: true)
                 } else {
-                    showAlert("장치연결이 필요합니다.", "사용하시려면 장치를 연결해주세요.", confirm: "장치연결") {
+                    showAlert(alertTitle: "장치연결이 필요합니다.", msg: "사용하시려면 장치를 연결해주세요.", confirm: "장치연결") {
                         print("장치연결 뷰 이동~")
                     }
                 }
             } else {
-                showAlert("로그인이 필요합니다.", "경쟁하기는 로그인이 필요한 서비스입니다.", confirm: "로그인") {
+                showAlert(alertTitle: "로그인이 필요합니다.", msg: "경쟁하기는 로그인이 필요한 서비스입니다.", confirm: "로그인") {
                     print("로그인 뷰 이동~")
                 }
             }
@@ -264,26 +267,6 @@ class CompetitionView: RideThisViewController {
         loginButton.addAction(UIAction { [weak self] _ in
             print("로그인 뷰 이동")
         }, for: .touchUpInside)
-    }
-    
-    // MARK: Alert
-    private func showAlert(_ title: String, _ message: String, confirm: String, confirmAction: (() -> Void)?) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        
-        let confirmBtn = UIAlertAction(title: "확인", style: .default) { _ in
-            confirmAction?()
-        }
-        
-        let cancelBtn = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        
-        // 버튼들을 알림에 추가
-        alert.addAction(cancelBtn)
-        alert.addAction(confirmBtn)
-        
-        alert.view.accessibilityIdentifier = "withdrawAlert"
-        
-        // 알림 표시
-        self.present(alert, animated: true, completion: nil)
     }
 }
 

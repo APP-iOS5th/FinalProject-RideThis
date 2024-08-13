@@ -8,7 +8,7 @@ class CompetitionViewModel {
     var selectedSegment = "전체 순위"
     var selectedDistance = "5"
     
-    let isLogin = false
+    let isLogin = true
     
     let isBluetooth = false
     
