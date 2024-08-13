@@ -13,5 +13,6 @@ class GraphCollectionViewCell: UICollectionViewCell {
     
     func configureCell() {
         self.contentView.backgroundColor = .white
+        self.contentView.layer.cornerRadius = 13
     }
 }

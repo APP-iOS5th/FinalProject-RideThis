@@ -123,16 +123,46 @@ class MyPageView: RideThisViewController {
         
         return collection
     }()
+    private lazy var pagingIndicator: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .horizontal
+        stack.distribution = .fillEqually
+        stack.spacing = 8
+        stack.alignment = .center
+        stack.backgroundColor = .systemGray5
+        stack.layer.cornerRadius = 12.5
+        stack.isLayoutMarginsRelativeArrangement = true
+        stack.layoutMargins = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
+
+        for i in 0..<graphSectionCount {
+            let dotImage = UIImageView(image: UIImage(systemName: "circle.fill"))
+            dotImage.contentMode = .scaleAspectFit
+            dotImage.translatesAutoresizingMaskIntoConstraints = false
+            dotImage.widthAnchor.constraint(equalToConstant: 12).isActive = true
+            dotImage.heightAnchor.constraint(equalToConstant: 12).isActive = true
+
+            if i == 0 {
+                dotImage.tintColor = .primaryColor
+            } else {
+                dotImage.tintColor = .lightGray
+            }
+            
+            stack.addArrangedSubview(dotImage)
+        }
+        
+        return stack
+    }()
     
     // MARK: Data for UI
-    lazy var itemSize = CGSize(width: self.view.frame.width - 40, height: 400)
-    lazy var insetX: CGFloat = (self.view.frame.width - itemSize.width) / 2.0
-    lazy var collectionViewContentInset: UIEdgeInsets = UIEdgeInsets(top: 0, left: insetX, bottom: 0, right: insetX)
-    let itemSpacing = 24.0
+    let graphSectionCount = 4
+    lazy var itemSize = CGSize(width: self.view.frame.width - 65, height: 400)
+    let itemSpacing = 15.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print(self.view.frame.width)
         self.title = "마이페이지"
         setNavigationComponents()
         setUIComponents()
@@ -365,7 +395,7 @@ class MyPageView: RideThisViewController {
     
     func setRecordByPeriodView() {
         [self.recordByPeriodLabel, self.recordByPeriodDetailButton, self.recordByPeriodPicker,
-         self.dataLabel, self.graphCollectionView].forEach{ self.contentView.addSubview($0) }
+         self.dataLabel, self.graphCollectionView, self.pagingIndicator].forEach{ self.contentView.addSubview($0) }
         
         self.recordByPeriodLabel.snp.makeConstraints {
             $0.top.equalTo(self.totalRecordContainer.snp.bottom).offset(20)
@@ -393,6 +423,11 @@ class MyPageView: RideThisViewController {
             $0.left.equalTo(self.recordByPeriodPicker.snp.left)
             $0.right.equalTo(self.recordByPeriodPicker.snp.right)
             $0.height.equalTo(400)
+        }
+        
+        self.pagingIndicator.snp.makeConstraints {
+            $0.top.equalTo(self.graphCollectionView.snp.bottom).offset(8)
+            $0.centerX.equalTo(self.graphCollectionView.snp.centerX)
             $0.bottom.equalTo(self.contentView.snp.bottom)
         }
     }
@@ -405,7 +440,7 @@ class MyPageView: RideThisViewController {
 
 extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 4
+        return graphSectionCount
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -439,6 +474,14 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
         
         DispatchQueue.main.async {
             self.dataLabel.text = changeDataLabelText
+            for (index, subView) in self.pagingIndicator.subviews.enumerated() {
+                guard let page = subView as? UIImageView else { continue }
+                if index == indexInt {
+                    page.tintColor = .primaryColor
+                } else {
+                    page.tintColor = .lightGray
+                }
+            }
         }
     }
 }
