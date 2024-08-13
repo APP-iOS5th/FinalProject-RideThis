@@ -8,16 +8,20 @@
 import Foundation
 import Combine
 
-class DistanceSlectionViewModel {
-     let distanceSelection = ["5", "10", "30", "100"]
-    
-    @Published var distance: String
-    
-    init(distance: String) {
-        self.distance = distance
-    }
-    
-    func chooseDistonace(distance: String) {
+//enum startDistanceGame: String, CaseIterable {
+//    case fiveKm = "5"
+//    case tenKm = "10"
+//    case thirtyKm = "30"
+//    case hundredKm = "100"
+//}
+
+class DistanceSelectionViewModel {
+    @Published var distance: String = ""
+        
+
+
+    // MARK: Choose Distnace
+    func chooseDistance(distance: String) {
         self.distance = distance
     }
 }

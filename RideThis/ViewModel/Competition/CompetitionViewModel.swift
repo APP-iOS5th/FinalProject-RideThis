@@ -26,16 +26,19 @@ class CompetitionViewModel {
         updateRecords()
     }
     
+    // MARK: Selected Ranking Segment
     func selectedSegment(selected: RankingSegment) {
         selectedSegment = selected
         updateRecords()
     }
     
+    // MARK: Selected Distance
     func selectedDistance(selected: DistanceSelection) {
         selectedDistance = selected
         updateRecords()
     }
     
+    // MARK: Update Records
     private func updateRecords() {
         guard let targetDistance = Int(selectedDistance.rawValue) else {
             records = []
@@ -61,6 +64,7 @@ class CompetitionViewModel {
         }
     }
     
+    // MARK: Change String Time
     private func timeInterval(from timerString: String) -> TimeInterval {
         let components = timerString.split(separator: ":").map { String($0) }
         guard components.count == 2,
