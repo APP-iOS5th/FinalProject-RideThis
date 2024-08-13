@@ -47,7 +47,7 @@ class RecordView: RideThisViewController {
         // 대형 타이틀 활성화
         // TODO: - UI 맞춰서 수정할 것
         self.navigationController?.navigationBar.prefersLargeTitles = true
-        self.navigationItem.largeTitleDisplayMode = .automatic
+        self.navigationItem.largeTitleDisplayMode = .inline
         self.navigationItem.title = "기록"
         
         // 버튼 상태 설정
@@ -114,7 +114,7 @@ class RecordView: RideThisViewController {
         // 컨테이너 제약조건
         timerContainer.snp.makeConstraints { [weak self] cont in
             guard let self = self else { return }
-            cont.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+            cont.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(40)
             cont.height.equalTo(150)
             cont.left.equalTo(self.view.safeAreaLayoutGuide.snp.left).offset(20)
             cont.right.equalTo(self.view.safeAreaLayoutGuide.snp.right).offset(-20)
@@ -251,18 +251,18 @@ class RecordView: RideThisViewController {
         }
         
         // 버튼 제약조건
+        recordButton.snp.makeConstraints { [weak self] btn in
+            guard let self = self else { return }
+            btn.top.equalTo(distanceContainer.snp.bottom).offset(90)
+            btn.centerX.equalTo(self.view.snp.centerX)
+            btn.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing).multipliedBy(0.66)
+        }
+        
         resetButton.snp.makeConstraints { [weak self] btn in
             guard let self = self else { return }
             btn.top.equalTo(distanceContainer.snp.bottom).offset(90)
             btn.left.equalTo(self.view.safeAreaLayoutGuide.snp.left).offset(20)
-            btn.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing).multipliedBy(0.3)
-        }
-        
-        recordButton.snp.makeConstraints { [weak self] btn in
-            guard let self = self else { return }
-            btn.top.equalTo(distanceContainer.snp.bottom).offset(90)
-            btn.left.equalTo(resetButton.snp.right).offset(15)
-            btn.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing).multipliedBy(0.66)
+            btn.right.equalTo(recordButton.snp.left).offset(-15)
         }
         
         finishButton.snp.makeConstraints { [weak self] btn in
