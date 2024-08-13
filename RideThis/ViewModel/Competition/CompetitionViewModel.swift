@@ -10,6 +10,8 @@ class CompetitionViewModel {
     
     let isLogin = false
     
+    let isBluetooth = false
+    
     @Published var records: [RecordsMockData] = []
     
     init() {
