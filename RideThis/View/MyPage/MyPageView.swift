@@ -94,8 +94,7 @@ class MyPageView: RideThisViewController {
         let picker = UISegmentedControl(items: self.periodOptions)
         picker.translatesAutoresizingMaskIntoConstraints = false
         picker.selectedSegmentIndex = 0
-        // MARK: TODO - picker의 선택된 기간에 따라 그래프 변경 로직 추가
-        // segmentedControl.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
+        picker.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
         
         return picker
     }()
@@ -153,6 +152,11 @@ class MyPageView: RideThisViewController {
         
         return stack
     }()
+    private let selectedPeriodTotalRecordContainer = RideThisContainer(height: 150)
+    private let selectedPeriodTitle = RideThisLabel(fontType: .recordInfoTitle, text: "Cadence")
+    private let selectedPeriodSeparator = RideThisSeparator()
+    private let selectedPeriodData = RideThisLabel(fontType: .title)
+    private var selectedPeriodDataUnit = ShowingData.cadence.unit
     
     // MARK: Data for UI
     let graphSectionCount = 4
@@ -162,7 +166,6 @@ class MyPageView: RideThisViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print(self.view.frame.width)
         self.title = "마이페이지"
         setNavigationComponents()
         setUIComponents()
@@ -395,7 +398,7 @@ class MyPageView: RideThisViewController {
     
     func setRecordByPeriodView() {
         [self.recordByPeriodLabel, self.recordByPeriodDetailButton, self.recordByPeriodPicker,
-         self.dataLabel, self.graphCollectionView, self.pagingIndicator].forEach{ self.contentView.addSubview($0) }
+         self.dataLabel, self.graphCollectionView, self.pagingIndicator, self.selectedPeriodTotalRecordContainer].forEach{ self.contentView.addSubview($0) }
         
         self.recordByPeriodLabel.snp.makeConstraints {
             $0.top.equalTo(self.totalRecordContainer.snp.bottom).offset(20)
@@ -428,13 +431,43 @@ class MyPageView: RideThisViewController {
         self.pagingIndicator.snp.makeConstraints {
             $0.top.equalTo(self.graphCollectionView.snp.bottom).offset(8)
             $0.centerX.equalTo(self.graphCollectionView.snp.centerX)
-            $0.bottom.equalTo(self.contentView.snp.bottom)
+        }
+        
+        self.selectedPeriodTotalRecordContainer.snp.makeConstraints {
+            $0.top.equalTo(self.pagingIndicator.snp.bottom).offset(8)
+            $0.left.equalTo(self.graphCollectionView.snp.left)
+            $0.right.equalTo(self.graphCollectionView.snp.right)
+            $0.bottom.equalTo(self.contentView.snp.bottom).offset(-20)
+        }
+        
+        [self.selectedPeriodTitle, self.selectedPeriodSeparator, self.selectedPeriodData].forEach{ self.selectedPeriodTotalRecordContainer.addSubview($0) }
+        
+        self.selectedPeriodTitle.snp.makeConstraints {
+            $0.top.equalTo(self.selectedPeriodTotalRecordContainer.snp.top).offset(15)
+            $0.centerX.equalTo(self.selectedPeriodTotalRecordContainer.snp.centerX)
+        }
+        
+        self.selectedPeriodSeparator.snp.makeConstraints {
+            $0.top.equalTo(self.selectedPeriodTitle.snp.bottom).offset(12)
+            $0.centerX.equalTo(self.selectedPeriodTitle.snp.centerX)
+            $0.width.equalTo(20)
+        }
+        
+        self.selectedPeriodData.snp.makeConstraints {
+            $0.top.equalTo(self.selectedPeriodSeparator.snp.bottom).offset(15)
+            $0.centerX.equalTo(self.selectedPeriodTitle.snp.centerX)
+            
+            selectedPeriodData.text = "121.23\(selectedPeriodDataUnit)"
         }
     }
     
     @objc func settingButtonTapAction() {
         let settingView = SettingView()
         self.navigationController?.pushViewController(settingView, animated: true)
+    }
+    
+    @objc func segmentChanged(_ sender: UISegmentedControl) {
+        // MARK: TODO - picker의 선택된 기간에 따라 그래프 변경 로직 추가
     }
 }
 
@@ -458,22 +491,25 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
         targetContentOffset.pointee = CGPoint(x: index * cellWidth - scrollView.contentInset.left, y: scrollView.contentInset.top)
         
         let indexInt = Int(index)
-        var changeDataLabelText = ""
+        var changeDataLabel: ShowingData = .cadence
         switch indexInt {
         case 0:
-            changeDataLabelText = "Cadence"
+            changeDataLabel = .cadence
         case 1:
-            changeDataLabelText = "Distance"
+            changeDataLabel = .distance
         case 2:
-            changeDataLabelText = "Speed"
+            changeDataLabel = .speed
         case 3:
-            changeDataLabelText = "Calories"
+            changeDataLabel = .calories
         default:
             break
         }
+        self.selectedPeriodDataUnit = changeDataLabel.unit
         
         DispatchQueue.main.async {
-            self.dataLabel.text = changeDataLabelText
+            self.dataLabel.text = changeDataLabel.rawValue
+            self.selectedPeriodTitle.text = changeDataLabel.rawValue
+            self.selectedPeriodData.text = "121.23\(self.selectedPeriodDataUnit)"
             for (index, subView) in self.pagingIndicator.subviews.enumerated() {
                 guard let page = subView as? UIImageView else { continue }
                 if index == indexInt {
