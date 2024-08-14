@@ -166,7 +166,7 @@ class DistanceSelectionViewController: RideThisViewController, CountViewControll
     // MARK: CountViewController Delegate
     func countdownFinish() {
         dismiss(animated: true) {
-            let startCompetitionVC = StartCompetitionViewController()
+            let startCompetitionVC = StartCompetitionViewController(goalDistance: self.viewModel.distance)
             self.navigationController?.pushViewController(startCompetitionVC, animated: true)
         }
     }
