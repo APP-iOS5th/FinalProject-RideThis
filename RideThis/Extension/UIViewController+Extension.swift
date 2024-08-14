@@ -11,10 +11,13 @@ class RideThisViewController: UIViewController {
 
 extension UIViewController {
     /// 쉽게 alert를 띄우기 위해 만든 함수 UIViewController를 상속한 모든 화면에서 사용 가능하다.
-    func showAlert(alertTitle: String, msg: String) {
+    func showAlert(alertTitle: String, msg: String, confirm: String, confirmAction: (() -> Void)?) {
         let alertController = UIAlertController(title: alertTitle, message: msg, preferredStyle: .alert)
+        
         let cancelAction =  UIAlertAction(title: "취소", style: .cancel)
-        let confirmAction = UIAlertAction(title: "확인", style: .default)
+        let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
+                confirmAction?()
+        }
         
         alertController.addAction(confirmAction)
         alertController.addAction(cancelAction)
