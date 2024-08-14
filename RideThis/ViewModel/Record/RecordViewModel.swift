@@ -14,6 +14,9 @@ class RecordViewModel {
         }
     }
     
+    // 기록 종료 시 화면 전환을 위한 클로저
+    var onFinishRecording: (() -> Void)?
+    
     func startRecording() {
         // 기록 시작
         isRecording = true
@@ -33,7 +36,9 @@ class RecordViewModel {
         // 기록 종료 버튼
         isRecording = false
         print("finish pushed")
+        
         // 누르면 종료 전까지의 기록 저장 후 요약페이지 이동
+        onFinishRecording?()
     }
     
     func pauseRecording() {

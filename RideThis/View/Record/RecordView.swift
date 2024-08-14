@@ -65,6 +65,11 @@ class RecordView: RideThisViewController {
             self.updateUI(isRecording: isRecording)
         }
         
+        // 뷰 모델에서 기록 종료 트리거 처리
+        viewModel.onFinishRecording = { [weak self] in
+            self?.navigateToSummaryView()
+        }
+        
         self.view.addSubview(recordContainerView)
         self.view.addSubview(resetButton)
         self.view.addSubview(recordButton)
@@ -118,6 +123,12 @@ class RecordView: RideThisViewController {
             
             recordButton.setTitle("시작", for: .normal)
         }
+    }
+    
+    private func navigateToSummaryView() {
+        let summaryViewController = RecordSumUpView()
+        self.navigationController?.pushViewController(summaryViewController, animated: true) // 요약 화면으로 이동
+        // TODO: - 요약 페이지 뒤로가기 버튼 해결
     }
 }
 
