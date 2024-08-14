@@ -14,7 +14,7 @@
 		041A67342C6C519B000BA4C1 /* CountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A67332C6C519B000BA4C1 /* CountViewController.swift */; };
 		041A67362C6C6543000BA4C1 /* CountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A67352C6C6543000BA4C1 /* CountViewModel.swift */; };
 		041A67392C6C6B0E000BA4C1 /* StartCompetitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A67382C6C6B0E000BA4C1 /* StartCompetitionViewController.swift */; };
-		041A673C2C6CE802000BA4C1 /* RecordInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A673B2C6CE802000BA4C1 /* RecordInfo.swift */; };
+		041A673E2C6CF1E0000BA4C1 /* RecordContainer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A673D2C6CF1E0000BA4C1 /* RecordContainer+Extension.swift */; };
 		04937A832C69A7CF0099D3EE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04937A822C69A7CF0099D3EE /* GoogleService-Info.plist */; };
 		04E3C0C82C6AEE62006B844F /* CompetitionTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0C72C6AEE62006B844F /* CompetitionTVCell.swift */; };
 		04E3C0CF2C6B32B8006B844F /* CompetitionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0CE2C6B32B8006B844F /* CompetitionCoordinator.swift */; };
@@ -82,7 +82,7 @@
 		041A67332C6C519B000BA4C1 /* CountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountViewController.swift; sourceTree = "<group>"; };
 		041A67352C6C6543000BA4C1 /* CountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountViewModel.swift; sourceTree = "<group>"; };
 		041A67382C6C6B0E000BA4C1 /* StartCompetitionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartCompetitionViewController.swift; sourceTree = "<group>"; };
-		041A673B2C6CE802000BA4C1 /* RecordInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordInfo.swift; sourceTree = "<group>"; };
+		041A673D2C6CF1E0000BA4C1 /* RecordContainer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecordContainer+Extension.swift"; sourceTree = "<group>"; };
 		04937A822C69A7CF0099D3EE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		04E3C0C72C6AEE62006B844F /* CompetitionTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionTVCell.swift; sourceTree = "<group>"; };
 		04E3C0CE2C6B32B8006B844F /* CompetitionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionCoordinator.swift; sourceTree = "<group>"; };
@@ -154,18 +154,9 @@
 		041A67372C6C6AF5000BA4C1 /* StartCompetition */ = {
 			isa = PBXGroup;
 			children = (
-				041A673A2C6CE7BF000BA4C1 /* Components */,
 				041A67382C6C6B0E000BA4C1 /* StartCompetitionViewController.swift */,
 			);
 			path = StartCompetition;
-			sourceTree = "<group>";
-		};
-		041A673A2C6CE7BF000BA4C1 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				041A673B2C6CE802000BA4C1 /* RecordInfo.swift */,
-			);
-			path = Components;
 			sourceTree = "<group>";
 		};
 		04E3C0C62C6AECE2006B844F /* Cell */ = {
@@ -454,6 +445,7 @@
 				CDC0C1DD2C664E7400349DC4 /* UIView+Extension.swift */,
 				CDC0C1DF2C664FFE00349DC4 /* UIButton+Extension.swift */,
 				041A672A2C6C400E000BA4C1 /* DistanceCase+Extension.swift */,
+				041A673D2C6CF1E0000BA4C1 /* RecordContainer+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -589,11 +581,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				041A673C2C6CE802000BA4C1 /* RecordInfo.swift in Sources */,
 				04E3C0D32C6B37F7006B844F /* DistancSelectionViewController.swift in Sources */,
 				CD42145E2C64998800F7C3AE /* CompetitionViewModel.swift in Sources */,
 				CD70006A2C6AF99F0071D4D2 /* GraphCollectionViewCell.swift in Sources */,
 				CD4214672C649D7800F7C3AE /* SplashView.swift in Sources */,
+				041A673E2C6CF1E0000BA4C1 /* RecordContainer+Extension.swift in Sources */,
 				CD6662122C678FF7005E2887 /* HomeModel.swift in Sources */,
 				CD4214652C649D0100F7C3AE /* FirebaseService.swift in Sources */,
 				CD4214742C64A35400F7C3AE /* UIImage+Extension.swift in Sources */,

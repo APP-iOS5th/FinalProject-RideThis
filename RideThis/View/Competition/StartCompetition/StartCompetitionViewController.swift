@@ -5,7 +5,11 @@ class StartCompetitionViewController: RideThisViewController {
 
     var goalDistance: String
 
-    let recordContainerView = RecordContainerView()
+    private let timerRecord = RecordContainer(title: "Timer", recordText: "00:00")
+    private let cadenceRecord = RecordContainer(title: "Cadence", recordText: "0 RPM")
+    private let speedRecord = RecordContainer(title: "Speed", recordText: "0 km/h")
+    private let distanceRecord = RecordContainer(title: "Distance", recordText: "0 km")
+    private let calorieRecord = RecordContainer(title: "Calories", recordText: "0 kcal")
 
     private let giveUpBtn: UIButton = {
         let button = UIButton(type: .custom)
@@ -77,13 +81,20 @@ class StartCompetitionViewController: RideThisViewController {
 
         self.navigationItem.hidesBackButton = true
         self.bottomLabel.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        
+        //Test
+        timerRecord.updateRecordText(text: "120:11")
 
         setupLayout()
     }
 
     // MARK: SetupLayout
     private func setupLayout() {
-        self.view.addSubview(recordContainerView)
+        self.view.addSubview(timerRecord)
+        self.view.addSubview(cadenceRecord)
+        self.view.addSubview(speedRecord)
+        self.view.addSubview(distanceRecord)
+        self.view.addSubview(calorieRecord)
         self.view.addSubview(giveUpBtn)
         self.view.addSubview(blurView)
         self.blurView.contentView.addSubview(bottomLabel)
@@ -91,11 +102,40 @@ class StartCompetitionViewController: RideThisViewController {
         let safeArea = self.view.safeAreaLayoutGuide
         
 
-        recordContainerView.snp.makeConstraints { make in
-            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(50)
-            make.left.equalToSuperview()
-            make.right.equalToSuperview()
-            make.height.equalTo(400)
+
+        timerRecord.snp.makeConstraints { timer in
+            timer.top.equalToSuperview().offset(80)
+            timer.left.equalToSuperview().offset(20)
+            timer.right.equalToSuperview().offset(-20)
+            timer.height.equalTo(150)
+        }
+        
+        cadenceRecord.snp.makeConstraints { cadence in
+            cadence.top.equalTo(timerRecord.snp.bottom).offset(40)
+            cadence.left.equalToSuperview().offset(20)
+            cadence.width.equalToSuperview().multipliedBy(0.5).offset(-25)
+            cadence.height.equalTo(110)
+        }
+        
+        speedRecord.snp.makeConstraints { speed in
+            speed.top.equalTo(timerRecord.snp.bottom).offset(40)
+            speed.left.equalTo(cadenceRecord.snp.right).offset(10)
+            speed.right.equalToSuperview().offset(-20)
+            speed.height.equalTo(110)
+        }
+        
+        distanceRecord.snp.makeConstraints { distance in
+            distance.top.equalTo(cadenceRecord.snp.bottom).offset(15)
+            distance.left.equalToSuperview().offset(20)
+            distance.width.equalToSuperview().multipliedBy(0.5).offset(-25)
+            distance.height.equalTo(110)
+        }
+        
+        calorieRecord.snp.makeConstraints { calory in
+            calory.top.equalTo(speedRecord.snp.bottom).offset(15)
+            calory.left.equalTo(distanceRecord.snp.right).offset(10)
+            calory.right.equalToSuperview().offset(-20)
+            calory.height.equalTo(110)
         }
 
         giveUpBtn.snp.makeConstraints { btn in
