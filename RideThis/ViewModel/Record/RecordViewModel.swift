@@ -3,8 +3,11 @@ import Foundation
 class RecordViewModel {
     // MARK: - 기록 화면 버튼 동작
     // TODO: - 버튼 동작 구현
+    var isRecording: Bool = false
+    
     func startRecording() {
         // 기록 시작
+        isRecording = true
         print("start pushed")
         // 기록 시작 전에 누르면
         // 1. 블루투스 연결 확인
@@ -16,6 +19,7 @@ class RecordViewModel {
     
     func resetRecording() {
         // reset 버튼
+        isRecording = false
         print("reset pushed")
         // 기록 시작 후 누르면
         // 1. 리셋 확인 팝업
@@ -26,6 +30,7 @@ class RecordViewModel {
     
     func finishRecording() {
         // 기록 종료 버튼
+        isRecording = false
         print("finish pushed")
         // 기록 시작 후 누르면
         // 1. 기록 종료 확인 팝업
@@ -36,6 +41,7 @@ class RecordViewModel {
     
     func pauseRecording() {
         // 기록 일시정지
+        isRecording = false
         print("pause pushed")
         // 기록 시작 후 정지로 레이블 변경된 버튼 누르면
         // 1. 별도 팝업 없이 기록 일시 정지
