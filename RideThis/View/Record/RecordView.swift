@@ -30,23 +30,40 @@ class RecordView: RideThisViewController {
         
         // 버튼 액션
         resetButton.addAction(UIAction { [weak self] _ in
-            self?.viewModel.resetRecording()
+            self?.showAlert(alertTitle: "기록을 리셋할까요?", msg: "지금까지의 기록이 초기화됩니다.", confirm: "리셋"
+            ) {
+                self?.viewModel.resetRecording()
+            }
         }, for: .touchUpInside)
         
         // TODO: - 클릭 시 버튼이 눌리는 모션이 보이지 않음(확인 필요)
         // 커스텀이라 그런가
         recordButton.addAction(UIAction { [weak self] _ in
-            // TODO: - 시작/정지 상태 처리
-            if self!.viewModel.isRecording {
-                self?.viewModel.pauseRecording()
+            guard let self = self else { return }
+            // TODO: - 최초 기록 시작일 때 카운트다운 추가
+            if self.viewModel.isRecording {
+                self.viewModel.pauseRecording()
+                resetButton.isEnabled = true
+                finishButton.isEnabled = true
+                resetButton.backgroundColor = .black
+                finishButton.backgroundColor = .black
             } else {
-                self?.viewModel.startRecording()
+                self.viewModel.startRecording()
             }
         }, for: .touchUpInside)
         
         finishButton.addAction(UIAction { [weak self] _ in
-            self?.viewModel.finishRecording()
+            self?.showAlert(alertTitle: "기록을 종료할까요?", msg: "요약 화면으로 이동합니다.", confirm: "기록 종료"
+            ) {
+                self?.viewModel.finishRecording()
+            }
         }, for: .touchUpInside)
+        
+        // ViewModel의 상태 변경 클로저 설정
+        viewModel.onRecordingStatusChanged = { [weak self] isRecording in
+            guard let self = self else { return }
+            self.updateUI(isRecording: isRecording)
+        }
         
         self.view.addSubview(recordContainerView)
         self.view.addSubview(resetButton)
@@ -81,6 +98,25 @@ class RecordView: RideThisViewController {
             btn.top.equalTo(recordContainerView.snp.bottom).offset(90)
             btn.left.equalTo(recordButton.snp.right).offset(15)
             btn.right.equalTo(self.view.safeAreaLayoutGuide.snp.right).offset(-20)
+        }
+    }
+    
+    // 버튼 UI 업데이트
+    private func updateUI(isRecording: Bool) {
+        if isRecording { // 기록중일 때
+            resetButton.isEnabled = true
+            finishButton.isEnabled = true
+            resetButton.backgroundColor = .black
+            finishButton.backgroundColor = .black
+            
+            recordButton.setTitle("정지", for: .normal)
+        } else { // 정지, 리셋, 종료 눌렸을 때
+            resetButton.isEnabled = false
+            finishButton.isEnabled = false
+            resetButton.backgroundColor = .systemGray
+            finishButton.backgroundColor = .systemGray
+            
+            recordButton.setTitle("시작", for: .normal)
         }
     }
 }

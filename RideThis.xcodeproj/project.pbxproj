@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CD0E1E852C6A409F0080CFED /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0E1E842C6A409F0080CFED /* SettingView.swift */; };
 		041A672B2C6C400E000BA4C1 /* DistanceCase+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A672A2C6C400E000BA4C1 /* DistanceCase+Extension.swift */; };
 		04937A832C69A7CF0099D3EE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04937A822C69A7CF0099D3EE /* GoogleService-Info.plist */; };
 		04E3C0C82C6AEE62006B844F /* CompetitionTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0C72C6AEE62006B844F /* CompetitionTVCell.swift */; };
@@ -15,6 +14,7 @@
 		04E3C0D32C6B37F7006B844F /* DistancSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0D22C6B37F7006B844F /* DistancSelectionViewController.swift */; };
 		04E3C0D52C6B3818006B844F /* DistanceSelectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0D42C6B3818006B844F /* DistanceSelectionCoordinator.swift */; };
 		04E3C0D72C6B8C30006B844F /* DistanceSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0D62C6B8C30006B844F /* DistanceSelectionViewModel.swift */; };
+		CD0E1E852C6A409F0080CFED /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0E1E842C6A409F0080CFED /* SettingView.swift */; };
 		CD4213C32C64982000F7C3AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4213C22C64982000F7C3AE /* AppDelegate.swift */; };
 		CD4213C52C64982000F7C3AE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4213C42C64982000F7C3AE /* SceneDelegate.swift */; };
 		CD4213CC2C64982200F7C3AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD4213CB2C64982200F7C3AE /* Assets.xcassets */; };
@@ -52,6 +52,9 @@
 		CDC0C1DE2C664E7400349DC4 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC0C1DD2C664E7400349DC4 /* UIView+Extension.swift */; };
 		CDC0C1E02C664FFE00349DC4 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC0C1DF2C664FFE00349DC4 /* UIButton+Extension.swift */; };
 		CDE25C6E2C6913B8008E2A80 /* EditProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE25C6D2C6913B8008E2A80 /* EditProfileInfoView.swift */; };
+		EB07B0BB2C6C79F20067BF0F /* RecordContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0B82C6C79F20067BF0F /* RecordContainerView.swift */; };
+		EB07B0BC2C6C79F20067BF0F /* RecordInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0B92C6C79F20067BF0F /* RecordInfoView.swift */; };
+		EB07B0BD2C6C79F20067BF0F /* RecordSumUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0BA2C6C79F20067BF0F /* RecordSumUpView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -68,7 +71,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		CD0E1E842C6A409F0080CFED /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		041A672A2C6C400E000BA4C1 /* DistanceCase+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DistanceCase+Extension.swift"; sourceTree = "<group>"; };
 		04937A822C69A7CF0099D3EE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		04E3C0C72C6AEE62006B844F /* CompetitionTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionTVCell.swift; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 		04E3C0D22C6B37F7006B844F /* DistancSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistancSelectionViewController.swift; sourceTree = "<group>"; };
 		04E3C0D42C6B3818006B844F /* DistanceSelectionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceSelectionCoordinator.swift; sourceTree = "<group>"; };
 		04E3C0D62C6B8C30006B844F /* DistanceSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceSelectionViewModel.swift; sourceTree = "<group>"; };
+		CD0E1E842C6A409F0080CFED /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		CD4213BF2C64982000F7C3AE /* RideThis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RideThis.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD4213C22C64982000F7C3AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CD4213C42C64982000F7C3AE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -109,6 +112,9 @@
 		CDC0C1DD2C664E7400349DC4 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		CDC0C1DF2C664FFE00349DC4 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		CDE25C6D2C6913B8008E2A80 /* EditProfileInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileInfoView.swift; sourceTree = "<group>"; };
+		EB07B0B82C6C79F20067BF0F /* RecordContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordContainerView.swift; sourceTree = "<group>"; };
+		EB07B0B92C6C79F20067BF0F /* RecordInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordInfoView.swift; sourceTree = "<group>"; };
+		EB07B0BA2C6C79F20067BF0F /* RecordSumUpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordSumUpView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,14 +135,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		CD0E1E832C6A40970080CFED /* Setting */ = {
-			isa = PBXGroup;
-			children = (
-				CD0E1E842C6A409F0080CFED /* SettingView.swift */,
-			);
-			path = Setting;
-			sourceTree = "<group>";
-		};
 		04E3C0C62C6AECE2006B844F /* Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -177,6 +175,14 @@
 				04E3C0D42C6B3818006B844F /* DistanceSelectionCoordinator.swift */,
 			);
 			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		CD0E1E832C6A40970080CFED /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				CD0E1E842C6A409F0080CFED /* SettingView.swift */,
+			);
+			path = Setting;
 			sourceTree = "<group>";
 		};
 		CD4213B62C64982000F7C3AE = {
@@ -364,6 +370,9 @@
 			children = (
 				CD4214632C649A1C00F7C3AE /* Coordinator */,
 				CD4213EA2C64988B00F7C3AE /* RecordView.swift */,
+				EB07B0B82C6C79F20067BF0F /* RecordContainerView.swift */,
+				EB07B0B92C6C79F20067BF0F /* RecordInfoView.swift */,
+				EB07B0BA2C6C79F20067BF0F /* RecordSumUpView.swift */,
 			);
 			path = Record;
 			sourceTree = "<group>";
@@ -544,6 +553,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB07B0BC2C6C79F20067BF0F /* RecordInfoView.swift in Sources */,
 				04E3C0D32C6B37F7006B844F /* DistancSelectionViewController.swift in Sources */,
 				CD42145E2C64998800F7C3AE /* CompetitionViewModel.swift in Sources */,
 				CD70006A2C6AF99F0071D4D2 /* GraphCollectionViewCell.swift in Sources */,
@@ -575,8 +585,10 @@
 				04E3C0D52C6B3818006B844F /* DistanceSelectionCoordinator.swift in Sources */,
 				CD6662162C679007005E2887 /* RecordModel.swift in Sources */,
 				CDC0C1DE2C664E7400349DC4 /* UIView+Extension.swift in Sources */,
+				EB07B0BD2C6C79F20067BF0F /* RecordSumUpView.swift in Sources */,
 				04E3C0C82C6AEE62006B844F /* CompetitionTVCell.swift in Sources */,
 				CD4214132C64988C00F7C3AE /* MyPageView.swift in Sources */,
+				EB07B0BB2C6C79F20067BF0F /* RecordContainerView.swift in Sources */,
 				CDE25C6E2C6913B8008E2A80 /* EditProfileInfoView.swift in Sources */,
 				CDC0C1E02C664FFE00349DC4 /* UIButton+Extension.swift in Sources */,
 			);
