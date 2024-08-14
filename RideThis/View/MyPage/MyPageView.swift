@@ -1,12 +1,10 @@
 import UIKit
 import SnapKit
-import DGCharts
 
 // 마이페이지 초기 화면
 class MyPageView: RideThisViewController {
     
     // MARK: UIComponents
-    
     // MARK: ScrollView
     private let scrollView: UIScrollView = {
         let scroll = UIScrollView()
@@ -481,6 +479,8 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
             return UICollectionViewCell()
         }
         
+        cell.setGraph(type: .cadence)
+        
         return cell
     }
     
@@ -517,6 +517,10 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
                 } else {
                     page.tintColor = .lightGray
                 }
+            }
+            if let graphCell = self.graphCollectionView.cellForItem(at: IndexPath(row: indexInt, section: 0)) as? GraphCollectionViewCell {
+                graphCell.lineChartDataSet?.label = changeDataLabel.rawValue
+                graphCell.lineChartView.notifyDataSetChanged()
             }
         }
     }
