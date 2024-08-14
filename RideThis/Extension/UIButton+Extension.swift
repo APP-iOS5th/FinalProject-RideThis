@@ -28,5 +28,6 @@ class RideThisButton: UIButton {
         self.layer.cornerRadius = 13
         self.backgroundColor = .primaryColor
         self.setTitleColor(.white, for: .normal)
+        self.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
     }
 }
