@@ -213,7 +213,7 @@ class CompetitionView: RideThisViewController {
     private func setupDropdownMenu() {
         var menuItems: [UIAction] = []
         
-        for distance in DistanceSelection.allCases {
+        for distance in DistanceCase.allCases {
             let action = UIAction(title: "\(distance.rawValue)Km") { [weak self] action in
                 self?.dropdownButton.setTitle("\(distance.rawValue)Km", for: .normal)
                 self?.viewModel.selectedDistance(selected: distance)

@@ -6,16 +6,9 @@ enum RankingSegment: String, CaseIterable {
     case followingRanking = "팔로잉 순위"
 }
 
-enum DistanceSelection: String, CaseIterable {
-    case fiveKm = "5"
-    case tenKm = "10"
-    case thirtyKm = "30"
-    case hundredKm = "100"
-}
-
 class CompetitionViewModel {
     var selectedSegment: RankingSegment = .totalRanking
-    var selectedDistance: DistanceSelection = .fiveKm
+    var selectedDistance: DistanceCase = .fiveKm
     
     let isLogin = true
     let isBluetooth = true
@@ -33,7 +26,7 @@ class CompetitionViewModel {
     }
     
     // MARK: Selected Distance
-    func selectedDistance(selected: DistanceSelection) {
+    func selectedDistance(selected: DistanceCase) {
         selectedDistance = selected
         updateRecords()
     }
