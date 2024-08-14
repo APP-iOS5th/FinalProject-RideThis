@@ -11,6 +11,8 @@
 		041A672F2C6C501F000BA4C1 /* RecordInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A672C2C6C501E000BA4C1 /* RecordInfoView.swift */; };
 		041A67302C6C501F000BA4C1 /* RecordSumUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A672D2C6C501E000BA4C1 /* RecordSumUpView.swift */; };
 		041A67312C6C501F000BA4C1 /* RecordContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A672E2C6C501E000BA4C1 /* RecordContainerView.swift */; };
+		041A67342C6C519B000BA4C1 /* CountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A67332C6C519B000BA4C1 /* CountViewController.swift */; };
+		041A67362C6C6543000BA4C1 /* CountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A67352C6C6543000BA4C1 /* CountViewModel.swift */; };
 		04937A832C69A7CF0099D3EE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04937A822C69A7CF0099D3EE /* GoogleService-Info.plist */; };
 		04E3C0C82C6AEE62006B844F /* CompetitionTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0C72C6AEE62006B844F /* CompetitionTVCell.swift */; };
 		04E3C0CF2C6B32B8006B844F /* CompetitionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0CE2C6B32B8006B844F /* CompetitionCoordinator.swift */; };
@@ -75,6 +77,8 @@
 		041A672C2C6C501E000BA4C1 /* RecordInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordInfoView.swift; sourceTree = "<group>"; };
 		041A672D2C6C501E000BA4C1 /* RecordSumUpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordSumUpView.swift; sourceTree = "<group>"; };
 		041A672E2C6C501E000BA4C1 /* RecordContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordContainerView.swift; sourceTree = "<group>"; };
+		041A67332C6C519B000BA4C1 /* CountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountViewController.swift; sourceTree = "<group>"; };
+		041A67352C6C6543000BA4C1 /* CountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountViewModel.swift; sourceTree = "<group>"; };
 		04937A822C69A7CF0099D3EE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		04E3C0C72C6AEE62006B844F /* CompetitionTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionTVCell.swift; sourceTree = "<group>"; };
 		04E3C0CE2C6B32B8006B844F /* CompetitionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionCoordinator.swift; sourceTree = "<group>"; };
@@ -135,6 +139,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		041A67322C6C518F000BA4C1 /* Count */ = {
+			isa = PBXGroup;
+			children = (
+				041A67332C6C519B000BA4C1 /* CountViewController.swift */,
+			);
+			path = Count;
+			sourceTree = "<group>";
+		};
 		04E3C0C62C6AECE2006B844F /* Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -277,6 +289,7 @@
 			children = (
 				CD42145D2C64998800F7C3AE /* CompetitionViewModel.swift */,
 				04E3C0D62C6B8C30006B844F /* DistanceSelectionViewModel.swift */,
+				041A67352C6C6543000BA4C1 /* CountViewModel.swift */,
 			);
 			path = Competition;
 			sourceTree = "<group>";
@@ -328,6 +341,7 @@
 		CD4213E32C64988B00F7C3AE /* Competition */ = {
 			isa = PBXGroup;
 			children = (
+				041A67322C6C518F000BA4C1 /* Count */,
 				04E3C0D02C6B379A006B844F /* DistanceSelection */,
 				04E3C0C92C6B2037006B844F /* CompetitionList */,
 				04E3C0C62C6AECE2006B844F /* Cell */,
@@ -583,11 +597,13 @@
 				04E3C0CF2C6B32B8006B844F /* CompetitionCoordinator.swift in Sources */,
 				CD66621A2C679010005E2887 /* MyPageModel.swift in Sources */,
 				CD4213C52C64982000F7C3AE /* SceneDelegate.swift in Sources */,
+				041A67342C6C519B000BA4C1 /* CountViewController.swift in Sources */,
 				04E3C0D52C6B3818006B844F /* DistanceSelectionCoordinator.swift in Sources */,
 				CD6662162C679007005E2887 /* RecordModel.swift in Sources */,
 				CDC0C1DE2C664E7400349DC4 /* UIView+Extension.swift in Sources */,
 				041A67302C6C501F000BA4C1 /* RecordSumUpView.swift in Sources */,
 				04E3C0C82C6AEE62006B844F /* CompetitionTVCell.swift in Sources */,
+				041A67362C6C6543000BA4C1 /* CountViewModel.swift in Sources */,
 				CD4214132C64988C00F7C3AE /* MyPageView.swift in Sources */,
 				CDE25C6E2C6913B8008E2A80 /* EditProfileInfoView.swift in Sources */,
 				CDC0C1E02C664FFE00349DC4 /* UIButton+Extension.swift in Sources */,
