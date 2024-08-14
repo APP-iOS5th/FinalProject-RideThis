@@ -9,7 +9,13 @@ import UIKit
 import SnapKit
 import Combine
 
+protocol CountViewControllerDelegate: AnyObject {
+    func countdownFinish()
+}
+
 class CountViewController: RideThisViewController {
+    
+    weak var countDelegate: CountViewControllerDelegate?
     
     private let countLabel = RideThisLabel(fontType: .countDownSize, fontColor: .primaryColor, text: "5")
     private var viewModel = CountViewModel()
@@ -46,6 +52,10 @@ class CountViewController: RideThisViewController {
             .receive(on: RunLoop.main)
             .sink { [weak self] newCount in
                 self?.countLabel.text = "\(newCount)"
+                
+                if newCount == 0 {
+                    self?.countDelegate?.countdownFinish()
+                }
             }
             .store(in: &cancellables)
     }

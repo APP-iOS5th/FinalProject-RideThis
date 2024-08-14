@@ -13,6 +13,7 @@
 		041A67312C6C501F000BA4C1 /* RecordContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A672E2C6C501E000BA4C1 /* RecordContainerView.swift */; };
 		041A67342C6C519B000BA4C1 /* CountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A67332C6C519B000BA4C1 /* CountViewController.swift */; };
 		041A67362C6C6543000BA4C1 /* CountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A67352C6C6543000BA4C1 /* CountViewModel.swift */; };
+		041A67392C6C6B0E000BA4C1 /* StartCompetitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A67382C6C6B0E000BA4C1 /* StartCompetitionViewController.swift */; };
 		04937A832C69A7CF0099D3EE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04937A822C69A7CF0099D3EE /* GoogleService-Info.plist */; };
 		04E3C0C82C6AEE62006B844F /* CompetitionTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0C72C6AEE62006B844F /* CompetitionTVCell.swift */; };
 		04E3C0CF2C6B32B8006B844F /* CompetitionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0CE2C6B32B8006B844F /* CompetitionCoordinator.swift */; };
@@ -79,6 +80,7 @@
 		041A672E2C6C501E000BA4C1 /* RecordContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordContainerView.swift; sourceTree = "<group>"; };
 		041A67332C6C519B000BA4C1 /* CountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountViewController.swift; sourceTree = "<group>"; };
 		041A67352C6C6543000BA4C1 /* CountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountViewModel.swift; sourceTree = "<group>"; };
+		041A67382C6C6B0E000BA4C1 /* StartCompetitionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartCompetitionViewController.swift; sourceTree = "<group>"; };
 		04937A822C69A7CF0099D3EE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		04E3C0C72C6AEE62006B844F /* CompetitionTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionTVCell.swift; sourceTree = "<group>"; };
 		04E3C0CE2C6B32B8006B844F /* CompetitionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionCoordinator.swift; sourceTree = "<group>"; };
@@ -145,6 +147,14 @@
 				041A67332C6C519B000BA4C1 /* CountViewController.swift */,
 			);
 			path = Count;
+			sourceTree = "<group>";
+		};
+		041A67372C6C6AF5000BA4C1 /* StartCompetition */ = {
+			isa = PBXGroup;
+			children = (
+				041A67382C6C6B0E000BA4C1 /* StartCompetitionViewController.swift */,
+			);
+			path = StartCompetition;
 			sourceTree = "<group>";
 		};
 		04E3C0C62C6AECE2006B844F /* Cell */ = {
@@ -341,6 +351,7 @@
 		CD4213E32C64988B00F7C3AE /* Competition */ = {
 			isa = PBXGroup;
 			children = (
+				041A67372C6C6AF5000BA4C1 /* StartCompetition */,
 				041A67322C6C518F000BA4C1 /* Count */,
 				04E3C0D02C6B379A006B844F /* DistanceSelection */,
 				04E3C0C92C6B2037006B844F /* CompetitionList */,
@@ -590,6 +601,7 @@
 				04E3C0D72C6B8C30006B844F /* DistanceSelectionViewModel.swift in Sources */,
 				041A67312C6C501F000BA4C1 /* RecordContainerView.swift in Sources */,
 				CD4214112C64988C00F7C3AE /* DeviceView.swift in Sources */,
+				041A67392C6C6B0E000BA4C1 /* StartCompetitionViewController.swift in Sources */,
 				CD0E1E852C6A409F0080CFED /* SettingView.swift in Sources */,
 				CD42145A2C64997100F7C3AE /* HomeViewModel.swift in Sources */,
 				CD4214142C64988C00F7C3AE /* RecordView.swift in Sources */,

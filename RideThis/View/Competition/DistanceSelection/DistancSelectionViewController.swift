@@ -8,7 +8,9 @@
 import UIKit
 import SnapKit
 
-class DistanceSelectionViewController: RideThisViewController {
+class DistanceSelectionViewController: RideThisViewController, CountViewControllerDelegate {
+    
+    private var viewModel = DistanceSelectionViewModel()
     
     private let titleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "목표 Km")
     
@@ -52,6 +54,7 @@ class DistanceSelectionViewController: RideThisViewController {
         
         setupNavigationBar()
         setupLayout()
+        setupAction()
     }
     
     // MARK: NavigationBar
@@ -133,12 +136,38 @@ class DistanceSelectionViewController: RideThisViewController {
     @objc private func distanceBtnTap(_ sender: UIButton) {
         for button in distanceButtons {
             if button == sender {
+                let distanceValue = "\(button.tag)"
+                self.viewModel.chooseDistance(distance: distanceValue)
+                
                 button.configuration?.baseBackgroundColor = UIColor.primaryColor
                 button.configuration?.baseForegroundColor = .white
             } else {
                 button.configuration?.baseBackgroundColor = UIColor(red: 204/255, green: 204/255, blue: 204/255, alpha: 1)
                 button.configuration?.baseForegroundColor = UIColor(red: 119/255, green: 119/255, blue: 119/255, alpha: 1)
             }
+        }
+    }
+    
+    // MARK: Setup Button Action
+    private func setupAction() {
+        startBtn.addAction(UIAction { [weak self] _ in
+            guard let self = self else { return }
+            print("시작~")
+            print(self.viewModel.distance)
+            
+            let countViewController = CountViewController()
+            countViewController.countDelegate = self
+            countViewController.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
+            present(countViewController, animated: true)
+            
+        }, for: .touchUpInside)
+    }
+    
+    // MARK: CountViewController Delegate
+    func countdownFinish() {
+        dismiss(animated: true) {
+            let startCompetitionVC = StartCompetitionViewController()
+            self.navigationController?.pushViewController(startCompetitionVC, animated: true)
         }
     }
 }
