@@ -32,13 +32,11 @@ class StartCompetitionViewController: RideThisViewController {
         return button
     }()
 
-    private let bottomContainer = RideThisContainer(height: 100)
-
     private let blurView: UIVisualEffectView = {
-        let blurEffect = UIBlurEffect(style: .light)
+        let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialLight)
         let blurView = UIVisualEffectView(effect: blurEffect)
+        blurView.contentView.backgroundColor = .white
         blurView.translatesAutoresizingMaskIntoConstraints = false
-        blurView.isUserInteractionEnabled = false
         
         return blurView
     }()
@@ -78,7 +76,7 @@ class StartCompetitionViewController: RideThisViewController {
         self.title = "\(goalDistance)Km 경쟁하기"
 
         self.navigationItem.hidesBackButton = true
-        self.bottomContainer.backgroundColor = UIColor.clear
+        self.bottomLabel.font = UIFont.systemFont(ofSize: 17, weight: .bold)
 
         setupLayout()
     }
@@ -87,15 +85,14 @@ class StartCompetitionViewController: RideThisViewController {
     private func setupLayout() {
         self.view.addSubview(recordContainerView)
         self.view.addSubview(giveUpBtn)
-        self.view.addSubview(bottomContainer)
-        self.bottomContainer.addSubview(blurView)
-        self.bottomContainer.addSubview(bottomLabel)
+        self.view.addSubview(blurView)
+        self.blurView.contentView.addSubview(bottomLabel)
 
         let safeArea = self.view.safeAreaLayoutGuide
         
 
         recordContainerView.snp.makeConstraints { make in
-            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(20)
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(50)
             make.left.equalToSuperview()
             make.right.equalToSuperview()
             make.height.equalTo(400)
@@ -107,21 +104,14 @@ class StartCompetitionViewController: RideThisViewController {
             btn.width.equalTo(210)
         }
         
-        bottomContainer.snp.makeConstraints { con in
+        blurView.snp.makeConstraints { con in
             con.left.right.bottom.equalToSuperview()
             con.height.equalTo(self.tabBarController!.tabBar.frame.height)
         }
         
-        blurView.snp.makeConstraints { blur in
-            blur.top.equalTo(self.bottomContainer.snp.top)
-            blur.left.equalTo(self.bottomContainer.snp.left)
-            blur.right.equalTo(self.bottomContainer.snp.right)
-            blur.bottom.equalTo(self.bottomContainer.snp.bottom)
-        }
-        
         bottomLabel.snp.makeConstraints { label in
-            label.centerX.equalTo(self.bottomContainer.snp.centerX)
-            label.top.equalTo(self.bottomContainer.snp.top).offset(10)
+            label.centerX.equalTo(self.blurView.snp.centerX)
+            label.top.equalTo(self.blurView.snp.top).offset(10)
         }
     }
 
