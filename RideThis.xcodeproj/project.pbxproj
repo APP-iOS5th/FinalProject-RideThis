@@ -50,6 +50,8 @@
 		CD66F5D42C6C887E00CDBB0B /* AccountSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD66F5D32C6C887E00CDBB0B /* AccountSettingView.swift */; };
 		CD7000632C6AF6D90071D4D2 /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = CD7000622C6AF6D90071D4D2 /* DGCharts */; };
 		CD70006A2C6AF99F0071D4D2 /* GraphCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7000692C6AF99F0071D4D2 /* GraphCollectionViewCell.swift */; };
+		CD76A8C92C6E53FF003490B3 /* SignUpInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD76A8C82C6E53FF003490B3 /* SignUpInfoView.swift */; };
+		CD76A8CB2C6E5828003490B3 /* UITextField+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD76A8CA2C6E5828003490B3 /* UITextField+Extension.swift */; };
 		CDAC668B2C6CF0CF005506FB /* AccountQuitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDAC668A2C6CF0CF005506FB /* AccountQuitView.swift */; };
 		CDC0C1D62C65FD6A00349DC4 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = CDC0C1D52C65FD6A00349DC4 /* FirebaseAuth */; };
 		CDC0C1D82C65FD6A00349DC4 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = CDC0C1D72C65FD6A00349DC4 /* FirebaseFirestore */; };
@@ -114,6 +116,8 @@
 		CD66F5D12C6C86EA00CDBB0B /* SettingTableToggleViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingTableToggleViewCell.swift; sourceTree = "<group>"; };
 		CD66F5D32C6C887E00CDBB0B /* AccountSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSettingView.swift; sourceTree = "<group>"; };
 		CD7000692C6AF99F0071D4D2 /* GraphCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphCollectionViewCell.swift; sourceTree = "<group>"; };
+		CD76A8C82C6E53FF003490B3 /* SignUpInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpInfoView.swift; sourceTree = "<group>"; };
+		CD76A8CA2C6E5828003490B3 /* UITextField+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extension.swift"; sourceTree = "<group>"; };
 		CDAC668A2C6CF0CF005506FB /* AccountQuitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountQuitView.swift; sourceTree = "<group>"; };
 		CDC0C1D32C65FB4300349DC4 /* RideThis.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RideThis.entitlements; sourceTree = "<group>"; };
 		CDC0C1DD2C664E7400349DC4 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
@@ -361,6 +365,7 @@
 				CD0E1E842C6A409F0080CFED /* SettingView.swift */,
 				CD66F5D32C6C887E00CDBB0B /* AccountSettingView.swift */,
 				CDAC668A2C6CF0CF005506FB /* AccountQuitView.swift */,
+				CD76A8C82C6E53FF003490B3 /* SignUpInfoView.swift */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -414,6 +419,7 @@
 				CDC0C1DD2C664E7400349DC4 /* UIView+Extension.swift */,
 				CDC0C1DF2C664FFE00349DC4 /* UIButton+Extension.swift */,
 				041A672A2C6C400E000BA4C1 /* DistanceCase+Extension.swift */,
+				CD76A8CA2C6E5828003490B3 /* UITextField+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -564,9 +570,11 @@
 				CD42145C2C64998200F7C3AE /* DeviceViewModel.swift in Sources */,
 				CD66F5D42C6C887E00CDBB0B /* AccountSettingView.swift in Sources */,
 				CD4214102C64988C00F7C3AE /* CompetitionView.swift in Sources */,
+				CD76A8C92C6E53FF003490B3 /* SignUpInfoView.swift in Sources */,
 				CD4213C32C64982000F7C3AE /* AppDelegate.swift in Sources */,
 				CD4214762C64A63D00F7C3AE /* UIViewController+Extension.swift in Sources */,
 				CD4214562C64994F00F7C3AE /* RecordViewModel.swift in Sources */,
+				CD76A8CB2C6E5828003490B3 /* UITextField+Extension.swift in Sources */,
 				CD6662182C67900B005E2887 /* DeviceModel.swift in Sources */,
 				CD4214582C64996700F7C3AE /* MyPageViewModel.swift in Sources */,
 				CD4214542C64991500F7C3AE /* UIColor+Extension.swift in Sources */,
