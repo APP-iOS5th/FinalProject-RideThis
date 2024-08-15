@@ -3,6 +3,20 @@ import SnapKit
 
 class AccountQuitView: RideThisViewController {
     
+    private let scrollView: UIScrollView = {
+        let scroll = UIScrollView()
+        scroll.translatesAutoresizingMaskIntoConstraints = false
+        scroll.showsHorizontalScrollIndicator = false
+        scroll.showsVerticalScrollIndicator = true
+        
+        return scroll
+    }()
+    private let contentView: UIView = {
+        let content = UIView()
+        content.translatesAutoresizingMaskIntoConstraints = false
+        
+        return content
+    }()
     private lazy var logoImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -68,28 +82,49 @@ class AccountQuitView: RideThisViewController {
     }
     
     func configureUI() {
+        setScrollView()
         setLogoImage()
         setQuitMessageLabel()
         setQuitButton()
+    }
+    
+    func setScrollView() {
+        self.view.addSubview(self.scrollView)
+        self.scrollView.addSubview(self.contentView)
+        
+        self.scrollView.snp.makeConstraints {
+            $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+            $0.left.equalTo(self.view.snp.left)
+            $0.right.equalTo(self.view.snp.right)
+            $0.bottom.equalTo(self.view.snp.bottom)
+        }
+        
+        self.contentView.snp.makeConstraints {
+            $0.top.equalTo(self.scrollView.snp.top)
+            $0.left.equalTo(self.scrollView.snp.left)
+            $0.right.equalTo(self.scrollView.snp.right)
+            $0.bottom.equalTo(self.scrollView.snp.bottom)
+            $0.width.equalTo(self.scrollView.snp.width)
+        }
     }
     
     func setLogoImage() {
         self.view.addSubview(self.logoImage)
         
         self.logoImage.snp.makeConstraints {
-            $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(50)
-            $0.centerX.equalTo(self.view.snp.centerX)
+            $0.top.equalTo(self.contentView.snp.top).offset(50)
+            $0.centerX.equalTo(self.contentView.snp.centerX)
         }
     }
     
     func setQuitMessageLabel() {
         [self.nickNameLabel, self.nickNameLabel2, self.quitMessagelabel,
-         self.confirmCheckbox, self.confirmMessageLabel].forEach{ self.view.addSubview($0) }
+         self.confirmCheckbox, self.confirmMessageLabel].forEach{ self.contentView.addSubview($0) }
         quitMessagelabel.numberOfLines = 0
         
         self.nickNameLabel.snp.makeConstraints {
             $0.top.equalTo(self.logoImage.snp.bottom).offset(40)
-            $0.left.equalTo(self.view.snp.left).offset(40)
+            $0.left.equalTo(self.contentView.snp.left).offset(40)
         }
         
         self.nickNameLabel2.snp.makeConstraints {
@@ -100,7 +135,7 @@ class AccountQuitView: RideThisViewController {
         self.quitMessagelabel.snp.makeConstraints {
             $0.top.equalTo(self.nickNameLabel2.snp.bottom).offset(10)
             $0.left.equalTo(self.nickNameLabel.snp.left)
-            $0.right.equalTo(self.view.snp.right).offset(-40)
+            $0.right.equalTo(self.contentView.snp.right).offset(-40)
         }
         
         self.confirmCheckbox.snp.makeConstraints {
@@ -119,13 +154,14 @@ class AccountQuitView: RideThisViewController {
         
         self.cancelButton.snp.makeConstraints {
             $0.top.equalTo(self.confirmCheckbox.snp.bottom).offset(20)
-            $0.right.equalTo(self.view.snp.centerX).offset(-10)
+            $0.right.equalTo(self.contentView.snp.centerX).offset(-10)
         }
         
         self.quitButton.snp.makeConstraints {
             $0.top.equalTo(self.cancelButton.snp.top)
-            $0.left.equalTo(self.view.snp.centerX).offset(10)
+            $0.left.equalTo(self.contentView.snp.centerX).offset(10)
             $0.width.equalTo(self.cancelButton.snp.width)
+            $0.bottom.equalTo(self.contentView.snp.bottom).offset(-15)
         }
     }
 }
