@@ -280,14 +280,14 @@ class MyPageView: RideThisViewController {
         
         self.firstSeparator.snp.makeConstraints {
             $0.top.equalTo(self.userInfoContainer.snp.top).offset(50)
-            $0.left.equalTo(self.userInfoContainer.snp.left)
-            $0.right.equalTo(self.userInfoContainer.snp.right)
+            $0.left.equalTo(self.userInfoContainer.snp.left).offset(15)
+            $0.right.equalTo(self.userInfoContainer.snp.right).offset(-15)
         }
         
         self.secondSeparator.snp.makeConstraints {
             $0.top.equalTo(self.firstSeparator.snp.top).offset(50)
-            $0.left.equalTo(self.userInfoContainer.snp.left)
-            $0.right.equalTo(self.userInfoContainer.snp.right)
+            $0.left.equalTo(self.userInfoContainer.snp.left).offset(15)
+            $0.right.equalTo(self.userInfoContainer.snp.right).offset(-15)
         }
         
         self.userNickNameLabel.snp.makeConstraints {

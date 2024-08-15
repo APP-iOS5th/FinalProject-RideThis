@@ -132,14 +132,14 @@ class EditProfileInfoView: RideThisViewController {
         
         self.firstSeparator.snp.makeConstraints {
             $0.top.equalTo(self.profileInfoContainer.snp.top).offset(50)
-            $0.left.equalTo(self.profileInfoContainer.snp.left)
-            $0.right.equalTo(self.profileInfoContainer.snp.right)
+            $0.left.equalTo(self.profileInfoContainer.snp.left).offset(15)
+            $0.right.equalTo(self.profileInfoContainer.snp.right).offset(-15)
         }
         
         self.secondSeparator.snp.makeConstraints {
             $0.top.equalTo(self.firstSeparator.snp.bottom).offset(50)
-            $0.left.equalTo(self.profileInfoContainer.snp.left)
-            $0.right.equalTo(self.profileInfoContainer.snp.right)
+            $0.left.equalTo(self.profileInfoContainer.snp.left).offset(15)
+            $0.right.equalTo(self.profileInfoContainer.snp.right).offset(-15)
         }
         
         self.userNickNameLabel.snp.makeConstraints { [weak self] label in
