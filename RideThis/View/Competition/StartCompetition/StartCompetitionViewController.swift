@@ -4,6 +4,7 @@ import SnapKit
 class StartCompetitionViewController: RideThisViewController {
 
     var goalDistance: String
+    private let viewModel = StartCometitionViewModel(startTime: Date())
 
     private let timerRecord = RecordContainer(title: "Timer", recordText: "00:00")
     private let cadenceRecord = RecordContainer(title: "Cadence", recordText: "0 RPM")
@@ -65,11 +66,13 @@ class StartCompetitionViewController: RideThisViewController {
         setupAction()
     }
     
+    // MARK: VeiwIsApeearing
     override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)
         tabBarController?.tabBar.items?.forEach{ $0.isEnabled = false }
     }
     
+    // MARK: ViewWillDisappear
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         tabBarController?.tabBar.items?.forEach{ $0.isEnabled = true }
@@ -82,10 +85,10 @@ class StartCompetitionViewController: RideThisViewController {
         self.navigationItem.hidesBackButton = true
         self.bottomLabel.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         
-        //Test
-        timerRecord.updateRecordText(text: "120:11")
-
         setupLayout()
+        setupBinding()
+        setupTimerBinding()
+        self.viewModel.startTimer()
     }
 
     // MARK: SetupLayout
@@ -152,6 +155,21 @@ class StartCompetitionViewController: RideThisViewController {
         bottomLabel.snp.makeConstraints { label in
             label.centerX.equalTo(self.blurView.snp.centerX)
             label.top.equalTo(self.blurView.snp.top).offset(10)
+        }
+    }
+    
+    // MARK: Setup Binding Data
+    private func setupBinding() {
+        timerRecord.updateRecordText(text: viewModel.timer)
+        cadenceRecord.updateRecordText(text: "\(viewModel.cadence) RPM")
+        speedRecord.updateRecordText(text: "\(viewModel.speed) Km/h")
+        distanceRecord.updateRecordText(text: "\(viewModel.distance) Km")
+        calorieRecord.updateRecordText(text: "\(viewModel.calorie) Kcal")
+    }
+    
+    private func setupTimerBinding() {
+        viewModel.timerUpdateCallback = { [weak self] newTime in
+            self?.timerRecord.updateRecordText(text: newTime)
         }
     }
 
