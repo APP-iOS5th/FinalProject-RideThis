@@ -161,10 +161,10 @@ class StartCompetitionViewController: RideThisViewController {
     // MARK: Setup Binding Data
     private func setupBinding() {
         timerRecord.updateRecordText(text: viewModel.timer)
-        cadenceRecord.updateRecordText(text: "\(viewModel.cadence) RPM")
-        speedRecord.updateRecordText(text: "\(viewModel.speed) Km/h")
-        distanceRecord.updateRecordText(text: "\(viewModel.distance) Km")
-        calorieRecord.updateRecordText(text: "\(viewModel.calorie) Kcal")
+        cadenceRecord.updateRecordText(text: "\(viewModel.cadence.formattedWithThousandsSeparator()) RPM")
+        speedRecord.updateRecordText(text: "\(viewModel.speed.formattedWithThousandsSeparator()) Km/h")
+        distanceRecord.updateRecordText(text: "\(viewModel.distance.formattedWithThousandsSeparator()) Km")
+        calorieRecord.updateRecordText(text: "\(viewModel.calorie.formattedWithThousandsSeparator()) Kcal")
     }
     
     private func setupTimerBinding() {
