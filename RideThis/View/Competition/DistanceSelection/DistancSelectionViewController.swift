@@ -34,6 +34,7 @@ class DistanceSelectionViewController: RideThisViewController, CountViewControll
         config.imagePadding = 5
         
         button.configuration = config
+        button.isEnabled = false
         button.translatesAutoresizingMaskIntoConstraints = false
         
         return button
@@ -141,6 +142,8 @@ class DistanceSelectionViewController: RideThisViewController, CountViewControll
                 
                 button.configuration?.baseBackgroundColor = UIColor.primaryColor
                 button.configuration?.baseForegroundColor = .white
+                
+                self.startBtn.isEnabled = true
             } else {
                 button.configuration?.baseBackgroundColor = UIColor(red: 204/255, green: 204/255, blue: 204/255, alpha: 1)
                 button.configuration?.baseForegroundColor = UIColor(red: 119/255, green: 119/255, blue: 119/255, alpha: 1)
