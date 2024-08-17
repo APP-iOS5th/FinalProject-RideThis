@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Combine
 
 class StartCometitionViewModel {
     var timer: String = "00:00" {
@@ -22,10 +23,14 @@ class StartCometitionViewModel {
     var startTime: Date?
     var elapsedTime: TimeInterval = 0
     
+    var goalDistance: Double
+    @Published var isFinished: Bool = false
+    
     var timerUpdateCallback: ((String) -> Void)?
     
-    init(startTime: Date) {
+    init(startTime: Date, goalDistnace: Double) {
         self.startTime = startTime
+        self.goalDistance = goalDistnace
     }
     
     func updateTimer() {
@@ -34,6 +39,11 @@ class StartCometitionViewModel {
             let minutes = Int(elapsedTime) / 60
             let seconds = Int(elapsedTime) % 60
             timer = String(format: "%02d:%02d", minutes, seconds)
+            
+            // 뷰 전환 타이머 초로 테스트
+            if Double(seconds) >= goalDistance {
+                isFinished = true
+            }
         }
     }
     

@@ -14,17 +14,29 @@ class RecordContainer: RideThisContainer {
     let separator: RideThisSeparator
     var recordLabel: RideThisLabel
     
-    init(title: String, recordText: String) {
+    init(title: String, recordText: String, view: String) {
         // 레이블과 Separator 초기화
         self.separator = RideThisSeparator()
-        // Timer인 경우 크기 조절
-        if title == "Timer" {
-            self.titleLabel = RideThisLabel(fontType: .recordInfoTitle, fontColor: .recordTitleColor, text: title)
-            self.recordLabel = RideThisLabel(fontType: .timerText, text: recordText)
-        } else {
-            self.titleLabel = RideThisLabel(fontType: .recordTitle, fontColor: .recordTitleColor, text: title)
-            self.recordLabel = RideThisLabel(fontType: .recordInfo, text: recordText)
+        
+        switch view {
+        case "record":
+            // Timer인 경우 크기 조절
+            if title == "Timer" {
+                self.titleLabel = RideThisLabel(fontType: .recordInfoTitle, fontColor: .recordTitleColor, text: title)
+                self.recordLabel = RideThisLabel(fontType: .timerText, text: recordText)
+            } else {
+                self.titleLabel = RideThisLabel(fontType: .recordTitle, fontColor: .recordTitleColor, text: title)
+                self.recordLabel = RideThisLabel(fontType: .recordInfo, text: recordText)
+            }
+        case "summary":
+            self.titleLabel = RideThisLabel(fontType: .classification, fontColor: .recordTitleColor, text: title)
+            self.recordLabel = RideThisLabel(fontType: .summaryInfo, text: recordText)
+        default:
+            self.titleLabel = RideThisLabel(fontType: .defaultSize, text: "")
+            self.recordLabel = RideThisLabel(fontType: .defaultSize, text: "")
         }
+        
+
         
         super.init(frame: .zero)
             

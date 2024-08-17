@@ -7,13 +7,15 @@ enum FontCase: CGFloat {
     case sectionTitle = 22
     case smallTitle = 13
     case infoMessage = 12
+    case buttonSize = 24
     case countDownSize = 350
     case classification = 20
     case recordInfoTitle = 28
     case timerText = 64
-    case profileFont, recordTitle = 18
-    case buttonSize, recordInfo = 24
+    case profileFont = 18
     case summaryInfo = 33
+    case recordTitle = 18.01
+    case recordInfo = 24.01
     
     var fontWeight: UIFont.Weight {
         get {
