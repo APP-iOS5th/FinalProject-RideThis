@@ -16,13 +16,14 @@ class RecordContainer: RideThisContainer {
     
     init(title: String, recordText: String) {
         // 레이블과 Separator 초기화
-        self.titleLabel = RideThisLabel(fontType: .sectionTitle, fontColor: .recordTitleColor, text: title)
         self.separator = RideThisSeparator()
         // Timer인 경우 크기 조절
         if title == "Timer" {
+            self.titleLabel = RideThisLabel(fontType: .recordInfoTitle, fontColor: .recordTitleColor, text: title)
             self.recordLabel = RideThisLabel(fontType: .timerText, text: recordText)
         } else {
-            self.recordLabel = RideThisLabel(fontType: .recordInfoTitle, text: recordText)
+            self.titleLabel = RideThisLabel(fontType: .recordTitle, fontColor: .recordTitleColor, text: title)
+            self.recordLabel = RideThisLabel(fontType: .recordInfo, text: recordText)
         }
         
         super.init(frame: .zero)

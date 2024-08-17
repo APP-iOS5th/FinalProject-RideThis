@@ -81,14 +81,22 @@ class StartCompetitionViewController: RideThisViewController {
     // MARK: SetupUI
     private func setupUI() {
         self.title = "\(goalDistance)Km 경쟁하기"
-
-        self.navigationItem.hidesBackButton = true
-        self.bottomLabel.font = UIFont.systemFont(ofSize: 17, weight: .bold)
-        
+    
+        setupFontUI()
         setupLayout()
         setupBinding()
         setupTimerBinding()
         self.viewModel.startTimer()
+    }
+    
+    // MARK: SetupFontUI
+    private func setupFontUI() {
+        self.navigationItem.hidesBackButton = true
+        self.cadenceRecord.titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        self.speedRecord.titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        self.distanceRecord.titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        self.calorieRecord.titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        self.bottomLabel.font = UIFont.systemFont(ofSize: 17, weight: .bold)
     }
 
     // MARK: SetupLayout

@@ -7,23 +7,24 @@ enum FontCase: CGFloat {
     case sectionTitle = 22
     case smallTitle = 13
     case infoMessage = 12
-    case buttonSize = 24
     case countDownSize = 350
     case classification = 20
     case recordInfoTitle = 28
     case timerText = 64
-    case profileFont = 18
+    case profileFont, recordTitle = 18
+    case buttonSize, recordInfo = 24
+    case summaryInfo = 33
     
     var fontWeight: UIFont.Weight {
         get {
             switch self {
             case .defaultSize, .smallTitle:
                 return .regular
-            case .title, .countDownSize, .timerText:
+            case .title, .countDownSize, .timerText, .summaryInfo, .recordInfo:
                 return .bold
             case .sectionTitle:
                 return .medium
-            case .infoMessage, .recordInfoTitle, .classification:
+            case .infoMessage, .recordInfoTitle, .classification, .recordTitle:
                 return .semibold
             case .buttonSize:
                 return .heavy
