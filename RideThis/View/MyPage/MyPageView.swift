@@ -181,6 +181,7 @@ class MyPageView: RideThisViewController {
         setUserInfoView()
         setTotalRecordView()
         setRecordByPeriodView()
+        setEventToProfileContainer()
     }
     
     func setScrollView() {
@@ -523,5 +524,15 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
                 graphCell.lineChartView.notifyDataSetChanged()
             }
         }
+    }
+    
+    func setEventToProfileContainer() {
+        let profileContainerTapEvent = UITapGestureRecognizer(target: self, action: #selector(toFollowerView))
+        profileContainer.addGestureRecognizer(profileContainerTapEvent)
+    }
+    
+    @objc func toFollowerView() {
+        let frientView = FollowManageView()
+        self.navigationController?.pushViewController(frientView, animated: true)
     }
 }
