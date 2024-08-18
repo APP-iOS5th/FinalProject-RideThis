@@ -49,12 +49,12 @@ class FollowTableViewCell: UITableViewCell {
         }
         
         userNickName.snp.makeConstraints {
-            $0.top.equalTo(profileImage.snp.top).offset(8)
+            $0.centerY.equalTo(contentView.snp.centerY).offset(-15)
             $0.left.equalTo(profileImage.snp.right).offset(10)
         }
         
         userEmail.snp.makeConstraints {
-            $0.bottom.equalTo(profileImage.snp.bottom).offset(-8)
+            $0.centerY.equalTo(contentView.snp.centerY).offset(15)
             $0.left.equalTo(userNickName.snp.left)
         }
         

@@ -43,6 +43,8 @@ class FollowManageView: RideThisViewController {
     
     func setNavigationComponents() {
         self.title = "매드카우"
+        let searchButton = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(searchUserButton))
+        navigationItem.rightBarButtonItem = searchButton
     }
     
     func setSearchBar() {
@@ -86,6 +88,11 @@ class FollowManageView: RideThisViewController {
     
     @objc func optionChanged(_ sender: UISegmentedControl) {
         
+    }
+    
+    @objc func searchUserButton() {
+        let searchUserView = UINavigationController(rootViewController: SearchUserView())
+        present(searchUserView, animated: true)
     }
 }
 
