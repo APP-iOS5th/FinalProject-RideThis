@@ -4,7 +4,7 @@ import UIKit
 enum FontCase: CGFloat {
     /// size: 17, weight: .regular
     case defaultSize = 17
-    /// size: 17, weight: .bold
+    /// size: 34, weight: .bold
     case title = 34
     /// size: 22, weight: .medium
     case sectionTitle = 22
