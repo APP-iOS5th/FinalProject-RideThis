@@ -1,9 +1,15 @@
 import UIKit
+import FirebaseCore
+import FirebaseAuth
+import AuthenticationServices
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    let userService = UserService.shared
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        FirebaseApp.configure()
         return true
     }
 

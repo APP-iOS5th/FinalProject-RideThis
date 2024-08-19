@@ -30,6 +30,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.window?.rootViewController = tabbarController
         self.window?.makeKeyAndVisible()
     }
+    
+    // MARK: rootViewController 수정
+    func changeRootView(viewController: UIViewController, animated: Bool) {
+        guard let window = self.window else { return }
+        window.rootViewController = viewController
+        UIView.transition(with: window, duration: 0.2, options: [.transitionCrossDissolve], animations: nil, completion: nil)
+    }
 
     func sceneDidDisconnect(_ scene: UIScene) {}
     func sceneDidBecomeActive(_ scene: UIScene) {}
