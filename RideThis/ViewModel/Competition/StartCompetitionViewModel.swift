@@ -21,6 +21,7 @@ class StartCometitionViewModel {
     var calorie: Double = 1267
     
     var startTime: Date?
+    var endTime: Date?
     var elapsedTime: TimeInterval = 0
     
     var goalDistance: Double
@@ -42,6 +43,7 @@ class StartCometitionViewModel {
             
             // 뷰 전환 타이머 초로 테스트
             if Double(seconds) >= goalDistance {
+                endTime = Date()
                 isFinished = true
             }
         }

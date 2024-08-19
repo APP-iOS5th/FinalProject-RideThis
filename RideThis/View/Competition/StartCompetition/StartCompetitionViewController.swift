@@ -3,42 +3,42 @@ import SnapKit
 import Combine
 
 class StartCompetitionViewController: RideThisViewController {
-
+    
     var goalDistance: String
     private let viewModel: StartCometitionViewModel
     private var cancellables = Set<AnyCancellable>()
-
+    
     private let timerRecord = RecordContainer(title: "Timer", recordText: "00:00", view: "record")
     private let cadenceRecord = RecordContainer(title: "Cadence", recordText: "0 RPM", view: "record")
     private let speedRecord = RecordContainer(title: "Speed", recordText: "0 km/h", view: "record")
     private let distanceRecord = RecordContainer(title: "Distance", recordText: "0 km", view: "record")
     private let calorieRecord = RecordContainer(title: "Calories", recordText: "0 kcal", view: "record")
-
+    
     private let giveUpBtn: UIButton = {
         let button = UIButton(type: .custom)
         var config = UIButton.Configuration.filled()
         config.baseBackgroundColor = UIColor.primaryColor
         config.baseForegroundColor = UIColor.white
         config.contentInsets = NSDirectionalEdgeInsets(top: 15, leading: 20, bottom: 15, trailing: 20)
-
+        
         var titleAttr = AttributedString("포기")
         titleAttr.font = .systemFont(ofSize: 17, weight: .semibold)
         config.attributedTitle = titleAttr
-
+        
         let imageConfig = UIImage.SymbolConfiguration(weight: .semibold)
         let image = UIImage(systemName: "flag.fill", withConfiguration: imageConfig)
         config.image = image
         config.imagePlacement = .leading
         config.imagePadding = 5
-
+        
         button.configuration = config
         button.layer.cornerRadius = 13
         button.clipsToBounds = true
         button.translatesAutoresizingMaskIntoConstraints = false
-
+        
         return button
     }()
-
+    
     private let blurView: UIVisualEffectView = {
         let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialLight)
         let blurView = UIVisualEffectView(effect: blurEffect)
@@ -47,9 +47,9 @@ class StartCompetitionViewController: RideThisViewController {
         
         return blurView
     }()
-
+    
     private let bottomLabel = RideThisLabel(fontType: .defaultSize, fontColor: .black, text: "기록 중에는 탭바를 사용하실 수 없습니다.")
-
+    
     // MARK: 초기화 및 데이터 바인딩
     init(goalDistance: String) {
         self.goalDistance = goalDistance
@@ -57,15 +57,15 @@ class StartCompetitionViewController: RideThisViewController {
         self.viewModel = StartCometitionViewModel(startTime: Date(), goalDistnace: goalDistanceDouble)
         super.init(nibName: nil, bundle: nil)
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     // MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setupUI()
         setupAction()
     }
@@ -81,12 +81,12 @@ class StartCompetitionViewController: RideThisViewController {
         super.viewWillDisappear(animated)
         tabBarController?.tabBar.items?.forEach{ $0.isEnabled = true }
     }
-
+    
     // MARK: SetupUI
     private func setupUI() {
         self.title = "\(goalDistance)Km 경쟁하기"
         self.navigationItem.hidesBackButton = true
-    
+        
         setupFontUI()
         setupLayout()
         setupBinding()
@@ -102,7 +102,7 @@ class StartCompetitionViewController: RideThisViewController {
         self.calorieRecord.titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         self.bottomLabel.font = UIFont.systemFont(ofSize: 17, weight: .bold)
     }
-
+    
     // MARK: SetupLayout
     private func setupLayout() {
         self.view.addSubview(timerRecord)
@@ -113,9 +113,9 @@ class StartCompetitionViewController: RideThisViewController {
         self.view.addSubview(giveUpBtn)
         self.view.addSubview(blurView)
         self.blurView.contentView.addSubview(bottomLabel)
-
+        
         let safeArea = self.view.safeAreaLayoutGuide
-
+        
         timerRecord.snp.makeConstraints { timer in
             timer.top.equalToSuperview().offset(80)
             timer.left.equalToSuperview().offset(20)
@@ -150,7 +150,7 @@ class StartCompetitionViewController: RideThisViewController {
             calory.right.equalToSuperview().offset(-20)
             calory.height.equalTo(110)
         }
-
+        
         giveUpBtn.snp.makeConstraints { btn in
             btn.bottom.equalTo(safeArea.snp.bottom).offset(-50)
             btn.centerX.equalTo(self.view.snp.centerX)
@@ -185,7 +185,7 @@ class StartCompetitionViewController: RideThisViewController {
                 // 이미 이동했다면 추가로 이동하지 않도록 처리
                 if let navController = self?.navigationController,
                    !(navController.viewControllers.last is SummaryRecordViewController) {
-                    let summaryRecordVC = SummaryRecordViewController(timer: self?.viewModel.timer ?? "", cadence: self?.viewModel.cadence ?? 0.0, speed: self?.viewModel.speed ?? 0.0, distance: self?.viewModel.goalDistance ?? 0.0, calorie: self?.viewModel.calorie ?? 0.0)
+                    let summaryRecordVC = SummaryRecordViewController(timer: self?.viewModel.timer ?? "", cadence: self?.viewModel.cadence ?? 0.0, speed: self?.viewModel.speed ?? 0.0, distance: self?.viewModel.goalDistance ?? 0.0, calorie: self?.viewModel.calorie ?? 0.0,                        startTime: self?.viewModel.startTime ?? Date(), endTime: self?.viewModel.endTime ?? Date())
                     navController.pushViewController(summaryRecordVC, animated: true)
                 }
             }
@@ -197,7 +197,7 @@ class StartCompetitionViewController: RideThisViewController {
             self?.timerRecord.updateRecordText(text: newTime)
         }
     }
-
+    
     // MARK: setupAction
     private func setupAction() {
         giveUpBtn.addAction(UIAction { [weak self] _ in
