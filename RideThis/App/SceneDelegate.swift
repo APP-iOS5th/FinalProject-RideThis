@@ -7,6 +7,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         self.window = UIWindow(windowScene: windowScene)
         
+        self.window?.rootViewController = getTabbarController()
+        self.window?.makeKeyAndVisible()
+    }
+    
+    func getTabbarController() -> UITabBarController {
         let homeView = UINavigationController(rootViewController: HomeView())
         homeView.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house.fill"), selectedImage: nil)
         
@@ -21,14 +26,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let myPageView = UINavigationController(rootViewController: MyPageView())
         myPageView.tabBarItem = UITabBarItem(title: "마이페이지", image: UIImage(systemName: "person.circle.fill"), selectedImage: nil)
-    
         let tabbarController = UITabBarController()
-        // tabbarController.overrideUserInterfaceStyle = .light // 기본 라이트모드
+        tabbarController.overrideUserInterfaceStyle = .light // 기본 라이트모드
         tabbarController.viewControllers = [homeView, competitionView, recordView, deviceView, myPageView]
         tabbarController.tabBar.tintColor = .primaryColor
         
-        self.window?.rootViewController = tabbarController
-        self.window?.makeKeyAndVisible()
+        return tabbarController
     }
     
     // MARK: rootViewController 수정

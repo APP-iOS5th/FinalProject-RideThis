@@ -228,6 +228,9 @@ class SignUpInfoView: RideThisViewController {
                     print("문서 생성 및 필드 추가 성공")
                 }
             }
+            if let scene = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate) {
+                scene.changeRootView(viewController: scene.getTabbarController(), animated: true)
+            }
         }, for: .touchUpInside)
     }
 }
