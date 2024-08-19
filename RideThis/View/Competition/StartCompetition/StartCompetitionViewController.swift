@@ -185,6 +185,12 @@ class StartCompetitionViewController: RideThisViewController {
                 // 이미 이동했다면 추가로 이동하지 않도록 처리
                 if let navController = self?.navigationController,
                    !(navController.viewControllers.last is SummaryRecordViewController) {
+                    // 데이터
+                    Task {
+                        await self?.viewModel.competitionUpdateData()
+                    }
+                    
+                    // 데이터 뷰 바인딩
                     let summaryRecordVC = SummaryRecordViewController(timer: self?.viewModel.timer ?? "", cadence: self?.viewModel.cadence ?? 0.0, speed: self?.viewModel.speed ?? 0.0, distance: self?.viewModel.goalDistance ?? 0.0, calorie: self?.viewModel.calorie ?? 0.0,                        startTime: self?.viewModel.startTime ?? Date(), endTime: self?.viewModel.endTime ?? Date())
                     navController.pushViewController(summaryRecordVC, animated: true)
                 }
