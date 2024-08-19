@@ -19,10 +19,7 @@
 		043E0C842C6F378D00F25AF7 /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C832C6F378D00F25AF7 /* Double+Extension.swift */; };
 		043E0C872C6F38F700F25AF7 /* SummaryRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C862C6F38F700F25AF7 /* SummaryRecordViewController.swift */; };
 		043E0C892C70AC2400F25AF7 /* SummaryRecordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C882C70AC2400F25AF7 /* SummaryRecordViewModel.swift */; };
-		043E0C932C73341400F25AF7 /* ResultRankingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C912C73341400F25AF7 /* ResultRankingViewController.swift */; };
-		043E0C952C73342900F25AF7 /* ResultRankingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C942C73342900F25AF7 /* ResultRankingViewModel.swift */; };
-		043E0C972C73344F00F25AF7 /* ResultRankingTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C962C73344F00F25AF7 /* ResultRankingTVCell.swift */; };
-		043E0C992C73377700F25AF7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 043E0C982C73377700F25AF7 /* GoogleService-Info.plist */; };
+		04937A832C69A7CF0099D3EE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04937A822C69A7CF0099D3EE /* GoogleService-Info.plist */; };
 		04E3C0C82C6AEE62006B844F /* CompetitionTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0C72C6AEE62006B844F /* CompetitionTVCell.swift */; };
 		04E3C0CF2C6B32B8006B844F /* CompetitionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0CE2C6B32B8006B844F /* CompetitionCoordinator.swift */; };
 		04E3C0D32C6B37F7006B844F /* DistancSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0D22C6B37F7006B844F /* DistancSelectionViewController.swift */; };
@@ -105,10 +102,7 @@
 		043E0C832C6F378D00F25AF7 /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
 		043E0C862C6F38F700F25AF7 /* SummaryRecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryRecordViewController.swift; sourceTree = "<group>"; };
 		043E0C882C70AC2400F25AF7 /* SummaryRecordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryRecordViewModel.swift; sourceTree = "<group>"; };
-		043E0C912C73341400F25AF7 /* ResultRankingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultRankingViewController.swift; sourceTree = "<group>"; };
-		043E0C942C73342900F25AF7 /* ResultRankingViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultRankingViewModel.swift; sourceTree = "<group>"; };
-		043E0C962C73344F00F25AF7 /* ResultRankingTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultRankingTVCell.swift; sourceTree = "<group>"; };
-		043E0C982C73377700F25AF7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		04937A822C69A7CF0099D3EE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		04E3C0C72C6AEE62006B844F /* CompetitionTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionTVCell.swift; sourceTree = "<group>"; };
 		04E3C0CE2C6B32B8006B844F /* CompetitionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionCoordinator.swift; sourceTree = "<group>"; };
 		04E3C0D22C6B37F7006B844F /* DistancSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistancSelectionViewController.swift; sourceTree = "<group>"; };
@@ -203,18 +197,9 @@
 			path = SummaryRecord;
 			sourceTree = "<group>";
 		};
-		043E0C922C73341400F25AF7 /* ResultRanking */ = {
-			isa = PBXGroup;
-			children = (
-				043E0C912C73341400F25AF7 /* ResultRankingViewController.swift */,
-			);
-			path = ResultRanking;
-			sourceTree = "<group>";
-		};
 		04E3C0C62C6AECE2006B844F /* Cell */ = {
 			isa = PBXGroup;
 			children = (
-				043E0C962C73344F00F25AF7 /* ResultRankingTVCell.swift */,
 				04E3C0C72C6AEE62006B844F /* CompetitionTVCell.swift */,
 			);
 			path = Cell;
@@ -254,6 +239,14 @@
 			path = Coordinator;
 			sourceTree = "<group>";
 		};
+		CD0E1E832C6A40970080CFED /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				CD0E1E842C6A409F0080CFED /* SettingView.swift */,
+			);
+			path = Setting;
+			sourceTree = "<group>";
+		};
 		CD4213B62C64982000F7C3AE = {
 			isa = PBXGroup;
 			children = (
@@ -274,8 +267,8 @@
 		CD4213C12C64982000F7C3AE /* RideThis */ = {
 			isa = PBXGroup;
 			children = (
+				04937A822C69A7CF0099D3EE /* GoogleService-Info.plist */,
 				CDC0C1D32C65FB4300349DC4 /* RideThis.entitlements */,
-				043E0C982C73377700F25AF7 /* GoogleService-Info.plist */,
 				CD4214502C6498FF00F7C3AE /* Extension */,
 				CD4214212C64989000F7C3AE /* App */,
 				CD42140F2C64988C00F7C3AE /* Service */,
@@ -349,7 +342,6 @@
 				041A67352C6C6543000BA4C1 /* CountViewModel.swift */,
 				043E0C812C6F232A00F25AF7 /* StartCompetitionViewModel.swift */,
 				043E0C882C70AC2400F25AF7 /* SummaryRecordViewModel.swift */,
-				043E0C942C73342900F25AF7 /* ResultRankingViewModel.swift */,
 			);
 			path = Competition;
 			sourceTree = "<group>";
@@ -402,7 +394,6 @@
 		CD4213E32C64988B00F7C3AE /* Competition */ = {
 			isa = PBXGroup;
 			children = (
-				043E0C922C73341400F25AF7 /* ResultRanking */,
 				043E0C852C6F38C800F25AF7 /* SummaryRecord */,
 				041A67372C6C6AF5000BA4C1 /* StartCompetition */,
 				041A67322C6C518F000BA4C1 /* Count */,
@@ -631,8 +622,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				CD4213CC2C64982200F7C3AE /* Assets.xcassets in Resources */,
-				043E0C992C73377700F25AF7 /* GoogleService-Info.plist in Resources */,
 				CD4213CF2C64982200F7C3AE /* Base in Resources */,
+				04937A832C69A7CF0099D3EE /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -661,14 +652,10 @@
 				CD42145C2C64998200F7C3AE /* DeviceViewModel.swift in Sources */,
 				CD66F5D42C6C887E00CDBB0B /* AccountSettingView.swift in Sources */,
 				CD4214102C64988C00F7C3AE /* CompetitionView.swift in Sources */,
-
-				043E0C952C73342900F25AF7 /* ResultRankingViewModel.swift in Sources */,
-
 				CD76A8C92C6E53FF003490B3 /* SignUpInfoView.swift in Sources */,
 				CD4213C32C64982000F7C3AE /* AppDelegate.swift in Sources */,
 				041A672F2C6C501F000BA4C1 /* RecordInfoView.swift in Sources */,
 				CD4214762C64A63D00F7C3AE /* UIViewController+Extension.swift in Sources */,
-				043E0C972C73344F00F25AF7 /* ResultRankingTVCell.swift in Sources */,
 				043E0C842C6F378D00F25AF7 /* Double+Extension.swift in Sources */,
 				CD4214562C64994F00F7C3AE /* RecordViewModel.swift in Sources */,
 				CD76A8CB2C6E5828003490B3 /* UITextField+Extension.swift in Sources */,
@@ -685,7 +672,6 @@
 				CD0E1E852C6A409F0080CFED /* SettingView.swift in Sources */,
 				CD66F5D02C6C837E00CDBB0B /* SettingTableViewCell.swift in Sources */,
 				CD42145A2C64997100F7C3AE /* HomeViewModel.swift in Sources */,
-				043E0C932C73341400F25AF7 /* ResultRankingViewController.swift in Sources */,
 				CD4214142C64988C00F7C3AE /* RecordView.swift in Sources */,
 				CD4214122C64988C00F7C3AE /* HomeView.swift in Sources */,
 				04E3C0CF2C6B32B8006B844F /* CompetitionCoordinator.swift in Sources */,
