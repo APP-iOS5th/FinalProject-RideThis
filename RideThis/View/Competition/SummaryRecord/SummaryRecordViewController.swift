@@ -38,6 +38,7 @@ class SummaryRecordViewController: RideThisViewController {
 
         setupUI()
         setupBinding()
+        setupAction()
     }
     
     // MARK: SetupUI
@@ -137,6 +138,14 @@ class SummaryRecordViewController: RideThisViewController {
         }
     }
     
+    // MARK: Setup Action
+    private func setupAction() {
+        confirmButton.addAction(UIAction { [weak self] _ in
+            guard let self = self else { return }
+            let ResultRankingVC = ResultRankingViewController()
+            self.navigationController?.pushViewController(ResultRankingVC, animated: true)
+        }, for: .touchUpInside)
+    }
 }
 
 #Preview {
