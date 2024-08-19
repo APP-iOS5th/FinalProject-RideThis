@@ -11,6 +11,9 @@ import SnapKit
 class RecordSumUpView: RideThisViewController {
     let viewModel = RecordViewModel()
     
+    // 커스텀 타이틀
+    private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "운동기록 요약")
+    
     // 컨테이너 선언
     let timerContainer = RideThisContainer()
     let cadenceContainer = RideThisContainer()
@@ -46,11 +49,7 @@ class RecordSumUpView: RideThisViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // 대형 타이틀 활성화
-        // TODO: - UI 맞춰서 수정할 것
-        self.navigationController?.navigationBar.prefersLargeTitles = true
-        self.navigationItem.largeTitleDisplayMode = .inline
-        self.navigationItem.title = "운동기록 요약"
+        setupNavigationBar()
         
         // 컨테이너 추가
         self.view.addSubview(timerContainer)
@@ -88,13 +87,30 @@ class RecordSumUpView: RideThisViewController {
         cancelButton.addAction(UIAction { [weak self] _ in
             self?.viewModel.cancelSaveRecording()
         }, for: .touchUpInside)
+        
+        // 뷰 모델에서 기록 저장 취소 트리거 처리
+        viewModel.onCancelSaveRecording = { [weak self] in
+            // 저장 없이 기록 뷰로 이동
+            self?.navigateToRecordView()
+        }
+        
         saveButton.addAction(UIAction { [weak self] _ in
-            self?.viewModel.saveRecording()
+            // TODO: - 미로그인 상태일 때 로그인 팝업
+            self?.showAlert(alertTitle: "기록 저장", msg: "기록을 저장하시겠습니까?", confirm: "저장"
+            ) {
+                self?.viewModel.saveRecording()
+            }
         }, for: .touchUpInside)
+        
+        viewModel.onSaveRecroding = { [weak self] in
+            // TODO: - 저장 후 마이페이지 뷰-기록으로 이동인지 기록 뷰로 이동인지 확인 필요
+            // 일단 기록 뷰로 이동
+            self?.navigateToRecordView()
+        }
         
         timerContainer.snp.makeConstraints { [weak self] cont in
             guard let self = self else { return }
-            cont.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+            cont.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(20)
             cont.height.equalTo(100)
             cont.left.equalTo(self.view.safeAreaLayoutGuide.snp.left).offset(20)
             cont.right.equalTo(self.view.safeAreaLayoutGuide.snp.right).offset(-20)
@@ -244,6 +260,30 @@ class RecordSumUpView: RideThisViewController {
             btn.left.equalTo(self.view.snp.centerX).offset(10)
             btn.right.equalTo(self.view.safeAreaLayoutGuide.snp.right).offset(-20)
         }
+    }
+    
+    private func navigateToRecordView() {
+        let recordViewController = RecordView()
+        self.navigationController?.pushViewController(recordViewController, animated: true) // 기록 화면으로 이동
+    }
+    
+    // MARK: Navigation Bar
+    private func setupNavigationBar() {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .systemBackground
+        
+        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationItem.largeTitleDisplayMode = .never
+        navigationController?.navigationBar.isTranslucent = false
+        
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.compactAppearance = appearance
+        
+        // 커스텀 타이틀 레이블을 왼쪽 바 버튼 아이템으로 설정
+        let leftBarButtonItem = UIBarButtonItem(customView: customTitleLabel)
+        navigationItem.leftBarButtonItem = leftBarButtonItem
     }
 }
 

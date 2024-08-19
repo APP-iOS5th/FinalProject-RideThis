@@ -7,6 +7,9 @@ class RecordView: RideThisViewController {
     
     let recordContainerView = RecordContainerView()
     
+    // 커스텀 타이틀
+    private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "기록")
+    
     // 버튼 선언
     let resetButton = RideThisButton(buttonTitle: "Reset")
     let recordButton = RideThisButton(buttonTitle: "시작")
@@ -16,11 +19,7 @@ class RecordView: RideThisViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // 대형 타이틀 활성화
-        // TODO: - UI 맞춰서 수정할 것
-        self.navigationController?.navigationBar.prefersLargeTitles = true
-        self.navigationItem.largeTitleDisplayMode = .inline
-        self.navigationItem.title = "기록"
+        setupNavigationBar()
         
         // 버튼 상태 설정
         resetButton.backgroundColor = .systemGray
@@ -129,6 +128,25 @@ class RecordView: RideThisViewController {
         let summaryViewController = RecordSumUpView()
         self.navigationController?.pushViewController(summaryViewController, animated: true) // 요약 화면으로 이동
         // TODO: - 요약 페이지 뒤로가기 버튼 해결
+    }
+    
+    // MARK: Navigation Bar
+    private func setupNavigationBar() {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .systemBackground
+        
+        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationItem.largeTitleDisplayMode = .never
+        navigationController?.navigationBar.isTranslucent = false
+        
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.compactAppearance = appearance
+        
+        // 커스텀 타이틀 레이블을 왼쪽 바 버튼 아이템으로 설정
+        let leftBarButtonItem = UIBarButtonItem(customView: customTitleLabel)
+        navigationItem.leftBarButtonItem = leftBarButtonItem
     }
 }
 

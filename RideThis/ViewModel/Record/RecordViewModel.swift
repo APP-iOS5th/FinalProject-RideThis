@@ -49,19 +49,21 @@ class RecordViewModel {
     
     // MARK: - 기록 요약 화면 버튼 동작
     // TODO: - 버튼 동작 구현
+    
+    // 저장 또는 취소 시 화면 전환을 위한 클로저
+    var onCancelSaveRecording: (() -> Void)?
+    var onSaveRecroding: (() -> Void)?
+    
     func cancelSaveRecording() {
         print("save cancel pushed")
-        // 기록 요약 화면에서 취소 버튼 누르면
-        // 1. 이전 화면(기록 화면)으로 이동
-        // 2. 기록은 저장되지 않음
+        // 기록 요약 화면에서 취소 버튼 누르면 이전 화면(기록 화면)으로 이동
+        onCancelSaveRecording?()
     }
     
     func saveRecording() {
-        print("save")
+        print("save pushed")
         // 기록 요약 화면에서 저장 버튼 누르면
-        // 1. 팝업 노출
-        // 1-1. 미로그인 시 로그인 안내 문구
-        // 1-2. 로그인 시 기록 저장 안내 문구
-        // 2. 취소 누르면 
+        // 1-1. 미로그인 시 로그인 안내 문구 팝업
+        onSaveRecroding?()
     }
 }
