@@ -1,7 +1,6 @@
 import UIKit
 import FirebaseCore
 import FirebaseAuth
-import AuthenticationServices
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -9,7 +8,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let userService = UserService.shared
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        // Firebase 초기화
         FirebaseApp.configure()
+        
+        if FirebaseApp.app() != nil {
+            print("Firebase Connect")
+        } else {
+            print("Firebase Failed Connect")
+        }
         return true
     }
 
