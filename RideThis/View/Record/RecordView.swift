@@ -5,10 +5,15 @@ import SnapKit
 class RecordView: RideThisViewController {
     let viewModel = RecordViewModel()
     
-    let recordContainerView = RecordContainerView()
-    
     // 커스텀 타이틀
     private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "기록")
+    
+    // 기록 뷰 선언
+    private let timerRecord = RecordContainer(title: "Timer", recordText: "00:00", view: "record")
+    private let cadenceRecord = RecordContainer(title: "Cadence", recordText: "0 RPM", view: "record")
+    private let speedRecord = RecordContainer(title: "Speed", recordText: "0 km/h", view: "record")
+    private let distanceRecord = RecordContainer(title: "Distance", recordText: "0 km", view: "record")
+    private let calorieRecord = RecordContainer(title: "Calories", recordText: "0 kcal", view: "record")
     
     // 버튼 선언
     let resetButton = RideThisButton(buttonTitle: "Reset")
@@ -69,37 +74,73 @@ class RecordView: RideThisViewController {
             self?.navigateToSummaryView()
         }
         
-        self.view.addSubview(recordContainerView)
+        // 기록 뷰 추가
+        self.view.addSubview(timerRecord)
+        self.view.addSubview(cadenceRecord)
+        self.view.addSubview(speedRecord)
+        self.view.addSubview(distanceRecord)
+        self.view.addSubview(calorieRecord)
+        
+        // 버튼 추가
         self.view.addSubview(resetButton)
         self.view.addSubview(recordButton)
         self.view.addSubview(finishButton)
         
         // MARK: - 제약조건 추가
-        recordContainerView.snp.makeConstraints { make in
-            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(20)
-            make.left.equalToSuperview()
-            make.right.equalToSuperview()
-            make.height.equalTo(400)
+        // 기록 뷰 제약조건
+        timerRecord.snp.makeConstraints { timer in
+            timer.top.equalToSuperview().offset(80)
+            timer.left.equalToSuperview().offset(20)
+            timer.right.equalToSuperview().offset(-20)
+            timer.height.equalTo(150)
+        }
+        
+        cadenceRecord.snp.makeConstraints { cadence in
+            cadence.top.equalTo(timerRecord.snp.bottom).offset(40)
+            cadence.left.equalToSuperview().offset(20)
+            cadence.width.equalToSuperview().multipliedBy(0.5).offset(-25)
+            cadence.height.equalTo(110)
+        }
+        
+        speedRecord.snp.makeConstraints { speed in
+            speed.top.equalTo(timerRecord.snp.bottom).offset(40)
+            speed.left.equalTo(cadenceRecord.snp.right).offset(10)
+            speed.right.equalToSuperview().offset(-20)
+            speed.height.equalTo(110)
+        }
+        
+        distanceRecord.snp.makeConstraints { distance in
+            distance.top.equalTo(cadenceRecord.snp.bottom).offset(15)
+            distance.left.equalToSuperview().offset(20)
+            distance.width.equalToSuperview().multipliedBy(0.5).offset(-25)
+            distance.height.equalTo(110)
+        }
+        
+        calorieRecord.snp.makeConstraints { calory in
+            calory.top.equalTo(speedRecord.snp.bottom).offset(15)
+            calory.left.equalTo(distanceRecord.snp.right).offset(10)
+            calory.right.equalToSuperview().offset(-20)
+            calory.height.equalTo(110)
         }
         
         // 버튼 제약조건
         recordButton.snp.makeConstraints { [weak self] btn in
             guard let self = self else { return }
-            btn.top.equalTo(recordContainerView.snp.bottom).offset(90)
+            btn.top.equalTo(calorieRecord.snp.bottom).offset(67)
             btn.centerX.equalToSuperview()
             btn.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing).multipliedBy(0.66)
         }
         
         resetButton.snp.makeConstraints { [weak self] btn in
             guard let self = self else { return }
-            btn.top.equalTo(recordContainerView.snp.bottom).offset(90)
+            btn.top.equalTo(calorieRecord.snp.bottom).offset(67)
             btn.left.equalTo(self.view.safeAreaLayoutGuide.snp.left).offset(20)
             btn.right.equalTo(recordButton.snp.left).offset(-15)
         }
         
         finishButton.snp.makeConstraints { [weak self] btn in
             guard let self = self else { return }
-            btn.top.equalTo(recordContainerView.snp.bottom).offset(90)
+            btn.top.equalTo(calorieRecord.snp.bottom).offset(67)
             btn.left.equalTo(recordButton.snp.right).offset(15)
             btn.right.equalTo(self.view.safeAreaLayoutGuide.snp.right).offset(-20)
         }
