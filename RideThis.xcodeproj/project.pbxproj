@@ -862,7 +862,7 @@
 				CODE_SIGN_ENTITLEMENTS = RideThis/RideThis.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = N954XS4D2X;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RideThis/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -890,7 +890,7 @@
 				CODE_SIGN_ENTITLEMENTS = RideThis/RideThis.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = N954XS4D2X;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RideThis/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
