@@ -1,17 +1,34 @@
 import UIKit
-import SnapKit
 import Combine
+import SnapKit
+import Kingfisher
 
 class EditProfileInfoView: RideThisViewController {
     
+    // MARK: Data Components
+    var user: User
+    
+    init(user: User) {
+        self.user = user
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: UI Components
-    private let profileImageView: UIImageView = {
+    private lazy var profileImageView: UIImageView = {
         // TODO: 이미지를 탭 했을 때 이미지(사용자 사진첩)를 변경할 수 있는 화면
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.widthAnchor.constraint(equalToConstant: 120).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: 120).isActive = true
         imageView.layer.cornerRadius = 60
+        imageView.clipsToBounds = true
+        if let imageURL = self.user.user_image {
+            imageView.kf.setImage(with: URL(string: imageURL))
+        }
         imageView.backgroundColor = .primaryColor
         
         return imageView
@@ -23,7 +40,7 @@ class EditProfileInfoView: RideThisViewController {
         imageView.widthAnchor.constraint(equalToConstant: 30).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: 30).isActive = true
         imageView.image = UIImage(systemName: "camera")
-        imageView.tintColor = .black
+        imageView.tintColor = .primaryColor
         
         return imageView
     }()
@@ -36,26 +53,26 @@ class EditProfileInfoView: RideThisViewController {
     private lazy var userNickNameTextField: UITextField = {
         let field = UITextField()
         field.translatesAutoresizingMaskIntoConstraints = false
-        field.placeholder = "매드카우"
-        field.text = "매드카우"
+        field.placeholder = self.user.user_nickname
+        field.text = self.user.user_nickname
         field.tag = 0
         field.addTarget(self, action: #selector(userNickNameChanged), for: .editingChanged)
         
         return field
     }()
-    private let userHeightTextField: UITextField = {
+    private lazy var userHeightTextField: UITextField = {
         let field = UITextField()
         field.translatesAutoresizingMaskIntoConstraints = false
-        field.placeholder = "168"
-        field.text = "168"
+        field.placeholder = self.user.tallStr
+        field.text = self.user.tallStr
         
         return field
     }()
     private lazy var userWeightTextField: UITextField = {
         let field = UITextField()
         field.translatesAutoresizingMaskIntoConstraints = false
-        field.placeholder = "70"
-        field.text = "70"
+        field.placeholder = "\(self.user.user_weight)"
+        field.text = "\(self.user.user_weight)"
         field.tag = 1
         field.addTarget(self, action: #selector(userNickNameChanged), for: .editingChanged)
         
@@ -176,10 +193,10 @@ class EditProfileInfoView: RideThisViewController {
             $0.left.equalTo(self.userNickNameTextField.snp.left)
             $0.right.equalTo(self.profileInfoContainer.snp.right).offset(-10)
         }
-        
     }
     
     @objc func saveProfileInfo() {
+        // MARK: TODO -
         self.navigationController?.popViewController(animated: true)
     }
     
