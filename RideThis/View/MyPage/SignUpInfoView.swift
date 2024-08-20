@@ -1,6 +1,22 @@
 import UIKit
+import FirebaseFirestore
+import FirebaseStorage
 
 class SignUpInfoView: RideThisViewController {
+    
+    // MARK: Data Components
+    let userId: String
+    let userEmail: String?
+    
+    init(userId: String, userEmail: String?) {
+        self.userId = userId
+        self.userEmail = userEmail
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: UI Components
     // MARK: SignUp Title
@@ -21,10 +37,14 @@ class SignUpInfoView: RideThisViewController {
     // MARK: SignUp Info - 1
     private let userInfoContainer = RideThisContainer(height: 100)
     private let userEmailLabel = RideThisLabel(text: "이메일")
-    private let userEmail: UITextField = {
+    private lazy var userEmailTextField: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.placeholder = "이메일을 입력해주세요"
+        tf.text = userEmail
+        if userEmail != nil {
+            tf.isEnabled = false
+        }
         
         return tf
     }()
@@ -89,7 +109,7 @@ class SignUpInfoView: RideThisViewController {
     
     func setInfoContainer() {
         view.addSubview(userInfoContainer)
-        [userEmailLabel, userEmail, userInfoSeparator,
+        [userEmailLabel, userEmailTextField, userInfoSeparator,
          userNickNameLabel, userNickName].forEach{ userInfoContainer.addSubview($0) }
         
         userInfoContainer.snp.makeConstraints {
@@ -103,7 +123,7 @@ class SignUpInfoView: RideThisViewController {
             $0.left.equalTo(self.userInfoContainer.snp.left).offset(10)
         }
         
-        userEmail.snp.makeConstraints {
+        userEmailTextField.snp.makeConstraints {
             $0.top.equalTo(self.userEmailLabel.snp.top)
             $0.left.equalTo(self.userEmailLabel.snp.right).offset(60)
         }
@@ -121,7 +141,7 @@ class SignUpInfoView: RideThisViewController {
         
         userNickName.snp.makeConstraints {
             $0.top.equalTo(self.userNickNameLabel.snp.top)
-            $0.left.equalTo(self.userEmail.snp.left)
+            $0.left.equalTo(self.userEmailTextField.snp.left)
         }
         
         view.addSubview(userInfoLabel)
@@ -149,7 +169,7 @@ class SignUpInfoView: RideThisViewController {
         
         userWeight.snp.makeConstraints {
             $0.top.equalTo(userWeightLabel.snp.top)
-            $0.left.equalTo(userEmail.snp.left)
+            $0.left.equalTo(userEmailTextField.snp.left)
         }
         
         userInfoSeparator2.snp.makeConstraints {
@@ -182,5 +202,35 @@ class SignUpInfoView: RideThisViewController {
             $0.left.equalTo(userInfoContainer.snp.left)
             $0.right.equalTo(userInfoContainer.snp.right)
         }
+        
+        nextButton.addAction(UIAction { [weak self] _ in
+            guard let self = self else { return }
+            // MARK: next버튼 누르면 Firebase에 저장
+            let db = Firestore.firestore()
+            let usersCollection = db.collection("USERS")
+            let documentID = usersCollection.document().documentID
+            let newUser: [String: Any] = [
+                "user_account_public": false,
+                "user_email": userEmail ?? "lobasketve@gmail.com",
+                "user_follower": ["1", "2"],
+                "user_follwing": ["1", "2"],
+                "user_id": "ckw",
+                "user_image": "https://picsum.photos/200", // null 값을 저장
+                "user_nickname": userNickName.text!,
+                "user_tall": Int(userHeight.text!)!, // null 값을 저장
+                "user_weight": Int(userWeight.text!)!
+            ]
+            
+            usersCollection.document(documentID).setData(newUser) { error in
+                if let error = error {
+                    print("문서 생성 실패: \(error.localizedDescription)")
+                } else {
+                    print("문서 생성 및 필드 추가 성공")
+                }
+            }
+            if let scene = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate) {
+                scene.changeRootView(viewController: scene.getTabbarController(), animated: true)
+            }
+        }, for: .touchUpInside)
     }
 }
