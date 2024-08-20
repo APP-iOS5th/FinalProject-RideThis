@@ -661,9 +661,10 @@
 				CD42145C2C64998200F7C3AE /* DeviceViewModel.swift in Sources */,
 				CD66F5D42C6C887E00CDBB0B /* AccountSettingView.swift in Sources */,
 				CD4214102C64988C00F7C3AE /* CompetitionView.swift in Sources */,
-
+<<<<<<< HEAD
 				043E0C952C73342900F25AF7 /* ResultRankingViewModel.swift in Sources */,
-
+=======
+>>>>>>> 1d175162670ef35f6910de80f57697fa5dce9437
 				CD76A8C92C6E53FF003490B3 /* SignUpInfoView.swift in Sources */,
 				CD4213C32C64982000F7C3AE /* AppDelegate.swift in Sources */,
 				041A672F2C6C501F000BA4C1 /* RecordInfoView.swift in Sources */,

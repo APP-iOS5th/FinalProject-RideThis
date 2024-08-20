@@ -1,9 +1,19 @@
 import UIKit
+import FirebaseCore
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        // Firebase 초기화
+        FirebaseApp.configure()
+        
+        if FirebaseApp.app() != nil {
+            print("Firebase Connect")
+        } else {
+            print("Firebase Failed Connect")
+        }
+        
         return true
     }
 
