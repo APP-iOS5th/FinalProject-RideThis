@@ -8,10 +8,8 @@
 import Foundation
 import UIKit
 import Combine
-//import FirebaseFirestore
 
 class StartCometitionViewModel {
-//    private let db = Firestore.firestore()
     private let firebaseService = FireBaseService()
     
     var timer: String = "00:00" {
