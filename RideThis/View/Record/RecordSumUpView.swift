@@ -14,6 +14,8 @@ class RecordSumUpView: RideThisViewController {
     // 커스텀 타이틀
     private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "운동기록 요약")
     
+    var recordedTime: String = "00:00"
+    
     // 기록 뷰 선언
     private let timerRecord = RecordContainer(title: "Timer", recordText: "00:00", view: "summary")
     private let cadenceRecord = RecordContainer(title: "Cadence", recordText: "0 RPM", view: "summary")
@@ -29,6 +31,8 @@ class RecordSumUpView: RideThisViewController {
         super.viewDidLoad()
         
         setupNavigationBar()
+        
+        timerRecord.updateRecordText(text: recordedTime)
         
         // 기록 뷰 추가
         self.view.addSubview(timerRecord)

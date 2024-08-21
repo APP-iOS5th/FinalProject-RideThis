@@ -1,11 +1,23 @@
 import Foundation
+import Combine
 
-class RecordViewModel {
-    // MARK: - 기록 화면 버튼 동작
-    // TODO: - 버튼 동작 구현
+class RecordViewModel: ObservableObject {
+    // MARK: - 기록 화면 동작
     
     let isLogin = false
     let isBluetooth = true
+    
+    // 타이머
+//    @Published private(set) var elapsedTime: TimeInterval = 0
+//    private var timer: AnyCancellable?
+    
+    var recordedTime: TimeInterval = 0.0
+    
+    // 타이머 업데이트 클로저
+    var onTimerUpdated: ((String) -> Void)?
+    
+    private var timer: Timer?
+    @Published var elapsedTime: TimeInterval = 0.0
     
     // 상태 변경을 알리는 클로저
     var onRecordingStatusChanged: ((Bool) -> Void)?
@@ -24,31 +36,76 @@ class RecordViewModel {
         // 기록 시작
         isRecording = true
         print("start pushed")
-        // 1. 블루투스 연결 확인
-        // 1-1. 연결안됐으면 블루투스 연결 알림 팝업
+        startTimer()
+        //        elapsedTime = 0
+        //        Timer.publish(every: 1.0, on: .main, in: .common)
+        //            .autoconnect()
+        //            .sink { [weak self] _ in
+        //                self?.elapsedTime += 1
+        //            }
+        //            .store(in: &cancellables)
     }
     
     func resetRecording() {
-        // reset 버튼
+        // 기록 시작 후 누르면 리셋하고 초기상태
         isRecording = false
         print("reset pushed")
-        // 기록 시작 후 누르면 리셋하고 초기상태
+        stopTimer()
+        //        cancellables.forEach { $0.cancel() }
+        elapsedTime = 0.0
+        recordedTime = 0.0
+        onTimerUpdated?(formatTime(elapsedTime))
     }
     
     func finishRecording() {
-        // 기록 종료 버튼
+        // 누르기 전까지의 기록 저장 후 요약페이지 이동
         isRecording = false
         print("finish pushed")
-        
-        // 누르면 종료 전까지의 기록 저장 후 요약페이지 이동
+        stopTimer()
+        recordedTime = elapsedTime
         onFinishRecording?()
+        //        cancellables.forEach { $0.cancel() }
     }
     
     func pauseRecording() {
         // 기록 일시정지
         isRecording = false
         print("pause pushed")
+        stopTimer()
+        //        cancellables.forEach { $0.cancel() }
     }
+    
+    private func startTimer() {
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            self.elapsedTime += 1
+            self.onTimerUpdated?(self.formatTime(self.elapsedTime))
+        }
+    }
+
+    private func stopTimer() {
+        timer?.invalidate()
+        timer = nil
+    }
+
+    func formatTime(_ time: TimeInterval) -> String {
+        let minutes = Int(time) / 60
+        let seconds = Int(time) % 60
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
+    
+//    private func startTimer() {
+//        timer = Timer.publish(every: 1, on: .main, in: .common)
+//            .autoconnect()
+//            .sink { [weak self] _ in
+//                self?.elapsedTime += 1
+//            }
+//    }
+//    
+//    private func stopTimer() {
+//        timer?.cancel()
+//        timer = nil
+//    }
     
     // MARK: - 기록 요약 화면 버튼 동작
     // TODO: - 버튼 동작 구현
@@ -66,7 +123,6 @@ class RecordViewModel {
     func saveRecording() {
         print("save pushed")
         // 기록 요약 화면에서 저장 버튼 누르면
-        // 1-1. 미로그인 시 로그인 안내 문구 팝업
         onSaveRecroding?()
     }
 }

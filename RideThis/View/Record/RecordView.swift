@@ -1,9 +1,12 @@
 import UIKit
 import SnapKit
+import Combine
 
 // 기록 탭 초기 화면
 class RecordView: RideThisViewController {
     let viewModel = RecordViewModel()
+    
+    private var cancellables = Set<AnyCancellable>()
     
     // 커스텀 타이틀
     private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "기록")
@@ -25,56 +28,8 @@ class RecordView: RideThisViewController {
         super.viewDidLoad()
         
         setupNavigationBar()
-        
-        // 버튼 상태 설정
-        resetButton.backgroundColor = .systemGray
-        finishButton.backgroundColor = .systemGray
-        resetButton.isEnabled = false
-        finishButton.isEnabled = false
-        
-        // 버튼 액션
-        resetButton.addAction(UIAction { [weak self] _ in
-            self?.showAlert(alertTitle: "기록을 리셋할까요?", msg: "지금까지의 기록이 초기화됩니다.", confirm: "리셋"
-            ) {
-                self?.viewModel.resetRecording()
-            }
-        }, for: .touchUpInside)
-        
-        // TODO: - 클릭 시 버튼이 눌리는 모션이 보이지 않음(확인 필요)
-        // 커스텀이라 그런가
-        recordButton.addAction(UIAction { [weak self] _ in
-            guard let self = self else { return }
-            // TODO: - 최초 기록 시작일 때 카운트다운 추가
-            
-            // 블루투스 연결 상태 확인
-            if self.viewModel.isBluetooth {
-                if self.viewModel.isRecording {
-                    self.viewModel.pauseRecording()
-                    resetButton.isEnabled = true
-                    finishButton.isEnabled = true
-                    resetButton.backgroundColor = .black
-                    finishButton.backgroundColor = .black
-                } else {
-                    self.viewModel.startRecording()
-                    // 기록 시작 시 탭바 비활성화
-                    self.tabBarController?.tabBar.items?.forEach { $0.isEnabled = false }
-                }
-            } else {
-                showAlert(alertTitle: "장치연결이 필요합니다.", msg: "사용하시려면 장치를 연결해주세요.", confirm: "장치연결") {
-                    print("connect Bluetooth")
-                    // TODO: - 장치 연결 페이지 이동 추가
-                }
-            }
-        }, for: .touchUpInside)
-        
-        finishButton.addAction(UIAction { [weak self] _ in
-            guard let self = self else { return }
-            self.showAlert(alertTitle: "기록을 종료할까요?", msg: "요약 화면으로 이동합니다.", confirm: "기록 종료"
-            ) {
-                self.viewModel.finishRecording()
-                self.tabBarController?.tabBar.items?.forEach { $0.isEnabled = true }
-            }
-        }, for: .touchUpInside)
+        setupButtons()
+        setupBindings()
         
         // ViewModel의 상태 변경 클로저 설정
         viewModel.onRecordingStatusChanged = { [weak self] isRecording in
@@ -99,7 +54,11 @@ class RecordView: RideThisViewController {
         self.view.addSubview(recordButton)
         self.view.addSubview(finishButton)
         
-        // MARK: - 제약조건 추가
+        setupConstraints()
+    }
+    
+    // MARK: - 레이아웃 설정
+    private func setupConstraints() {
         // 기록 뷰 제약조건
         timerRecord.snp.makeConstraints { timer in
             timer.top.equalToSuperview().offset(80)
@@ -159,6 +118,68 @@ class RecordView: RideThisViewController {
         }
     }
     
+    // MARK: - 버튼 설정
+    private func setupButtons() {
+        resetButton.backgroundColor = .systemGray
+        finishButton.backgroundColor = .systemGray
+        resetButton.isEnabled = false
+        finishButton.isEnabled = false
+        
+        // 버튼 액션
+        resetButton.addAction(UIAction { [weak self] _ in
+            self?.showAlert(alertTitle: "기록을 리셋할까요?", msg: "지금까지의 기록이 초기화됩니다.", confirm: "리셋"
+            ) {
+                self?.viewModel.resetRecording()
+            }
+        }, for: .touchUpInside)
+        
+        // TODO: - 클릭 시 버튼이 눌리는 모션이 보이지 않음(확인 필요)
+        // 커스텀이라 그런가
+        recordButton.addAction(UIAction { [weak self] _ in
+            guard let self = self else { return }
+            // TODO: - 최초 기록 시작일 때 카운트다운 추가
+            // 블루투스 연결 상태 확인
+            if self.viewModel.isBluetooth {
+                if self.viewModel.isRecording {
+                    self.viewModel.pauseRecording()
+                    self.updateUI(isRecording: false)
+                } else {
+                    self.viewModel.startRecording()
+                    self.updateUI(isRecording: true)
+                    // 기록 시작 시 탭바 비활성화
+                    self.tabBarController?.tabBar.items?.forEach { $0.isEnabled = false }
+                }
+            } else {
+                showAlert(alertTitle: "장치연결이 필요합니다.", msg: "사용하시려면 장치를 연결해주세요.", confirm: "장치연결") {
+                    print("connect Bluetooth")
+                    // TODO: - 장치 연결 페이지 이동 추가
+                }
+            }
+        }, for: .touchUpInside)
+        
+        finishButton.addAction(UIAction { [weak self] _ in
+            guard let self = self else { return }
+            self.showAlert(alertTitle: "기록을 종료할까요?", msg: "요약 화면으로 이동합니다.", confirm: "기록 종료"
+            ) {
+                self.viewModel.finishRecording()
+                self.tabBarController?.tabBar.items?.forEach { $0.isEnabled = true }
+            }
+        }, for: .touchUpInside)
+    }
+    
+    // 바인딩 설정
+    private func setupBindings() {
+        // elapsedTime이 변경될 때마다 timerRecord의 recordText 업데이트
+        viewModel.$elapsedTime
+            .map { elapsedTime -> String in
+                let minutes = Int(elapsedTime) / 60
+                let seconds = Int(elapsedTime) % 60
+                return String(format: "%02d:%02d", minutes, seconds)
+            }
+            .assign(to: \.recordLabel.text, on: timerRecord)
+            .store(in: &cancellables)
+    }
+    
     // 버튼 UI 업데이트
     private func updateUI(isRecording: Bool) {
         if isRecording { // 기록중일 때
@@ -180,8 +201,8 @@ class RecordView: RideThisViewController {
     
     private func navigateToSummaryView() {
         let summaryViewController = RecordSumUpView()
+        summaryViewController.recordedTime = viewModel.formatTime(viewModel.recordedTime)
         self.navigationController?.pushViewController(summaryViewController, animated: true) // 요약 화면으로 이동
-        // TODO: - 요약 페이지 뒤로가기 버튼 해결
     }
     
     // MARK: Navigation Bar
@@ -208,7 +229,7 @@ class RecordView: RideThisViewController {
         super.viewWillDisappear(animated)
         tabBarController?.tabBar.items?.forEach { $0.isEnabled = true }
     }
-
+    
 }
 
 // MARK: - Preview
