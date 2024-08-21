@@ -3,6 +3,7 @@ import SnapKit
 import AuthenticationServices
 import CryptoKit
 import FirebaseAuth
+import FirebaseFirestore
 
 class LoginView: RideThisViewController {
     
@@ -83,11 +84,28 @@ extension LoginView: ASAuthorizationControllerDelegate {
                     print("Error in SignIn \(error.localizedDescription) \(#function) \(#line)")
                     return
                 }
-                // MARK: apple 로그인 정보 KeyChain에 저장
                 
-                self.userService.appleSignIn(userId: userId)
-                // MARK: 추가정보 입력 화면으로 이동
-                (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(viewController: SignUpInfoView(userId: userId, userEmail: userEmail), animated: true)
+                let service = FireBaseService()
+                Task {
+                    do {
+                        if let scene = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate) {
+                            if let searchedUser = try await service.fetchUser(at: userId) {
+                                // MARK: 추가정보 입력 화면으로 이동
+                                let searchedUserData = try searchedUser.data(as: User.self)
+                                self.userService.signedUser = searchedUserData
+                                scene.changeRootView(viewController: scene.getTabbarController(), animated: true)
+                            } else {
+                                // MARK: apple 로그인 정보 KeyChain에 저장
+                                self.userService.appleSignIn(userId: userId)
+                                // MARK: 추가정보 입력 화면으로 이동
+                                (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(viewController: SignUpInfoView(userId: userId, userEmail: userEmail), animated: true)
+                            }
+                        }
+                    } catch {
+                        print(error)
+                    }
+                }
+                
             }
         }
     }

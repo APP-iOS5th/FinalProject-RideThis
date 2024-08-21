@@ -47,6 +47,7 @@ class MyPageView: RideThisViewController {
     private let followingLabel = RideThisLabel(fontType: .profileFont, text: "팔로잉")
     private let followingCountLabel = RideThisLabel(fontType: .profileFont)
     private let notLoginLabel = RideThisLabel(fontType: .recordInfoTitle, text: "로그인이 필요합니다.")
+    private let loginButton = RideThisButton(buttonTitle: "로그인", height: 50)
     
     // MARK: User Info
     private let userInfoLabel = RideThisLabel(fontType: .profileFont, text: "정보")
@@ -173,6 +174,11 @@ class MyPageView: RideThisViewController {
         super.viewDidLoad()
         
         setNavigationComponents()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
         setUIComponents()
         setUserData()
     }
@@ -185,12 +191,40 @@ class MyPageView: RideThisViewController {
     }
     
     func setUIComponents() {
-        setScrollView()
-        setProfileView()
-        setUserInfoView()
-        setTotalRecordView()
-        setRecordByPeriodView()
-        setEventToProfileContainer()
+        for subview in view.subviews {
+            subview.removeFromSuperview()
+        }
+        if service.signedUser == nil {
+            setLoginComponents()
+        } else {
+            setScrollView()
+            setProfileView()
+            setUserInfoView()
+            setTotalRecordView()
+            setRecordByPeriodView()
+            setEventToProfileContainer()
+        }
+    }
+    
+    func setLoginComponents() {
+        view.addSubview(notLoginLabel)
+        view.addSubview(loginButton)
+        
+        notLoginLabel.snp.makeConstraints {
+            $0.centerY.equalTo(view.snp.centerY)
+            $0.centerX.equalTo(view.snp.centerX)
+        }
+        
+        loginButton.snp.makeConstraints {
+            $0.top.equalTo(notLoginLabel.snp.bottom).offset(10)
+            $0.left.equalTo(view.snp.left).offset(30)
+            $0.right.equalTo(view.snp.right).offset(-30)
+        }
+        
+        loginButton.addAction(UIAction { [weak self] _ in
+            guard let self = self else { return }
+            self.navigationController?.pushViewController(LoginView(), animated: true)
+        }, for: .touchUpInside)
     }
     
     func setScrollView() {
@@ -557,7 +591,7 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
     }
     
     @objc func toFollowerView() {
-        if let user = service.signedUser {
+        if service.signedUser != nil {
             let frientView = FollowManageView()
             self.navigationController?.pushViewController(frientView, animated: true)
         } else {
