@@ -1,69 +1,128 @@
 import Foundation
+import Combine
 
-class RecordViewModel {
-    // MARK: - 기록 화면 버튼 동작
-    // TODO: - 버튼 동작 구현
-    var isRecording: Bool = false
+class RecordViewModel: ObservableObject {
+    // MARK: - 기록 화면 동작
+    
+    let isLogin = false
+    let isBluetooth = true
+    
+    // 타이머
+//    @Published private(set) var elapsedTime: TimeInterval = 0
+//    private var timer: AnyCancellable?
+    
+    var recordedTime: TimeInterval = 0.0
+    
+    // 타이머 업데이트 클로저
+    var onTimerUpdated: ((String) -> Void)?
+    
+    private var timer: Timer?
+    @Published var elapsedTime: TimeInterval = 0.0
+    
+    // 상태 변경을 알리는 클로저
+    var onRecordingStatusChanged: ((Bool) -> Void)?
+    
+    private(set) var isRecording: Bool = false {
+        didSet {
+            // 상태 변경 시 클로저 호출
+            onRecordingStatusChanged?(isRecording)
+        }
+    }
+    
+    // 기록 종료 시 화면 전환을 위한 클로저
+    var onFinishRecording: (() -> Void)?
     
     func startRecording() {
         // 기록 시작
         isRecording = true
         print("start pushed")
-        // 기록 시작 전에 누르면
-        // 1. 블루투스 연결 확인
-        // 1-1. 연결안됐으면 블루투스 연결 알림 팝업
-        // 2. 기록 시작(경쟁처럼 카운트다운은 없는듯)
-        // 2. reset, finish 버튼 활성화
-        // 3. 레이블 시작->정지 변경
+        startTimer()
+        //        elapsedTime = 0
+        //        Timer.publish(every: 1.0, on: .main, in: .common)
+        //            .autoconnect()
+        //            .sink { [weak self] _ in
+        //                self?.elapsedTime += 1
+        //            }
+        //            .store(in: &cancellables)
     }
     
     func resetRecording() {
-        // reset 버튼
+        // 기록 시작 후 누르면 리셋하고 초기상태
         isRecording = false
         print("reset pushed")
-        // 기록 시작 후 누르면
-        // 1. 리셋 확인 팝업
-        // 1-1. 취소 누르면 리셋 버튼 이전 상태 지속
-        // 1-2. 리셋 누르면 리셋하고 초기상태
-        // 2. 기록 레이블 리셋하고 reset, finish 버튼 비활성화
+        stopTimer()
+        //        cancellables.forEach { $0.cancel() }
+        elapsedTime = 0.0
+        recordedTime = 0.0
+        onTimerUpdated?(formatTime(elapsedTime))
     }
     
     func finishRecording() {
-        // 기록 종료 버튼
+        // 누르기 전까지의 기록 저장 후 요약페이지 이동
         isRecording = false
         print("finish pushed")
-        // 기록 시작 후 누르면
-        // 1. 기록 종료 확인 팝업
-        // 1-1. 취소 누르면 종료 버튼 이전 상태 지속
-        // 1-2. 종료 누르면 종료 전까지의 기록 저장 후 요약페이지 이동
-        // 2. 기록 레이블 리셋하고 reset, finish 버튼 비활성화
+        stopTimer()
+        recordedTime = elapsedTime
+        onFinishRecording?()
+        //        cancellables.forEach { $0.cancel() }
     }
     
     func pauseRecording() {
         // 기록 일시정지
         isRecording = false
         print("pause pushed")
-        // 기록 시작 후 정지로 레이블 변경된 버튼 누르면
-        // 1. 별도 팝업 없이 기록 일시 정지
-        // 2. 레이블 정지->시작 변경
-        // 3. reset, finish 버튼은 계속 활성화된 상태
+        stopTimer()
+        //        cancellables.forEach { $0.cancel() }
     }
+    
+    private func startTimer() {
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            self.elapsedTime += 1
+            self.onTimerUpdated?(self.formatTime(self.elapsedTime))
+        }
+    }
+
+    private func stopTimer() {
+        timer?.invalidate()
+        timer = nil
+    }
+
+    func formatTime(_ time: TimeInterval) -> String {
+        let minutes = Int(time) / 60
+        let seconds = Int(time) % 60
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
+    
+//    private func startTimer() {
+//        timer = Timer.publish(every: 1, on: .main, in: .common)
+//            .autoconnect()
+//            .sink { [weak self] _ in
+//                self?.elapsedTime += 1
+//            }
+//    }
+//    
+//    private func stopTimer() {
+//        timer?.cancel()
+//        timer = nil
+//    }
     
     // MARK: - 기록 요약 화면 버튼 동작
     // TODO: - 버튼 동작 구현
+    
+    // 저장 또는 취소 시 화면 전환을 위한 클로저
+    var onCancelSaveRecording: (() -> Void)?
+    var onSaveRecroding: (() -> Void)?
+    
     func cancelSaveRecording() {
         print("save cancel pushed")
-        // 기록 요약 화면에서 취소 버튼 누르면
-        // 1. 이전 화면(기록 화면)으로 이동
-        // 2. 기록은 저장되지 않음
+        // 기록 요약 화면에서 취소 버튼 누르면 이전 화면(기록 화면)으로 이동
+        onCancelSaveRecording?()
     }
     
     func saveRecording() {
-        print("save")
+        print("save pushed")
         // 기록 요약 화면에서 저장 버튼 누르면
-        // 1. 팝업 노출
-        // 1-1. 미로그인 시 로그인 안내 문구
-        // 1-2. 로그인 시 기록 저장 안내 문구
-        // 2. 취소 누르면 
+        onSaveRecroding?()
     }
 }

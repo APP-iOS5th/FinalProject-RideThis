@@ -34,6 +34,7 @@ class SignUpInfoView: RideThisViewController {
         return stack
     }()
     private let signUpInfoLabel = RideThisLabel(text: "원활한 사용을 위해 추가 정보를 입력해주세요.")
+    
     // MARK: SignUp Info - 1
     private let userInfoContainer = RideThisContainer(height: 100)
     private let userEmailLabel = RideThisLabel(text: "이메일")
@@ -58,6 +59,7 @@ class SignUpInfoView: RideThisViewController {
         return tf
     }()
     private let userInfoLabel = RideThisLabel(fontType: .smallTitle, text: "닉네임은 설정에서 언제든 수정 가능합니다.")
+    
     // MARK: SignUp Info - 2
     private let userInfoContainer2 = RideThisContainer(height: 100)
     private let userWeightLabel = RideThisLabel(text: "몸무게(kg)")
@@ -78,6 +80,7 @@ class SignUpInfoView: RideThisViewController {
         return tf
     }()
     private let userInfoLabel2 = RideThisLabel(fontType: .smallTitle, text: "키, 몸무게는 운동 시 칼로리 측정을 위해 입력해주세요.")
+    
     // MARK: Next Button
     private let nextButton = RideThisButton(buttonTitle: "다음", height: 50)
     
@@ -94,7 +97,7 @@ class SignUpInfoView: RideThisViewController {
     }
     
     func setInfoLabel() {
-        [signUpTitleStackView, signUpInfoLabel].forEach{ self.view.addSubview($0) }
+        [signUpTitleStackView, signUpInfoLabel].forEach { self.view.addSubview($0) }
         
         signUpTitleStackView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
@@ -110,7 +113,7 @@ class SignUpInfoView: RideThisViewController {
     func setInfoContainer() {
         view.addSubview(userInfoContainer)
         [userEmailLabel, userEmailTextField, userInfoSeparator,
-         userNickNameLabel, userNickName].forEach{ userInfoContainer.addSubview($0) }
+         userNickNameLabel, userNickName].forEach { userInfoContainer.addSubview($0) }
         
         userInfoContainer.snp.makeConstraints {
             $0.top.equalTo(signUpInfoLabel.snp.bottom).offset(30)
@@ -160,7 +163,7 @@ class SignUpInfoView: RideThisViewController {
         }
         
         [userWeightLabel, userWeight, userInfoSeparator2,
-         userHeightLabel, userHeight, userInfoLabel2].forEach{ userInfoContainer2.addSubview($0) }
+         userHeightLabel, userHeight, userInfoLabel2].forEach { userInfoContainer2.addSubview($0) }
         
         userWeightLabel.snp.makeConstraints {
             $0.top.equalTo(userInfoContainer2.snp.top).offset(15)
@@ -208,20 +211,19 @@ class SignUpInfoView: RideThisViewController {
             // MARK: next버튼 누르면 Firebase에 저장
             let db = Firestore.firestore()
             let usersCollection = db.collection("USERS")
-            let documentID = usersCollection.document().documentID
             let newUser: [String: Any] = [
                 "user_account_public": false,
                 "user_email": userEmail ?? "lobasketve@gmail.com",
                 "user_follower": ["1", "2"],
-                "user_follwing": ["1", "2"],
-                "user_id": "ckw",
-                "user_image": "https://picsum.photos/200", // null 값을 저장
+                "user_following": ["1", "2"],
+                "user_id": userId,
+                "user_image": "https://picsum.photos/200",
                 "user_nickname": userNickName.text!,
-                "user_tall": Int(userHeight.text!)!, // null 값을 저장
+                "user_tall": Int(userHeight.text!)!,
                 "user_weight": Int(userWeight.text!)!
             ]
             
-            usersCollection.document(documentID).setData(newUser) { error in
+            usersCollection.document(userId).setData(newUser) { error in
                 if let error = error {
                     print("문서 생성 실패: \(error.localizedDescription)")
                 } else {
