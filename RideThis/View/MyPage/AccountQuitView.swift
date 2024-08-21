@@ -20,7 +20,7 @@ class AccountQuitView: RideThisViewController {
     private lazy var logoImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
-        image.image = UIImage(named: "logo")
+        image.image = UIImage(named: "logoTransparentWithName")
         image.contentMode = .scaleAspectFit
         let widthAndHeight = self.view.frame.width - 100
         image.widthAnchor.constraint(equalToConstant: widthAndHeight).isActive = true

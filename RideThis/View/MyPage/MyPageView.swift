@@ -8,15 +8,7 @@ class MyPageView: RideThisViewController {
     
     // MARK: Data Components
     let viewModel = MyPageViewModel()
-    let user = User(user_image: "https://picsum.photos/200",
-                    user_email: "test@gmail.com",
-                    user_nickname: "MadCow",
-                    user_weight: 70,
-                    user_tall: 168,
-                    user_following: ["1", "2", "3", "4"],
-                    user_follower: ["1", "2", "3", "4", "5"],
-                    record_id: RecordsMockData.sample.map{ $0.record_id },
-                    device_id: [])
+    let service = UserService.shared
     
     // MARK: UIComponents
     // MARK: ScrollView
@@ -44,18 +36,15 @@ class MyPageView: RideThisViewController {
         imageView.heightAnchor.constraint(equalToConstant: 80).isActive = true
         imageView.layer.cornerRadius = 40
         imageView.clipsToBounds = true
-        if let imageURL = self.user.user_image {
-            imageView.kf.setImage(with: URL(string: imageURL))
-        }
         imageView.backgroundColor = .primaryColor
         
         return imageView
     }()
     // MARK: TODO - 팔로워 / 팔로잉 숫자가 커질 때 잘 대비 해야함.
     private let followerLabel = RideThisLabel(fontType: .profileFont, text: "팔로워")
-    private lazy var followerCountLabel = RideThisLabel(fontType: .profileFont, text: "\(self.user.user_follower.count)")
+    private let followerCountLabel = RideThisLabel(fontType: .profileFont)
     private let followingLabel = RideThisLabel(fontType: .profileFont, text: "팔로잉")
-    private lazy var followingCountLabel = RideThisLabel(fontType: .profileFont, text: "\(self.user.user_following.count)")
+    private let followingCountLabel = RideThisLabel(fontType: .profileFont)
     private let notLoginLabel = RideThisLabel(fontType: .recordInfoTitle, text: "로그인이 필요합니다.")
     
     // MARK: User Info
@@ -76,16 +65,16 @@ class MyPageView: RideThisViewController {
     private let userNickNameLabel = RideThisLabel(text: "닉네임")
     private let userHeightLabel = RideThisLabel(text: "키(cm)")
     private let userWeightLabel = RideThisLabel(text: "몸무게(kg)")
-    private lazy var userNickName = RideThisLabel(text: user.user_nickname)
-    private lazy var userHeight = RideThisLabel(text: user.tallStr)
-    private lazy var userWeight = RideThisLabel(text: "\(user.user_weight)")
+    private let userNickName = RideThisLabel()
+    private let userHeight = RideThisLabel()
+    private let userWeight = RideThisLabel()
     
     // MARK: Total Record
     private let totalRecordLabel = RideThisLabel(fontType: .profileFont, text: "With. RideThis")
     private let totalRecordContainer = RideThisContainer(height: 100)
     private let totalRunCount = RideThisLabel(fontColor: .recordTitleColor, text: "총 달린 횟수")
     private let totalRunCountSeparator = RideThisSeparator()
-    private lazy var totalRunCountData = RideThisLabel(fontType: .classification, text: "\(self.user.record_id.count)회")
+    private lazy var totalRunCountData = RideThisLabel(fontType: .classification, text: "3회"/*"\(self.user.record_id.count)회"*/)
     private let totalRunTime = RideThisLabel(fontColor: .recordTitleColor, text: "총 달린 시간")
     private let totalRunTimeSeparator = RideThisSeparator()
     private let totalRunTimeData = RideThisLabel(fontType: .classification, text: "2시간 15분")
@@ -184,6 +173,7 @@ class MyPageView: RideThisViewController {
         
         setNavigationComponents()
         setUIComponents()
+        setUserData()
     }
     
     func setNavigationComponents() {
@@ -340,8 +330,8 @@ class MyPageView: RideThisViewController {
         }
         
         self.profileEditButton.addAction(UIAction { [weak self] _ in
-            guard let self = self else { return }
-            let profileEditView = EditProfileInfoView(user: self.user)
+            guard let self = self, let user = service.signedUser else { return }
+            let profileEditView = EditProfileInfoView(user: user)
             navigationController?.pushViewController(profileEditView, animated: true)
         }, for: .touchUpInside)
     }
@@ -478,6 +468,22 @@ class MyPageView: RideThisViewController {
         }
     }
     
+    func setUserData() {
+        guard let user = service.signedUser else { return }
+        if let imageUrl = user.user_image {
+            self.profileImageView.kf.setImage(with: URL(string: imageUrl))
+        }
+        followerCountLabel.text = "\(user.user_follower.count)"
+        followingCountLabel.text = "\(user.user_following.count)"
+        userNickName.text = user.user_nickname
+        userWeight.text = "\(user.user_weight)"
+        if let height = user.user_tall {
+            userHeight.text = "\(height)"
+        } else {
+            userHeight.text = "-"
+        }
+    }
+    
     @objc func settingButtonTapAction() {
         let settingView = SettingView()
         self.navigationController?.pushViewController(settingView, animated: true)
@@ -550,7 +556,13 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
     }
     
     @objc func toFollowerView() {
-        let frientView = FollowManageView()
-        self.navigationController?.pushViewController(frientView, animated: true)
+        if let user = service.signedUser {
+            let frientView = FollowManageView()
+            self.navigationController?.pushViewController(frientView, animated: true)
+        } else {
+            self.showAlert(alertTitle: "알림", msg: "로그인이 필요한 기능입니다. 로그인 화면으로 이동할까요?", confirm: "예") {
+                self.navigationController?.pushViewController(LoginView(), animated: true)
+            }
+        }
     }
 }

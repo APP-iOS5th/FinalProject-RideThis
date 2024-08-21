@@ -3,10 +3,11 @@ import SnapKit
 
 class AccountSettingView: RideThisViewController {
     
+    private let service = UserService.shared
     private lazy var logoImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
-        image.image = UIImage(named: "logo")
+        image.image = UIImage(named: "logoTransparentWithName")
         image.contentMode = .scaleAspectFit
         let widthAndHeight = self.view.frame.width - 100
         image.widthAnchor.constraint(equalToConstant: widthAndHeight).isActive = true
@@ -15,7 +16,7 @@ class AccountSettingView: RideThisViewController {
         return image
     }()
     private let loginAccountLabel = RideThisLabel(fontType: .defaultSize, text: "로그인 계정")
-    private let loginAccount = RideThisLabel(fontType: .defaultSize, fontColor: .recordTitleColor, text: "test@gmail.com")
+    private let loginAccount = RideThisLabel(fontType: .defaultSize, fontColor: .recordTitleColor)
     private let accountSeparator = CustomSeparator()
     private let logoutButton: UIButton = {
         let btn = UIButton()
@@ -50,6 +51,7 @@ class AccountSettingView: RideThisViewController {
         setLogoImage()
         setAccountLabel()
         setAccountButton()
+        setUserData()
     }
     
     func setLogoImage() {
@@ -77,8 +79,8 @@ class AccountSettingView: RideThisViewController {
         
         self.accountSeparator.snp.makeConstraints {
             $0.top.equalTo(self.loginAccountLabel.snp.bottom).offset(10)
-            $0.left.equalTo(self.loginAccountLabel.snp.left)
-            $0.right.equalTo(self.loginAccount.snp.right)
+            $0.left.equalTo(self.view.snp.left).offset(70)
+            $0.right.equalTo(self.view.snp.right).offset(-70)
         }
     }
     
@@ -88,18 +90,30 @@ class AccountSettingView: RideThisViewController {
         
         self.logoutButton.snp.makeConstraints {
             $0.top.equalTo(self.accountSeparator.snp.bottom).offset(30)
-            $0.centerX.equalTo(self.accountSeparator.snp.centerX)
+            $0.centerX.equalTo(self.view.snp.centerX)
         }
         
         self.quitAccountButton.snp.makeConstraints {
             $0.top.equalTo(self.logoutButton.snp.bottom).offset(10)
-            $0.centerX.equalTo(self.logoutButton.snp.centerX)
+            $0.centerX.equalTo(self.view.snp.centerX)
         }
+        
+        self.logoutButton.addAction(UIAction { [weak self] _ in
+            guard let self = self else { return }
+            self.showAlert(alertTitle: "알림", msg: "정말 로그아웃 하시겠습니까?", confirm: "예") {
+                self.service.logout()
+            }
+        }, for: .touchUpInside)
         
         self.quitAccountButton.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
             let quitView = AccountQuitView()
             self.navigationController?.pushViewController(quitView, animated: true)
         }, for: .touchUpInside)
+    }
+    
+    func setUserData() {
+        guard let user = service.signedUser else { return }
+        self.loginAccount.text = user.user_email
     }
 }
