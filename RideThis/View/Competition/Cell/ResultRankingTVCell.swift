@@ -95,7 +95,7 @@ class ResultRankingTVCell: UITableViewCell {
 
         userNameLabel.text = "\(ranking). User\(ranking)"
         timeLabel.text = item.record_timer
-        timeLabel.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        timeLabel.font = UIFont.monospacedSystemFont(ofSize: 17, weight: .bold)
         
         // 인덱스에 따른 색상 및 이미지 표시
         switch ranking {

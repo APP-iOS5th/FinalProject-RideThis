@@ -18,8 +18,6 @@ class SummaryRecordViewController: RideThisViewController {
     private let distanceRecord = RecordContainer(title: "Distance", recordText: "0 km", view: "summary")
     private let calorieRecord = RecordContainer(title: "Calories", recordText: "0 kcal", view: "summary")
     
-    private let testLabel = RideThisLabel(fontType: .defaultSize, text: "")
-    
     private let confirmButton = RideThisButton(buttonTitle: "확인", height: 50)
     
     // MARK: 초기화 및 데이터 바인딩
@@ -47,7 +45,6 @@ class SummaryRecordViewController: RideThisViewController {
         self.navigationItem.hidesBackButton = true
         
         setupLayout()
-        setupTest()
     }
     
     // MARK: SetupBinding Data
@@ -59,20 +56,13 @@ class SummaryRecordViewController: RideThisViewController {
         calorieRecord.updateRecordText(text: "\(viewModel.calorie.formattedWithThousandsSeparator()) Kcal")
     }
     
-    private func setupTest() {
-        testLabel.text = "\(formattedCurrentTime(date: viewModel.startTime)), \(formattedCurrentTime(date: viewModel.endTime))"
-    }
-    
     func formattedCurrentTime(date: Date) -> String {
-        // 현재 시간을 가져옵니다.
         let currentDate = date
         
-        // DateFormatter를 생성하고 설정합니다.
         let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ko_KR") // 한국어 형식 설정
-        dateFormatter.dateFormat = "a hh시 mm분 ss초" // 'a'는 오전/오후, 'hh'는 시간, 'mm'는 분
+        dateFormatter.locale = Locale(identifier: "ko_KR")
+        dateFormatter.dateFormat = "a hh시 mm분 ss초"
         
-        // 현재 시간을 원하는 형식으로 변환합니다.
         let formattedTime = dateFormatter.string(from: currentDate)
         
         return formattedTime
@@ -86,8 +76,6 @@ class SummaryRecordViewController: RideThisViewController {
         self.view.addSubview(distanceRecord)
         self.view.addSubview(calorieRecord)
         self.view.addSubview(confirmButton)
-        
-        self.view.addSubview(testLabel)
         
         let safeArea = self.view.safeAreaLayoutGuide
         
@@ -124,11 +112,6 @@ class SummaryRecordViewController: RideThisViewController {
             calorie.left.equalToSuperview().offset(20)
             calorie.right.equalToSuperview().offset(-20)
             calorie.height.equalTo(100)
-        }
-        
-        testLabel.snp.makeConstraints { test in
-            test.centerX.equalTo(self.view.snp.centerX)
-            test.top.equalTo(calorieRecord.snp.bottom)
         }
         
         confirmButton.snp.makeConstraints { btn in

@@ -116,8 +116,16 @@ class StartCompetitionViewController: RideThisViewController {
         
         let safeArea = self.view.safeAreaLayoutGuide
         
+        let screenHeight = UIScreen.main.bounds.height
+        
         timerRecord.snp.makeConstraints { timer in
-            timer.top.equalToSuperview().offset(80)
+
+            if screenHeight < 668 {
+                timer.top.equalTo(safeArea.snp.top).offset(20)
+            } else {
+                timer.top.equalTo(safeArea.snp.top).offset(80)
+            }
+            
             timer.left.equalToSuperview().offset(20)
             timer.right.equalToSuperview().offset(-20)
             timer.height.equalTo(150)
@@ -152,7 +160,13 @@ class StartCompetitionViewController: RideThisViewController {
         }
         
         giveUpBtn.snp.makeConstraints { btn in
-            btn.bottom.equalTo(safeArea.snp.bottom).offset(-50)
+            
+            if screenHeight < 668 {
+                btn.bottom.equalTo(safeArea.snp.bottom).offset(-20)
+            } else {
+                btn.bottom.equalTo(safeArea.snp.bottom).offset(-50)
+            }
+            
             btn.centerX.equalTo(self.view.snp.centerX)
             btn.width.equalTo(210)
         }
