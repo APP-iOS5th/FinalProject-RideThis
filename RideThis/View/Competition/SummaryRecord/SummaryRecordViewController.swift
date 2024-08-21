@@ -12,6 +12,9 @@ class SummaryRecordViewController: RideThisViewController {
     
     private let viewModel: SummaryRecordViewModel
     
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
+    
     private let timerRecord = RecordContainer(title: "Timer", recordText: "00:00", view: "summary")
     private let cadenceRecord = RecordContainer(title: "Cadence", recordText: "0 RPM", view: "summary")
     private let speedRecord = RecordContainer(title: "Speed", recordText: "0 km/h", view: "summary")
@@ -70,17 +73,32 @@ class SummaryRecordViewController: RideThisViewController {
     
     // MARK: Setup Layout
     private func setupLayout() {
-        self.view.addSubview(timerRecord)
-        self.view.addSubview(cadenceRecord)
-        self.view.addSubview(speedRecord)
-        self.view.addSubview(distanceRecord)
-        self.view.addSubview(calorieRecord)
+        self.view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        
+        contentView.addSubview(timerRecord)
+        contentView.addSubview(cadenceRecord)
+        contentView.addSubview(speedRecord)
+        contentView.addSubview(distanceRecord)
+        contentView.addSubview(calorieRecord)
         self.view.addSubview(confirmButton)
         
         let safeArea = self.view.safeAreaLayoutGuide
         
+        scrollView.snp.makeConstraints { make in
+            make.top.left.right.equalTo(safeArea)
+            make.bottom.equalTo(confirmButton.snp.top).offset(-19)
+        }
+
+        contentView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+            make.width.equalToSuperview()
+            make.top.equalTo(timerRecord.snp.top)
+            make.bottom.equalTo(calorieRecord.snp.bottom)
+        }
+        
         timerRecord.snp.makeConstraints { timer in
-            timer.top.equalTo(safeArea.snp.top).offset(20)
+            timer.top.equalTo(contentView.snp.top).offset(20)
             timer.left.equalToSuperview().offset(20)
             timer.right.equalToSuperview().offset(-20)
             timer.height.equalTo(100)

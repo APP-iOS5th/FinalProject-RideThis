@@ -132,13 +132,18 @@ class CompetitionView: RideThisViewController {
         self.view.addSubview(noRecordLabel)
         self.view.addSubview(competitionBtn)
         
+        let screenHeight = UIScreen.main.bounds.height
+        
         
         segmentedControl.snp.makeConstraints { segment in
             segment.top.equalTo(safeArea.snp.top).offset(20)
             segment.right.equalTo(safeArea.snp.right).offset(-20)
             segment.left.equalTo(safeArea.snp.left).offset(20)
-            segment.height.equalTo(safeArea.snp.height).multipliedBy(0.05)
-
+            if screenHeight < 668 {
+                segment.height.equalTo(30)
+            } else {
+                segment.height.equalTo(40)
+            }
         }
         
         dropdownButton.snp.makeConstraints { drop in
@@ -152,7 +157,7 @@ class CompetitionView: RideThisViewController {
             table.top.equalTo(dropdownButton.snp.bottom).offset(10)
             table.right.equalTo(safeArea.snp.right).offset(-20)
             table.left.equalTo(safeArea.snp.left).offset(20)
-            table.bottom.equalTo(safeArea.snp.bottom).offset(-150)
+            table.bottom.equalTo(competitionBtn.snp.top).offset(-30)
         }
         
         loginLabel.snp.makeConstraints { label in
@@ -171,7 +176,12 @@ class CompetitionView: RideThisViewController {
         }
         
         competitionBtn.snp.makeConstraints { btn in
-            btn.bottom.equalTo(safeArea.snp.bottom).offset(-50)
+            if screenHeight < 668 {
+                btn.bottom.equalTo(safeArea.snp.bottom).offset(-20)
+            } else {
+                btn.bottom.equalTo(safeArea.snp.bottom).offset(-50)
+            }
+
             btn.right.equalTo(safeArea.snp.right).offset(-20)
             btn.left.equalTo(safeArea.snp.left).offset(20)
         }

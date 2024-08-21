@@ -85,6 +85,8 @@ class ResultRankingViewController: RideThisViewController {
 
         let safeArea = self.view.safeAreaLayoutGuide
         
+        let screenHeight = UIScreen.main.bounds.height
+        
         container.snp.makeConstraints { con in
             con.top.equalTo(safeArea.snp.top).offset(20)
             con.left.equalToSuperview().offset(20)
@@ -95,18 +97,26 @@ class ResultRankingViewController: RideThisViewController {
             table.top.equalTo(container.snp.bottom).offset(20)
             table.right.equalTo(safeArea.snp.right).offset(-20)
             table.left.equalTo(safeArea.snp.left).offset(20)
-            table.bottom.equalTo(safeArea.snp.bottom).offset(-150)
+            table.bottom.equalTo(finishBtn.snp.top).offset(-30)
         }
         
         finishBtn.snp.makeConstraints { finish in
-            finish.bottom.equalTo(safeArea.snp.bottom).offset(-50)
+            if screenHeight < 668 {
+                finish.bottom.equalTo(safeArea.snp.bottom).offset(-20)
+            } else {
+                finish.bottom.equalTo(safeArea.snp.bottom).offset(-50)
+            }
             finish.left.equalToSuperview().offset(20)
             finish.right.equalTo(retryBtn.snp.left).offset(-20)
             finish.width.equalTo(retryBtn.snp.width)
         }
         
         retryBtn.snp.makeConstraints { retry in
-            retry.bottom.equalTo(safeArea.snp.bottom).offset(-50)
+            if screenHeight < 668 {
+                retry.bottom.equalTo(safeArea.snp.bottom).offset(-20)
+            } else {
+                retry.bottom.equalTo(safeArea.snp.bottom).offset(-50)
+            }
             retry.right.equalToSuperview().offset(-20)
             retry.left.equalTo(finishBtn.snp.right).offset(20)
             retry.width.equalTo(finishBtn.snp.width)
