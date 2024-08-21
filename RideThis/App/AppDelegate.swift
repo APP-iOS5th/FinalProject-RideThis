@@ -12,6 +12,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         
         if FirebaseApp.app() != nil {
+            userService.checkPrevAppleLogin()
             print("Firebase Connect")
         } else {
             print("Firebase Failed Connect")
