@@ -8,9 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		041A672B2C6C400E000BA4C1 /* DistanceCase+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A672A2C6C400E000BA4C1 /* DistanceCase+Extension.swift */; };
-		041A672F2C6C501F000BA4C1 /* RecordInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A672C2C6C501E000BA4C1 /* RecordInfoView.swift */; };
-		041A67302C6C501F000BA4C1 /* RecordSumUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A672D2C6C501E000BA4C1 /* RecordSumUpView.swift */; };
-		041A67312C6C501F000BA4C1 /* RecordContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A672E2C6C501E000BA4C1 /* RecordContainerView.swift */; };
 		041A67342C6C519B000BA4C1 /* CountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A67332C6C519B000BA4C1 /* CountViewController.swift */; };
 		041A67362C6C6543000BA4C1 /* CountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A67352C6C6543000BA4C1 /* CountViewModel.swift */; };
 		041A67392C6C6B0E000BA4C1 /* StartCompetitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A67382C6C6B0E000BA4C1 /* StartCompetitionViewController.swift */; };
@@ -77,6 +74,12 @@
 		EB07B0BB2C6C79F20067BF0F /* RecordContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0B82C6C79F20067BF0F /* RecordContainerView.swift */; };
 		EB07B0BC2C6C79F20067BF0F /* RecordInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0B92C6C79F20067BF0F /* RecordInfoView.swift */; };
 		EB07B0BD2C6C79F20067BF0F /* RecordSumUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0BA2C6C79F20067BF0F /* RecordSumUpView.swift */; };
+		EBFE4DAB2C757A7D00A36FCA /* ResultRankingTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFE4DAA2C757A7D00A36FCA /* ResultRankingTVCell.swift */; };
+		EBFE4DAE2C757AA800A36FCA /* ResultRankingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFE4DAC2C757AA800A36FCA /* ResultRankingViewController.swift */; };
+		EBFE4DB12C757AE800A36FCA /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFE4DAF2C757AE800A36FCA /* UserService.swift */; };
+		EBFE4DB22C757AE800A36FCA /* KeyChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFE4DB02C757AE800A36FCA /* KeyChain.swift */; };
+		EBFE4DB42C757B1200A36FCA /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFE4DB32C757B1200A36FCA /* LoginViewModel.swift */; };
+		EBFE4DB62C757B4300A36FCA /* ResultRankingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFE4DB52C757B4300A36FCA /* ResultRankingViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -94,9 +97,6 @@
 
 /* Begin PBXFileReference section */
 		041A672A2C6C400E000BA4C1 /* DistanceCase+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DistanceCase+Extension.swift"; sourceTree = "<group>"; };
-		041A672C2C6C501E000BA4C1 /* RecordInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordInfoView.swift; sourceTree = "<group>"; };
-		041A672D2C6C501E000BA4C1 /* RecordSumUpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordSumUpView.swift; sourceTree = "<group>"; };
-		041A672E2C6C501E000BA4C1 /* RecordContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordContainerView.swift; sourceTree = "<group>"; };
 		041A67332C6C519B000BA4C1 /* CountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountViewController.swift; sourceTree = "<group>"; };
 		041A67352C6C6543000BA4C1 /* CountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountViewModel.swift; sourceTree = "<group>"; };
 		041A67382C6C6B0E000BA4C1 /* StartCompetitionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartCompetitionViewController.swift; sourceTree = "<group>"; };
@@ -159,6 +159,12 @@
 		EB07B0B82C6C79F20067BF0F /* RecordContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordContainerView.swift; sourceTree = "<group>"; };
 		EB07B0B92C6C79F20067BF0F /* RecordInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordInfoView.swift; sourceTree = "<group>"; };
 		EB07B0BA2C6C79F20067BF0F /* RecordSumUpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordSumUpView.swift; sourceTree = "<group>"; };
+		EBFE4DAA2C757A7D00A36FCA /* ResultRankingTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultRankingTVCell.swift; sourceTree = "<group>"; };
+		EBFE4DAC2C757AA800A36FCA /* ResultRankingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultRankingViewController.swift; sourceTree = "<group>"; };
+		EBFE4DAF2C757AE800A36FCA /* UserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
+		EBFE4DB02C757AE800A36FCA /* KeyChain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyChain.swift; sourceTree = "<group>"; };
+		EBFE4DB32C757B1200A36FCA /* LoginViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		EBFE4DB52C757B4300A36FCA /* ResultRankingViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultRankingViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -206,6 +212,7 @@
 		04E3C0C62C6AECE2006B844F /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				EBFE4DAA2C757A7D00A36FCA /* ResultRankingTVCell.swift */,
 				04E3C0C72C6AEE62006B844F /* CompetitionTVCell.swift */,
 			);
 			path = Cell;
@@ -243,14 +250,6 @@
 				04E3C0D42C6B3818006B844F /* DistanceSelectionCoordinator.swift */,
 			);
 			path = Coordinator;
-			sourceTree = "<group>";
-		};
-		CD0E1E832C6A40970080CFED /* Setting */ = {
-			isa = PBXGroup;
-			children = (
-				CD0E1E842C6A409F0080CFED /* SettingView.swift */,
-			);
-			path = Setting;
 			sourceTree = "<group>";
 		};
 		CD4213B62C64982000F7C3AE = {
@@ -343,6 +342,7 @@
 		CD4213DC2C64988B00F7C3AE /* Competition */ = {
 			isa = PBXGroup;
 			children = (
+				EBFE4DB52C757B4300A36FCA /* ResultRankingViewModel.swift */,
 				CD42145D2C64998800F7C3AE /* CompetitionViewModel.swift */,
 				04E3C0D62C6B8C30006B844F /* DistanceSelectionViewModel.swift */,
 				041A67352C6C6543000BA4C1 /* CountViewModel.swift */,
@@ -371,6 +371,7 @@
 		CD4213DF2C64988B00F7C3AE /* MyPage */ = {
 			isa = PBXGroup;
 			children = (
+				EBFE4DB32C757B1200A36FCA /* LoginViewModel.swift */,
 				CD4214572C64996700F7C3AE /* MyPageViewModel.swift */,
 				CD66F5CD2C6C75AA00CDBB0B /* EditProfileInfoViewModel.swift */,
 			);
@@ -400,6 +401,7 @@
 		CD4213E32C64988B00F7C3AE /* Competition */ = {
 			isa = PBXGroup;
 			children = (
+				EBFE4DAD2C757AA800A36FCA /* ResultRanking */,
 				043E0C852C6F38C800F25AF7 /* SummaryRecord */,
 				041A67372C6C6AF5000BA4C1 /* StartCompetition */,
 				041A67322C6C518F000BA4C1 /* Count */,
@@ -474,6 +476,8 @@
 		CD42140F2C64988C00F7C3AE /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				EBFE4DB02C757AE800A36FCA /* KeyChain.swift */,
+				EBFE4DAF2C757AE800A36FCA /* UserService.swift */,
 				CD4214642C649D0100F7C3AE /* FirebaseService.swift */,
 			);
 			path = Service;
@@ -550,6 +554,14 @@
 				CD0EC4CA2C71F10500E70452 /* FollowTableViewCell.swift */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		EBFE4DAD2C757AA800A36FCA /* ResultRanking */ = {
+			isa = PBXGroup;
+			children = (
+				EBFE4DAC2C757AA800A36FCA /* ResultRankingViewController.swift */,
+			);
+			path = ResultRanking;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -644,6 +656,7 @@
 				04E3C0D32C6B37F7006B844F /* DistancSelectionViewController.swift in Sources */,
 				CD42145E2C64998800F7C3AE /* CompetitionViewModel.swift in Sources */,
 				CD70006A2C6AF99F0071D4D2 /* GraphCollectionViewCell.swift in Sources */,
+				EBFE4DB62C757B4300A36FCA /* ResultRankingViewModel.swift in Sources */,
 				CD4214672C649D7800F7C3AE /* SplashView.swift in Sources */,
 				043E0C872C6F38F700F25AF7 /* SummaryRecordViewController.swift in Sources */,
 				041A673E2C6CF1E0000BA4C1 /* RecordContainer+Extension.swift in Sources */,
@@ -655,13 +668,14 @@
 				CD0EC4C92C71EE5400E70452 /* FollowManageView.swift in Sources */,
 				CD0EC4CB2C71F10500E70452 /* FollowTableViewCell.swift in Sources */,
 				CD4214522C64990D00F7C3AE /* UILabel+Extension.swift in Sources */,
+				EBFE4DAB2C757A7D00A36FCA /* ResultRankingTVCell.swift in Sources */,
 				CD0EC4CD2C71FC4800E70452 /* SearchUserView.swift in Sources */,
 				CD42145C2C64998200F7C3AE /* DeviceViewModel.swift in Sources */,
+				EBFE4DB22C757AE800A36FCA /* KeyChain.swift in Sources */,
 				CD66F5D42C6C887E00CDBB0B /* AccountSettingView.swift in Sources */,
 				CD4214102C64988C00F7C3AE /* CompetitionView.swift in Sources */,
 				CD76A8C92C6E53FF003490B3 /* SignUpInfoView.swift in Sources */,
 				CD4213C32C64982000F7C3AE /* AppDelegate.swift in Sources */,
-				041A672F2C6C501F000BA4C1 /* RecordInfoView.swift in Sources */,
 				CD4214762C64A63D00F7C3AE /* UIViewController+Extension.swift in Sources */,
 				043E0C842C6F378D00F25AF7 /* Double+Extension.swift in Sources */,
 				CD4214562C64994F00F7C3AE /* RecordViewModel.swift in Sources */,
@@ -673,8 +687,8 @@
 				CD4214692C649F3600F7C3AE /* UIFont+Extension.swift in Sources */,
 				04E3C0D72C6B8C30006B844F /* DistanceSelectionViewModel.swift in Sources */,
 				CD66F5D22C6C86EA00CDBB0B /* SettingTableToggleViewCell.swift in Sources */,
-				041A67312C6C501F000BA4C1 /* RecordContainerView.swift in Sources */,
 				CD4214112C64988C00F7C3AE /* DeviceView.swift in Sources */,
+				EBFE4DAE2C757AA800A36FCA /* ResultRankingViewController.swift in Sources */,
 				041A67392C6C6B0E000BA4C1 /* StartCompetitionViewController.swift in Sources */,
 				CD0E1E852C6A409F0080CFED /* SettingView.swift in Sources */,
 				CD66F5D02C6C837E00CDBB0B /* SettingTableViewCell.swift in Sources */,
@@ -687,6 +701,7 @@
 				CD66621A2C679010005E2887 /* MyPageModel.swift in Sources */,
 				CD4213C52C64982000F7C3AE /* SceneDelegate.swift in Sources */,
 				043E0C822C6F232A00F25AF7 /* StartCompetitionViewModel.swift in Sources */,
+				EBFE4DB42C757B1200A36FCA /* LoginViewModel.swift in Sources */,
 				041A67342C6C519B000BA4C1 /* CountViewController.swift in Sources */,
 				04E3C0D52C6B3818006B844F /* DistanceSelectionCoordinator.swift in Sources */,
 				CD66F5CE2C6C75AA00CDBB0B /* EditProfileInfoViewModel.swift in Sources */,
@@ -696,6 +711,7 @@
 				04E3C0C82C6AEE62006B844F /* CompetitionTVCell.swift in Sources */,
 				041A67362C6C6543000BA4C1 /* CountViewModel.swift in Sources */,
 				CD4214132C64988C00F7C3AE /* MyPageView.swift in Sources */,
+				EBFE4DB12C757AE800A36FCA /* UserService.swift in Sources */,
 				EB07B0BB2C6C79F20067BF0F /* RecordContainerView.swift in Sources */,
 				CDE25C6E2C6913B8008E2A80 /* EditProfileInfoView.swift in Sources */,
 				CDC0C1E02C664FFE00349DC4 /* UIButton+Extension.swift in Sources */,

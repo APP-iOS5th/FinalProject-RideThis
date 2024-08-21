@@ -68,7 +68,7 @@ class RecordSumUpView: RideThisViewController {
     
         // 기록 뷰 제약조건
         timerRecord.snp.makeConstraints { timer in
-            timer.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(20)
+            timer.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(10)
             timer.left.equalToSuperview().offset(20)
             timer.right.equalToSuperview().offset(-20)
             timer.height.equalTo(100)
@@ -105,14 +105,14 @@ class RecordSumUpView: RideThisViewController {
         // 버튼 제약조건
         cancelButton.snp.makeConstraints { [weak self] btn in
             guard let self = self else { return }
-            btn.top.equalTo(calorieRecord.snp.bottom).offset(25)
+            btn.top.equalTo(calorieRecord.snp.bottom).offset(15)
             btn.left.equalTo(self.view.safeAreaLayoutGuide.snp.left).offset(20)
             btn.right.equalTo(self.view.snp.centerX).offset(-10)
         }
         
         saveButton.snp.makeConstraints { [weak self] btn in
             guard let self = self else { return }
-            btn.top.equalTo(calorieRecord.snp.bottom).offset(25)
+            btn.top.equalTo(calorieRecord.snp.bottom).offset(15)
             btn.left.equalTo(self.view.snp.centerX).offset(10)
             btn.right.equalTo(self.view.safeAreaLayoutGuide.snp.right).offset(-20)
         }
