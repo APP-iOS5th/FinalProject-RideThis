@@ -56,6 +56,8 @@ class RecordView: RideThisViewController {
                     finishButton.backgroundColor = .black
                 } else {
                     self.viewModel.startRecording()
+                    // 기록 시작 시 탭바 비활성화
+                    self.tabBarController?.tabBar.items?.forEach { $0.isEnabled = false }
                 }
             } else {
                 showAlert(alertTitle: "장치연결이 필요합니다.", msg: "사용하시려면 장치를 연결해주세요.", confirm: "장치연결") {
@@ -66,9 +68,11 @@ class RecordView: RideThisViewController {
         }, for: .touchUpInside)
         
         finishButton.addAction(UIAction { [weak self] _ in
-            self?.showAlert(alertTitle: "기록을 종료할까요?", msg: "요약 화면으로 이동합니다.", confirm: "기록 종료"
+            guard let self = self else { return }
+            self.showAlert(alertTitle: "기록을 종료할까요?", msg: "요약 화면으로 이동합니다.", confirm: "기록 종료"
             ) {
-                self?.viewModel.finishRecording()
+                self.viewModel.finishRecording()
+                self.tabBarController?.tabBar.items?.forEach { $0.isEnabled = true }
             }
         }, for: .touchUpInside)
         
@@ -198,6 +202,13 @@ class RecordView: RideThisViewController {
         let leftBarButtonItem = UIBarButtonItem(customView: customTitleLabel)
         navigationItem.leftBarButtonItem = leftBarButtonItem
     }
+    
+    // MARK: - 탭바 활성화
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        tabBarController?.tabBar.items?.forEach { $0.isEnabled = true }
+    }
+
 }
 
 // MARK: - Preview
