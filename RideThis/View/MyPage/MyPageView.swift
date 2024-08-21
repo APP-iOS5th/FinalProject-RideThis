@@ -173,18 +173,12 @@ class MyPageView: RideThisViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setNavigationComponents()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
+        self.title = "마이페이지"
         setUIComponents()
         setUserData()
     }
     
     func setNavigationComponents() {
-        self.title = "마이페이지"
         let settingButton = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: #selector(settingButtonTapAction))
         settingButton.tintColor = .label
         self.navigationItem.rightBarButtonItem = settingButton
@@ -197,6 +191,7 @@ class MyPageView: RideThisViewController {
         if service.signedUser == nil {
             setLoginComponents()
         } else {
+            setNavigationComponents()
             setScrollView()
             setProfileView()
             setUserInfoView()
