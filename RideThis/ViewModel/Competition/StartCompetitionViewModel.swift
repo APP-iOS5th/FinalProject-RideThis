@@ -8,10 +8,9 @@
 import Foundation
 import UIKit
 import Combine
-import FirebaseFirestore
 
 class StartCometitionViewModel {
-    private let db = Firestore.firestore()
+    private let firebaseService = FireBaseService()
     
     var timer: String = "00:00" {
         didSet {
@@ -63,29 +62,25 @@ class StartCometitionViewModel {
     // MARK: Update Firebase
     func competitionUpdateData() async {
         do {
-            let querySnapshot = try await db.collection("USERS")
-                .whereField("user_id", isEqualTo: "sam")
-                .getDocuments()
-            
-            // 유저가 존재하는지 확인
-            guard let userDocument = querySnapshot.documents.first else {
+            // 유저아이디가 존재하는지 확인
+            guard let userDocument = try await firebaseService.fetchUser(at: "sam") else {
                 print("유저를 찾을 수 없습니다.")
                 return
             }
             
-            // 해당 유저의 RECORDS에서 조건에 맞는 기존 데이터를 가져옴
-            let recordsCollection = userDocument.reference.collection("RECORDS")
-            let recordsSnapshot = try await recordsCollection
-                .whereField("record_competetion_status", isEqualTo: true)
-                .whereField("record_target_distance", isEqualTo: goalDistance)
-                .getDocuments()
+            // USERS 도큐먼트에서 Collection 찾기
+            let recordsCollection = firebaseService.fetchCollection(document: userDocument, collectionName: "RECORDS")
+            
+            // competitionStatus = true, goalDistance가 일치하는 데이터 찾기
+            let recordsSnapshot = try await firebaseService.fetchCompetitionSnapshot(collection: recordsCollection, competitionStatus: true, goalDistance: goalDistance)
             
             // 기존 기록을 비교하고, 더 빠른 기록만 남김
             for document in recordsSnapshot.documents {
                 let existingTimer = document.data()["record_timer"] as? String ?? "00:00"
                 
                 if compareTimers(existingTimer, timer) {
-                    try await recordsCollection.document(document.documentID).delete()
+                    try await firebaseService.fetchDeleteDocument(at: nil, withId: nil, collection: recordsCollection, document: document)
+                    
                 } else {
                     shouldSaveNewRecord = false
                 }
@@ -93,18 +88,7 @@ class StartCometitionViewModel {
             
             // 새로운 기록을 저장할지 여부 결정
             if shouldSaveNewRecord {
-                _ = try await recordsCollection.addDocument(data: [
-                    "record_timer": timer,
-                    "record_cadence": cadence,
-                    "record_speed": speed,
-                    "record_distance": distance,
-                    "record_calories": calorie,
-                    "record_start_time": startTime ?? Date(),
-                    "record_end_time": endTime ?? Date(),
-                    "record_data": startTime ?? Date(),
-                    "record_competetion_status": true,
-                    "record_target_distance": goalDistance
-                ])
+                try await firebaseService.fetchRecord(collection: recordsCollection, timer: timer, cadence: cadence, speed: speed, distance: distance, calorie: calorie, startTime: startTime ?? Date(), endTime: endTime ?? Date(), date: startTime ?? Date(), competetionStatus: true, tagetDistance: goalDistance)
                 print("경쟁 기록 추가")
             } else {
                 print("새로운 기록이 저장되지 않았습니다. 기존 기록이 더 빠릅니다.")
