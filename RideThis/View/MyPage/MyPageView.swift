@@ -9,6 +9,7 @@ class MyPageView: RideThisViewController {
     // MARK: Data Components
     let viewModel = MyPageViewModel()
     let service = UserService.shared
+
     
     // MARK: UIComponents
     // MARK: ScrollView
@@ -80,7 +81,7 @@ class MyPageView: RideThisViewController {
     private let totalRunTimeData = RideThisLabel(fontType: .classification, text: "2시간 15분")
     private let totalRunDistance = RideThisLabel(fontColor: .recordTitleColor, text: "총 달린 거리")
     private let totalRunDistanceSeparator = RideThisSeparator()
-    private lazy var totalRunDistanceData = RideThisLabel(fontType: .classification, text: "\(RecordsMockData.sample.map{ $0.record_distance }.reduce(0, +))km")
+    private lazy var totalRunDistanceData = RideThisLabel(fontType: .classification, text: "test123km")
     
     // MARK: Record By Period
     private let recordByPeriodLabel = RideThisLabel(fontType: .profileFont, text: "기간별 기록")

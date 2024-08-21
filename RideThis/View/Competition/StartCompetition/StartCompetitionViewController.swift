@@ -205,7 +205,7 @@ class StartCompetitionViewController: RideThisViewController {
                     }
                     
                     // 데이터 뷰 바인딩
-                    let summaryRecordVC = SummaryRecordViewController(timer: self?.viewModel.timer ?? "", cadence: self?.viewModel.cadence ?? 0.0, speed: self?.viewModel.speed ?? 0.0, distance: self?.viewModel.goalDistance ?? 0.0, calorie: self?.viewModel.calorie ?? 0.0,                        startTime: self?.viewModel.startTime ?? Date(), endTime: self?.viewModel.endTime ?? Date())
+                    let summaryRecordVC = SummaryRecordViewController(timer: self?.viewModel.timer ?? "", cadence: self?.viewModel.cadence ?? 0.0, speed: self?.viewModel.speed ?? 0.0, distance: self?.viewModel.goalDistance ?? 0.0, calorie: self?.viewModel.calorie ?? 0.0, startTime: self?.viewModel.startTime ?? Date(), endTime: self?.viewModel.endTime ?? Date())
                     navController.pushViewController(summaryRecordVC, animated: true)
                 }
             }

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		040028BE2C762F310038CC10 /* SplashCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040028BD2C762F310038CC10 /* SplashCoordinator.swift */; };
+		040028C02C762F9D0038CC10 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 040028BF2C762F9D0038CC10 /* GoogleService-Info.plist */; };
 		041A672B2C6C400E000BA4C1 /* DistanceCase+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A672A2C6C400E000BA4C1 /* DistanceCase+Extension.swift */; };
 		041A67342C6C519B000BA4C1 /* CountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A67332C6C519B000BA4C1 /* CountViewController.swift */; };
 		041A67362C6C6543000BA4C1 /* CountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A67352C6C6543000BA4C1 /* CountViewModel.swift */; };
@@ -16,10 +18,6 @@
 		043E0C842C6F378D00F25AF7 /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C832C6F378D00F25AF7 /* Double+Extension.swift */; };
 		043E0C872C6F38F700F25AF7 /* SummaryRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C862C6F38F700F25AF7 /* SummaryRecordViewController.swift */; };
 		043E0C892C70AC2400F25AF7 /* SummaryRecordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C882C70AC2400F25AF7 /* SummaryRecordViewModel.swift */; };
-		043E0C932C73341400F25AF7 /* ResultRankingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C912C73341400F25AF7 /* ResultRankingViewController.swift */; };
-		043E0C952C73342900F25AF7 /* ResultRankingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C942C73342900F25AF7 /* ResultRankingViewModel.swift */; };
-		043E0C972C73344F00F25AF7 /* ResultRankingTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C962C73344F00F25AF7 /* ResultRankingTVCell.swift */; };
-		04937A832C69A7CF0099D3EE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04937A822C69A7CF0099D3EE /* GoogleService-Info.plist */; };
 		04E3C0C82C6AEE62006B844F /* CompetitionTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0C72C6AEE62006B844F /* CompetitionTVCell.swift */; };
 		04E3C0CF2C6B32B8006B844F /* CompetitionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0CE2C6B32B8006B844F /* CompetitionCoordinator.swift */; };
 		04E3C0D32C6B37F7006B844F /* DistancSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0D22C6B37F7006B844F /* DistancSelectionViewController.swift */; };
@@ -74,8 +72,6 @@
 		CDC0C1DE2C664E7400349DC4 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC0C1DD2C664E7400349DC4 /* UIView+Extension.swift */; };
 		CDC0C1E02C664FFE00349DC4 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC0C1DF2C664FFE00349DC4 /* UIButton+Extension.swift */; };
 		CDE25C6E2C6913B8008E2A80 /* EditProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE25C6D2C6913B8008E2A80 /* EditProfileInfoView.swift */; };
-		CDE5E0A62C75E4B400CC79D1 /* SplashCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE5E0A52C75E4B400CC79D1 /* SplashCoordinator.swift */; };
-		CDE5E0AC2C75E6A500CC79D1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CDE5E0AB2C75E6A500CC79D1 /* GoogleService-Info.plist */; };
 		EB07B0BB2C6C79F20067BF0F /* RecordContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0B82C6C79F20067BF0F /* RecordContainerView.swift */; };
 		EB07B0BC2C6C79F20067BF0F /* RecordInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0B92C6C79F20067BF0F /* RecordInfoView.swift */; };
 		EB07B0BD2C6C79F20067BF0F /* RecordSumUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0BA2C6C79F20067BF0F /* RecordSumUpView.swift */; };
@@ -101,6 +97,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		040028BD2C762F310038CC10 /* SplashCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashCoordinator.swift; sourceTree = "<group>"; };
+		040028BF2C762F9D0038CC10 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		041A672A2C6C400E000BA4C1 /* DistanceCase+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DistanceCase+Extension.swift"; sourceTree = "<group>"; };
 		041A67332C6C519B000BA4C1 /* CountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountViewController.swift; sourceTree = "<group>"; };
 		041A67352C6C6543000BA4C1 /* CountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountViewModel.swift; sourceTree = "<group>"; };
@@ -110,10 +108,6 @@
 		043E0C832C6F378D00F25AF7 /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
 		043E0C862C6F38F700F25AF7 /* SummaryRecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryRecordViewController.swift; sourceTree = "<group>"; };
 		043E0C882C70AC2400F25AF7 /* SummaryRecordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryRecordViewModel.swift; sourceTree = "<group>"; };
-		043E0C912C73341400F25AF7 /* ResultRankingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultRankingViewController.swift; sourceTree = "<group>"; };
-		043E0C942C73342900F25AF7 /* ResultRankingViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultRankingViewModel.swift; sourceTree = "<group>"; };
-		043E0C962C73344F00F25AF7 /* ResultRankingTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultRankingTVCell.swift; sourceTree = "<group>"; };
-		04937A822C69A7CF0099D3EE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		04E3C0C72C6AEE62006B844F /* CompetitionTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionTVCell.swift; sourceTree = "<group>"; };
 		04E3C0CE2C6B32B8006B844F /* CompetitionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionCoordinator.swift; sourceTree = "<group>"; };
 		04E3C0D22C6B37F7006B844F /* DistancSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistancSelectionViewController.swift; sourceTree = "<group>"; };
@@ -164,8 +158,6 @@
 		CDC0C1DD2C664E7400349DC4 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		CDC0C1DF2C664FFE00349DC4 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		CDE25C6D2C6913B8008E2A80 /* EditProfileInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileInfoView.swift; sourceTree = "<group>"; };
-		CDE5E0A52C75E4B400CC79D1 /* SplashCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashCoordinator.swift; sourceTree = "<group>"; };
-		CDE5E0AB2C75E6A500CC79D1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EB07B0B82C6C79F20067BF0F /* RecordContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordContainerView.swift; sourceTree = "<group>"; };
 		EB07B0B92C6C79F20067BF0F /* RecordInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordInfoView.swift; sourceTree = "<group>"; };
 		EB07B0BA2C6C79F20067BF0F /* RecordSumUpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordSumUpView.swift; sourceTree = "<group>"; };
@@ -264,10 +256,8 @@
 		CD4213B62C64982000F7C3AE = {
 			isa = PBXGroup;
 			children = (
-				CDE5E0AB2C75E6A500CC79D1 /* GoogleService-Info.plist */,
 				CD4213C12C64982000F7C3AE /* RideThis */,
 				CD4213C02C64982000F7C3AE /* Products */,
-				CD7000612C6AF6D90071D4D2 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -283,6 +273,7 @@
 			isa = PBXGroup;
 			children = (
 				CDC0C1D32C65FB4300349DC4 /* RideThis.entitlements */,
+				040028BF2C762F9D0038CC10 /* GoogleService-Info.plist */,
 				CD4214502C6498FF00F7C3AE /* Extension */,
 				CD4214212C64989000F7C3AE /* App */,
 				CD42140F2C64988C00F7C3AE /* Service */,
@@ -530,7 +521,7 @@
 		CD4214612C649A1100F7C3AE /* Coordinator */ = {
 			isa = PBXGroup;
 			children = (
-				CDE5E0A52C75E4B400CC79D1 /* SplashCoordinator.swift */,
+				040028BD2C762F310038CC10 /* SplashCoordinator.swift */,
 			);
 			path = Coordinator;
 			sourceTree = "<group>";
@@ -547,13 +538,6 @@
 			children = (
 			);
 			path = Coordinator;
-			sourceTree = "<group>";
-		};
-		CD7000612C6AF6D90071D4D2 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		CD7000682C6AF9910071D4D2 /* Cell */ = {
@@ -651,8 +635,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				CD4213CC2C64982200F7C3AE /* Assets.xcassets in Resources */,
+				040028C02C762F9D0038CC10 /* GoogleService-Info.plist in Resources */,
 				CD4213CF2C64982200F7C3AE /* Base in Resources */,
-				CDE5E0AC2C75E6A500CC79D1 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -679,7 +663,6 @@
 				CD0EC4C92C71EE5400E70452 /* FollowManageView.swift in Sources */,
 				CD0EC4CB2C71F10500E70452 /* FollowTableViewCell.swift in Sources */,
 				CD4214522C64990D00F7C3AE /* UILabel+Extension.swift in Sources */,
-				CDE5E0A62C75E4B400CC79D1 /* SplashCoordinator.swift in Sources */,
 				EBFE4DAB2C757A7D00A36FCA /* ResultRankingTVCell.swift in Sources */,
 				CD0EC4CD2C71FC4800E70452 /* SearchUserView.swift in Sources */,
 				CD42145C2C64998200F7C3AE /* DeviceViewModel.swift in Sources */,
@@ -697,6 +680,7 @@
 				CD4214542C64991500F7C3AE /* UIColor+Extension.swift in Sources */,
 				043E0C892C70AC2400F25AF7 /* SummaryRecordViewModel.swift in Sources */,
 				CD4214692C649F3600F7C3AE /* UIFont+Extension.swift in Sources */,
+				040028BE2C762F310038CC10 /* SplashCoordinator.swift in Sources */,
 				04E3C0D72C6B8C30006B844F /* DistanceSelectionViewModel.swift in Sources */,
 				CD66F5D22C6C86EA00CDBB0B /* SettingTableToggleViewCell.swift in Sources */,
 				CD4214112C64988C00F7C3AE /* DeviceView.swift in Sources */,
