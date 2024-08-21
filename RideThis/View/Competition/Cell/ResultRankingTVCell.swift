@@ -1,13 +1,13 @@
 //
-//  CompetitionTVCell.swift
+//  ResultRankingTVCell.swift
 //  RideThis
 //
-//  Created by SeongKook on 8/13/24.
+//  Created by SeongKook on 8/19/24.
 //
 
 import UIKit
 
-class CompetitionTVCell: UITableViewCell {
+class ResultRankingTVCell: UITableViewCell {
     
     private let numberImage: UIImageView = {
         let imageView = UIImageView()
@@ -22,6 +22,8 @@ class CompetitionTVCell: UITableViewCell {
     private let userNameLabel = RideThisLabel(fontType: .defaultSize, fontColor: .black, text: "user")
     private let timeLabel = RideThisLabel(fontType: .defaultSize, fontColor: .black)
     
+    private let eclipeLabel = RideThisLabel(fontType: .defaultSize, fontColor: .recordTitleColor, text: "")
+    
     // MARK: 초기화
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -35,14 +37,18 @@ class CompetitionTVCell: UITableViewCell {
     
     // MARK: SetupUI
     private func setupUI() {
-        self.contentView.addSubview(numberImage)
-        self.contentView.addSubview(userNameLabel)
-        self.contentView.addSubview(timeLabel)
+        eclipeLabel.isHidden = true
+        
         setupLayout()
     }
     
     // MARK: Layout
     private func setupLayout() {
+        self.contentView.addSubview(numberImage)
+        self.contentView.addSubview(userNameLabel)
+        self.contentView.addSubview(timeLabel)
+        self.contentView.addSubview(eclipeLabel)
+        
         numberImage.snp.makeConstraints { image in
             image.top.equalTo(self.contentView.snp.top).offset(10)
             image.left.equalTo(self.contentView.snp.left).offset(10)
@@ -62,12 +68,31 @@ class CompetitionTVCell: UITableViewCell {
             time.right.equalTo(self.contentView.snp.right).offset(-10)
             time.bottom.equalTo(self.contentView.snp.bottom).offset(-10)
         }
+        
+        eclipeLabel.snp.makeConstraints { eclipe in
+            eclipe.centerX.equalTo(self.contentView.snp.centerX)
+            eclipe.centerY.equalTo(self.contentView.snp.centerY)
+        }
     }
     
     // MARK: Configure
     func configure(item: RecordsMockData, number: Int) {
-        let ranking = number + 1
+        if number == -1 {
+            userNameLabel.text = ""
+            timeLabel.text = ""
+            userNameLabel.isHidden = true
+            timeLabel.isHidden = true
+            numberImage.isHidden = true
+            
+            eclipeLabel.isHidden = false
+            eclipeLabel.text = "..."
+            eclipeLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+            
+            return
+        }
         
+        let ranking = number
+
         userNameLabel.text = "\(ranking). User\(ranking)"
         timeLabel.text = item.record_timer
         timeLabel.font = UIFont.monospacedSystemFont(ofSize: 17, weight: .bold)
@@ -89,6 +114,12 @@ class CompetitionTVCell: UITableViewCell {
         default:
             timeLabel.textColor = .black
             numberImage.isHidden = true
+        }
+        
+        // 해당 아이디 강조
+        if item.record_timer == "45:00" {
+            userNameLabel.textColor = .primaryColor
+            timeLabel.textColor = .primaryColor
         }
     }
 }

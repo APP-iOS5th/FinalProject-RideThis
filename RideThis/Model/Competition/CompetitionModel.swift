@@ -1,7 +1,7 @@
 import Foundation
 
 struct RecordsMockData {
-    var record_id: String
+    var record_id: String?
     let record_timer: String
     let record_cadence: Double
     let record_speed: Double

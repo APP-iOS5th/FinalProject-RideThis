@@ -1,8 +1,22 @@
 import UIKit
+import Kingfisher
 import SnapKit
+import FirebaseFirestore
 
 // 마이페이지 초기 화면
 class MyPageView: RideThisViewController {
+    
+    // MARK: Data Components
+    let viewModel = MyPageViewModel()
+    let user = User(user_image: "https://picsum.photos/200",
+                    user_email: "test@gmail.com",
+                    user_nickname: "MadCow",
+                    user_weight: 70,
+                    user_tall: 168,
+                    user_following: ["1", "2", "3", "4"],
+                    user_follower: ["1", "2", "3", "4", "5"],
+                    record_id: RecordsMockData.sample.map{ $0.record_id },
+                    device_id: [])
     
     // MARK: UIComponents
     // MARK: ScrollView
@@ -29,15 +43,19 @@ class MyPageView: RideThisViewController {
         imageView.widthAnchor.constraint(equalToConstant: 80).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: 80).isActive = true
         imageView.layer.cornerRadius = 40
+        imageView.clipsToBounds = true
+        if let imageURL = self.user.user_image {
+            imageView.kf.setImage(with: URL(string: imageURL))
+        }
         imageView.backgroundColor = .primaryColor
         
         return imageView
     }()
     // MARK: TODO - 팔로워 / 팔로잉 숫자가 커질 때 잘 대비 해야함.
     private let followerLabel = RideThisLabel(fontType: .profileFont, text: "팔로워")
-    private let followerCountLabel = RideThisLabel(fontType: .profileFont, text: "30")
+    private lazy var followerCountLabel = RideThisLabel(fontType: .profileFont, text: "\(self.user.user_follower.count)")
     private let followingLabel = RideThisLabel(fontType: .profileFont, text: "팔로잉")
-    private let followingCountLabel = RideThisLabel(fontType: .profileFont, text: "35")
+    private lazy var followingCountLabel = RideThisLabel(fontType: .profileFont, text: "\(self.user.user_following.count)")
     private let notLoginLabel = RideThisLabel(fontType: .recordInfoTitle, text: "로그인이 필요합니다.")
     
     // MARK: User Info
@@ -58,22 +76,22 @@ class MyPageView: RideThisViewController {
     private let userNickNameLabel = RideThisLabel(text: "닉네임")
     private let userHeightLabel = RideThisLabel(text: "키(cm)")
     private let userWeightLabel = RideThisLabel(text: "몸무게(kg)")
-    private let userNickName = RideThisLabel(text: "매드카우")
-    private let userHeight = RideThisLabel(text: "168")
-    private let userWeight = RideThisLabel(text: "70")
+    private lazy var userNickName = RideThisLabel(text: user.user_nickname)
+    private lazy var userHeight = RideThisLabel(text: user.tallStr)
+    private lazy var userWeight = RideThisLabel(text: "\(user.user_weight)")
     
     // MARK: Total Record
     private let totalRecordLabel = RideThisLabel(fontType: .profileFont, text: "With. RideThis")
     private let totalRecordContainer = RideThisContainer(height: 100)
     private let totalRunCount = RideThisLabel(fontColor: .recordTitleColor, text: "총 달린 횟수")
     private let totalRunCountSeparator = RideThisSeparator()
-    private let totalRunCountData = RideThisLabel(fontType: .classification, text: "20회")
+    private lazy var totalRunCountData = RideThisLabel(fontType: .classification, text: "\(self.user.record_id.count)회")
     private let totalRunTime = RideThisLabel(fontColor: .recordTitleColor, text: "총 달린 시간")
     private let totalRunTimeSeparator = RideThisSeparator()
     private let totalRunTimeData = RideThisLabel(fontType: .classification, text: "2시간 15분")
     private let totalRunDistance = RideThisLabel(fontColor: .recordTitleColor, text: "총 달린 거리")
     private let totalRunDistanceSeparator = RideThisSeparator()
-    private let totalRunDistanceData = RideThisLabel(fontType: .classification, text: "300km")
+    private lazy var totalRunDistanceData = RideThisLabel(fontType: .classification, text: "\(RecordsMockData.sample.map{ $0.record_distance }.reduce(0, +))km")
     
     // MARK: Record By Period
     private let recordByPeriodLabel = RideThisLabel(fontType: .profileFont, text: "기간별 기록")
@@ -164,12 +182,12 @@ class MyPageView: RideThisViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "마이페이지"
         setNavigationComponents()
         setUIComponents()
     }
     
     func setNavigationComponents() {
+        self.title = "마이페이지"
         let settingButton = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: #selector(settingButtonTapAction))
         settingButton.tintColor = .label
         self.navigationItem.rightBarButtonItem = settingButton
@@ -181,6 +199,7 @@ class MyPageView: RideThisViewController {
         setUserInfoView()
         setTotalRecordView()
         setRecordByPeriodView()
+        setEventToProfileContainer()
     }
     
     func setScrollView() {
@@ -280,14 +299,14 @@ class MyPageView: RideThisViewController {
         
         self.firstSeparator.snp.makeConstraints {
             $0.top.equalTo(self.userInfoContainer.snp.top).offset(50)
-            $0.left.equalTo(self.userInfoContainer.snp.left)
-            $0.right.equalTo(self.userInfoContainer.snp.right)
+            $0.left.equalTo(self.userInfoContainer.snp.left).offset(15)
+            $0.right.equalTo(self.userInfoContainer.snp.right).offset(-15)
         }
         
         self.secondSeparator.snp.makeConstraints {
             $0.top.equalTo(self.firstSeparator.snp.top).offset(50)
-            $0.left.equalTo(self.userInfoContainer.snp.left)
-            $0.right.equalTo(self.userInfoContainer.snp.right)
+            $0.left.equalTo(self.userInfoContainer.snp.left).offset(15)
+            $0.right.equalTo(self.userInfoContainer.snp.right).offset(-15)
         }
         
         self.userNickNameLabel.snp.makeConstraints {
@@ -322,7 +341,7 @@ class MyPageView: RideThisViewController {
         
         self.profileEditButton.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
-            let profileEditView = EditProfileInfoView()
+            let profileEditView = EditProfileInfoView(user: self.user)
             navigationController?.pushViewController(profileEditView, animated: true)
         }, for: .touchUpInside)
     }
@@ -523,5 +542,15 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
                 graphCell.lineChartView.notifyDataSetChanged()
             }
         }
+    }
+    
+    func setEventToProfileContainer() {
+        let profileContainerTapEvent = UITapGestureRecognizer(target: self, action: #selector(toFollowerView))
+        profileContainer.addGestureRecognizer(profileContainerTapEvent)
+    }
+    
+    @objc func toFollowerView() {
+        let frientView = FollowManageView()
+        self.navigationController?.pushViewController(frientView, animated: true)
     }
 }

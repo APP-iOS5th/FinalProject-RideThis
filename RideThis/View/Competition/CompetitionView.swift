@@ -137,13 +137,15 @@ class CompetitionView: RideThisViewController {
             segment.top.equalTo(safeArea.snp.top).offset(20)
             segment.right.equalTo(safeArea.snp.right).offset(-20)
             segment.left.equalTo(safeArea.snp.left).offset(20)
-            segment.height.equalTo(40)
+            segment.height.equalTo(safeArea.snp.height).multipliedBy(0.05)
+
         }
         
         dropdownButton.snp.makeConstraints { drop in
             drop.top.equalTo(segmentedControl.snp.bottom).offset(20)
             drop.left.equalTo(safeArea.snp.left).offset(20)
-            drop.width.equalTo(200)
+            drop.width.equalTo(safeArea.snp.width).multipliedBy(0.5)
+            drop.height.equalTo(safeArea.snp.height).multipliedBy(0.05)
         }
         
         tableView.snp.makeConstraints { table in
