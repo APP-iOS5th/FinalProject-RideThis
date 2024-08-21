@@ -76,7 +76,7 @@ class ResultRankingTVCell: UITableViewCell {
     }
     
     // MARK: Configure
-    func configure(item: RecordModel, number: Int) {
+    func configure(item: RecordModel, number: Int, viewModel: ResultRankingViewModel) {
         if number == -1 {
             userNameLabel.text = ""
             timeLabel.text = ""
@@ -93,7 +93,15 @@ class ResultRankingTVCell: UITableViewCell {
         
         let ranking = number
 
-        userNameLabel.text = "\(ranking). User\(ranking)"
+        userNameLabel.text = "\(ranking). \(item.user_nickname)"
+        
+        if item.user_nickname == viewModel.nickName {
+            userNameLabel.text = "\(ranking). \(item.user_nickname) (나)"
+            userNameLabel.textColor = UIColor.primaryColor
+        } else {
+            userNameLabel.textColor = .black
+        }
+        
         timeLabel.text = item.record_timer
         timeLabel.font = UIFont.monospacedSystemFont(ofSize: 17, weight: .bold)
         

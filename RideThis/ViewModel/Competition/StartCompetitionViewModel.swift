@@ -63,8 +63,8 @@ class StartCometitionViewModel {
     func competitionUpdateData() async {
         do {
             // 유저아이디가 존재하는지 확인
-            // 로그인한 현재아이디@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -> test
-            guard let userDocument = try await firebaseService.fetchUser(at: "test") else {
+            // 로그인한 현재아이디@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -> sam
+            guard let userDocument = try await firebaseService.fetchUser(at: "sam") else {
                 print("유저를 찾을 수 없습니다.")
                 return
             }

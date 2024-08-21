@@ -59,18 +59,6 @@ class SummaryRecordViewController: RideThisViewController {
         calorieRecord.updateRecordText(text: "\(viewModel.calorie.formattedWithThousandsSeparator()) Kcal")
     }
     
-    func formattedCurrentTime(date: Date) -> String {
-        let currentDate = date
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ko_KR")
-        dateFormatter.dateFormat = "a hh시 mm분 ss초"
-        
-        let formattedTime = dateFormatter.string(from: currentDate)
-        
-        return formattedTime
-    }
-    
     // MARK: Setup Layout
     private func setupLayout() {
         self.view.addSubview(scrollView)
@@ -143,7 +131,7 @@ class SummaryRecordViewController: RideThisViewController {
     private func setupAction() {
         confirmButton.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
-            let ResultRankingVC = ResultRankingViewController()
+            let ResultRankingVC = ResultRankingViewController(distance: self.viewModel.distance)
             self.navigationController?.pushViewController(ResultRankingVC, animated: true)
         }, for: .touchUpInside)
     }

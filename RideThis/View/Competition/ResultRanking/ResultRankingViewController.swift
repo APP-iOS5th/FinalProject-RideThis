@@ -7,10 +7,13 @@
 
 import UIKit
 import SnapKit
+import Combine
 
 class ResultRankingViewController: RideThisViewController {
     
-    private let viewModel = ResultRankingViewModel()
+    private let viewModel: ResultRankingViewModel
+    
+    private var cancellables = Set<AnyCancellable>()
     
     private let container: UIStackView = {
        let stack = UIStackView()
@@ -37,6 +40,16 @@ class ResultRankingViewController: RideThisViewController {
     
     private let finishBtn = RideThisButton(buttonTitle: "종료")
     private let retryBtn = RideThisButton(buttonTitle: "재도전")
+    
+    // MARK: 초기화 및 데이터 바인딩
+    init(distance: Double) {
+        self.viewModel = ResultRankingViewModel(distance: distance)
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: ViewDidLoad
     override func viewDidLoad() {
@@ -62,16 +75,28 @@ class ResultRankingViewController: RideThisViewController {
     private func setupBinding() {
         // Double -> String으로 변환 소수점 지우기.
         let distanceText = String(format: "%.0f", viewModel.distance)
-        let rankingText = String(format: "%.0f", viewModel.ranking)
         
-        let nameText = "\(viewModel.name)님의"
+        
+        let nameText = "\(viewModel.nickName)님의"
         let attributedName = NSMutableAttributedString(string: nameText)
         
-        let range = (nameText as NSString).range(of: viewModel.name)
+        let range = (nameText as NSString).range(of: viewModel.nickName)
         attributedName.addAttribute(.foregroundColor, value: UIColor.primaryColor, range: range)
         
         self.nameLabel.attributedText = attributedName
-        self.infoLabel.text = "\(distanceText)Km 순위는 \(rankingText)위 입니다."
+        self.infoLabel.text = "\(distanceText)Km 순위는 0위 입니다."
+        
+        // Ranking Combined
+        self.viewModel.$myRank
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] rank in
+                let rankingText = "\(rank + 1)"
+                self?.infoLabel.text = "\(distanceText)Km 순위는 \(rankingText)위 입니다."
+                
+                self?.tableView.reloadData()
+            }
+            .store(in: &cancellables)
+        
     }
     
     // MARK: setupLayout
@@ -148,12 +173,16 @@ extension ResultRankingViewController: UITableViewDelegate, UITableViewDataSourc
         }
         let recordTuple = viewModel.displayedRecords[indexPath.row]
         
-        if recordTuple.index == -1 {
-            cell.configure(item: RecordModel(record_timer: "", record_cadence: 0, record_speed: 0, record_distance: 0, record_calories: 0, record_start_time: nil, record_end_time: nil, record_data: nil, record_competetion_status: false, record_target_distance: 0, user_nickname: "SSAM", user_id: "test12"), number: -1)
+        // 10위권 단위로 Cell 분기처리
+        if self.viewModel.myRank > 8 {
+            if recordTuple.index == -1 {
+                cell.configure(item: RecordModel(record_timer: "", record_cadence: 0, record_speed: 0, record_distance: 0, record_calories: 0, record_start_time: nil, record_end_time: nil, record_data: nil, record_competetion_status: false, record_target_distance: 0, user_nickname: "SSAM", user_id: "test12"), number: -1, viewModel: self.viewModel)
 
+            } else {
+                cell.configure(item: recordTuple.record, number: recordTuple.index, viewModel: self.viewModel)
+            }
         } else {
-            cell.configure(item: recordTuple.record, number: recordTuple.index)
-
+            cell.configure(item: recordTuple.record, number: recordTuple.index, viewModel: self.viewModel)
         }
         
         cell.selectionStyle = .none
@@ -164,5 +193,5 @@ extension ResultRankingViewController: UITableViewDelegate, UITableViewDataSourc
 
 
 #Preview {
-    UINavigationController(rootViewController: ResultRankingViewController())
+    UINavigationController(rootViewController: ResultRankingViewController(distance: 5))
 }
