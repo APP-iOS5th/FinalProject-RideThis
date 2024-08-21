@@ -68,7 +68,7 @@ class HomeView: RideThisViewController {
     // MARK: 라이딩 안내 섹션 UI 요소들
     private let letsRideSectionView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         return view
     }()
     
@@ -91,12 +91,26 @@ class HomeView: RideThisViewController {
         return button
     }()
     
+    // MARK: 날씨 안내 섹션 UI 요소들
+    private let weatherSectionView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemBackground
+        return view
+    }()
+    
+    private lazy var weatherTitleLabel: UILabel = {
+        let label = RideThisLabel(fontType: .sectionTitle, fontColor: .black, text: "라이딩하기 따악 좋은 날이고만!")
+        label.font = UIFont.boldSystemFont(ofSize: label.font.pointSize)
+        return label
+    }()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
         weeklyRecordSectionContentView()
         letsRideSectionContentView()
+        weatherSectionContentView()
     }
     
     // MARK: Navigation Bar
@@ -179,6 +193,22 @@ class HomeView: RideThisViewController {
         }
     }
     
+    // MARK: weather(w) Section View
+    private func weatherSectionContentView() {
+        view.addSubview(weatherSectionView)
+        weatherSectionView.snp.makeConstraints { wSection in
+            wSection.top.equalTo(letsRideSectionView.snp.bottom).offset(10)
+            wSection.leading.trailing.equalToSuperview()
+            wSection.height.equalTo(230)
+        }
+        
+        weatherSectionView.addSubview(weatherTitleLabel)
+        weatherTitleLabel.snp.makeConstraints { wTitleLabel in
+            wTitleLabel.top.leading.trailing.equalToSuperview().inset(20)
+            wTitleLabel.leading.equalTo(weatherSectionView).offset(16)
+            wTitleLabel.trailing.equalTo(weatherSectionView).offset(-16)
+        }
+    }
     
     // MARK: weeklyRecord Data Set
     private func createRecordItemView(title: String, value: String) -> UIView {
