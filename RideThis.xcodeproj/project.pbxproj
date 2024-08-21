@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		040028BE2C762F310038CC10 /* SplashCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040028BD2C762F310038CC10 /* SplashCoordinator.swift */; };
+		040028C02C762F9D0038CC10 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 040028BF2C762F9D0038CC10 /* GoogleService-Info.plist */; };
 		041A672B2C6C400E000BA4C1 /* DistanceCase+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A672A2C6C400E000BA4C1 /* DistanceCase+Extension.swift */; };
 		041A672F2C6C501F000BA4C1 /* RecordInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A672C2C6C501E000BA4C1 /* RecordInfoView.swift */; };
 		041A67302C6C501F000BA4C1 /* RecordSumUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041A672D2C6C501E000BA4C1 /* RecordSumUpView.swift */; };
@@ -22,13 +24,11 @@
 		043E0C932C73341400F25AF7 /* ResultRankingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C912C73341400F25AF7 /* ResultRankingViewController.swift */; };
 		043E0C952C73342900F25AF7 /* ResultRankingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C942C73342900F25AF7 /* ResultRankingViewModel.swift */; };
 		043E0C972C73344F00F25AF7 /* ResultRankingTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C962C73344F00F25AF7 /* ResultRankingTVCell.swift */; };
-		043E0C992C73377700F25AF7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 043E0C982C73377700F25AF7 /* GoogleService-Info.plist */; };
 		04E3C0C82C6AEE62006B844F /* CompetitionTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0C72C6AEE62006B844F /* CompetitionTVCell.swift */; };
 		04E3C0CF2C6B32B8006B844F /* CompetitionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0CE2C6B32B8006B844F /* CompetitionCoordinator.swift */; };
 		04E3C0D32C6B37F7006B844F /* DistancSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0D22C6B37F7006B844F /* DistancSelectionViewController.swift */; };
 		04E3C0D52C6B3818006B844F /* DistanceSelectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0D42C6B3818006B844F /* DistanceSelectionCoordinator.swift */; };
 		04E3C0D72C6B8C30006B844F /* DistanceSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0D62C6B8C30006B844F /* DistanceSelectionViewModel.swift */; };
-		78FA3AB72C6EE55500EA1D18 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 78FA3AB62C6EE55500EA1D18 /* GoogleService-Info.plist */; };
 		CD0E1E852C6A409F0080CFED /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0E1E842C6A409F0080CFED /* SettingView.swift */; };
 		CD0EC4C92C71EE5400E70452 /* FollowManageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0EC4C82C71EE5400E70452 /* FollowManageView.swift */; };
 		CD0EC4CB2C71F10500E70452 /* FollowTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0EC4CA2C71F10500E70452 /* FollowTableViewCell.swift */; };
@@ -98,6 +98,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		040028BD2C762F310038CC10 /* SplashCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashCoordinator.swift; sourceTree = "<group>"; };
+		040028BF2C762F9D0038CC10 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		041A672A2C6C400E000BA4C1 /* DistanceCase+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DistanceCase+Extension.swift"; sourceTree = "<group>"; };
 		041A672C2C6C501E000BA4C1 /* RecordInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordInfoView.swift; sourceTree = "<group>"; };
 		041A672D2C6C501E000BA4C1 /* RecordSumUpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordSumUpView.swift; sourceTree = "<group>"; };
@@ -113,13 +115,11 @@
 		043E0C912C73341400F25AF7 /* ResultRankingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultRankingViewController.swift; sourceTree = "<group>"; };
 		043E0C942C73342900F25AF7 /* ResultRankingViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultRankingViewModel.swift; sourceTree = "<group>"; };
 		043E0C962C73344F00F25AF7 /* ResultRankingTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultRankingTVCell.swift; sourceTree = "<group>"; };
-		043E0C982C73377700F25AF7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		04E3C0C72C6AEE62006B844F /* CompetitionTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionTVCell.swift; sourceTree = "<group>"; };
 		04E3C0CE2C6B32B8006B844F /* CompetitionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionCoordinator.swift; sourceTree = "<group>"; };
 		04E3C0D22C6B37F7006B844F /* DistancSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistancSelectionViewController.swift; sourceTree = "<group>"; };
 		04E3C0D42C6B3818006B844F /* DistanceSelectionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceSelectionCoordinator.swift; sourceTree = "<group>"; };
 		04E3C0D62C6B8C30006B844F /* DistanceSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceSelectionViewModel.swift; sourceTree = "<group>"; };
-		78FA3AB62C6EE55500EA1D18 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CD0E1E842C6A409F0080CFED /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		CD0EC4C82C71EE5400E70452 /* FollowManageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowManageView.swift; sourceTree = "<group>"; };
 		CD0EC4CA2C71F10500E70452 /* FollowTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowTableViewCell.swift; sourceTree = "<group>"; };
@@ -263,20 +263,11 @@
 			path = Coordinator;
 			sourceTree = "<group>";
 		};
-		CD0E1E832C6A40970080CFED /* Setting */ = {
-			isa = PBXGroup;
-			children = (
-				CD0E1E842C6A409F0080CFED /* SettingView.swift */,
-			);
-			path = Setting;
-			sourceTree = "<group>";
-		};
 		CD4213B62C64982000F7C3AE = {
 			isa = PBXGroup;
 			children = (
 				CD4213C12C64982000F7C3AE /* RideThis */,
 				CD4213C02C64982000F7C3AE /* Products */,
-				CD7000612C6AF6D90071D4D2 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -291,8 +282,8 @@
 		CD4213C12C64982000F7C3AE /* RideThis */ = {
 			isa = PBXGroup;
 			children = (
-				04937A822C69A7CF0099D3EE /* GoogleService-Info.plist */,
 				CDC0C1D32C65FB4300349DC4 /* RideThis.entitlements */,
+				040028BF2C762F9D0038CC10 /* GoogleService-Info.plist */,
 				CD4214502C6498FF00F7C3AE /* Extension */,
 				CD4214212C64989000F7C3AE /* App */,
 				CD42140F2C64988C00F7C3AE /* Service */,
@@ -540,6 +531,7 @@
 		CD4214612C649A1100F7C3AE /* Coordinator */ = {
 			isa = PBXGroup;
 			children = (
+				040028BD2C762F310038CC10 /* SplashCoordinator.swift */,
 			);
 			path = Coordinator;
 			sourceTree = "<group>";
@@ -556,13 +548,6 @@
 			children = (
 			);
 			path = Coordinator;
-			sourceTree = "<group>";
-		};
-		CD7000612C6AF6D90071D4D2 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		CD7000682C6AF9910071D4D2 /* Cell */ = {
@@ -653,7 +638,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CD4213CC2C64982200F7C3AE /* Assets.xcassets in Resources */,
-				78FA3AB72C6EE55500EA1D18 /* GoogleService-Info.plist in Resources */,
+				040028C02C762F9D0038CC10 /* GoogleService-Info.plist in Resources */,
 				CD4213CF2C64982200F7C3AE /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -698,6 +683,7 @@
 				CD4214542C64991500F7C3AE /* UIColor+Extension.swift in Sources */,
 				043E0C892C70AC2400F25AF7 /* SummaryRecordViewModel.swift in Sources */,
 				CD4214692C649F3600F7C3AE /* UIFont+Extension.swift in Sources */,
+				040028BE2C762F310038CC10 /* SplashCoordinator.swift in Sources */,
 				04E3C0D72C6B8C30006B844F /* DistanceSelectionViewModel.swift in Sources */,
 				CD66F5D22C6C86EA00CDBB0B /* SettingTableToggleViewCell.swift in Sources */,
 				041A67312C6C501F000BA4C1 /* RecordContainerView.swift in Sources */,
