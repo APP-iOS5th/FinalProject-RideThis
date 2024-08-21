@@ -69,6 +69,12 @@ class CompetitionTVCell: UITableViewCell {
         let ranking = number + 1
         
         userNameLabel.text = "\(ranking). \(item.user_nickname)"
+        if item.user_nickname == "두령님" {
+            userNameLabel.text = "\(ranking). \(item.user_nickname) (나)"
+            userNameLabel.textColor = UIColor.primaryColor
+        } else {
+            userNameLabel.textColor = .black
+        }
         timeLabel.text = item.record_timer
         timeLabel.font = UIFont.monospacedSystemFont(ofSize: 17, weight: .bold)
         

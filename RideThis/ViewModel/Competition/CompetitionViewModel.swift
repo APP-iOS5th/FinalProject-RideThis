@@ -30,9 +30,10 @@ class CompetitionViewModel {
     private func fetchFollowingUsers() {
         Task {
             do {
-                self.followingUserIds = try await firebaseService.fetchUserFollowing(userId: "test")
+                self.followingUserIds = try await firebaseService.fetchUserFollowing(userId: "test") // 로그인한 현재 아이디
+                
+                followingUserIds.append("test") // 로그인한 현재 아이디
                 updateRecords()
-                print(followingUserIds)
             } catch {
                 print("팔로잉 목록 가져오기 실패")
             }
