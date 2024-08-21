@@ -4,11 +4,12 @@ import SnapKit
 class HomeView: RideThisViewController {
     private let viewModel = HomeViewModel()
     
+    // MARK: 주간기록 안내 섹션 UI 요소들
     // 커스텀 타이틀
     private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "Home")
     
     // sectionView: 흰색 배경
-    private let sectionView: UIView = {
+    private let weeklyRecordSectionView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemBackground
         return view
@@ -64,10 +65,38 @@ class HomeView: RideThisViewController {
         return stackView
     }()
     
+    // MARK: 라이딩 안내 섹션 UI 요소들
+    private let letsRideSectionView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        return view
+    }()
+    
+    private lazy var letsRideTitleLabel: UILabel = {
+        let userName = viewModel.userName
+        let label = RideThisLabel(fontType: .sectionTitle, fontColor: .black, text: "\(userName)님, 라이딩 고고씽?")
+        label.font = UIFont.boldSystemFont(ofSize: label.font.pointSize)
+        return label
+    }()
+    
+    private let letsRideDescriptionLabel: UILabel = {
+        let label = RideThisLabel(fontType: .defaultSize, fontColor: .gray, text: "바로 운동을 시작하시려면 라이딩 고고씽 버튼을 눌러주세요.\n운동을 마치면 운동하신 통계를 보여드릴게요.")
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    private lazy var letsRideButton: RideThisButton = {
+        let button = RideThisButton(buttonTitle: "라이딩 고고씽", height: 50)
+        button.addTarget(self, action: #selector(letsRideButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
-        weeklyRecordSectionView()
+        weeklyRecordSectionContentView()
+        letsRideSectionContentView()
     }
     
     // MARK: Navigation Bar
@@ -88,28 +117,27 @@ class HomeView: RideThisViewController {
         navigationItem.leftBarButtonItem = leftBarButtonItem
     }
     
-    // MARK: weeklyRecord Section View
-    private func weeklyRecordSectionView() {
-        view.addSubview(sectionView)
-        sectionView.snp.makeConstraints { section in
-            section.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
-            section.leading.trailing.equalToSuperview()
-            section.height.equalTo(200)
+    // MARK: weeklyRecord(wr) Section View
+    private func weeklyRecordSectionContentView() {
+        view.addSubview(weeklyRecordSectionView)
+        weeklyRecordSectionView.snp.makeConstraints { wrSection in
+            wrSection.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
+            wrSection.leading.trailing.equalToSuperview()
+            wrSection.height.equalTo(200)
         }
         
-        sectionView.addSubview(weeklyRecordHeaderView)
-        sectionView.addSubview(weeklyRecordBackgroundView)
-        
+        weeklyRecordSectionView.addSubview(weeklyRecordHeaderView)
         weeklyRecordHeaderView.snp.makeConstraints { wrHeader in
-            wrHeader.top.equalTo(sectionView).offset(20)
-            wrHeader.leading.equalTo(sectionView).offset(16)
-            wrHeader.trailing.equalTo(sectionView).offset(-16)
+            wrHeader.top.equalTo(weeklyRecordSectionView).offset(20)
+            wrHeader.leading.equalTo(weeklyRecordSectionView).offset(16)
+            wrHeader.trailing.equalTo(weeklyRecordSectionView).offset(-16)
         }
         
+        weeklyRecordSectionView.addSubview(weeklyRecordBackgroundView)
         weeklyRecordBackgroundView.snp.makeConstraints { wrBackground in
             wrBackground.top.equalTo(weeklyRecordHeaderView.snp.bottom).offset(10)
-            wrBackground.leading.equalTo(sectionView).offset(16)
-            wrBackground.trailing.equalTo(sectionView).offset(-16)
+            wrBackground.leading.equalTo(weeklyRecordSectionView).offset(16)
+            wrBackground.trailing.equalTo(weeklyRecordSectionView).offset(-16)
             wrBackground.height.equalTo(120)
         }
         
@@ -119,6 +147,38 @@ class HomeView: RideThisViewController {
             wrData.leading.trailing.equalToSuperview().inset(16)
         }
     }
+    
+    // MARK: letsRide(lr) Section View
+    private func letsRideSectionContentView() {
+        view.addSubview(letsRideSectionView)
+        letsRideSectionView.snp.makeConstraints { lrSection in
+            lrSection.top.equalTo(weeklyRecordSectionView.snp.bottom).offset(10)
+            lrSection.leading.trailing.equalToSuperview()
+            lrSection.height.equalTo(200)
+        }
+        
+        letsRideSectionView.addSubview(letsRideTitleLabel)
+        letsRideTitleLabel.snp.makeConstraints { lrTitleLabel in
+            lrTitleLabel.top.leading.trailing.equalToSuperview().inset(20)
+            lrTitleLabel.leading.equalTo(letsRideSectionView).offset(16)
+            lrTitleLabel.trailing.equalTo(letsRideSectionView).offset(-16)
+        }
+        
+        letsRideSectionView.addSubview(letsRideDescriptionLabel)
+        letsRideDescriptionLabel.snp.makeConstraints { lrDescriptionLabel in
+            lrDescriptionLabel.top.equalTo(letsRideTitleLabel.snp.bottom).offset(10)
+            lrDescriptionLabel.leading.trailing.equalToSuperview().inset(16)
+            lrDescriptionLabel.trailing.equalTo(letsRideSectionView).offset(-16)
+        }
+        
+        letsRideSectionView.addSubview(letsRideButton)
+        letsRideButton.snp.makeConstraints { lrButton in
+            lrButton.top.equalTo(letsRideDescriptionLabel.snp.bottom).offset(16)
+            lrButton.leading.trailing.equalToSuperview().inset(16)
+            lrButton.bottom.equalToSuperview().offset(-16)
+        }
+    }
+    
     
     // MARK: weeklyRecord Data Set
     private func createRecordItemView(title: String, value: String) -> UIView {
@@ -148,6 +208,13 @@ class HomeView: RideThisViewController {
     @objc private func moreButtonTapped() {
         let myPageView = MyPageView()
         navigationController?.pushViewController(myPageView, animated: true)
+    }
+    
+    // 라이딩 고고씽 버튼 TODO: 추후 연결
+    @objc private func letsRideButtonTapped() {
+        //        let recordView = RecordView()
+        //        navigationController?.pushViewController(RecordView, animated: true)
+        print("라이딩을 시작합니다!")
     }
     
 }
