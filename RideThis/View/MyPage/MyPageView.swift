@@ -15,7 +15,7 @@ class MyPageView: RideThisViewController {
                     user_tall: 168,
                     user_following: ["1", "2", "3", "4"],
                     user_follower: ["1", "2", "3", "4", "5"],
-                    record_id: RecordsMockData.sample.map{ $0.record_id },
+                    record_id: RecordModel.sample.map{ $0.user_nickname },
                     device_id: [])
     
     // MARK: UIComponents
@@ -91,7 +91,7 @@ class MyPageView: RideThisViewController {
     private let totalRunTimeData = RideThisLabel(fontType: .classification, text: "2시간 15분")
     private let totalRunDistance = RideThisLabel(fontColor: .recordTitleColor, text: "총 달린 거리")
     private let totalRunDistanceSeparator = RideThisSeparator()
-    private lazy var totalRunDistanceData = RideThisLabel(fontType: .classification, text: "\(RecordsMockData.sample.map{ $0.record_distance }.reduce(0, +))km")
+    private lazy var totalRunDistanceData = RideThisLabel(fontType: .classification, text: "test123km")
     
     // MARK: Record By Period
     private let recordByPeriodLabel = RideThisLabel(fontType: .profileFont, text: "기간별 기록")

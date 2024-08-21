@@ -76,7 +76,7 @@ class ResultRankingTVCell: UITableViewCell {
     }
     
     // MARK: Configure
-    func configure(item: RecordsMockData, number: Int) {
+    func configure(item: RecordModel, number: Int) {
         if number == -1 {
             userNameLabel.text = ""
             timeLabel.text = ""

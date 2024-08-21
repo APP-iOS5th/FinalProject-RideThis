@@ -7,16 +7,36 @@ enum RankingSegment: String, CaseIterable {
 }
 
 class CompetitionViewModel {
+    
+    private let firebaseService = FireBaseService()
+    
     var selectedSegment: RankingSegment = .totalRanking
     var selectedDistance: DistanceCase = .fiveKm
     
     let isLogin = true
     let isBluetooth = true
     
-    @Published var records: [RecordsMockData] = []
+    private var allRecords: [RecordModel] = []
+    @Published var records: [RecordModel] = []
+    
+    var followingUserIds: [String] = []
     
     init() {
-        updateRecords()
+        fetchAllRecords()
+        fetchFollowingUsers()
+    }
+    
+    // MARK: Following
+    private func fetchFollowingUsers() {
+        Task {
+            do {
+                self.followingUserIds = try await firebaseService.fetchUserFollowing(userId: "test")
+                updateRecords()
+                print(followingUserIds)
+            } catch {
+                print("팔로잉 목록 가져오기 실패")
+            }
+        }
     }
     
     // MARK: Selected Ranking Segment
@@ -39,13 +59,16 @@ class CompetitionViewModel {
         }
         
         if selectedSegment == .totalRanking {
-            records = RecordsMockData.sample.filter { record in
+            records = allRecords.filter { record in
                 record.record_competetion_status == true && record.record_target_distance == targetDistance
             }
+
         } else if selectedSegment == .followingRanking {
             if isLogin {
-                records = RecordsMockData.sample.filter { record in
-                    record.record_competetion_status == false && record.record_target_distance == targetDistance
+                records = allRecords.filter { record in
+                    record.record_competetion_status == true &&
+                    record.record_target_distance == targetDistance &&
+                    followingUserIds.contains(record.user_id)
                 }
             } else {
                 records = []
@@ -54,6 +77,20 @@ class CompetitionViewModel {
         
         records.sort { first, second in
             return timeInterval(from: first.record_timer) < timeInterval(from: second.record_timer)
+        }
+    }
+    
+    // MARK: allUSERS
+    func fetchAllRecords() {
+        Task {
+            do {
+                let userSnapshots = try await firebaseService.fetchAllUsers()
+                let allRecordData = try await firebaseService.fetchAllRecordsForUsers(userSnapshots)
+                self.allRecords = allRecordData
+                updateRecords()
+            } catch {
+                print("FIREBASE통신 오류")
+            }
         }
     }
     

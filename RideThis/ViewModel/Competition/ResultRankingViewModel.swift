@@ -12,11 +12,11 @@ class ResultRankingViewModel {
     let distance: Double = 10
     let ranking: Double = 34
     
-    var records: [RecordsMockData] = []
-    var displayedRecords: [(index: Int, record: RecordsMockData)] = []
+    var records: [RecordModel] = []
+    var displayedRecords: [(index: Int, record: RecordModel)] = []
     
     init() {
-        records = RecordsMockData.sample
+        records = RecordModel.sample
         sortedRecord()
         prepareDisplayedRecords()
     }
@@ -35,7 +35,7 @@ class ResultRankingViewModel {
         }
         
         // 생략된 부분
-        displayedRecords.append((index: -1, record: RecordsMockData(record_id: "", record_timer: "", record_cadence: 0, record_speed: 0, record_distance: 0, record_calories: 0, record_start_time: nil, record_end_time: nil, record_data: nil, record_competetion_status: false, record_target_distance: 0)))
+        displayedRecords.append((index: -1, record: RecordModel(record_timer: "", record_cadence: 0, record_speed: 0, record_distance: 0, record_calories: 0, record_start_time: nil, record_end_time: nil, record_data: nil, record_competetion_status: false, record_target_distance: 0, user_nickname: "test", user_id: "tt123")))
         
         // 10번부터 12번까지
         for i in 9..<12 {

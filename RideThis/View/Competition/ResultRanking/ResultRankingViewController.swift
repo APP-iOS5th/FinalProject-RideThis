@@ -149,7 +149,7 @@ extension ResultRankingViewController: UITableViewDelegate, UITableViewDataSourc
         let recordTuple = viewModel.displayedRecords[indexPath.row]
         
         if recordTuple.index == -1 {
-            cell.configure(item: RecordsMockData(record_id: "", record_timer: "", record_cadence: 0, record_speed: 0, record_distance: 0, record_calories: 0, record_start_time: nil, record_end_time: nil, record_data: nil, record_competetion_status: false, record_target_distance: 0), number: -1)
+            cell.configure(item: RecordModel(record_timer: "", record_cadence: 0, record_speed: 0, record_distance: 0, record_calories: 0, record_start_time: nil, record_end_time: nil, record_data: nil, record_competetion_status: false, record_target_distance: 0, user_nickname: "SSAM", user_id: "test12"), number: -1)
 
         } else {
             cell.configure(item: recordTuple.record, number: recordTuple.index)

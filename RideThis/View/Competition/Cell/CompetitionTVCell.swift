@@ -65,10 +65,10 @@ class CompetitionTVCell: UITableViewCell {
     }
     
     // MARK: Configure
-    func configure(item: RecordsMockData, number: Int) {
+    func configure(item: RecordModel, number: Int) {
         let ranking = number + 1
         
-        userNameLabel.text = "\(ranking). User\(ranking)"
+        userNameLabel.text = "\(ranking). \(item.user_nickname)"
         timeLabel.text = item.record_timer
         timeLabel.font = UIFont.monospacedSystemFont(ofSize: 17, weight: .bold)
         

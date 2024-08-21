@@ -94,6 +94,14 @@ class CompetitionView: RideThisViewController {
         setupAction()
     }
     
+    // MARK: ViewWillAppear
+      override func viewWillAppear(_ animated: Bool) {
+          super.viewWillAppear(animated)
+          
+          // 데이터를 새로고침
+          self.viewModel.fetchAllRecords()
+      }
+    
     // MARK: setupUI
     private func setupUI() {
         
@@ -197,7 +205,7 @@ class CompetitionView: RideThisViewController {
             .store(in: &cancellables)
     }
     
-    private func updateUI(for records: [RecordsMockData]) {
+    private func updateUI(for records: [RecordModel]) {
         let isLoggedIn = self.viewModel.isLogin
         let isFollowingSegmentSelected = self.viewModel.selectedSegment.rawValue == "팔로잉 순위"
         
@@ -263,14 +271,15 @@ class CompetitionView: RideThisViewController {
                 }
             } else {
                 showAlert(alertTitle: "로그인이 필요합니다.", msg: "경쟁하기는 로그인이 필요한 서비스입니다.", confirm: "로그인") {
-                    print("로그인 뷰 이동~")
-                }
+                    let loginVC = LoginView()
+                    self.navigationController?.pushViewController(loginVC, animated: true)                }
             }
             
         }, for: .touchUpInside)
         
         loginButton.addAction(UIAction { [weak self] _ in
-            print("로그인 뷰 이동")
+            let loginVC = LoginView()
+            self?.navigationController?.pushViewController(loginVC, animated: true)
         }, for: .touchUpInside)
     }
 }
