@@ -45,14 +45,23 @@ class RecordView: RideThisViewController {
         recordButton.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
             // TODO: - 최초 기록 시작일 때 카운트다운 추가
-            if self.viewModel.isRecording {
-                self.viewModel.pauseRecording()
-                resetButton.isEnabled = true
-                finishButton.isEnabled = true
-                resetButton.backgroundColor = .black
-                finishButton.backgroundColor = .black
+            
+            // 블루투스 연결 상태 확인
+            if self.viewModel.isBluetooth {
+                if self.viewModel.isRecording {
+                    self.viewModel.pauseRecording()
+                    resetButton.isEnabled = true
+                    finishButton.isEnabled = true
+                    resetButton.backgroundColor = .black
+                    finishButton.backgroundColor = .black
+                } else {
+                    self.viewModel.startRecording()
+                }
             } else {
-                self.viewModel.startRecording()
+                showAlert(alertTitle: "장치연결이 필요합니다.", msg: "사용하시려면 장치를 연결해주세요.", confirm: "장치연결") {
+                    print("connect Bluetooth")
+                    // TODO: - 장치 연결 페이지 이동 추가
+                }
             }
         }, for: .touchUpInside)
         

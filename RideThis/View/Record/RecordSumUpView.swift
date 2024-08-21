@@ -53,10 +53,19 @@ class RecordSumUpView: RideThisViewController {
         }
         
         saveButton.addAction(UIAction { [weak self] _ in
-            // TODO: - 미로그인 상태일 때 로그인 팝업
-            self?.showAlert(alertTitle: "기록 저장", msg: "기록을 저장하시겠습니까?", confirm: "저장"
-            ) {
-                self?.viewModel.saveRecording()
+            guard let self = self else { return }
+            
+            if self.viewModel.isLogin { // 로그인 상태일 때
+                showAlert(alertTitle: "기록 저장", msg: "기록을 저장하시겠습니까?", confirm: "저장"
+                ) {
+                    self.viewModel.saveRecording()
+                }
+            } else { // 미로그인 상태일 때
+                showAlert(alertTitle: "로그인이 필요합니다.", msg: "기록 저장은 로그인이 필요한 서비스입니다.", confirm: "로그인") {
+                    print("go to login")
+                    // TODO: - 로그인 페이지 이동 추가
+                    // MARK: - 설정한 '로그인'이 아니라 '확인'이 확인 버튼으로 출력
+                }
             }
         }, for: .touchUpInside)
         

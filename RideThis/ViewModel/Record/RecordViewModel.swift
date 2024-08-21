@@ -4,6 +4,9 @@ class RecordViewModel {
     // MARK: - 기록 화면 버튼 동작
     // TODO: - 버튼 동작 구현
     
+    let isLogin = false
+    let isBluetooth = true
+    
     // 상태 변경을 알리는 클로저
     var onRecordingStatusChanged: ((Bool) -> Void)?
     
