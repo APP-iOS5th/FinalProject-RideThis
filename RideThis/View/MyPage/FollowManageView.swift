@@ -114,9 +114,8 @@ class FollowManageView: RideThisViewController {
 }
 
 extension FollowManageView: UISearchBarDelegate {
-    // MARK: TODO - 키보드에서 입력할 때 event
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
+        followViewModel.searchUser(text: searchText, type: self.followPicker.selectedSegmentIndex == 0 ? .follower : .following)
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {

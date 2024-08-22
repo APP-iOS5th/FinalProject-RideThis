@@ -59,4 +59,14 @@ class FollowManageViewModel {
     func isEachFollow(userId: String) -> Bool {
         return followings.contains(where: { $0.user_id == userId })
     }
+    
+    func searchUser(text: String, type: FollowType) {
+        let target = type == .follower ? followers : followings
+        if text.count > 0 {
+            let filteredUser = target.filter{ $0.user_nickname.contains(text) || $0.user_email.contains(text) }
+            self.showingData = filteredUser
+        } else {
+            self.showingData = target
+        }
+    }
 }
