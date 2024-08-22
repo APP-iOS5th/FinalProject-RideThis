@@ -9,11 +9,12 @@ enum RankingSegment: String, CaseIterable {
 class CompetitionViewModel {
     
     private let firebaseService = FireBaseService()
+    let service = UserService.shared
     
     var selectedSegment: RankingSegment = .totalRanking
     var selectedDistance: DistanceCase = .fiveKm
     
-    let isLogin = true
+    let isLogin: Bool
     let isBluetooth = true
     
     private var allRecords: [RecordModel] = []
@@ -21,7 +22,9 @@ class CompetitionViewModel {
     
     var followingUserIds: [String] = []
     
-    init() {
+    init(isLogin: Bool) {
+        self.isLogin = (service.signedUser != nil) ? true : false
+        
         fetchAllRecords()
         fetchFollowingUsers()
     }
@@ -30,9 +33,9 @@ class CompetitionViewModel {
     private func fetchFollowingUsers() {
         Task {
             do {
-                self.followingUserIds = try await firebaseService.fetchUserFollowing(userId: "sam") // 로그인한 현재 아이디
+                self.followingUserIds = try await firebaseService.fetchUserFollowing(userId: service.signedUser?.user_id ?? "")
                 
-                followingUserIds.append("sam") // 로그인한 현재 아이디
+                followingUserIds.append(service.signedUser?.user_id ?? "")
                 updateRecords()
             } catch {
                 print("팔로잉 목록 가져오기 실패")

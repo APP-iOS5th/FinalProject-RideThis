@@ -5,7 +5,7 @@ import Combine
 // 경쟁 탭 초기 화면
 class CompetitionView: RideThisViewController {
     
-    private let viewModel = CompetitionViewModel()
+    private let viewModel = CompetitionViewModel(isLogin: false)
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -272,7 +272,8 @@ class CompetitionView: RideThisViewController {
             } else {
                 showAlert(alertTitle: "로그인이 필요합니다.", msg: "경쟁하기는 로그인이 필요한 서비스입니다.", confirm: "로그인") {
                     let loginVC = LoginView()
-                    self.navigationController?.pushViewController(loginVC, animated: true)                }
+                    self.navigationController?.pushViewController(loginVC, animated: true)
+                }
             }
             
         }, for: .touchUpInside)
@@ -295,7 +296,7 @@ extension CompetitionView: UITableViewDelegate, UITableViewDataSource {
         
         let record = self.viewModel.records[indexPath.row]
         cell.selectionStyle = .none
-        cell.configure(item: record, number: indexPath.row)
+        cell.configure(item: record, number: indexPath.row, viewModel: self.viewModel)
         
         return cell
     }

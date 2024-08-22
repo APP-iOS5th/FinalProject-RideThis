@@ -43,7 +43,7 @@ class ResultRankingViewController: RideThisViewController {
     
     // MARK: 초기화 및 데이터 바인딩
     init(distance: Double) {
-        self.viewModel = ResultRankingViewModel(distance: distance)
+        self.viewModel = ResultRankingViewModel(distance: distance, nickName: "")
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -77,10 +77,10 @@ class ResultRankingViewController: RideThisViewController {
         let distanceText = String(format: "%.0f", viewModel.distance)
         
         
-        let nameText = "\(viewModel.nickName)님의"
+        let nameText = "\(viewModel.nickName ?? "")님"
         let attributedName = NSMutableAttributedString(string: nameText)
         
-        let range = (nameText as NSString).range(of: viewModel.nickName)
+        let range = (nameText as NSString).range(of: viewModel.nickName ?? "")
         attributedName.addAttribute(.foregroundColor, value: UIColor.primaryColor, range: range)
         
         self.nameLabel.attributedText = attributedName
