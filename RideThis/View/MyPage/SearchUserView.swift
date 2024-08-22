@@ -1,10 +1,18 @@
 import UIKit
 import SnapKit
+import Combine
 
 class SearchUserView: RideThisViewController {
-    // MARK: UIComponents
+    
+    // MARK: Data Components
+    private let viewModel = SearchUserViewModel()
+    private let followViewModel = FollowManageViewModel()
+    private var cancellable = Set<AnyCancellable>()
+    
+    // MARK: UI Components
     // MARK: Search Bar
     private let searchController = UISearchController()
+    
     // MARK: User Search Result Table
     private lazy var searchUserTable: UITableView = {
         let table = UITableView()
@@ -21,6 +29,7 @@ class SearchUserView: RideThisViewController {
         super.viewDidLoad()
         
         configureUI()
+        setBindingData()
     }
     
     func configureUI() {
@@ -41,6 +50,7 @@ class SearchUserView: RideThisViewController {
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "이메일 또는 닉네임을 검색해주세요."
         searchController.searchBar.sizeToFit()
+        searchController.searchBar.autocapitalizationType = .none
         navigationItem.hidesSearchBarWhenScrolling = false
         navigationItem.searchController = searchController
     }
@@ -56,6 +66,16 @@ class SearchUserView: RideThisViewController {
         }
     }
     
+    func setBindingData() {
+        viewModel.$searchedUser
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                self.searchUserTable.reloadData()
+            }
+            .store(in: &cancellable)
+    }
+    
     @objc func cancelAction() {
         dismiss(animated: true)
     }
@@ -64,7 +84,7 @@ class SearchUserView: RideThisViewController {
 extension SearchUserView: UISearchBarDelegate {
     // MARK: TODO - 키보드에서 입력할 때 event
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
+        viewModel.searchUser(text: searchText)
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
@@ -78,13 +98,18 @@ extension SearchUserView: UISearchBarDelegate {
 
 extension SearchUserView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return viewModel.searchedUser.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "SearchUserTableCell", for: indexPath) as? FollowTableViewCell else {
             return UITableViewCell()
         }
+        
+        let user = viewModel.searchedUser[indexPath.row]
+        cell.viewModel = followViewModel
+        cell.cellUser = user
+        cell.configureUserInfo(type: .follower, eachFollow: false)
         
         return cell
     }

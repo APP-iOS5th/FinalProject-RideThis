@@ -4,6 +4,8 @@ import Kingfisher
 
 class FollowTableViewCell: UITableViewCell {
     
+    var viewModel: FollowManageViewModel?
+    var cellUser: User?
     private let profileImage: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
@@ -68,9 +70,22 @@ class FollowTableViewCell: UITableViewCell {
         }
         
         userEmail.numberOfLines = 1
+        followButton.addAction(UIAction { [weak self] _ in
+            guard let self = self, 
+                  let label = followButton.titleLabel,
+                  let title = label.text,
+                  let user = cellUser,
+                  let viewModel = viewModel else { return }
+            if title == "Follow" {
+                viewModel.followUser(user: user)
+            } else {
+                viewModel.unFollowUser(user: user)
+            }
+        }, for: .touchUpInside)
     }
     
-    func configureUserInfo(user: User, type: FollowType, eachFollow: Bool) {
+    func configureUserInfo(type: FollowType, eachFollow: Bool) {
+        guard let user = cellUser else { return }
         self.userNickName.text = user.user_nickname
         self.userEmail.text = user.user_email
         if let imgUrl = user.user_image {

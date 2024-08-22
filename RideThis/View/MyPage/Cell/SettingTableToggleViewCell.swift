@@ -63,6 +63,6 @@ class SettingTableToggleViewCell: UITableViewCell {
                                user_account_public: sender.isOn)
         
         let firebaseService = FireBaseService()
-        firebaseService.editProfileInfo(user: changedUser)
+        firebaseService.updateUserInfo(user: changedUser)
     }
 }

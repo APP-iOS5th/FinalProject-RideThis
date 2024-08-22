@@ -208,7 +208,7 @@ class EditProfileInfoView: RideThisViewController {
                                user_follower: user.user_follower,
                                user_account_public: user.user_account_public)
         
-        firebaseService.editProfileInfo(user: changedUser)
+        firebaseService.updateUserInfo(user: changedUser)
         self.navigationController?.popViewController(animated: true)
     }
     

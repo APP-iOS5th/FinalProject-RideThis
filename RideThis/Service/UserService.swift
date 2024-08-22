@@ -58,7 +58,6 @@ class UserService {
                 self.signedUser = user
                 self.combineUser = user
             }
-            
         } catch {
             print(error)
         }

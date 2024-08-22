@@ -8,6 +8,8 @@ class FireBaseService {
         case userSnapshot(QueryDocumentSnapshot?)
     }
     
+    private let db = Firestore.firestore()
+    
     // MARK: UserId로 파이어베이스에 유저 확인
     func fetchUser(at userId: String, userType: Bool) async throws -> ReturnUserType {
         let querySnapshot = try await db.collection("USERS")
@@ -22,8 +24,6 @@ class FireBaseService {
             return .userSnapshot(querySnapshot.documents.first)
         }
     }
-    
-    private let db = Firestore.firestore()
     
     // MARK: USERS 컬렉션의 모든 데이터 가져오기
     func fetchAllUsers() async throws -> [QueryDocumentSnapshot] {
@@ -115,7 +115,7 @@ class FireBaseService {
     }
     
     // MARK: 유저 정보 수정
-    func editProfileInfo(user: User) {
+    func updateUserInfo(user: User, isProfileEdit: Bool = true) {
         let userInfo = db.collection("USERS").document(user.user_id)
         let updateData: [String: Any] = [
             "user_account_public": user.user_account_public,
@@ -125,7 +125,7 @@ class FireBaseService {
             "user_id": user.user_id,
             "user_image": "",
             "user_nickname": user.user_nickname,
-            "user_tall": user.user_tall!,
+            "user_tall": user.user_tall ?? "",
             "user_weight": user.user_weight
         ]
         
@@ -137,6 +137,8 @@ class FireBaseService {
             }
         }
         
-        UserService.shared.combineUser = user
+        if isProfileEdit {        
+            UserService.shared.combineUser = user
+        }
     }
 }

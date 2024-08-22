@@ -93,7 +93,15 @@ class FollowManageView: RideThisViewController {
     }
     
     func setBindingData() {
-        followViewModel.$showingData
+        followViewModel.$followers
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                followTable.reloadData()
+            }
+            .store(in: &cancellable)
+        
+        followViewModel.$followings
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 guard let self = self else { return }
@@ -129,7 +137,8 @@ extension FollowManageView: UISearchBarDelegate {
 
 extension FollowManageView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return followViewModel.showingData.count
+        let target = self.followPicker.selectedSegmentIndex == 0 ? followViewModel.followers : followViewModel.followings
+        return target.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -137,13 +146,17 @@ extension FollowManageView: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let followerInfo = followViewModel.showingData[indexPath.row]
+        let target = self.followPicker.selectedSegmentIndex == 0 ? followViewModel.followers : followViewModel.followings
+        let followerInfo = target[indexPath.row]
+        cell.viewModel = self.followViewModel
+        cell.cellUser = followerInfo
+        
         let type: FollowType = self.followPicker.selectedSegmentIndex == 0 ? .follower : .following
         var eachFollow: Bool = false
         if type == .follower {
             eachFollow = followViewModel.isEachFollow(userId: followerInfo.user_id)
         }
-        cell.configureUserInfo(user: followerInfo, type: type, eachFollow: eachFollow)
+        cell.configureUserInfo(type: type, eachFollow: eachFollow)
         
         return cell
     }

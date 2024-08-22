@@ -521,9 +521,21 @@ class MyPageView: RideThisViewController {
             .sink { [weak self] receivedUser in
                 guard let self = self, let combineUser = receivedUser else { return }
                 DispatchQueue.main.async {
+//                    self.userNickName.text = combineUser.user_nickname
+//                    self.userHeight.text = "\(combineUser.user_tall!)"
+//                    self.userWeight.text = "\(combineUser.user_weight)"
+                    if let imageUrl = combineUser.user_image {
+                        self.profileImageView.kf.setImage(with: URL(string: imageUrl))
+                    }
+                    self.followerCountLabel.text = "\(combineUser.user_follower.count)"
+                    self.followingCountLabel.text = "\(combineUser.user_following.count)"
                     self.userNickName.text = combineUser.user_nickname
-                    self.userHeight.text = "\(combineUser.user_tall!)"
                     self.userWeight.text = "\(combineUser.user_weight)"
+                    if let height = combineUser.user_tall {
+                        self.userHeight.text = "\(height)"
+                    } else {
+                        self.userHeight.text = "-"
+                    }
                 }
             }
             .store(in: &cancellable)
