@@ -212,16 +212,19 @@ class SignUpInfoView: RideThisViewController {
             // MARK: next버튼 누르면 Firebase에 저장
             let db = Firestore.firestore()
             let usersCollection = db.collection("USERS")
+            let enteredEmail: String = userEmail ?? ""
+            let enteredNickname: String = userNickName.text ?? ""
+            
             let newUser: [String: Any] = [
                 "user_account_public": false,
-                "user_email": userEmail!,
-                "user_follower": ["1", "2"],
-                "user_following": ["1", "2"],
+                "user_email": enteredEmail,
+                "user_follower": [],
+                "user_following": [],
                 "user_id": userId,
                 "user_image": "",
-                "user_nickname": userNickName.text!,
-                "user_tall": Int(userHeight.text!)!,
-                "user_weight": Int(userWeight.text!)!
+                "user_nickname": enteredNickname,
+                "user_tall": Int(userHeight.text ?? "")!,
+                "user_weight": Int(userWeight.text ?? "")!
             ]
             
             usersCollection.document(userId).setData(newUser) { error in
@@ -234,8 +237,8 @@ class SignUpInfoView: RideThisViewController {
             // MARK: TODO - 바로 로그인 시키기
             let createdUser = User(user_id: userId,
                                    user_image: "",
-                                   user_email: userEmail!,
-                                   user_nickname: userNickName.text!,
+                                   user_email: enteredEmail,
+                                   user_nickname: enteredNickname,
                                    user_weight: Int(userWeight.text!)!,
                                    user_tall: Int(userHeight.text!),
                                    user_following: [],

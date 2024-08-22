@@ -3,21 +3,32 @@ import FirebaseFirestore
 
 class FireBaseService {
     
+    enum ReturnUserType {
+        case user(User?)
+        case userSnapshot(QueryDocumentSnapshot?)
+    }
+    
+    // MARK: UserId로 파이어베이스에 유저 확인
+    func fetchUser(at userId: String, userType: Bool) async throws -> ReturnUserType {
+        let querySnapshot = try await db.collection("USERS")
+            .whereField("user_id", isEqualTo: userId)
+            .getDocuments()
+        
+        if userType {
+            let foundUser = try querySnapshot.documents.first?.data(as: User.self)
+            
+            return .user(foundUser)
+        } else {
+            return .userSnapshot(querySnapshot.documents.first)
+        }
+    }
+    
     private let db = Firestore.firestore()
     
     // MARK: USERS 컬렉션의 모든 데이터 가져오기
     func fetchAllUsers() async throws -> [QueryDocumentSnapshot] {
         let querySnapshot = try await db.collection("USERS").getDocuments()
         return querySnapshot.documents
-    }
-    
-    // MARK: UserId로 파이어베이스에 유저 확인
-    func fetchUser(at userId: String) async throws -> QueryDocumentSnapshot? {
-        let querySnapshot = try await db.collection("USERS")
-            .whereField("user_id", isEqualTo: userId)
-            .getDocuments()
-        
-        return querySnapshot.documents.first
     }
     
     // MARK: USERS 하위 Collection 찾기
@@ -94,11 +105,13 @@ class FireBaseService {
     
     // MARK: Following목록 가져오기
     func fetchUserFollowing(userId: String) async throws -> [String] {
-        let userSnapshot = try await fetchUser(at: userId)
-        guard let userFollowing = userSnapshot?.get("user_following") as? [String] else {
-            return []
+        if case .userSnapshot(let userSnapshot) = try await fetchUser(at: userId, userType: false) {
+            guard let userFollowing = userSnapshot?.get("user_following") as? [String] else {
+                return []
+            }
+            return userFollowing
         }
-        return userFollowing
+        return []
     }
     
     // MARK: 유저 정보 수정

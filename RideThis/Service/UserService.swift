@@ -49,12 +49,16 @@ class UserService {
                 print("No valid user ID")
                 return
             }
-            guard let user = try await service.fetchUser(at: userId) else {
-                print("no user")
-                return
+            
+            if case .user(let userData) = try await service.fetchUser(at: userId, userType: true) {
+                guard let user = userData else {
+                    print("no user")
+                    return
+                }
+                self.signedUser = user
+                self.combineUser = user
             }
-            self.signedUser = try user.data(as: User.self)
-            self.combineUser = try user.data(as: User.self)
+            
         } catch {
             print(error)
         }
