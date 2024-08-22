@@ -65,11 +65,11 @@ class CompetitionTVCell: UITableViewCell {
     }
     
     // MARK: Configure
-    func configure(item: RecordModel, number: Int) {
+    func configure(item: RecordModel, number: Int, viewModel: CompetitionViewModel) {
         let ranking = number + 1
         
         userNameLabel.text = "\(ranking). \(item.user_nickname)"
-        if item.user_nickname == "레오" {
+        if item.user_nickname == viewModel.service.signedUser?.user_nickname {
             userNameLabel.text = "\(ranking). \(item.user_nickname) (나)"
             userNameLabel.textColor = UIColor.primaryColor
         } else {

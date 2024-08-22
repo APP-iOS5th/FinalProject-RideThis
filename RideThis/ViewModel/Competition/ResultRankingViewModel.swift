@@ -11,16 +11,18 @@ import Combine
 class ResultRankingViewModel {
     
     private let firebaseService = FireBaseService()
-    //가상 닉네임
-    let nickName: String = "레오"
+    let service = UserService.shared
+    
+    let nickName: String?
     let distance: Double
     @Published var myRank: Int = 0
     
     var records: [RecordModel] = []
     var displayedRecords: [(index: Int, record: RecordModel)] = []
     
-    init(distance: Double) {
+    init(distance: Double, nickName: String) {
         self.distance = distance
+        self.nickName = (service.signedUser != nil) ? service.signedUser?.user_nickname : "UNKOWNED"
         
         updateRecords()
     }
