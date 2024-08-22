@@ -52,8 +52,7 @@ class UserService {
                 print("no user")
                 return
             }
-            let userData = try user.data(as: User.self)
-            self.signedUser = userData
+            self.signedUser = try user.data(as: User.self)
         } catch {
             print(error)
         }
