@@ -100,4 +100,30 @@ class FireBaseService {
         }
         return userFollowing
     }
+    
+    // MARK: 유저 정보 수정
+    func editProfileInfo(user: User) {
+        let userInfo = db.collection("USERS").document(user.user_id)
+        let updateData: [String: Any] = [
+            "user_account_public": user.user_account_public,
+            "user_email": user.user_email,
+            "user_follower": user.user_follower,
+            "user_following": user.user_following,
+            "user_id": user.user_id,
+            "user_image": "",
+            "user_nickname": user.user_nickname,
+            "user_tall": user.user_tall!,
+            "user_weight": user.user_weight
+        ]
+        
+        userInfo.updateData(updateData) { error in
+            if let error = error {
+                print("Error updating document: \(error)")
+            } else {
+                print("Document successfully updated")
+            }
+        }
+        
+        UserService.shared.combineUser = user
+    }
 }

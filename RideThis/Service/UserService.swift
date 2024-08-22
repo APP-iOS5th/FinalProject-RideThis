@@ -12,6 +12,7 @@ class UserService {
     static let shared = UserService()
     private let keyChain = Keychain()
     var signedUser: User? = nil
+    @Published var combineUser: User? = nil
     
     func checkPrevAppleLogin() {
         
@@ -53,6 +54,7 @@ class UserService {
                 return
             }
             self.signedUser = try user.data(as: User.self)
+            self.combineUser = try user.data(as: User.self)
         } catch {
             print(error)
         }
@@ -61,6 +63,7 @@ class UserService {
     func logout() {
         keyChain.delete(key: "appleUserId")
         self.signedUser = nil
+        self.combineUser = nil
         if let scene = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate) {
             scene.changeRootView(viewController: scene.getTabbarController(), animated: true)
         }

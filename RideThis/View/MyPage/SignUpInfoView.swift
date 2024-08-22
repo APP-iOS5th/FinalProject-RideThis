@@ -7,6 +7,7 @@ class SignUpInfoView: RideThisViewController {
     // MARK: Data Components
     let userId: String
     let userEmail: String?
+    private let userService = UserService()
     
     init(userId: String, userEmail: String?) {
         self.userId = userId
@@ -82,7 +83,7 @@ class SignUpInfoView: RideThisViewController {
     private let userInfoLabel2 = RideThisLabel(fontType: .smallTitle, text: "키, 몸무게는 운동 시 칼로리 측정을 위해 입력해주세요.")
     
     // MARK: Next Button
-    private let nextButton = RideThisButton(buttonTitle: "다음", height: 50)
+    private let nextButton = RideThisButton(buttonTitle: "회원가입", height: 50)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -213,11 +214,11 @@ class SignUpInfoView: RideThisViewController {
             let usersCollection = db.collection("USERS")
             let newUser: [String: Any] = [
                 "user_account_public": false,
-                "user_email": userEmail ?? "lobasketve@gmail.com",
+                "user_email": userEmail!,
                 "user_follower": ["1", "2"],
                 "user_following": ["1", "2"],
                 "user_id": userId,
-                "user_image": "https://picsum.photos/200",
+                "user_image": "",
                 "user_nickname": userNickName.text!,
                 "user_tall": Int(userHeight.text!)!,
                 "user_weight": Int(userWeight.text!)!
@@ -230,6 +231,19 @@ class SignUpInfoView: RideThisViewController {
                     print("문서 생성 및 필드 추가 성공")
                 }
             }
+            // MARK: TODO - 바로 로그인 시키기
+            let createdUser = User(user_id: userId,
+                                   user_image: "",
+                                   user_email: userEmail!,
+                                   user_nickname: userNickName.text!,
+                                   user_weight: Int(userWeight.text!)!,
+                                   user_tall: Int(userHeight.text!),
+                                   user_following: [],
+                                   user_follower: [],
+                                   user_account_public: false)
+            
+            userService.signedUser = createdUser
+            
             if let scene = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate) {
                 scene.changeRootView(viewController: scene.getTabbarController(), animated: true)
             }

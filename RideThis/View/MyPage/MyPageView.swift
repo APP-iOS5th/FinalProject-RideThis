@@ -2,6 +2,7 @@ import UIKit
 import Kingfisher
 import SnapKit
 import FirebaseFirestore
+import Combine
 
 // 마이페이지 초기 화면
 class MyPageView: RideThisViewController {
@@ -9,7 +10,7 @@ class MyPageView: RideThisViewController {
     // MARK: Data Components
     let viewModel = MyPageViewModel()
     let service = UserService.shared
-
+    private var cancellable = Set<AnyCancellable>()
     
     // MARK: UIComponents
     // MARK: ScrollView
@@ -176,6 +177,7 @@ class MyPageView: RideThisViewController {
         self.title = "마이페이지"
         setUIComponents()
         setUserData()
+        setCombineData()
     }
     
     func setNavigationComponents() {
@@ -360,7 +362,7 @@ class MyPageView: RideThisViewController {
         }
         
         self.profileEditButton.addAction(UIAction { [weak self] _ in
-            guard let self = self, let user = service.signedUser else { return }
+            guard let self = self, let user = service.combineUser else { return }
             let profileEditView = EditProfileInfoView(user: user)
             navigationController?.pushViewController(profileEditView, animated: true)
         }, for: .touchUpInside)
@@ -512,6 +514,19 @@ class MyPageView: RideThisViewController {
         } else {
             userHeight.text = "-"
         }
+    }
+    
+    func setCombineData() {
+        service.$combineUser
+            .sink { [weak self] receivedUser in
+                guard let self = self, let combineUser = receivedUser else { return }
+                DispatchQueue.main.async {
+                    self.userNickName.text = combineUser.user_nickname
+                    self.userHeight.text = "\(combineUser.user_tall!)"
+                    self.userWeight.text = "\(combineUser.user_weight)"
+                }
+            }
+            .store(in: &cancellable)
     }
     
     @objc func settingButtonTapAction() {

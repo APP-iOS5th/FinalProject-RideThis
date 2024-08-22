@@ -3,11 +3,11 @@ import Combine
 import SnapKit
 import Kingfisher
 
-
 class EditProfileInfoView: RideThisViewController {
     
     // MARK: Data Components
     var user: User
+    private let firebaseService = FireBaseService()
     
     init(user: User) {
         self.user = user
@@ -198,6 +198,17 @@ class EditProfileInfoView: RideThisViewController {
     
     @objc func saveProfileInfo() {
         // MARK: TODO -
+        let changedUser = User(user_id: user.user_id,
+                               user_image: user.user_image,
+                               user_email: user.user_email,
+                               user_nickname: self.userNickNameTextField.text!,
+                               user_weight: Int(self.userWeightTextField.text!)!,
+                               user_tall: Int(self.userHeightTextField.text!),
+                               user_following: user.user_following,
+                               user_follower: user.user_follower,
+                               user_account_public: user.user_account_public)
+        
+        firebaseService.editProfileInfo(user: changedUser)
         self.navigationController?.popViewController(animated: true)
     }
     
