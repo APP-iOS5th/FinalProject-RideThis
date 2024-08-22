@@ -1,5 +1,6 @@
 import UIKit
 import SnapKit
+import Kingfisher
 
 class FollowTableViewCell: UITableViewCell {
     
@@ -11,18 +12,18 @@ class FollowTableViewCell: UITableViewCell {
         iv.heightAnchor.constraint(equalToConstant: 60).isActive = true
         iv.clipsToBounds = true
         iv.layer.cornerRadius = 30
-        iv.image = UIImage(systemName: "sun.max")
         
         return iv
     }()
-    private let userNickName = RideThisLabel(text: "매드카우")
-    private let userEmail = RideThisLabel(fontColor: .recordTitleColor, text: "test@gmail.com")
+    private let userNickName = RideThisLabel()
+    private let userEmail: UILabel = {
+        let label = RideThisLabel(fontColor: .recordTitleColor)
+        label.lineBreakMode = .byTruncatingTail // 줄임표 표시 설정
+        return label
+    }()
     private let followButton: UIButton = {
         let btn = UIButton()
         btn.translatesAutoresizingMaskIntoConstraints = false
-        let btnTitle = ["Follow", "Unfollow"].randomElement()!
-        btn.setTitle(btnTitle, for: .normal)
-        btn.setTitleColor(btnTitle == "Follow" ? .systemBlue : .systemRed, for: .normal)
         
         return btn
     }()
@@ -48,19 +49,41 @@ class FollowTableViewCell: UITableViewCell {
             $0.left.equalTo(contentView.snp.left).offset(10)
         }
         
+        followButton.snp.makeConstraints {
+            $0.centerY.equalTo(contentView.snp.centerY)
+            $0.right.equalTo(contentView.snp.right).offset(-10)
+            $0.width.equalTo(80)  // 버튼의 너비를 고정
+        }
+        
         userNickName.snp.makeConstraints {
             $0.centerY.equalTo(contentView.snp.centerY).offset(-15)
             $0.left.equalTo(profileImage.snp.right).offset(10)
+            $0.right.equalTo(followButton.snp.left).offset(-10)
         }
         
         userEmail.snp.makeConstraints {
             $0.centerY.equalTo(contentView.snp.centerY).offset(15)
             $0.left.equalTo(userNickName.snp.left)
+            $0.right.equalTo(followButton.snp.left).offset(-10)  // followButton 왼쪽에 맞추기
         }
         
-        followButton.snp.makeConstraints {
-            $0.centerY.equalTo(contentView.snp.centerY)
-            $0.right.equalTo(contentView.snp.right).offset(-10)
+        userEmail.numberOfLines = 1
+    }
+    
+    func configureUserInfo(user: User, type: FollowType, eachFollow: Bool) {
+        self.userNickName.text = user.user_nickname
+        self.userEmail.text = user.user_email
+        if let imgUrl = user.user_image {
+            self.profileImage.kf.setImage(with: URL(string: imgUrl))
+        }
+        
+        switch type {
+        case .follower:
+            followButton.setTitle(eachFollow ? "Unfollow" : "Follow", for: .normal)
+            followButton.setTitleColor(eachFollow ? .systemRed : .systemBlue, for: .normal)
+        case .following:
+            followButton.setTitle("Unfollow", for: .normal)
+            followButton.setTitleColor(.systemRed, for: .normal)
         }
     }
 }

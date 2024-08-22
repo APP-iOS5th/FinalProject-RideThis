@@ -1,7 +1,12 @@
 import UIKit
 import SnapKit
+import Combine
 
 class FollowManageView: RideThisViewController {
+    
+    // MARK: Data Components
+    private let followViewModel = FollowManageViewModel()
+    private var cancellable = Set<AnyCancellable>()
     
     // MARK: UIComponents
     // MARK: Search Bar
@@ -32,6 +37,7 @@ class FollowManageView: RideThisViewController {
         super.viewDidLoad()
         
         configureUI()
+        setBindingData()
     }
     
     func configureUI() {
@@ -86,8 +92,19 @@ class FollowManageView: RideThisViewController {
         }
     }
     
+    func setBindingData() {
+        followViewModel.$showingData
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                followTable.reloadData()
+            }
+            .store(in: &cancellable)
+    }
+    
     @objc func optionChanged(_ sender: UISegmentedControl) {
-        
+        let followType: FollowType = self.followPicker.selectedSegmentIndex == 0 ? .follower : .following
+        followViewModel.changeSegmentValue(type: followType)
     }
     
     @objc func searchUserButton() {
@@ -113,13 +130,21 @@ extension FollowManageView: UISearchBarDelegate {
 
 extension FollowManageView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return followViewModel.showingData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "FollowTableViewCell", for: indexPath) as? FollowTableViewCell else {
             return UITableViewCell()
         }
+        
+        let followerInfo = followViewModel.showingData[indexPath.row]
+        let type: FollowType = self.followPicker.selectedSegmentIndex == 0 ? .follower : .following
+        var eachFollow: Bool = false
+        if type == .follower {
+            eachFollow = followViewModel.isEachFollow(userId: followerInfo.user_id)
+        }
+        cell.configureUserInfo(user: followerInfo, type: type, eachFollow: eachFollow)
         
         return cell
     }
