@@ -173,16 +173,14 @@ class HomeView: RideThisViewController {
         
         letsRideSectionView.addSubview(letsRideTitleLabel)
         letsRideTitleLabel.snp.makeConstraints { lrTitleLabel in
-            lrTitleLabel.top.leading.trailing.equalToSuperview().inset(20)
-            lrTitleLabel.leading.equalTo(letsRideSectionView).offset(16)
-            lrTitleLabel.trailing.equalTo(letsRideSectionView).offset(-16)
+            lrTitleLabel.top.equalToSuperview().offset(20)
+            lrTitleLabel.leading.trailing.equalToSuperview().inset(16)
         }
         
         letsRideSectionView.addSubview(letsRideDescriptionLabel)
         letsRideDescriptionLabel.snp.makeConstraints { lrDescriptionLabel in
             lrDescriptionLabel.top.equalTo(letsRideTitleLabel.snp.bottom).offset(10)
             lrDescriptionLabel.leading.trailing.equalToSuperview().inset(16)
-            lrDescriptionLabel.trailing.equalTo(letsRideSectionView).offset(-16)
         }
         
         letsRideSectionView.addSubview(letsRideButton)
@@ -204,9 +202,8 @@ class HomeView: RideThisViewController {
         
         weatherSectionView.addSubview(weatherTitleLabel)
         weatherTitleLabel.snp.makeConstraints { wTitleLabel in
-            wTitleLabel.top.leading.trailing.equalToSuperview().inset(20)
-            wTitleLabel.leading.equalTo(weatherSectionView).offset(16)
-            wTitleLabel.trailing.equalTo(weatherSectionView).offset(-16)
+            wTitleLabel.top.equalToSuperview().offset(20)
+            wTitleLabel.leading.trailing.equalToSuperview().inset(16)
         }
     }
     
@@ -240,11 +237,14 @@ class HomeView: RideThisViewController {
         navigationController?.pushViewController(myPageView, animated: true)
     }
     
-    // 라이딩 고고씽 버튼 TODO: 추후 연결
+    // 라이딩 고고씽 버튼: 기록탭으로 전환
+    // TODO: 탭바 이슈
     @objc private func letsRideButtonTapped() {
-        //        let recordView = RecordView()
-        //        navigationController?.pushViewController(RecordView, animated: true)
-        print("라이딩을 시작합니다!")
+        let recordView = RecordView()
+        navigationController?.pushViewController(recordView, animated: true)
+        
+        let recordTabIndex = 2
+        tabBarController?.selectedIndex = recordTabIndex
     }
     
 }
