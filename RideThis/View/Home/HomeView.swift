@@ -3,11 +3,20 @@ import WeatherKit
 import SnapKit
 import Combine
 
-class HomeView: RideThisViewController{
+class HomeView: RideThisViewController {
     
-    private let viewModel = HomeViewModel()
+    private let viewModel: HomeViewModel
     
     private var cancellables = Set<AnyCancellable>()
+    
+    init(viewModel: HomeViewModel = HomeViewModel()) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: 주간기록 안내 섹션 UI 요소들
     // 커스텀 타이틀
@@ -58,11 +67,7 @@ class HomeView: RideThisViewController{
     
     // 주간기록: 데이터
     private lazy var weeklyRecordDataView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [
-            createRecordItemView(title: "달린 횟수", value: "\(viewModel.weeklyRecord.runCount)회"),
-            createRecordItemView(title: "달린 시간", value: viewModel.weeklyRecord.runTime),
-            createRecordItemView(title: "달린 거리", value: String(format: "%.2f Km", viewModel.weeklyRecord.runDistance))
-        ])
+        let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         stackView.alignment = .center
@@ -78,8 +83,7 @@ class HomeView: RideThisViewController{
     }()
     
     private lazy var letsRideTitleLabel: UILabel = {
-        let userName = viewModel.userName
-        let label = RideThisLabel(fontType: .sectionTitle, fontColor: .black, text: "\(userName)님, 라이딩 고고씽?")
+        let label = RideThisLabel(fontType: .sectionTitle, fontColor: .black, text: "")
         label.font = UIFont.boldSystemFont(ofSize: label.font.pointSize)
         return label
     }()
@@ -184,6 +188,7 @@ class HomeView: RideThisViewController{
         weeklyRecordSectionContentView()
         letsRideSectionContentView()
         weatherSectionContentView()
+        setupBindings()
     }
     
     // MARK: WeathrContainer 그라데이션
@@ -457,6 +462,23 @@ class HomeView: RideThisViewController{
         tabBarController?.selectedIndex = recordTabIndex
     }
     
+    private func setupBindings() {
+        viewModel.$model
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] model in
+                self?.updateUI(with: model)
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func updateUI(with model: HomeModel) {
+        weeklyRecordDataView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        weeklyRecordDataView.addArrangedSubview(createRecordItemView(title: "달린 횟수", value: "\(model.weeklyRecord.runCount)회"))
+        weeklyRecordDataView.addArrangedSubview(createRecordItemView(title: "달린 시간", value: model.weeklyRecord.runTime))
+        weeklyRecordDataView.addArrangedSubview(createRecordItemView(title: "달린 거리", value: String(format: "%.2f Km", model.weeklyRecord.runDistance)))
+        
+        letsRideTitleLabel.text = "\(model.userName)님, 라이딩 고고씽?"
+    }
 }
 
 #Preview {
