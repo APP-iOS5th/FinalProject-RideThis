@@ -23,7 +23,7 @@ class HomeViewModel: NSObject, CLLocationManagerDelegate {
     
     override init() {
         self.weeklyRecord = WeeklyRecord(runCount: 6, runTime: "15시간 34분", runDistance: 404.51)
-        self.userName = "규상"
+        self.userName = "전두광"
         super.init()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
