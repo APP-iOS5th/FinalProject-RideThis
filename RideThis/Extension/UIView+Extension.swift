@@ -64,3 +64,21 @@ class CustomSeparator: UIView {
         self.layer.borderColor = UIColor.lightGray.cgColor
     }
 }
+
+// UIView Background Gridiant추가
+extension UIView{
+    func setGradient(color1:UIColor,color2:UIColor){
+        let gradient: CAGradientLayer = CAGradientLayer()
+        gradient.colors = [color1.cgColor,color2.cgColor]
+        gradient.locations = [0.0 , 1.0]
+        gradient.startPoint = CGPoint(x: 0.5, y: 0.0)
+        gradient.endPoint = CGPoint(x: 0.5, y: 1.0)
+        gradient.frame = bounds
+        // layer.addSublayer(gradient)
+        
+        if let firstLayer = layer.sublayers?.first, firstLayer is CAGradientLayer {
+            firstLayer.removeFromSuperlayer()
+        }
+        layer.insertSublayer(gradient, at: 0)
+    }
+}
