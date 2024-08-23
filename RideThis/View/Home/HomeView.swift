@@ -1,8 +1,13 @@
 import UIKit
+import WeatherKit
 import SnapKit
+import Combine
 
-class HomeView: RideThisViewController {
+class HomeView: RideThisViewController{
+    
     private let viewModel = HomeViewModel()
+    
+    private var cancellables = Set<AnyCancellable>()
     
     // MARK: 주간기록 안내 섹션 UI 요소들
     // 커스텀 타이틀
@@ -104,6 +109,74 @@ class HomeView: RideThisViewController {
         return label
     }()
     
+    // MARK: Weather
+    private let weatherContainer: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 10
+        view.backgroundColor = UIColor(red: 12/255, green: 79/255, blue: 146/255, alpha: 1)
+        view.layer.masksToBounds = true
+        
+        return view
+    }()
+    
+    private let locationLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
+        label.text = "우리집"
+        label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        return label
+    }()
+    
+    private let currentTemp: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 45, weight: .semibold)
+        label.text = "76"
+        label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        return label
+    }()
+    
+    private let weatherSymbol: UIImageView = {
+        let image = UIImageView(image: UIImage(systemName: "hare.fill"))
+        image.tintColor = .white
+        image.contentMode = .scaleAspectFit
+        image.translatesAutoresizingMaskIntoConstraints = false
+        
+        return image
+    }()
+    
+    private let weatherConditionLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
+        label.text = "Sunny"
+        label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        return label
+    }()
+    
+    private let averageTempLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
+        label.text = "h:88 L:57"
+        label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        return label
+    }()
+    
+    private let weatherHStackView: UIStackView = {
+       let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.distribution = .fillEqually
+        stack.spacing = 10
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        
+        return stack
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -111,6 +184,13 @@ class HomeView: RideThisViewController {
         weeklyRecordSectionContentView()
         letsRideSectionContentView()
         weatherSectionContentView()
+    }
+    
+    // MARK: WeathrContainer 그라데이션
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        weatherContainer.setGradient(color1: UIColor(red: 12/255, green: 79/255, blue: 146/255, alpha: 1),
+                                     color2: UIColor(red: 77/255, green: 143/255, blue: 209/255, alpha: 1))
     }
     
     // MARK: Navigation Bar
@@ -193,11 +273,14 @@ class HomeView: RideThisViewController {
     
     // MARK: weather(w) Section View
     private func weatherSectionContentView() {
+        
+        setupWeatherUI()
+        
         view.addSubview(weatherSectionView)
         weatherSectionView.snp.makeConstraints { wSection in
             wSection.top.equalTo(letsRideSectionView.snp.bottom).offset(10)
             wSection.leading.trailing.equalToSuperview()
-            wSection.height.equalTo(230)
+            wSection.height.equalTo(238)
         }
         
         weatherSectionView.addSubview(weatherTitleLabel)
@@ -205,6 +288,133 @@ class HomeView: RideThisViewController {
             wTitleLabel.top.equalToSuperview().offset(20)
             wTitleLabel.leading.trailing.equalToSuperview().inset(16)
         }
+        
+        weatherSectionView.addSubview(weatherContainer)
+        weatherContainer.snp.makeConstraints { con in
+            con.top.equalTo(weatherTitleLabel.snp.bottom).offset(15)
+            con.left.equalTo(weatherSectionView.snp.left).offset(20)
+            con.right.equalTo(weatherSectionView.snp.right).offset(-20)
+            con.height.equalTo(160)
+        }
+        
+        weatherContainer.addSubview(locationLabel)
+        weatherContainer.addSubview(currentTemp)
+        weatherContainer.addSubview(weatherSymbol)
+        weatherContainer.addSubview(weatherConditionLabel)
+        weatherContainer.addSubview(averageTempLabel)
+        weatherContainer.addSubview(weatherHStackView)
+        
+        locationLabel.snp.makeConstraints { label in
+               label.top.equalTo(weatherContainer.snp.top).offset(15)
+               label.left.equalTo(weatherContainer.snp.left).offset(15)
+           }
+        currentTemp.snp.makeConstraints { temp in
+            temp.top.equalTo(locationLabel.snp.bottom)
+            temp.left.equalTo(weatherContainer.snp.left).offset(15)
+        }
+        weatherSymbol.snp.makeConstraints { symbol in
+            symbol.top.equalTo(weatherContainer.snp.top).offset(15)
+            symbol.right.equalTo(weatherContainer.snp.right).offset(-15)
+        }
+        weatherConditionLabel.snp.makeConstraints { label in
+            label.top.equalTo(weatherSymbol.snp.bottom).offset(5)
+            label.right.equalTo(weatherContainer.snp.right).offset(-15)
+        }
+        averageTempLabel.snp.makeConstraints { label in
+            label.top.equalTo(weatherConditionLabel.snp.bottom).offset(5)
+            label.right.equalTo(weatherContainer.snp.right).offset(-15)
+        }
+        weatherHStackView.snp.makeConstraints { con in
+            con.bottom.equalTo(weatherContainer.snp.bottom).offset(-5)
+            con.left.equalTo(weatherContainer.snp.left).offset(15)
+            con.right.equalTo(weatherContainer.snp.right).offset(-15)
+        }
+           
+    }
+    
+    // MARK: Setup Weather UI
+    private func setupWeatherUI() {
+        // 지역이름
+        self.viewModel.$locationName
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] location in
+                self?.locationLabel.text = "\(location)"
+                
+            }
+            .store(in: &cancellables)
+        
+        // 현재 날씨
+        self.viewModel.$currentWeather
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] weather in
+                self?.currentTemp.text = "\(weather?.currentWeather.temperature.formatted() ?? "")"
+                self?.weatherSymbol.image = UIImage(systemName: "\(weather?.currentWeather.symbolName ?? "")")
+                self?.weatherConditionLabel.text = "\(weather?.currentWeather.condition.description ?? "")"
+                
+                if let todayForecast = weather?.dailyForecast.forecast.first(where: {
+                    Calendar.current.isDate($0.date, inSameDayAs: Date())
+                }) {
+                    let highTemperature = Int(todayForecast.highTemperature.value)
+                    let lowTemperature = Int(todayForecast.lowTemperature.value)
+                    self?.averageTempLabel.text = "H:\(highTemperature)° L:\(lowTemperature)°"
+                } else {
+                    self?.averageTempLabel.text = ""
+                }
+                
+            }
+            .store(in: &cancellables)
+        
+        // 시간별 날씨
+        self.viewModel.$hourlyForecast
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] hourlyForecast in
+                guard let self = self else { return }
+                
+                self.weatherHStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+                
+                let calendar = Calendar.current
+                let now = Date()
+                
+                for i in 1...6 {
+                    if let forecast = hourlyForecast.first(where: {
+                        calendar.isDate($0.date, inSameDayAs: calendar.date(byAdding: .hour, value: i, to: now)!)
+                    }) {
+                        let weatherVStackView = self.createWeatherVStackView(forecast: forecast, hourOffset: i)
+                        self.weatherHStackView.addArrangedSubview(weatherVStackView)
+                    }
+                }
+            }
+            .store(in: &cancellables)
+        
+    }
+    
+    // Weather 시간별 날씨배열 함수
+    private func createWeatherVStackView(forecast: HourWeather, hourOffset: Int) -> UIStackView {
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "ha"
+        
+        let weatherTimeLabel = UILabel()
+        weatherTimeLabel.font = UIFont.systemFont(ofSize: 11, weight: .regular)
+        weatherTimeLabel.textColor = .white
+        weatherTimeLabel.textAlignment = .center
+        weatherTimeLabel.text = timeFormatter.string(from: Calendar.current.date(byAdding: .hour, value: hourOffset, to: Date())!)
+        
+        let weatherTimeSymbol = UIImageView(image: UIImage(systemName: forecast.symbolName))
+        weatherTimeSymbol.tintColor = .white
+        weatherTimeSymbol.contentMode = .scaleAspectFit
+        
+        let weatherTimeTempLabel = UILabel()
+        weatherTimeTempLabel.font = UIFont.systemFont(ofSize: 11, weight: .semibold)
+        weatherTimeTempLabel.textColor = .white
+        weatherTimeTempLabel.textAlignment = .center
+        weatherTimeTempLabel.text = "\(Int(forecast.temperature.value))°"
+        
+        let weatherVStackView = UIStackView(arrangedSubviews: [weatherTimeLabel, weatherTimeSymbol, weatherTimeTempLabel])
+        weatherVStackView.axis = .vertical
+        weatherVStackView.alignment = .center
+        weatherVStackView.spacing = 5
+        
+        return weatherVStackView
     }
     
     // MARK: weeklyRecord Data Set
