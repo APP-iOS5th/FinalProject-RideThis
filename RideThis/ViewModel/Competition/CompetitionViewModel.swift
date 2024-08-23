@@ -17,13 +17,16 @@ class CompetitionViewModel {
     let isLogin: Bool
     let isBluetooth = true
     
+    let nickName: String?
+    
     private var allRecords: [RecordModel] = []
     @Published var records: [RecordModel] = []
     
     var followingUserIds: [String] = []
     
-    init(isLogin: Bool) {
+    init(isLogin: Bool, nickName: String) {
         self.isLogin = (service.signedUser != nil) ? true : false
+        self.nickName = (service.signedUser != nil) ? service.signedUser?.user_nickname : "UNKOWNED"
         
         fetchAllRecords()
         fetchFollowingUsers()

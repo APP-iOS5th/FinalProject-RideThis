@@ -5,7 +5,7 @@ import Combine
 // 경쟁 탭 초기 화면
 class CompetitionView: RideThisViewController {
     
-    private let viewModel = CompetitionViewModel(isLogin: false)
+    private let viewModel = CompetitionViewModel(isLogin: false, nickName: "")
     
     private var cancellables = Set<AnyCancellable>()
     

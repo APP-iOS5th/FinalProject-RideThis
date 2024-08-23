@@ -69,7 +69,7 @@ class CompetitionTVCell: UITableViewCell {
         let ranking = number + 1
         
         userNameLabel.text = "\(ranking). \(item.user_nickname)"
-        if item.user_nickname == viewModel.service.signedUser?.user_nickname {
+        if item.user_nickname == viewModel.nickName {
             userNameLabel.text = "\(ranking). \(item.user_nickname) (나)"
             userNameLabel.textColor = UIColor.primaryColor
         } else {
