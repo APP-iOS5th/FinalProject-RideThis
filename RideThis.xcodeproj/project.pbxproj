@@ -98,7 +98,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		040028BF2C762F9D0038CC10 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		041A672A2C6C400E000BA4C1 /* DistanceCase+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DistanceCase+Extension.swift"; sourceTree = "<group>"; };
 		041A67332C6C519B000BA4C1 /* CountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountViewController.swift; sourceTree = "<group>"; };
 		041A67352C6C6543000BA4C1 /* CountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountViewModel.swift; sourceTree = "<group>"; };
@@ -275,7 +274,6 @@
 			isa = PBXGroup;
 			children = (
 				CDC0C1D32C65FB4300349DC4 /* RideThis.entitlements */,
-				040028BF2C762F9D0038CC10 /* GoogleService-Info.plist */,
 				786F60E12C77103B00B277FE /* GoogleService-Info.plist */,
 				CD4214502C6498FF00F7C3AE /* Extension */,
 				CD4214212C64989000F7C3AE /* App */,
