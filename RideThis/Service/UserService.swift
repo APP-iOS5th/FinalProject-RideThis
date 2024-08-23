@@ -1,5 +1,6 @@
 import Foundation
 import AuthenticationServices
+import FirebaseFirestore
 import Combine
 
 enum UserStatus {
@@ -9,9 +10,8 @@ enum UserStatus {
 
 class UserService {
     static let shared = UserService()
-    
-    @Published var userStatus: UserStatus = .signedOut
-    let keyChain = Keychain()
+    private let keyChain = Keychain()
+    var signedUser: User? = nil
     
     func checkPrevAppleLogin() {
         
@@ -27,17 +27,13 @@ class UserService {
                 switch credentialState {
                 case .authorized:
                     print("authorized")
-                    self.getAppleUserProfile()
+                    Task {
+                        await self.getUserInfo()
+                    }
                 case .revoked:
                     print("revoked")
-//                    DispatchQueue.main.async {
-//                        self.state = .signedOut
-//                    }
                 case .notFound:
                     print("notFound")
-//                    DispatchQueue.main.async {
-//                        self.state = .signedOut
-//                    }
                 default:
                     break
                 }
@@ -45,8 +41,30 @@ class UserService {
         }
     }
     
-    func getAppleUserProfile() {
-        
+    func getUserInfo() async {
+        let service = FireBaseService()
+        do {
+            guard let userId = self.keyChain.read(key: "appleUserId") else {
+                print("No valid user ID")
+                return
+            }
+            guard let user = try await service.fetchUser(at: userId) else {
+                print("no user")
+                return
+            }
+            let userData = try user.data(as: User.self)
+            self.signedUser = userData
+        } catch {
+            print(error)
+        }
+    }
+    
+    func logout() {
+        keyChain.delete(key: "appleUserId")
+        self.signedUser = nil
+        if let scene = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate) {
+            scene.changeRootView(viewController: scene.getTabbarController(), animated: true)
+        }
     }
     
     func appleSignIn(userId: String) {

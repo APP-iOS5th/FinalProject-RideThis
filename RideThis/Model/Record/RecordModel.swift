@@ -1,9 +1,8 @@
 import Foundation
 
-extension RecordsMockData {
-    static var sampleRecords: [RecordsMockData] = [
-        RecordsMockData(
-            record_id: "1",
+extension RecordModel {
+    static var sampleRecords: [RecordModel] = [
+        RecordModel(
             record_timer: "25:30",
             record_cadence: 28.4,
             record_speed: 15.8,
@@ -13,10 +12,11 @@ extension RecordsMockData {
             record_end_time: nil,
             record_data: nil,
             record_competetion_status: false,
-            record_target_distance: 5
+            record_target_distance: 5,
+            user_nickname: "test",
+            user_id: "test"
         ),
-        RecordsMockData(
-            record_id: "2",
+        RecordModel(
             record_timer: "35:45",
             record_cadence: 30.2,
             record_speed: 17.5,
@@ -26,10 +26,11 @@ extension RecordsMockData {
             record_end_time: nil,
             record_data: nil,
             record_competetion_status: false,
-            record_target_distance: 10
+            record_target_distance: 10,
+            user_nickname: "test",
+            user_id: "test"
         ),
-        RecordsMockData(
-            record_id: "3",
+        RecordModel(
             record_timer: "50:10",
             record_cadence: 29.8,
             record_speed: 19.1,
@@ -39,10 +40,11 @@ extension RecordsMockData {
             record_end_time: nil,
             record_data: nil,
             record_competetion_status: false,
-            record_target_distance: 30
+            record_target_distance: 30,
+            user_nickname: "test",
+            user_id: "test"
         ),
-        RecordsMockData(
-            record_id: "4",
+        RecordModel(
             record_timer: "40:25",
             record_cadence: 27.6,
             record_speed: 16.5,
@@ -52,10 +54,11 @@ extension RecordsMockData {
             record_end_time: nil,
             record_data: nil,
             record_competetion_status: false,
-            record_target_distance: 100
+            record_target_distance: 100,
+            user_nickname: "test",
+            user_id: "test"
         ),
-        RecordsMockData(
-            record_id: "5",
+        RecordModel(
             record_timer: "20:15",
             record_cadence: 31.1,
             record_speed: 18.3,
@@ -65,10 +68,11 @@ extension RecordsMockData {
             record_end_time: nil,
             record_data: nil,
             record_competetion_status: false,
-            record_target_distance: 5
+            record_target_distance: 5,
+            user_nickname: "test",
+            user_id: "test"
         ),
-        RecordsMockData(
-            record_id: "6",
+        RecordModel(
             record_timer: "45:00",
             record_cadence: 26.9,
             record_speed: 14.7,
@@ -78,10 +82,11 @@ extension RecordsMockData {
             record_end_time: nil,
             record_data: nil,
             record_competetion_status: false,
-            record_target_distance: 30
+            record_target_distance: 30,
+            user_nickname: "test",
+            user_id: "test"
         ),
-        RecordsMockData(
-            record_id: "7",
+        RecordModel(
             record_timer: "30:20",
             record_cadence: 29.5,
             record_speed: 16.8,
@@ -91,10 +96,11 @@ extension RecordsMockData {
             record_end_time: nil,
             record_data: nil,
             record_competetion_status: false,
-            record_target_distance: 10
+            record_target_distance: 10,
+            user_nickname: "test",
+            user_id: "test"
         ),
-        RecordsMockData(
-            record_id: "8",
+        RecordModel(
             record_timer: "55:50",
             record_cadence: 28.3,
             record_speed: 20.0,
@@ -104,10 +110,11 @@ extension RecordsMockData {
             record_end_time: nil,
             record_data: nil,
             record_competetion_status: false,
-            record_target_distance: 100
+            record_target_distance: 100,
+            user_nickname: "test",
+            user_id: "test"
         ),
-        RecordsMockData(
-            record_id: "9",
+        RecordModel(
             record_timer: "38:35",
             record_cadence: 30.0,
             record_speed: 18.0,
@@ -117,10 +124,11 @@ extension RecordsMockData {
             record_end_time: nil,
             record_data: nil,
             record_competetion_status: false,
-            record_target_distance: 10
+            record_target_distance: 10,
+            user_nickname: "test",
+            user_id: "test"
         ),
-        RecordsMockData(
-            record_id: "10",
+        RecordModel(
             record_timer: "42:20",
             record_cadence: 27.0,
             record_speed: 17.0,
@@ -130,10 +138,11 @@ extension RecordsMockData {
             record_end_time: nil,
             record_data: nil,
             record_competetion_status: false,
-            record_target_distance: 30
+            record_target_distance: 30,
+            user_nickname: "test",
+            user_id: "test"
         ),
-        RecordsMockData(
-            record_id: "11",
+        RecordModel(
             record_timer: "32:21",
             record_cadence: 22.0,
             record_speed: 40.0,
@@ -143,10 +152,11 @@ extension RecordsMockData {
             record_end_time: nil,
             record_data: nil,
             record_competetion_status: false,
-            record_target_distance: 5
+            record_target_distance: 5,
+            user_nickname: "test",
+            user_id: "test"
         ),
-        RecordsMockData(
-            record_id: "12",
+        RecordModel(
             record_timer: "34:12",
             record_cadence: 22.0,
             record_speed: 40.0,
@@ -156,7 +166,9 @@ extension RecordsMockData {
             record_end_time: nil,
             record_data: nil,
             record_competetion_status: false,
-            record_target_distance: 5
+            record_target_distance: 5,
+            user_nickname: "test",
+            user_id: "test"
         )
     ]
 }

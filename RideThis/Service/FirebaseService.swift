@@ -5,6 +5,12 @@ class FireBaseService {
     
     private let db = Firestore.firestore()
     
+    // MARK: USERS 컬렉션의 모든 데이터 가져오기
+    func fetchAllUsers() async throws -> [QueryDocumentSnapshot] {
+        let querySnapshot = try await db.collection("USERS").getDocuments()
+        return querySnapshot.documents
+    }
+    
     // MARK: UserId로 파이어베이스에 유저 확인
     func fetchUser(at userId: String) async throws -> QueryDocumentSnapshot? {
         let querySnapshot = try await db.collection("USERS")
@@ -52,5 +58,46 @@ class FireBaseService {
             "record_target_distance": tagetDistance ?? 0
         ])
 
+    }
+    
+    // MARK: 각 USERS 문서의 RECORDS 컬렉션의 모든 데이터 가져오기
+        func fetchAllRecordsForUsers(_ userSnapshots: [QueryDocumentSnapshot]) async throws -> [RecordModel] {
+            var allRecordData: [RecordModel] = []
+
+            for userSnapshot in userSnapshots {
+                let userNickname = userSnapshot["user_nickname"] as? String ?? ""
+                let userId = userSnapshot["user_id"] as? String ?? ""
+                let recordsCollectionRef = userSnapshot.reference.collection("RECORDS")
+                let recordsQuerySnapshot = try await recordsCollectionRef.getDocuments()
+
+                for recordSnapshot in recordsQuerySnapshot.documents {
+                    let recordData = RecordModel(
+                        record_timer: recordSnapshot["record_timer"] as? String ?? "",
+                        record_cadence: recordSnapshot["record_cadence"] as? Double ?? 0.0,
+                        record_speed: recordSnapshot["record_speed"] as? Double ?? 0.0,
+                        record_distance: recordSnapshot["record_distance"] as? Double ?? 0.0,
+                        record_calories: recordSnapshot["record_calories"] as? Double ?? 0.0,
+                        record_start_time: (recordSnapshot["record_start_time"] as? Timestamp)?.dateValue(),
+                        record_end_time: (recordSnapshot["record_end_time"] as? Timestamp)?.dateValue(),
+                        record_data: (recordSnapshot["record_date"] as? Timestamp)?.dateValue(),
+                        record_competetion_status: recordSnapshot["record_competetion_status"] as? Bool ?? false,
+                        record_target_distance: recordSnapshot["record_target_distance"] as? Int ?? 0,
+                        user_nickname: userNickname,
+                        user_id: userId
+                    )
+                    allRecordData.append(recordData)
+                }
+            }
+
+            return allRecordData
+        }
+    
+    // MARK: Following목록 가져오기
+    func fetchUserFollowing(userId: String) async throws -> [String] {
+        let userSnapshot = try await fetchUser(at: userId)
+        guard let userFollowing = userSnapshot?.get("user_following") as? [String] else {
+            return []
+        }
+        return userFollowing
     }
 }
