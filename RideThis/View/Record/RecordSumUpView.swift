@@ -132,8 +132,7 @@ class RecordSumUpView: RideThisViewController {
     }
     
     private func navigateToRecordView() {
-        let recordViewController = RecordView()
-        self.navigationController?.pushViewController(recordViewController, animated: true) // 기록 화면으로 이동
+        self.navigationController?.popToRootViewController(animated: true) // 기록 화면으로 이동
     }
     
     // MARK: Navigation Bar

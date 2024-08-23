@@ -8,9 +8,6 @@ class RecordViewModel: ObservableObject {
     let isBluetooth = true
     
     // 타이머
-//    @Published private(set) var elapsedTime: TimeInterval = 0
-//    private var timer: AnyCancellable?
-    
     var recordedTime: TimeInterval = 0.0
     
     // 타이머 업데이트 클로저
@@ -37,13 +34,6 @@ class RecordViewModel: ObservableObject {
         isRecording = true
         print("start pushed")
         startTimer()
-        //        elapsedTime = 0
-        //        Timer.publish(every: 1.0, on: .main, in: .common)
-        //            .autoconnect()
-        //            .sink { [weak self] _ in
-        //                self?.elapsedTime += 1
-        //            }
-        //            .store(in: &cancellables)
     }
     
     func resetRecording() {
@@ -51,7 +41,6 @@ class RecordViewModel: ObservableObject {
         isRecording = false
         print("reset pushed")
         stopTimer()
-        //        cancellables.forEach { $0.cancel() }
         elapsedTime = 0.0
         recordedTime = 0.0
         onTimerUpdated?(formatTime(elapsedTime))
@@ -63,8 +52,8 @@ class RecordViewModel: ObservableObject {
         print("finish pushed")
         stopTimer()
         recordedTime = elapsedTime
+        elapsedTime = 0 // 화면에 출력되는 값 초기화
         onFinishRecording?()
-        //        cancellables.forEach { $0.cancel() }
     }
     
     func pauseRecording() {
@@ -72,7 +61,6 @@ class RecordViewModel: ObservableObject {
         isRecording = false
         print("pause pushed")
         stopTimer()
-        //        cancellables.forEach { $0.cancel() }
     }
     
     private func startTimer() {
@@ -93,19 +81,6 @@ class RecordViewModel: ObservableObject {
         let seconds = Int(time) % 60
         return String(format: "%02d:%02d", minutes, seconds)
     }
-    
-//    private func startTimer() {
-//        timer = Timer.publish(every: 1, on: .main, in: .common)
-//            .autoconnect()
-//            .sink { [weak self] _ in
-//                self?.elapsedTime += 1
-//            }
-//    }
-//    
-//    private func stopTimer() {
-//        timer?.cancel()
-//        timer = nil
-//    }
     
     // MARK: - 기록 요약 화면 버튼 동작
     // TODO: - 버튼 동작 구현
