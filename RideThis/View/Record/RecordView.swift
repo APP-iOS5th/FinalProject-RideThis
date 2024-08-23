@@ -142,7 +142,11 @@ class RecordView: RideThisViewController {
             if self.viewModel.isBluetooth {
                 if self.viewModel.isRecording {
                     self.viewModel.pauseRecording()
-                    self.updateUI(isRecording: false)
+                    resetButton.isEnabled = true
+                    finishButton.isEnabled = true
+                    resetButton.backgroundColor = .black
+                    finishButton.backgroundColor = .black
+                    recordButton.setTitle("시작", for: .normal)
                 } else {
                     self.viewModel.startRecording()
                     self.updateUI(isRecording: true)
