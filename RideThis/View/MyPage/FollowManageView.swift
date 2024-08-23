@@ -5,8 +5,18 @@ import Combine
 class FollowManageView: RideThisViewController {
     
     // MARK: Data Components
-    private let followViewModel = FollowManageViewModel()
+    var user: User
+    private lazy var followViewModel = FollowManageViewModel()
     private var cancellable = Set<AnyCancellable>()
+    
+    init(user: User) {
+        self.user = user
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: UIComponents
     // MARK: Search Bar
@@ -37,7 +47,7 @@ class FollowManageView: RideThisViewController {
         super.viewDidLoad()
         
         configureUI()
-        setBindingData()
+        setCombineData()
     }
     
     func configureUI() {
@@ -48,7 +58,7 @@ class FollowManageView: RideThisViewController {
     }
     
     func setNavigationComponents() {
-        self.title = "매드카우"
+        self.title = ""
         let searchButton = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(searchUserButton))
         navigationItem.rightBarButtonItem = searchButton
     }
@@ -92,27 +102,23 @@ class FollowManageView: RideThisViewController {
         }
     }
     
-    func setBindingData() {
-        followViewModel.$followers
+    func setCombineData() {
+        followViewModel.$followDatas
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 guard let self = self else { return }
-                followTable.reloadData()
+                self.followTable.reloadData()
             }
             .store(in: &cancellable)
         
-        followViewModel.$followings
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                guard let self = self else { return }
-                followTable.reloadData()
-            }
-            .store(in: &cancellable)
+        Task {
+            await followViewModel.fetchFollowData(user: user, type: .follower)
+        }
     }
     
     @objc func optionChanged(_ sender: UISegmentedControl) {
         let followType: FollowType = self.followPicker.selectedSegmentIndex == 0 ? .follower : .following
-        followViewModel.changeSegmentValue(type: followType)
+        followViewModel.changeSegmentValue(user: user, type: followType)
     }
     
     @objc func searchUserButton() {
@@ -123,7 +129,7 @@ class FollowManageView: RideThisViewController {
 
 extension FollowManageView: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        followViewModel.searchUser(text: searchText, type: self.followPicker.selectedSegmentIndex == 0 ? .follower : .following)
+        
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
@@ -137,8 +143,7 @@ extension FollowManageView: UISearchBarDelegate {
 
 extension FollowManageView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let target = self.followPicker.selectedSegmentIndex == 0 ? followViewModel.followers : followViewModel.followings
-        return target.count
+        return followViewModel.followDatas.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -146,22 +151,23 @@ extension FollowManageView: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let target = self.followPicker.selectedSegmentIndex == 0 ? followViewModel.followers : followViewModel.followings
-        let followerInfo = target[indexPath.row]
-        cell.viewModel = self.followViewModel
-        cell.cellUser = followerInfo
-        
-        let type: FollowType = self.followPicker.selectedSegmentIndex == 0 ? .follower : .following
-        var eachFollow: Bool = false
-        if type == .follower {
-            eachFollow = followViewModel.isEachFollow(userId: followerInfo.user_id)
-        }
-        cell.configureUserInfo(type: type, eachFollow: eachFollow)
+        let followUser = followViewModel.followDatas[indexPath.row]
+        cell.cellUser = followUser
+        cell.configureUserInfo()
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80
+    }
+}
+
+extension FollowManageView: UpdateUserDelegate {
+    func updateUser(user: User) {
+        self.user = user
+        Task {
+            await followViewModel.fetchFollowData(user: user, type: self.followPicker.selectedSegmentIndex == 0 ? .follower : .following)
+        }
     }
 }

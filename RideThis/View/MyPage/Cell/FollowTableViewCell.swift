@@ -4,7 +4,6 @@ import Kingfisher
 
 class FollowTableViewCell: UITableViewCell {
     
-    var viewModel: FollowManageViewModel?
     var cellUser: User?
     private let profileImage: UIImageView = {
         let iv = UIImageView()
@@ -70,21 +69,13 @@ class FollowTableViewCell: UITableViewCell {
         }
         
         userEmail.numberOfLines = 1
-        followButton.addAction(UIAction { [weak self] _ in
-            guard let self = self, 
-                  let label = followButton.titleLabel,
-                  let title = label.text,
-                  let user = cellUser,
-                  let viewModel = viewModel else { return }
-            if title == "Follow" {
-                viewModel.followUser(user: user)
-            } else {
-                viewModel.unFollowUser(user: user)
-            }
-        }, for: .touchUpInside)
+//        followButton.addAction(UIAction { [weak self] _ in
+//            guard let self = self else { return }
+//            
+//        }, for: .touchUpInside)
     }
     
-    func configureUserInfo(type: FollowType, eachFollow: Bool) {
+    func configureUserInfo() {
         guard let user = cellUser else { return }
         self.userNickName.text = user.user_nickname
         self.userEmail.text = user.user_email
@@ -92,13 +83,15 @@ class FollowTableViewCell: UITableViewCell {
             self.profileImage.kf.setImage(with: URL(string: imgUrl))
         }
         
-        switch type {
-        case .follower:
-            followButton.setTitle(eachFollow ? "Unfollow" : "Follow", for: .normal)
-            followButton.setTitleColor(eachFollow ? .systemRed : .systemBlue, for: .normal)
-        case .following:
-            followButton.setTitle("Unfollow", for: .normal)
-            followButton.setTitleColor(.systemRed, for: .normal)
-        }
+        followButton.setTitle("Follow", for: .normal)
+        followButton.setTitleColor(.systemBlue, for: .normal)
+//        switch type {
+//        case .follower:
+//            followButton.setTitle(eachFollow ? "Unfollow" : "Follow", for: .normal)
+//            followButton.setTitleColor(eachFollow ? .systemRed : .systemBlue, for: .normal)
+//        case .following:
+//            followButton.setTitle("Unfollow", for: .normal)
+//            followButton.setTitleColor(.systemRed, for: .normal)
+//        }
     }
 }

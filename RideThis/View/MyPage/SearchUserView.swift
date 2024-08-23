@@ -5,8 +5,7 @@ import Combine
 class SearchUserView: RideThisViewController {
     
     // MARK: Data Components
-    private let viewModel = SearchUserViewModel()
-    private let followViewModel = FollowManageViewModel()
+    private let viewModel = SearchUserViewModel(user: UserService.shared.combineUser!)
     private var cancellable = Set<AnyCancellable>()
     
     // MARK: UI Components
@@ -67,7 +66,7 @@ class SearchUserView: RideThisViewController {
     }
     
     func setBindingData() {
-        viewModel.$searchedUser
+        viewModel.$users
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 guard let self = self else { return }
@@ -84,7 +83,7 @@ class SearchUserView: RideThisViewController {
 extension SearchUserView: UISearchBarDelegate {
     // MARK: TODO - 키보드에서 입력할 때 event
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        viewModel.searchUser(text: searchText)
+        viewModel.searchText = searchText
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
@@ -98,7 +97,7 @@ extension SearchUserView: UISearchBarDelegate {
 
 extension SearchUserView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.searchedUser.count
+        return viewModel.users.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -106,10 +105,9 @@ extension SearchUserView: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let user = viewModel.searchedUser[indexPath.row]
-        cell.viewModel = followViewModel
+        let user = viewModel.users[indexPath.row]
         cell.cellUser = user
-        cell.configureUserInfo(type: .follower, eachFollow: false)
+        cell.configureUserInfo()
         
         return cell
     }

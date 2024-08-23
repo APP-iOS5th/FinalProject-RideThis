@@ -11,6 +11,7 @@ class MyPageView: RideThisViewController {
     let viewModel = MyPageViewModel()
     let service = UserService.shared
     private var cancellable = Set<AnyCancellable>()
+    private var followDelegate: UpdateUserDelegate?
     
     // MARK: UIComponents
     // MARK: ScrollView
@@ -521,9 +522,6 @@ class MyPageView: RideThisViewController {
             .sink { [weak self] receivedUser in
                 guard let self = self, let combineUser = receivedUser else { return }
                 DispatchQueue.main.async {
-//                    self.userNickName.text = combineUser.user_nickname
-//                    self.userHeight.text = "\(combineUser.user_tall!)"
-//                    self.userWeight.text = "\(combineUser.user_weight)"
                     if let imageUrl = combineUser.user_image {
                         self.profileImageView.kf.setImage(with: URL(string: imageUrl))
                     }
@@ -537,6 +535,7 @@ class MyPageView: RideThisViewController {
                         self.userHeight.text = "-"
                     }
                 }
+                followDelegate?.updateUser(user: combineUser)
             }
             .store(in: &cancellable)
     }
@@ -614,8 +613,9 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
     
     @objc func toFollowerView() {
         if service.signedUser != nil {
-            let frientView = FollowManageView()
-            self.navigationController?.pushViewController(frientView, animated: true)
+            let followView = FollowManageView(user: service.signedUser!)
+            followDelegate = followView
+            self.navigationController?.pushViewController(followView, animated: true)
         } else {
             self.showAlert(alertTitle: "알림", msg: "로그인이 필요한 기능입니다. 로그인 화면으로 이동할까요?", confirm: "예") {
                 self.navigationController?.pushViewController(LoginView(), animated: true)

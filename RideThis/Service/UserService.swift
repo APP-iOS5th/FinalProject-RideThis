@@ -13,6 +13,15 @@ class UserService {
     private let keyChain = Keychain()
     var signedUser: User? = nil
     @Published var combineUser: User? = nil
+    var loginStatus: UserStatus {
+        get {
+            if combineUser == nil {
+                return .signedOut
+            } else {
+                return .appleLogin
+            }
+        }
+    }
     
     func checkPrevAppleLogin() {
         

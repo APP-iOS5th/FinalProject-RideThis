@@ -25,6 +25,40 @@ class FireBaseService {
         }
     }
     
+    func fetchUsers(by userIds: [String]) async throws -> [User] {
+        var returnUserData: [User] = []
+        
+        for id in userIds {
+            do {
+                if case .user(let userData) = try await fetchUser(at: id, userType: true) {
+                    guard let user = userData else { continue }
+                    returnUserData.append(user)
+                }
+            } catch {
+                print(error)
+            }
+        }
+        
+        return returnUserData
+    }
+    
+    func findUser(text: String) async -> [User] {
+        var allUsers: [User] = []
+        do {
+            let allUsersSnapshot = try await self.fetchAllUsers()
+            for snapshot in allUsersSnapshot {
+                let userData = try snapshot.data(as: User.self)
+                if !userData.user_email.contains(text) && !userData.user_nickname.contains(text) {
+                    continue
+                }
+                allUsers.append(userData)
+            }
+        } catch {
+            print(error)
+        }
+        return allUsers
+    }
+    
     // MARK: USERS 컬렉션의 모든 데이터 가져오기
     func fetchAllUsers() async throws -> [QueryDocumentSnapshot] {
         let querySnapshot = try await db.collection("USERS").getDocuments()
@@ -115,7 +149,7 @@ class FireBaseService {
     }
     
     // MARK: 유저 정보 수정
-    func updateUserInfo(user: User, isProfileEdit: Bool = true) {
+    func updateUserInfo(updated user: User) {
         let userInfo = db.collection("USERS").document(user.user_id)
         let updateData: [String: Any] = [
             "user_account_public": user.user_account_public,
@@ -123,7 +157,7 @@ class FireBaseService {
             "user_follower": user.user_follower,
             "user_following": user.user_following,
             "user_id": user.user_id,
-            "user_image": "",
+            "user_image": user.user_image ?? "",
             "user_nickname": user.user_nickname,
             "user_tall": user.user_tall ?? "",
             "user_weight": user.user_weight
@@ -137,8 +171,6 @@ class FireBaseService {
             }
         }
         
-        if isProfileEdit {        
-            UserService.shared.combineUser = user
-        }
+        UserService.shared.combineUser = user
     }
 }

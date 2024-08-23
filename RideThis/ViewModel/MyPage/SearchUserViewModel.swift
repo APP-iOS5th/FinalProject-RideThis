@@ -2,32 +2,31 @@ import Foundation
 import Combine
 
 class SearchUserViewModel {
-    @Published var searchedUser: [User] = []
+    @Published var users: [User] = []
+    @Published var searchText: String = ""
+    private var cancellable = Set<AnyCancellable>()
     private let firebaseService = FireBaseService()
-    private let userService = UserService.shared
-    private var allUsers: [User] = []
+    var signedUser: User
     
-    init() {
-        Task {
-            do {
-                let allUserDocs = try await firebaseService.fetchAllUsers()
-                for doc in allUserDocs {
-                    let user = try doc.data(as: User.self)
-                    allUsers.append(user)
+    init(user: User) {
+        self.signedUser = user
+        
+        self.$searchText
+            .debounce(for: 0.5, scheduler: RunLoop.main)
+            .sink { [weak self] text in
+                guard let self = self else { return }
+                
+                Task {
+                    await self.searchUser(text: text)
                 }
-            } catch {
-                print(error)
             }
-        }
+            .store(in: &cancellable)
     }
     
-    func searchUser(text: String) {
-        guard let signedUser = userService.combineUser else { return }
-        
-        let filteredUser = allUsers.filter { $0.user_nickname.contains(text) || $0.user_email.contains(text) }
-        let filteredFollowUser = filteredUser.filter { user in
+    func searchUser(text: String) async {
+        let searchedUsers = await firebaseService.findUser(text: text)
+        users = searchedUsers.filter { user in
             !signedUser.user_following.contains(user.user_id)
         }
-        searchedUser = filteredFollowUser
     }
 }

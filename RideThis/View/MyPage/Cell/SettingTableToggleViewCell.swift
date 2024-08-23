@@ -2,6 +2,8 @@ import UIKit
 import SnapKit
 
 class SettingTableToggleViewCell: UITableViewCell {
+    private let firebaseService = FireBaseService()
+    
     private let settingLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -62,7 +64,6 @@ class SettingTableToggleViewCell: UITableViewCell {
                                user_follower: user.user_follower,
                                user_account_public: sender.isOn)
         
-        let firebaseService = FireBaseService()
-        firebaseService.updateUserInfo(user: changedUser)
+        firebaseService.updateUserInfo(updated: changedUser)
     }
 }
