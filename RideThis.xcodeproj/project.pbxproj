@@ -23,6 +23,10 @@
 		04E3C0D72C6B8C30006B844F /* DistanceSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0D62C6B8C30006B844F /* DistanceSelectionViewModel.swift */; };
 		786F60E02C770ECF00B277FE /* SplashCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786F60DF2C770ECF00B277FE /* SplashCoordinator.swift */; };
 		786F60E22C77103B00B277FE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 786F60E12C77103B00B277FE /* GoogleService-Info.plist */; };
+		78DBD01B2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DBD01A2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift */; };
+		78DBD01D2C7882B700B43A62 /* DeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DBD01C2C7882B700B43A62 /* DeviceTableViewCell.swift */; };
+		78DBD01F2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DBD01E2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift */; };
+		78DBD0212C7882EB00B43A62 /* DeviceDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DBD0202C7882EB00B43A62 /* DeviceDetailViewController.swift */; };
 		78FA3AB72C6EE55500EA1D18 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		CD0E1E852C6A409F0080CFED /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0E1E842C6A409F0080CFED /* SettingView.swift */; };
 		CD0EC4C92C71EE5400E70452 /* FollowManageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0EC4C82C71EE5400E70452 /* FollowManageView.swift */; };
@@ -114,6 +118,10 @@
 		04E3C0D62C6B8C30006B844F /* DistanceSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceSelectionViewModel.swift; sourceTree = "<group>"; };
 		786F60DF2C770ECF00B277FE /* SplashCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashCoordinator.swift; sourceTree = "<group>"; };
 		786F60E12C77103B00B277FE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		78DBD01A2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoTableViewCell.swift; sourceTree = "<group>"; };
+		78DBD01C2C7882B700B43A62 /* DeviceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceTableViewCell.swift; sourceTree = "<group>"; };
+		78DBD01E2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelCircumferenceTableViewCell.swift; sourceTree = "<group>"; };
+		78DBD0202C7882EB00B43A62 /* DeviceDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDetailViewController.swift; sourceTree = "<group>"; };
 		CD0E1E842C6A409F0080CFED /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		CD0EC4C82C71EE5400E70452 /* FollowManageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowManageView.swift; sourceTree = "<group>"; };
 		CD0EC4CA2C71F10500E70452 /* FollowTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowTableViewCell.swift; sourceTree = "<group>"; };
@@ -252,6 +260,16 @@
 				04E3C0D42C6B3818006B844F /* DistanceSelectionCoordinator.swift */,
 			);
 			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		78DBD0132C78827B00B43A62 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				78DBD01A2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift */,
+				78DBD01C2C7882B700B43A62 /* DeviceTableViewCell.swift */,
+				78DBD01E2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		CD4213B62C64982000F7C3AE = {
@@ -417,8 +435,10 @@
 		CD4213E52C64988B00F7C3AE /* Device */ = {
 			isa = PBXGroup;
 			children = (
+				78DBD0132C78827B00B43A62 /* Cell */,
 				CD4214602C649A0800F7C3AE /* Coordinator */,
 				CD4213E42C64988B00F7C3AE /* DeviceView.swift */,
+				78DBD0202C7882EB00B43A62 /* DeviceDetailViewController.swift */,
 			);
 			path = Device;
 			sourceTree = "<group>";
@@ -650,12 +670,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB07B0BC2C6C79F20067BF0F /* RecordInfoView.swift in Sources */,
+				78DBD01D2C7882B700B43A62 /* DeviceTableViewCell.swift in Sources */,
 				04E3C0D32C6B37F7006B844F /* DistancSelectionViewController.swift in Sources */,
 				CD42145E2C64998800F7C3AE /* CompetitionViewModel.swift in Sources */,
 				CD70006A2C6AF99F0071D4D2 /* GraphCollectionViewCell.swift in Sources */,
 				EBFE4DB62C757B4300A36FCA /* ResultRankingViewModel.swift in Sources */,
 				CD4214672C649D7800F7C3AE /* SplashView.swift in Sources */,
 				043E0C872C6F38F700F25AF7 /* SummaryRecordViewController.swift in Sources */,
+				78DBD01F2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift in Sources */,
 				041A673E2C6CF1E0000BA4C1 /* RecordContainer+Extension.swift in Sources */,
 				CD6662122C678FF7005E2887 /* HomeModel.swift in Sources */,
 				CD4214652C649D0100F7C3AE /* FirebaseService.swift in Sources */,
@@ -688,6 +710,7 @@
 				CD4214112C64988C00F7C3AE /* DeviceView.swift in Sources */,
 				EBFE4DAE2C757AA800A36FCA /* ResultRankingViewController.swift in Sources */,
 				041A67392C6C6B0E000BA4C1 /* StartCompetitionViewController.swift in Sources */,
+				78DBD01B2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift in Sources */,
 				CD0E1E852C6A409F0080CFED /* SettingView.swift in Sources */,
 				CD66F5D02C6C837E00CDBB0B /* SettingTableViewCell.swift in Sources */,
 				CD42145A2C64997100F7C3AE /* HomeViewModel.swift in Sources */,
@@ -708,6 +731,7 @@
 				EB07B0BD2C6C79F20067BF0F /* RecordSumUpView.swift in Sources */,
 				04E3C0C82C6AEE62006B844F /* CompetitionTVCell.swift in Sources */,
 				041A67362C6C6543000BA4C1 /* CountViewModel.swift in Sources */,
+				78DBD0212C7882EB00B43A62 /* DeviceDetailViewController.swift in Sources */,
 				CD4214132C64988C00F7C3AE /* MyPageView.swift in Sources */,
 				EBFE4DB12C757AE800A36FCA /* UserService.swift in Sources */,
 				EB07B0BB2C6C79F20067BF0F /* RecordContainerView.swift in Sources */,
