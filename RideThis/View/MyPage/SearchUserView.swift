@@ -107,7 +107,8 @@ extension SearchUserView: UITableViewDelegate, UITableViewDataSource {
         
         let user = viewModel.users[indexPath.row]
         cell.cellUser = user
-        cell.configureUserInfo()
+        cell.signedUser = UserService.shared.combineUser
+        cell.configureUserInfo(viewType: .searchView, followType: .follower)
         
         return cell
     }

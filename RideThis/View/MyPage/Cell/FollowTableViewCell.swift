@@ -2,9 +2,17 @@ import UIKit
 import SnapKit
 import Kingfisher
 
+enum FollowViewType {
+    case followView
+    case searchView
+}
+
 class FollowTableViewCell: UITableViewCell {
     
     var cellUser: User?
+    var signedUser: User?
+    var userService: UserService?
+    
     private let profileImage: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
@@ -69,29 +77,61 @@ class FollowTableViewCell: UITableViewCell {
         }
         
         userEmail.numberOfLines = 1
-//        followButton.addAction(UIAction { [weak self] _ in
-//            guard let self = self else { return }
-//            
-//        }, for: .touchUpInside)
+        followButton.addAction(UIAction { [weak self] _ in
+            guard let self = self, 
+                  let btnLabel = self.followButton.titleLabel,
+                  let cellUser = self.cellUser,
+                  let signedUser = self.signedUser else { return }
+            // 버튼의 title이 Unfollow면 signedUser.user_following에서 cellUser.user_id를 삭제하고 cellUser.user_follower에서 signedUser.user_id를 삭제한다.
+            // 근데 바로 tableView에 업데이트 하지않고 title만 Unfollow -> Follow / Follow -> Unfollow로 수정하고 백그라운드에서 firebase에 데이터를 수정한다. 그리고 다시 화면을 띄울 때 적용된 화면을 보여준다
+            if let title = btnLabel.text {
+                if title == "Follow" {
+                    self.followButton.setTitle("Unfollow", for: .normal)
+                    self.followButton.setTitleColor(.systemRed, for: .normal)
+                    
+                } else {
+                    self.followButton.setTitle("Follow", for: .normal)
+                    self.followButton.setTitleColor(.systemBlue, for: .normal)
+                }
+            }
+        }, for: .touchUpInside)
     }
     
-    func configureUserInfo() {
-        guard let user = cellUser else { return }
+    func configureUserInfo(viewType: FollowViewType, followType: FollowType) {
+        guard let user = cellUser, let signedUser = signedUser else { return }
         self.userNickName.text = user.user_nickname
         self.userEmail.text = user.user_email
         if let imgUrl = user.user_image {
             self.profileImage.kf.setImage(with: URL(string: imgUrl))
         }
         
-        followButton.setTitle("Follow", for: .normal)
-        followButton.setTitleColor(.systemBlue, for: .normal)
-//        switch type {
-//        case .follower:
-//            followButton.setTitle(eachFollow ? "Unfollow" : "Follow", for: .normal)
-//            followButton.setTitleColor(eachFollow ? .systemRed : .systemBlue, for: .normal)
-//        case .following:
-//            followButton.setTitle("Unfollow", for: .normal)
-//            followButton.setTitleColor(.systemRed, for: .normal)
-//        }
+        var buttonTitle: String = "Follow"
+        var buttonColor: UIColor = .systemBlue
+        switch viewType {
+        case .followView:
+            switch followType {
+            case .follower:
+                if signedUser.user_following.contains(where: { $0 == user.user_id }) {
+                    buttonTitle = "Unfollow"
+                    buttonColor = .systemRed
+                }
+            case .following:
+                buttonTitle = "Unfollow"
+                buttonColor = .systemRed
+            }
+        case .searchView:
+            break
+        }
+        followButton.setTitle(buttonTitle, for: .normal)
+        followButton.setTitleColor(buttonColor, for: .normal)
+    }
+    
+    func updateUserFollowData() {
+        
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        profileImage.image = nil // 재사용 문제 방지
     }
 }

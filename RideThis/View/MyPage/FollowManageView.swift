@@ -104,10 +104,12 @@ class FollowManageView: RideThisViewController {
     
     func setCombineData() {
         followViewModel.$followDatas
-            .receive(on: DispatchQueue.main)
+            .receive(on: DispatchQueue.global())
             .sink { [weak self] _ in
                 guard let self = self else { return }
-                self.followTable.reloadData()
+                DispatchQueue.main.async {
+                    self.followTable.reloadData()
+                }
             }
             .store(in: &cancellable)
         
@@ -153,7 +155,8 @@ extension FollowManageView: UITableViewDelegate, UITableViewDataSource {
         
         let followUser = followViewModel.followDatas[indexPath.row]
         cell.cellUser = followUser
-        cell.configureUserInfo()
+        cell.signedUser = user
+        cell.configureUserInfo(viewType: .followView, followType: self.followPicker.selectedSegmentIndex == 0 ? .follower : .following)
         
         return cell
     }
