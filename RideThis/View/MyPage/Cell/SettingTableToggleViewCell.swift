@@ -64,6 +64,6 @@ class SettingTableToggleViewCell: UITableViewCell {
                                user_follower: user.user_follower,
                                user_account_public: sender.isOn)
         
-        firebaseService.updateUserInfo(updated: changedUser)
+        firebaseService.updateUserInfo(updated: changedUser, update: true)
     }
 }

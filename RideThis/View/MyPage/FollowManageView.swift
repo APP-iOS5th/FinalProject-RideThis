@@ -156,6 +156,7 @@ extension FollowManageView: UITableViewDelegate, UITableViewDataSource {
         let followUser = followViewModel.followDatas[indexPath.row]
         cell.cellUser = followUser
         cell.signedUser = user
+        
         cell.configureUserInfo(viewType: .followView, followType: self.followPicker.selectedSegmentIndex == 0 ? .follower : .following)
         
         return cell

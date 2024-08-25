@@ -11,7 +11,7 @@ class FollowTableViewCell: UITableViewCell {
     
     var cellUser: User?
     var signedUser: User?
-    var userService: UserService?
+    private let firebaseService = FireBaseService()
     
     private let profileImage: UIImageView = {
         let iv = UIImageView()
@@ -88,11 +88,16 @@ class FollowTableViewCell: UITableViewCell {
                 if title == "Follow" {
                     self.followButton.setTitle("Unfollow", for: .normal)
                     self.followButton.setTitleColor(.systemRed, for: .normal)
-                    
+                    cellUser.user_follower.append(signedUser.user_id)
+                    signedUser.user_following.append(cellUser.user_id)
                 } else {
                     self.followButton.setTitle("Follow", for: .normal)
                     self.followButton.setTitleColor(.systemBlue, for: .normal)
+                    cellUser.user_follower.remove(at: cellUser.user_follower.firstIndex(of: signedUser.user_id)!)
+                    signedUser.user_following.remove(at: signedUser.user_following.firstIndex(of: cellUser.user_id)!)
                 }
+                firebaseService.updateUserInfo(updated: cellUser, update: false)
+                firebaseService.updateUserInfo(updated: signedUser, update: false)
             }
         }, for: .touchUpInside)
     }

@@ -149,7 +149,7 @@ class FireBaseService {
     }
     
     // MARK: 유저 정보 수정
-    func updateUserInfo(updated user: User) {
+    func updateUserInfo(updated user: User, update now: Bool) {
         let userInfo = db.collection("USERS").document(user.user_id)
         let updateData: [String: Any] = [
             "user_account_public": user.user_account_public,
@@ -171,6 +171,8 @@ class FireBaseService {
             }
         }
         
-        UserService.shared.combineUser = user
+        if now {
+            UserService.shared.combineUser = user
+        }
     }
 }
