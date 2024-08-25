@@ -1,5 +1,6 @@
 import Foundation
 import FirebaseFirestore
+import FirebaseStorage
 
 class FireBaseService {
     
@@ -173,6 +174,61 @@ class FireBaseService {
         
         if now {
             UserService.shared.combineUser = user
+        }
+    }
+    
+    func saveImage(image: UIImage, userId: String, completion: @escaping (URL) -> Void) {
+        guard let imageData = image.jpegData(compressionQuality: 0.5) else {
+            print("이미지 변환 오류")
+            return
+        }
+        
+        let storageRef = Storage.storage().reference()
+        let imageRef = storageRef.child("userProfileImage/\(userId).jpg")
+        
+        imageRef.putData(imageData, metadata: nil) { metadata, error in
+            if let error = error {
+                print("이미지 업로드 실패: \(error.localizedDescription)")
+                return
+            }
+
+            // 업로드 완료 후 메타데이터 확인
+            imageRef.downloadURL { url, error in
+                if let error = error {
+                    print("이미지 다운로드 URL 가져오기 실패: \(error.localizedDescription)")
+                    return
+                }
+
+                if let downloadURL = url {
+                    completion(downloadURL)
+                }
+            }
+        }
+
+        // 업로드 진행 상태를 모니터링할 수 있습니다.
+        /*
+        uploadTask.observe(.progress) { snapshot in
+            let percentComplete = 100.0 * Double(snapshot.progress!.completedUnitCount) / Double(snapshot.progress!.totalUnitCount)
+            print("업로드 진행률: \(percentComplete)%")
+        }
+        */
+    }
+    
+    func loadImage(userId: String, loadCompletion: @escaping (URL?) -> Void) {
+        // Firebase Storage 참조
+        let storageRef = Storage.storage().reference()
+
+        // 다운로드할 이미지의 경로 설정 (예: "images/example.jpg")
+        let imageRef = storageRef.child("userProfileImage/\(userId).jpg")
+
+        // 이미지의 다운로드 URL 가져오기
+        imageRef.downloadURL { url, error in
+            if let error = error {
+                print("이미지 다운로드 URL 가져오기 실패: \(error.localizedDescription)")
+                return
+            }
+
+            loadCompletion(url)
         }
     }
 }

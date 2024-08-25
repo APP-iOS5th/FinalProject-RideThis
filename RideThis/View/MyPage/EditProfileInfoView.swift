@@ -6,8 +6,9 @@ import Kingfisher
 class EditProfileInfoView: RideThisViewController {
     
     // MARK: Data Components
-    var user: User
     private let firebaseService = FireBaseService()
+    var user: User
+    var selectedUserImage: UIImage? = nil
     
     init(user: User) {
         self.user = user
@@ -79,6 +80,7 @@ class EditProfileInfoView: RideThisViewController {
         
         return field
     }()
+    let imagePickerController = UIImagePickerController()
     
     // Data Components
     private let editViewModel = EditProfileInfoViewModel()
@@ -101,6 +103,7 @@ class EditProfileInfoView: RideThisViewController {
     func setUIComponents() {
         setProfileImage()
         setProfileInfoView()
+        setProfileImageTapEvent()
     }
     
     func setProfileImage() {
@@ -196,23 +199,53 @@ class EditProfileInfoView: RideThisViewController {
         }
     }
     
+    func setProfileImageTapEvent() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openPhotoLibrary))
+        self.view.addGestureRecognizer(tapGesture)
+    }
+    
     @objc func saveProfileInfo() {
-        // MARK: TODO -
-        let changedUser = User(user_id: user.user_id,
-                               user_image: user.user_image,
-                               user_email: user.user_email,
-                               user_nickname: self.userNickNameTextField.text!,
-                               user_weight: Int(self.userWeightTextField.text!)!,
-                               user_tall: Int(self.userHeightTextField.text!),
-                               user_following: user.user_following,
-                               user_follower: user.user_follower,
-                               user_account_public: user.user_account_public)
+        self.user.user_nickname = self.userNickNameTextField.text!
+        self.user.user_weight = Int(self.userWeightTextField.text!)!
+        self.user.user_tall = Int(self.userHeightTextField.text!)!
         
-        firebaseService.updateUserInfo(updated: changedUser, update: true)
+        if let img = selectedUserImage {
+            firebaseService.saveImage(image: img, userId: user.user_id) { imgUrl in
+                self.user.user_image = imgUrl.absoluteString
+                self.firebaseService.updateUserInfo(updated: self.user, update: true)
+            }
+        }
         self.navigationController?.popViewController(animated: true)
     }
     
     @objc func userNickNameChanged(sender: UITextField) {
         
+    }
+    
+    @objc func openPhotoLibrary() {
+        imagePickerController.sourceType = .photoLibrary
+        imagePickerController.delegate = self
+        imagePickerController.allowsEditing = false
+        present(imagePickerController, animated: true, completion: nil)
+    }
+}
+
+extension EditProfileInfoView: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    // 사용자가 이미지를 선택했을 때 호출되는 함수
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        // 선택한 이미지 가져오기
+        if let selectedImage = info[.originalImage] as? UIImage {
+            selectedUserImage = selectedImage
+            DispatchQueue.main.async {
+                self.profileImageView.image = selectedImage
+            }
+        }
+        picker.dismiss(animated: true, completion: nil)
+    }
+
+    // 사용자가 취소했을 때 호출되는 함수
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
     }
 }

@@ -10,6 +10,7 @@ class MyPageView: RideThisViewController {
     // MARK: Data Components
     let viewModel = MyPageViewModel()
     let service = UserService.shared
+    private let firebaseService = FireBaseService()
     private var cancellable = Set<AnyCancellable>()
     private var followDelegate: UpdateUserDelegate?
     
@@ -39,7 +40,7 @@ class MyPageView: RideThisViewController {
         imageView.heightAnchor.constraint(equalToConstant: 80).isActive = true
         imageView.layer.cornerRadius = 40
         imageView.clipsToBounds = true
-        imageView.backgroundColor = .primaryColor
+//        imageView.backgroundColor = .primaryColor
         
         return imageView
     }()

@@ -17,10 +17,10 @@ class FollowTableViewCell: UITableViewCell {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.contentMode = .scaleAspectFit
-        iv.widthAnchor.constraint(equalToConstant: 60).isActive = true
-        iv.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        iv.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 80).isActive = true
         iv.clipsToBounds = true
-        iv.layer.cornerRadius = 30
+        iv.layer.cornerRadius = 40
         
         return iv
     }()

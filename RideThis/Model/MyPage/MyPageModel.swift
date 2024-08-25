@@ -23,11 +23,11 @@ enum ShowingData: String, CaseIterable {
 }
 class User: Decodable {
     var user_id: String
-    let user_image: String?
+    var user_image: String?
     let user_email: String
-    let user_nickname: String
-    let user_weight: Int
-    let user_tall: Int?
+    var user_nickname: String
+    var user_weight: Int
+    var user_tall: Int?
     var user_following: [String]
     var user_follower: [String]
     var user_account_public: Bool
