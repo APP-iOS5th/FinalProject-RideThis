@@ -32,6 +32,7 @@ class EditProfileInfoView: RideThisViewController {
             imageView.kf.setImage(with: URL(string: imageURL))
         }
         imageView.backgroundColor = .primaryColor
+        imageView.isUserInteractionEnabled = true
         
         return imageView
     }()
@@ -201,7 +202,7 @@ class EditProfileInfoView: RideThisViewController {
     
     func setProfileImageTapEvent() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openPhotoLibrary))
-        self.view.addGestureRecognizer(tapGesture)
+        self.profileImageView.addGestureRecognizer(tapGesture)
     }
     
     @objc func saveProfileInfo() {
