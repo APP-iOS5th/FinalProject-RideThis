@@ -47,10 +47,10 @@ class StartCometitionViewModel {
             timer = String(format: "%02d:%02d", minutes, seconds)
             
             // 뷰 전환 타이머 초로 테스트
-            if Double(seconds) >= goalDistance {
-                endTime = Date()
-                isFinished = true
-            }
+//            if Double(seconds) >= goalDistance {
+//                endTime = Date()
+//                isFinished = true
+//            }
         }
     }
     
