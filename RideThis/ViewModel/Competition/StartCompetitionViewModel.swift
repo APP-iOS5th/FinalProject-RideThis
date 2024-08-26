@@ -27,6 +27,13 @@ class StartCometitionViewModel: BluetoothManagerDelegate {
     @Published var calorie: Double = 0
     var userWeight: Int
     
+    var averageCadence: Double = 0
+    var averageSpeed: Double = 0
+    
+    // 평균값 구하기
+    private var cadenceValues: [Double] = []
+    private var speedValues: [Double] = []
+    
     // Device데이터
     var deviceInfo: BluetoothModel = BluetoothModel(device_firmware_version: "test123", device_name: "test", device_registration_status: false, device_serial_number: "13", device_wheel_circumference: 123)
     
@@ -42,14 +49,14 @@ class StartCometitionViewModel: BluetoothManagerDelegate {
     
     var shouldSaveNewRecord = true
     
+    // MARK: 초기화
     init(startTime: Date, goalDistnace: Double, userWeight: Int) {
         self.startTime = startTime
-        self.goalDistance = goalDistnace
+         self.goalDistance = goalDistnace
         self.userWeight = service.signedUser?.user_weight ?? 0
-        
-        fetchDeviceData()
     }
     
+    // MARK: Timer 업데이트
     func updateTimer() {
         if let startTime = startTime {
             elapsedTime = Date().timeIntervalSince(startTime)
@@ -151,24 +158,36 @@ class StartCometitionViewModel: BluetoothManagerDelegate {
     }
     
     // MARK: - BluetoothManagerDelegate Methods
-
-    
     func didUpdateCadence(_ cadence: Double) {
         DispatchQueue.main.async {
             self.cadence = cadence
+            self.cadenceValues.append(cadence)
         }
     }
     
     func didUpdateSpeed(_ speed: Double) {
         DispatchQueue.main.async {
             self.speed = speed
+            self.speedValues.append(speed)
         }
     }
     
     func didUpdateDistance(_ distance: Double) {
         DispatchQueue.main.async {
             self.distance = distance
-            print("Distance: \(distance)")
+            
+            if distance >= self.goalDistance {
+                self.endTime = Date()
+
+                // 평균 계산
+                let averageCadence = self.cadenceValues.isEmpty ? 0 : self.cadenceValues.reduce(0, +) / Double(self.cadenceValues.count)
+                self.averageCadence = Double(averageCadence)
+                let averageSpeed = self.speedValues.isEmpty ? 0 : self.speedValues.reduce(0, +) / Double(self.speedValues.count)
+                self.averageSpeed = Double(averageSpeed)
+                
+                self.isFinished = true
+                self.bluetoothManager.disConnect()
+            }
         }
     }
     

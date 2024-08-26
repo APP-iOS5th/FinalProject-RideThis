@@ -34,7 +34,7 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
     private var lastValidCadence: Double = 0
     private var lastValidSpeed: Double = 0
     private var isFirstMeasurement = true
-    private let validCadenceTimeout: TimeInterval = 2 // seconds
+    private let validCadenceTimeout: TimeInterval = 2
     private var lastValidCadenceTime: Date?
     
     private var totalDistance: Double = 0
@@ -43,6 +43,7 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
     private var userWeight: Double
     private var wheelCircumference: Double
 
+    // MARK: 블루투스 초기화
     init(targetDeviceName: String, userWeight: Double, wheelCircumference: Double) {
         self.targetDeviceName = targetDeviceName
         self.userWeight = userWeight
@@ -51,39 +52,61 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
         centralManager = CBCentralManager(delegate: self, queue: nil)
     }
     
+    // MARK: 블루투스 장치 검색 후 연결 시도
     func connect() {
         centralManager.scanForPeripherals(withServices: nil, options: nil)
     }
     
+    // MARK: 블루투스 장치 해제
+    func disConnect() {
+        if let peripheral = cadencePeripheral {
+              centralManager.cancelPeripheralConnection(peripheral)
+          }
+
+    }
 
     
     // MARK: - CBCentralManagerDelegate Methods
     
+    // MARK: 블루투스 상태 변경
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         if central.state == .poweredOn {
             connect()
+            print("블루투스가 켜졌습니다.")
+        } else {
+            print("블루투스가 꺼졌거나 사용 불가능한 상태입니다.")
         }
     }
     
+    // MARK: 실제 연결 기기와 데이터베이스 기기와 확인
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        if peripheral.name == targetDeviceName {
+        guard let peripheralName = peripheral.name else {
+            print("발견된 기기의 이름이 없습니다.")
+            return
+        }
+        
+        // 특정 기기 이름과 일치하는지 확인
+        if peripheralName == targetDeviceName {
             centralManager.stopScan()
             cadencePeripheral = peripheral
             cadencePeripheral?.delegate = self
             centralManager.connect(peripheral, options: nil)
+            print("기기 이름이 일치하여 연결 시도 중입니다.")
         }
     }
     
+    // MARK: 주변 장치와의 연결이 성공했을 때 호출
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         peripheral.discoverServices([cadenceServiceUUID])
     }
     
+    // MARK: 자동으로 재연결
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         connect()
     }
     
     // MARK: - CBPeripheralDelegate Methods
-    
+    // MARK: 기기 있을시 서비스 호출
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         guard let services = peripheral.services else { return }
         
@@ -95,6 +118,7 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
         }
     }
 
+    // MARK: 서비스의 특성이 발견되었을 때 호출
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         if let characteristics = service.characteristics {
             for characteristic in characteristics {
@@ -105,6 +129,7 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
         }
     }
 
+    // MARK: 특성의 값이 업데이트되었을 때 호출
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         if characteristic.uuid == cadenceCharacteristicUUID {
             if let data = characteristic.value {
@@ -114,7 +139,7 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
     }
     
     // MARK: - Data Parsing and Calculation
-    
+    // MARK: 장치에서 수신한 데이터를 분석하고, 케이던스, 속도 등을 계산
     private func parseCadenceData(_ data: Data) {
         guard data.count >= 5 else { return }
 
@@ -188,12 +213,14 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
         updateDistanceAndCalories(speed: currentSpeed)
     }
 
+    // MARK: 케이던스로 속도 계산
     private func estimateSpeedFromCadence(_ cadence: Double) -> Double {
         let rotationsPerHour = cadence * 60
         let distancePerHour = rotationsPerHour * wheelCircumference / 1000000
         return distancePerHour
     }
     
+    // MARK: 케이던스로 거리 및 칼로리 계산
     private func updateDistanceAndCalories(speed: Double) {
         let currentTime = Date()
         if let lastTime = lastUpdateTime {
@@ -211,6 +238,7 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
         lastUpdateTime = currentTime
     }
 
+    // MARK: 속도로 MET(운동 강도 측정)
     private func estimateMET(speed: Double) -> Double {
         if speed < 16 {
             return 4
