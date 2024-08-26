@@ -49,6 +49,7 @@ class SignUpInfoView: RideThisViewController {
         tf.autocapitalizationType = .none
         tf.text = userEmail
         tf.addTarget(self, action: #selector(textFieldValueChanged(_:)), for: .editingChanged)
+        tf.setKeyboardHider()
         self.viewModel.emailText = userEmail ?? ""
         
         return tf
@@ -60,6 +61,7 @@ class SignUpInfoView: RideThisViewController {
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.placeholder = "닉네임을 입력해주세요."
         tf.addTarget(self, action: #selector(textFieldValueChanged(_:)), for: .editingChanged)
+        tf.setKeyboardHider()
         
         return tf
     }()
@@ -74,6 +76,7 @@ class SignUpInfoView: RideThisViewController {
         tf.placeholder = "몸무게를 입력해주세요."
         tf.keyboardType = .numberPad
         tf.addTarget(self, action: #selector(textFieldValueChanged(_:)), for: .editingChanged)
+        tf.setKeyboardHider()
         
         return tf
     }()
@@ -85,13 +88,14 @@ class SignUpInfoView: RideThisViewController {
         tf.placeholder = "키를 입력해주세요."
         tf.keyboardType = .numberPad
         tf.addTarget(self, action: #selector(textFieldValueChanged(_:)), for: .editingChanged)
+        tf.setKeyboardHider()
         
         return tf
     }()
     private let userInfoLabel2 = RideThisLabel(fontType: .smallTitle, text: "키, 몸무게는 운동 시 칼로리 측정을 위해 입력해주세요.")
     
     // MARK: Next Button
-    private let nextButton = RideThisButton(buttonTitle: "회원가입", height: 50)
+    private let nextButton = RideThisButton(buttonTitle: "시작하기", height: 50)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -287,7 +291,7 @@ class SignUpInfoView: RideThisViewController {
                                    user_follower: [],
                                    user_account_public: false)
             
-            userService.checkPrevAppleLogin()
+            userService.combineUser = createdUser
             
             if let scene = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate) {
                 let tabbarCtr = scene.getTabbarController(selectedIndex: 4)
