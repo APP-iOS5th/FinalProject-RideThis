@@ -23,6 +23,13 @@ class WheelCircumferenceTableViewCell: UITableViewCell {
         return label
     }()
     
+    private let arrowImageView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(systemName: "chevron.right"))
+        imageView.tintColor = .gray
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
@@ -36,21 +43,27 @@ class WheelCircumferenceTableViewCell: UITableViewCell {
         contentView.addSubview(containerView)
         containerView.addSubview(titleLabel)
         containerView.addSubview(valueLabel)
+        containerView.addSubview(arrowImageView)
         
-        containerView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-            make.height.greaterThanOrEqualTo(44)
+        containerView.snp.makeConstraints { containerView in
+            containerView.edges.equalToSuperview()
+            containerView.height.greaterThanOrEqualTo(44)
         }
         
-        titleLabel.snp.makeConstraints { make in
-            make.left.equalTo(containerView).offset(16)
-            make.centerY.equalTo(containerView)
+        titleLabel.snp.makeConstraints { titleLabel in
+            titleLabel.left.equalTo(containerView).offset(16)
+            titleLabel.centerY.equalTo(containerView)
         }
         
-        valueLabel.snp.makeConstraints { make in
-            make.right.equalTo(containerView).offset(-16)
-            make.centerY.equalTo(containerView)
-            make.left.greaterThanOrEqualTo(titleLabel.snp.right).offset(8)
+        valueLabel.snp.makeConstraints { valueLabel in
+            valueLabel.right.equalTo(arrowImageView.snp.left).offset(-8)
+            valueLabel.centerY.equalTo(containerView)
+        }
+        
+        arrowImageView.snp.makeConstraints { arrowImageView in
+            arrowImageView.right.equalTo(containerView).offset(-16)
+            arrowImageView.centerY.equalTo(containerView)
+            arrowImageView.width.height.equalTo(20)
         }
     }
     
