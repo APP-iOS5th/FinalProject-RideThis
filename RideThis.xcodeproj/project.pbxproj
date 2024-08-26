@@ -22,6 +22,8 @@
 		04E3C0D52C6B3818006B844F /* DistanceSelectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0D42C6B3818006B844F /* DistanceSelectionCoordinator.swift */; };
 		04E3C0D72C6B8C30006B844F /* DistanceSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0D62C6B8C30006B844F /* DistanceSelectionViewModel.swift */; };
 		78254FD42C7C05CB0069B10A /* DeviceSearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78254FD32C7C05CB0069B10A /* DeviceSearchTableViewCell.swift */; };
+		78254FD62C7C1CC90069B10A /* WheelCircumferenceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78254FD52C7C1CC90069B10A /* WheelCircumferenceViewController.swift */; };
+		78254FD82C7C1CF40069B10A /* WheelCircumferenceSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78254FD72C7C1CF40069B10A /* WheelCircumferenceSelectionCell.swift */; };
 		784D5DFE2C7B780700D2FE15 /* DeviceSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784D5DFD2C7B780700D2FE15 /* DeviceSearchViewController.swift */; };
 		786F60E02C770ECF00B277FE /* SplashCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786F60DF2C770ECF00B277FE /* SplashCoordinator.swift */; };
 		786F60E22C77103B00B277FE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 786F60E12C77103B00B277FE /* GoogleService-Info.plist */; };
@@ -119,6 +121,8 @@
 		04E3C0D42C6B3818006B844F /* DistanceSelectionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceSelectionCoordinator.swift; sourceTree = "<group>"; };
 		04E3C0D62C6B8C30006B844F /* DistanceSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceSelectionViewModel.swift; sourceTree = "<group>"; };
 		78254FD32C7C05CB0069B10A /* DeviceSearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSearchTableViewCell.swift; sourceTree = "<group>"; };
+		78254FD52C7C1CC90069B10A /* WheelCircumferenceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelCircumferenceViewController.swift; sourceTree = "<group>"; };
+		78254FD72C7C1CF40069B10A /* WheelCircumferenceSelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelCircumferenceSelectionCell.swift; sourceTree = "<group>"; };
 		784D5DFD2C7B780700D2FE15 /* DeviceSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSearchViewController.swift; sourceTree = "<group>"; };
 		786F60DF2C770ECF00B277FE /* SplashCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashCoordinator.swift; sourceTree = "<group>"; };
 		786F60E12C77103B00B277FE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -273,6 +277,7 @@
 				78DBD01C2C7882B700B43A62 /* DeviceTableViewCell.swift */,
 				78DBD01E2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift */,
 				78254FD32C7C05CB0069B10A /* DeviceSearchTableViewCell.swift */,
+				78254FD72C7C1CF40069B10A /* WheelCircumferenceSelectionCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -445,6 +450,7 @@
 				CD4213E42C64988B00F7C3AE /* DeviceView.swift */,
 				78DBD0202C7882EB00B43A62 /* DeviceDetailViewController.swift */,
 				784D5DFD2C7B780700D2FE15 /* DeviceSearchViewController.swift */,
+				78254FD52C7C1CC90069B10A /* WheelCircumferenceViewController.swift */,
 			);
 			path = Device;
 			sourceTree = "<group>";
@@ -703,6 +709,7 @@
 				CD4213C32C64982000F7C3AE /* AppDelegate.swift in Sources */,
 				CD4214762C64A63D00F7C3AE /* UIViewController+Extension.swift in Sources */,
 				043E0C842C6F378D00F25AF7 /* Double+Extension.swift in Sources */,
+				78254FD62C7C1CC90069B10A /* WheelCircumferenceViewController.swift in Sources */,
 				CD4214562C64994F00F7C3AE /* RecordViewModel.swift in Sources */,
 				CD76A8CB2C6E5828003490B3 /* UITextField+Extension.swift in Sources */,
 				CD6662182C67900B005E2887 /* DeviceModel.swift in Sources */,
@@ -744,6 +751,7 @@
 				EBFE4DB12C757AE800A36FCA /* UserService.swift in Sources */,
 				EB07B0BB2C6C79F20067BF0F /* RecordContainerView.swift in Sources */,
 				CDE25C6E2C6913B8008E2A80 /* EditProfileInfoView.swift in Sources */,
+				78254FD82C7C1CF40069B10A /* WheelCircumferenceSelectionCell.swift in Sources */,
 				CDC0C1E02C664FFE00349DC4 /* UIButton+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
