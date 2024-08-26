@@ -23,11 +23,23 @@
 		04E3C0D32C6B37F7006B844F /* DistancSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0D22C6B37F7006B844F /* DistancSelectionViewController.swift */; };
 		04E3C0D52C6B3818006B844F /* DistanceSelectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0D42C6B3818006B844F /* DistanceSelectionCoordinator.swift */; };
 		04E3C0D72C6B8C30006B844F /* DistanceSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0D62C6B8C30006B844F /* DistanceSelectionViewModel.swift */; };
+		78254FD42C7C05CB0069B10A /* DeviceSearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78254FD32C7C05CB0069B10A /* DeviceSearchTableViewCell.swift */; };
+		78254FD62C7C1CC90069B10A /* WheelCircumferenceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78254FD52C7C1CC90069B10A /* WheelCircumferenceViewController.swift */; };
+		78254FD82C7C1CF40069B10A /* WheelCircumferenceSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78254FD72C7C1CF40069B10A /* WheelCircumferenceSelectionCell.swift */; };
+		784D5DFE2C7B780700D2FE15 /* DeviceSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784D5DFD2C7B780700D2FE15 /* DeviceSearchViewController.swift */; };
+		786F60E02C770ECF00B277FE /* SplashCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786F60DF2C770ECF00B277FE /* SplashCoordinator.swift */; };
+		786F60E22C77103B00B277FE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 786F60E12C77103B00B277FE /* GoogleService-Info.plist */; };
+		78DBD01B2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DBD01A2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift */; };
+		78DBD01D2C7882B700B43A62 /* DeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DBD01C2C7882B700B43A62 /* DeviceTableViewCell.swift */; };
+		78DBD01F2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DBD01E2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift */; };
+		78DBD0212C7882EB00B43A62 /* DeviceDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DBD0202C7882EB00B43A62 /* DeviceDetailViewController.swift */; };
 		CD0E1E852C6A409F0080CFED /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0E1E842C6A409F0080CFED /* SettingView.swift */; };
 		CD0EC4C92C71EE5400E70452 /* FollowManageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0EC4C82C71EE5400E70452 /* FollowManageView.swift */; };
 		CD0EC4CB2C71F10500E70452 /* FollowTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0EC4CA2C71F10500E70452 /* FollowTableViewCell.swift */; };
 		CD0EC4CD2C71FC4800E70452 /* SearchUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0EC4CC2C71FC4800E70452 /* SearchUserView.swift */; };
 		CD0EC4D32C7227AB00E70452 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0EC4D22C7227AB00E70452 /* LoginView.swift */; };
+		CD3E64692C76F5390018C46E /* FollowManageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3E64682C76F5390018C46E /* FollowManageViewModel.swift */; };
+		CD3E646B2C777A180018C46E /* SearchUserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3E646A2C777A180018C46E /* SearchUserViewModel.swift */; };
 		CD4213C32C64982000F7C3AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4213C22C64982000F7C3AE /* AppDelegate.swift */; };
 		CD4213C52C64982000F7C3AE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4213C42C64982000F7C3AE /* SceneDelegate.swift */; };
 		CD4213CC2C64982200F7C3AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD4213CB2C64982200F7C3AE /* Assets.xcassets */; };
@@ -66,6 +78,7 @@
 		CD76A8C92C6E53FF003490B3 /* SignUpInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD76A8C82C6E53FF003490B3 /* SignUpInfoView.swift */; };
 		CD76A8CB2C6E5828003490B3 /* UITextField+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD76A8CA2C6E5828003490B3 /* UITextField+Extension.swift */; };
 		CDAC668B2C6CF0CF005506FB /* AccountQuitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDAC668A2C6CF0CF005506FB /* AccountQuitView.swift */; };
+		CDB71BA02C78A72400DC5D57 /* MyPageProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB71B9F2C78A72400DC5D57 /* MyPageProtocol.swift */; };
 		CDC0C1D62C65FD6A00349DC4 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = CDC0C1D52C65FD6A00349DC4 /* FirebaseAuth */; };
 		CDC0C1D82C65FD6A00349DC4 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = CDC0C1D72C65FD6A00349DC4 /* FirebaseFirestore */; };
 		CDC0C1DA2C65FD6A00349DC4 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = CDC0C1D92C65FD6A00349DC4 /* FirebaseStorage */; };
@@ -116,11 +129,23 @@
 		04E3C0D22C6B37F7006B844F /* DistancSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistancSelectionViewController.swift; sourceTree = "<group>"; };
 		04E3C0D42C6B3818006B844F /* DistanceSelectionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceSelectionCoordinator.swift; sourceTree = "<group>"; };
 		04E3C0D62C6B8C30006B844F /* DistanceSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceSelectionViewModel.swift; sourceTree = "<group>"; };
+		78254FD32C7C05CB0069B10A /* DeviceSearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSearchTableViewCell.swift; sourceTree = "<group>"; };
+		78254FD52C7C1CC90069B10A /* WheelCircumferenceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelCircumferenceViewController.swift; sourceTree = "<group>"; };
+		78254FD72C7C1CF40069B10A /* WheelCircumferenceSelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelCircumferenceSelectionCell.swift; sourceTree = "<group>"; };
+		784D5DFD2C7B780700D2FE15 /* DeviceSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSearchViewController.swift; sourceTree = "<group>"; };
+		786F60DF2C770ECF00B277FE /* SplashCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashCoordinator.swift; sourceTree = "<group>"; };
+		786F60E12C77103B00B277FE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		78DBD01A2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoTableViewCell.swift; sourceTree = "<group>"; };
+		78DBD01C2C7882B700B43A62 /* DeviceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceTableViewCell.swift; sourceTree = "<group>"; };
+		78DBD01E2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelCircumferenceTableViewCell.swift; sourceTree = "<group>"; };
+		78DBD0202C7882EB00B43A62 /* DeviceDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDetailViewController.swift; sourceTree = "<group>"; };
 		CD0E1E842C6A409F0080CFED /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		CD0EC4C82C71EE5400E70452 /* FollowManageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowManageView.swift; sourceTree = "<group>"; };
 		CD0EC4CA2C71F10500E70452 /* FollowTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowTableViewCell.swift; sourceTree = "<group>"; };
 		CD0EC4CC2C71FC4800E70452 /* SearchUserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUserView.swift; sourceTree = "<group>"; };
 		CD0EC4D22C7227AB00E70452 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		CD3E64682C76F5390018C46E /* FollowManageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowManageViewModel.swift; sourceTree = "<group>"; };
+		CD3E646A2C777A180018C46E /* SearchUserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUserViewModel.swift; sourceTree = "<group>"; };
 		CD4213BF2C64982000F7C3AE /* RideThis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RideThis.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD4213C22C64982000F7C3AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CD4213C42C64982000F7C3AE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -157,6 +182,7 @@
 		CD76A8C82C6E53FF003490B3 /* SignUpInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpInfoView.swift; sourceTree = "<group>"; };
 		CD76A8CA2C6E5828003490B3 /* UITextField+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extension.swift"; sourceTree = "<group>"; };
 		CDAC668A2C6CF0CF005506FB /* AccountQuitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountQuitView.swift; sourceTree = "<group>"; };
+		CDB71B9F2C78A72400DC5D57 /* MyPageProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageProtocol.swift; sourceTree = "<group>"; };
 		CDC0C1D32C65FB4300349DC4 /* RideThis.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RideThis.entitlements; sourceTree = "<group>"; };
 		CDC0C1DD2C664E7400349DC4 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		CDC0C1DF2C664FFE00349DC4 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
@@ -259,6 +285,18 @@
 			path = Coordinator;
 			sourceTree = "<group>";
 		};
+		78DBD0132C78827B00B43A62 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				78DBD01A2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift */,
+				78DBD01C2C7882B700B43A62 /* DeviceTableViewCell.swift */,
+				78DBD01E2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift */,
+				78254FD32C7C05CB0069B10A /* DeviceSearchTableViewCell.swift */,
+				78254FD72C7C1CF40069B10A /* WheelCircumferenceSelectionCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		CD4213B62C64982000F7C3AE = {
 			isa = PBXGroup;
 			children = (
@@ -279,7 +317,7 @@
 			isa = PBXGroup;
 			children = (
 				CDC0C1D32C65FB4300349DC4 /* RideThis.entitlements */,
-				040028BF2C762F9D0038CC10 /* GoogleService-Info.plist */,
+				786F60E12C77103B00B277FE /* GoogleService-Info.plist */,
 				CD4214502C6498FF00F7C3AE /* Extension */,
 				CD4214212C64989000F7C3AE /* App */,
 				CD42140F2C64988C00F7C3AE /* Service */,
@@ -380,6 +418,8 @@
 				EBFE4DB32C757B1200A36FCA /* LoginViewModel.swift */,
 				CD4214572C64996700F7C3AE /* MyPageViewModel.swift */,
 				CD66F5CD2C6C75AA00CDBB0B /* EditProfileInfoViewModel.swift */,
+				CD3E64682C76F5390018C46E /* FollowManageViewModel.swift */,
+				CD3E646A2C777A180018C46E /* SearchUserViewModel.swift */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -423,8 +463,12 @@
 		CD4213E52C64988B00F7C3AE /* Device */ = {
 			isa = PBXGroup;
 			children = (
+				78DBD0132C78827B00B43A62 /* Cell */,
 				CD4214602C649A0800F7C3AE /* Coordinator */,
 				CD4213E42C64988B00F7C3AE /* DeviceView.swift */,
+				78DBD0202C7882EB00B43A62 /* DeviceDetailViewController.swift */,
+				784D5DFD2C7B780700D2FE15 /* DeviceSearchViewController.swift */,
+				78254FD52C7C1CC90069B10A /* WheelCircumferenceViewController.swift */,
 			);
 			path = Device;
 			sourceTree = "<group>";
@@ -530,7 +574,7 @@
 		CD4214612C649A1100F7C3AE /* Coordinator */ = {
 			isa = PBXGroup;
 			children = (
-				040028BD2C762F310038CC10 /* SplashCoordinator.swift */,
+				786F60DF2C770ECF00B277FE /* SplashCoordinator.swift */,
 			);
 			path = Coordinator;
 			sourceTree = "<group>";
@@ -538,6 +582,7 @@
 		CD4214622C649A1600F7C3AE /* Coordinator */ = {
 			isa = PBXGroup;
 			children = (
+				CDB71B9F2C78A72400DC5D57 /* MyPageProtocol.swift */,
 			);
 			path = Coordinator;
 			sourceTree = "<group>";
@@ -644,7 +689,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CD4213CC2C64982200F7C3AE /* Assets.xcassets in Resources */,
-				040028C02C762F9D0038CC10 /* GoogleService-Info.plist in Resources */,
+				786F60E22C77103B00B277FE /* GoogleService-Info.plist in Resources */,
 				CD4213CF2C64982200F7C3AE /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -657,16 +702,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB07B0BC2C6C79F20067BF0F /* RecordInfoView.swift in Sources */,
+				78DBD01D2C7882B700B43A62 /* DeviceTableViewCell.swift in Sources */,
 				04E3C0D32C6B37F7006B844F /* DistancSelectionViewController.swift in Sources */,
 				CD42145E2C64998800F7C3AE /* CompetitionViewModel.swift in Sources */,
 				CD70006A2C6AF99F0071D4D2 /* GraphCollectionViewCell.swift in Sources */,
 				EBFE4DB62C757B4300A36FCA /* ResultRankingViewModel.swift in Sources */,
 				CD4214672C649D7800F7C3AE /* SplashView.swift in Sources */,
 				043E0C872C6F38F700F25AF7 /* SummaryRecordViewController.swift in Sources */,
+				78DBD01F2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift in Sources */,
 				041A673E2C6CF1E0000BA4C1 /* RecordContainer+Extension.swift in Sources */,
 				CD6662122C678FF7005E2887 /* HomeModel.swift in Sources */,
 				CD4214652C649D0100F7C3AE /* FirebaseService.swift in Sources */,
 				CD4214742C64A35400F7C3AE /* UIImage+Extension.swift in Sources */,
+				CDB71BA02C78A72400DC5D57 /* MyPageProtocol.swift in Sources */,
 				041A672B2C6C400E000BA4C1 /* DistanceCase+Extension.swift in Sources */,
 				CD6662142C678FFD005E2887 /* CompetitionModel.swift in Sources */,
 				CD0EC4C92C71EE5400E70452 /* FollowManageView.swift in Sources */,
@@ -678,25 +726,29 @@
 				CD42145C2C64998200F7C3AE /* DeviceViewModel.swift in Sources */,
 				EB6A234E2C7C1D73006A49C6 /* RecordStorageViewModel.swift in Sources */,
 				EBFE4DB22C757AE800A36FCA /* KeyChain.swift in Sources */,
+				CD3E64692C76F5390018C46E /* FollowManageViewModel.swift in Sources */,
 				CD66F5D42C6C887E00CDBB0B /* AccountSettingView.swift in Sources */,
 				CD4214102C64988C00F7C3AE /* CompetitionView.swift in Sources */,
 				CD76A8C92C6E53FF003490B3 /* SignUpInfoView.swift in Sources */,
 				CD4213C32C64982000F7C3AE /* AppDelegate.swift in Sources */,
 				CD4214762C64A63D00F7C3AE /* UIViewController+Extension.swift in Sources */,
 				043E0C842C6F378D00F25AF7 /* Double+Extension.swift in Sources */,
+				78254FD62C7C1CC90069B10A /* WheelCircumferenceViewController.swift in Sources */,
 				CD4214562C64994F00F7C3AE /* RecordViewModel.swift in Sources */,
 				CD76A8CB2C6E5828003490B3 /* UITextField+Extension.swift in Sources */,
 				CD6662182C67900B005E2887 /* DeviceModel.swift in Sources */,
+				784D5DFE2C7B780700D2FE15 /* DeviceSearchViewController.swift in Sources */,
 				CD4214582C64996700F7C3AE /* MyPageViewModel.swift in Sources */,
 				CD4214542C64991500F7C3AE /* UIColor+Extension.swift in Sources */,
 				043E0C892C70AC2400F25AF7 /* SummaryRecordViewModel.swift in Sources */,
 				CD4214692C649F3600F7C3AE /* UIFont+Extension.swift in Sources */,
-				040028BE2C762F310038CC10 /* SplashCoordinator.swift in Sources */,
+				786F60E02C770ECF00B277FE /* SplashCoordinator.swift in Sources */,
 				04E3C0D72C6B8C30006B844F /* DistanceSelectionViewModel.swift in Sources */,
 				CD66F5D22C6C86EA00CDBB0B /* SettingTableToggleViewCell.swift in Sources */,
 				CD4214112C64988C00F7C3AE /* DeviceView.swift in Sources */,
 				EBFE4DAE2C757AA800A36FCA /* ResultRankingViewController.swift in Sources */,
 				041A67392C6C6B0E000BA4C1 /* StartCompetitionViewController.swift in Sources */,
+				78DBD01B2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift in Sources */,
 				CD0E1E852C6A409F0080CFED /* SettingView.swift in Sources */,
 				CD66F5D02C6C837E00CDBB0B /* SettingTableViewCell.swift in Sources */,
 				CD42145A2C64997100F7C3AE /* HomeViewModel.swift in Sources */,
@@ -705,6 +757,8 @@
 				04E3C0CF2C6B32B8006B844F /* CompetitionCoordinator.swift in Sources */,
 				CDAC668B2C6CF0CF005506FB /* AccountQuitView.swift in Sources */,
 				CD0EC4D32C7227AB00E70452 /* LoginView.swift in Sources */,
+				78254FD42C7C05CB0069B10A /* DeviceSearchTableViewCell.swift in Sources */,
+				CD3E646B2C777A180018C46E /* SearchUserViewModel.swift in Sources */,
 				CD66621A2C679010005E2887 /* MyPageModel.swift in Sources */,
 				CD4213C52C64982000F7C3AE /* SceneDelegate.swift in Sources */,
 				043E0C822C6F232A00F25AF7 /* StartCompetitionViewModel.swift in Sources */,
@@ -717,11 +771,13 @@
 				EB07B0BD2C6C79F20067BF0F /* RecordSumUpView.swift in Sources */,
 				04E3C0C82C6AEE62006B844F /* CompetitionTVCell.swift in Sources */,
 				041A67362C6C6543000BA4C1 /* CountViewModel.swift in Sources */,
+				78DBD0212C7882EB00B43A62 /* DeviceDetailViewController.swift in Sources */,
 				CD4214132C64988C00F7C3AE /* MyPageView.swift in Sources */,
 				EBFE4DB12C757AE800A36FCA /* UserService.swift in Sources */,
 				EB07B0BB2C6C79F20067BF0F /* RecordContainerView.swift in Sources */,
 				CDE25C6E2C6913B8008E2A80 /* EditProfileInfoView.swift in Sources */,
 				EBB1F4182C76CA75007B0E3C /* RecordListViewController.swift in Sources */,
+				78254FD82C7C1CF40069B10A /* WheelCircumferenceSelectionCell.swift in Sources */,
 				CDC0C1E02C664FFE00349DC4 /* UIButton+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -745,7 +801,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NON = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_MODULES = YES;
@@ -865,11 +921,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = RideThis/RideThis.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = N954XS4D2X;
+				DEVELOPMENT_TEAM = N954XS4D2X;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RideThis/Info.plist;
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "현재 위치의 날씨 정보를 가져오기 위해 위치 접근이 필요합니다.";
@@ -885,8 +939,6 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.madcow.RideThis;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = RideThis;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -899,11 +951,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = RideThis/RideThis.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = N954XS4D2X;
+				DEVELOPMENT_TEAM = N954XS4D2X;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RideThis/Info.plist;
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "현재 위치의 날씨 정보를 가져오기 위해 위치 접근이 필요합니다.";
@@ -919,8 +969,6 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.madcow.RideThis;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = RideThis;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

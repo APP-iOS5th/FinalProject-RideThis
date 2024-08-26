@@ -2,6 +2,7 @@ import UIKit
 import Kingfisher
 import SnapKit
 import FirebaseFirestore
+import Combine
 
 // 마이페이지 초기 화면
 class MyPageView: RideThisViewController {
@@ -9,7 +10,9 @@ class MyPageView: RideThisViewController {
     // MARK: Data Components
     let viewModel = MyPageViewModel()
     let service = UserService.shared
-
+    private let firebaseService = FireBaseService()
+    private var cancellable = Set<AnyCancellable>()
+    private var followDelegate: UpdateUserDelegate?
     
     // MARK: UIComponents
     // MARK: ScrollView
@@ -37,7 +40,7 @@ class MyPageView: RideThisViewController {
         imageView.heightAnchor.constraint(equalToConstant: 80).isActive = true
         imageView.layer.cornerRadius = 40
         imageView.clipsToBounds = true
-        imageView.backgroundColor = .primaryColor
+//        imageView.backgroundColor = .primaryColor
         
         return imageView
     }()
@@ -176,6 +179,7 @@ class MyPageView: RideThisViewController {
         self.title = "마이페이지"
         setUIComponents()
         setUserData()
+        setCombineData()
     }
     
     func setNavigationComponents() {
@@ -360,7 +364,7 @@ class MyPageView: RideThisViewController {
         }
         
         self.profileEditButton.addAction(UIAction { [weak self] _ in
-            guard let self = self, let user = service.signedUser else { return }
+            guard let self = self, let user = service.combineUser else { return }
             let profileEditView = EditProfileInfoView(user: user)
             navigationController?.pushViewController(profileEditView, animated: true)
         }, for: .touchUpInside)
@@ -514,6 +518,29 @@ class MyPageView: RideThisViewController {
         }
     }
     
+    func setCombineData() {
+        service.$combineUser
+            .sink { [weak self] receivedUser in
+                guard let self = self, let combineUser = receivedUser else { return }
+                DispatchQueue.main.async {
+                    if let imageUrl = combineUser.user_image {
+                        self.profileImageView.kf.setImage(with: URL(string: imageUrl))
+                    }
+                    self.followerCountLabel.text = "\(combineUser.user_follower.count)"
+                    self.followingCountLabel.text = "\(combineUser.user_following.count)"
+                    self.userNickName.text = combineUser.user_nickname
+                    self.userWeight.text = "\(combineUser.user_weight)"
+                    if let height = combineUser.user_tall {
+                        self.userHeight.text = "\(height)"
+                    } else {
+                        self.userHeight.text = "-"
+                    }
+                }
+                followDelegate?.updateUser(user: combineUser)
+            }
+            .store(in: &cancellable)
+    }
+    
     @objc func settingButtonTapAction() {
         let settingView = SettingView()
         self.navigationController?.pushViewController(settingView, animated: true)
@@ -587,8 +614,9 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
     
     @objc func toFollowerView() {
         if service.signedUser != nil {
-            let frientView = FollowManageView()
-            self.navigationController?.pushViewController(frientView, animated: true)
+            let followView = FollowManageView(user: service.signedUser!)
+            followDelegate = followView
+            self.navigationController?.pushViewController(followView, animated: true)
         } else {
             self.showAlert(alertTitle: "알림", msg: "로그인이 필요한 기능입니다. 로그인 화면으로 이동할까요?", confirm: "예") {
                 self.navigationController?.pushViewController(LoginView(), animated: true)
