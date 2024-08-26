@@ -101,6 +101,7 @@ class SignUpInfoView: RideThisViewController {
     }
     
     func configureUI() {
+        self.overrideUserInterfaceStyle = .light
         setInfoLabel()
         setInfoContainer()
         setNextButton()
