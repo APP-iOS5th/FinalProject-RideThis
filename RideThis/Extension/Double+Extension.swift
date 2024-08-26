@@ -23,7 +23,26 @@ extension Double {
 }
 
 extension Int {
-    func miniutesToHours(minutes: Int) -> String {
-        return "\(minutes / 60)시간 \(minutes % 60)분"
+    var secondsToRecordTime: String {
+        get {
+            var hours = self / 3600
+            var minutes = self / 60
+            let seconds = self % 60
+            if seconds > 30 {
+                minutes += 1
+            }
+            if minutes >= 60 {
+                hours += 1
+            }
+            
+            if hours > 0 {
+                return "\(hours)시간 \(minutes)분"
+            } else if hours == 0 && minutes > 0 {
+                return "\(minutes)분"
+            } else if hours == 0 && minutes == 0 {
+                return "1분"
+            }
+            return ""
+        }
     }
 }

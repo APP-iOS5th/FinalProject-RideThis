@@ -14,4 +14,9 @@ class MyPageViewModel {
     func getRecords(userId: String) async {
         recordsData = await firebaseService.findRecordsBy(userId: userId)
     }
+    
+    func getRecordTimeDiff(endDate: Date, startDate: Date) -> Int {
+        let timeInterval = endDate.timeIntervalSince(startDate)
+        return Int(timeInterval)
+    }
 }

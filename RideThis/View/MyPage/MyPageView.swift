@@ -550,15 +550,17 @@ class MyPageView: RideThisViewController {
             .sink { [weak self] records in
                 guard let self = self else { return }
                 let count = records.count
-                var totalHour: Int = 0
+                var totalSeconds: Int = 0
                 var totalDistance: Double = 0
                 
                 for record in records {
                     totalDistance += record.record_distance
-                    totalHour = Date.getDateDiff(startDate: record.record_start_time!, endDate: record.record_end_time!)
+                    if let endTime = record.record_end_time, let startTime = record.record_start_time {
+                        totalSeconds += viewModel.getRecordTimeDiff(endDate: endTime, startDate: startTime)
+                    }
                 }
                 self.totalRunCountData.text = "\(count)회"
-                self.totalRunTimeData.text = Int().miniutesToHours(minutes: totalHour)
+                self.totalRunTimeData.text = totalSeconds.secondsToRecordTime
                 self.totalRunDistanceData.text = "\(totalDistance.getTwoDecimal)km"
             }
             .store(in: &cancellable)
