@@ -49,7 +49,7 @@ class MyPageView: RideThisViewController {
     private let followerCountLabel = RideThisLabel(fontType: .profileFont)
     private let followingLabel = RideThisLabel(fontType: .profileFont, text: "팔로잉")
     private let followingCountLabel = RideThisLabel(fontType: .profileFont)
-    private let notLoginLabel = RideThisLabel(fontType: .recordInfoTitle, text: "로그인이 필요합니다.")
+    private let notLoginLabel = RideThisLabel(fontType: .recordInfoTitle, text: "로그인이 필요한 화면입니다.")
     private let loginButton = RideThisButton(buttonTitle: "로그인", height: 50)
     
     // MARK: User Info
@@ -210,14 +210,14 @@ class MyPageView: RideThisViewController {
         view.addSubview(loginButton)
         
         notLoginLabel.snp.makeConstraints {
-            $0.centerY.equalTo(view.snp.centerY)
+            $0.centerY.equalTo(view.snp.centerY).offset(-25)
             $0.centerX.equalTo(view.snp.centerX)
         }
         
         loginButton.snp.makeConstraints {
-            $0.top.equalTo(notLoginLabel.snp.bottom).offset(10)
-            $0.left.equalTo(view.snp.left).offset(30)
-            $0.right.equalTo(view.snp.right).offset(-30)
+            $0.top.equalTo(notLoginLabel.snp.bottom).offset(25)
+            $0.left.equalTo(notLoginLabel.snp.left)
+            $0.right.equalTo(notLoginLabel.snp.right)
         }
         
         loginButton.addAction(UIAction { [weak self] _ in
