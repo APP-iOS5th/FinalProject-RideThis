@@ -25,4 +25,8 @@ class FollowManageViewModel {
             print(error)
         }
     }
+    
+    func searchUser(text: String) {
+        
+    }
 }
