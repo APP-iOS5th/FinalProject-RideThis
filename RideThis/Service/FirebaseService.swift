@@ -167,8 +167,6 @@ class FireBaseService {
         userInfo.updateData(updateData) { error in
             if let error = error {
                 print("Error updating document: \(error)")
-            } else {
-                print("Document successfully updated")
             }
         }
         

@@ -45,7 +45,7 @@ class FollowManageView: RideThisViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         configureUI()
         setCombineData()
     }
