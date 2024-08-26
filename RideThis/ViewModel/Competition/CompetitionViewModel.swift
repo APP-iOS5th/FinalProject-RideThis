@@ -114,7 +114,7 @@ class CompetitionViewModel {
     }
     
     // MARK: Bluetooth 상태 확인
-    private func checkBluetoothStatus() {
+    func checkBluetoothStatus() {
         Task {
             self.isBluetooth = await checkBluetooth()
         }

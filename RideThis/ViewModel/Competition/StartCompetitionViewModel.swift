@@ -9,9 +9,11 @@ import Foundation
 import UIKit
 import Combine
 
-class StartCometitionViewModel {
+class StartCometitionViewModel: BluetoothManagerDelegate {
     private let firebaseService = FireBaseService()
     private let service = UserService.shared
+    
+    var bluetoothManager: BluetoothManager!
     
     // 케이던스 정보 데이터
     var timer: String = "00:00" {
@@ -19,14 +21,14 @@ class StartCometitionViewModel {
             timerUpdateCallback?(timer)
         }
     }
-    var cadence: Double = 0
-    var speed: Double = 0
-    var distance: Double = 0
-    var calorie: Double = 0
+    @Published var cadence: Double = 0
+    @Published var speed: Double = 0
+    @Published var distance: Double = 0
+    @Published var calorie: Double = 0
     var userWeight: Int
     
     // Device데이터
-    var deviceInfo: BluetoothModel = BluetoothModel(device_firmware_version: "test123", device_name: "test", device_registration_status: false, device_serial_number: "13", device_wheel_circumference: "123")
+    var deviceInfo: BluetoothModel = BluetoothModel(device_firmware_version: "test123", device_name: "test", device_registration_status: false, device_serial_number: "13", device_wheel_circumference: 123)
     
     // 타이머 데이터
     var startTime: Date?
@@ -54,12 +56,6 @@ class StartCometitionViewModel {
             let minutes = Int(elapsedTime) / 60
             let seconds = Int(elapsedTime) % 60
             timer = String(format: "%02d:%02d", minutes, seconds)
-            
-            // 뷰 전환 타이머 초로 테스트
-            //            if Double(seconds) >= goalDistance {
-            //                endTime = Date()
-            //                isFinished = true
-            //            }
         }
     }
     
@@ -127,15 +123,23 @@ class StartCometitionViewModel {
                     if let activeDeviceDocument = deviceDocuments.documents.first(where: { document in
                         return document["device_registration_status"] as? Bool == true
                     }) {
-                        // deviceInfo 업데이트
                         deviceInfo = BluetoothModel(
                             device_firmware_version: activeDeviceDocument["device_firmware_version"] as? String ?? "",
                             device_name: activeDeviceDocument["device_name"] as? String ?? "",
                             device_registration_status: activeDeviceDocument["device_registration_status"] as? Bool ?? false,
                             device_serial_number: activeDeviceDocument["device_serial_number"] as? String ?? "",
-                            device_wheel_circumference: activeDeviceDocument["device_wheel_circumference"] as? String ?? "0"
+                            device_wheel_circumference: activeDeviceDocument["device_wheel_circumference"] as? Double ?? 0
                         )
-                        print(deviceInfo)
+                        
+                        DispatchQueue.main.async {
+                            self.bluetoothManager = BluetoothManager(
+                                targetDeviceName: self.deviceInfo.device_name,
+                                userWeight: Double(self.userWeight),
+                                wheelCircumference: self.deviceInfo.device_wheel_circumference
+                            )
+                            self.bluetoothManager.delegate = self
+                            self.bluetoothManager.connect()
+                        }
                     } else {
                         print("등록된 DEVICE가 없습니다.")
                     }
@@ -143,6 +147,34 @@ class StartCometitionViewModel {
             } catch {
                 print("FIREBASE 통신 오류: \(error.localizedDescription)")
             }
+        }
+    }
+    
+    // MARK: - BluetoothManagerDelegate Methods
+
+    
+    func didUpdateCadence(_ cadence: Double) {
+        DispatchQueue.main.async {
+            self.cadence = cadence
+        }
+    }
+    
+    func didUpdateSpeed(_ speed: Double) {
+        DispatchQueue.main.async {
+            self.speed = speed
+        }
+    }
+    
+    func didUpdateDistance(_ distance: Double) {
+        DispatchQueue.main.async {
+            self.distance = distance
+            print("Distance: \(distance)")
+        }
+    }
+    
+    func didUpdateCalories(_ calories: Double) {
+        DispatchQueue.main.async {
+            self.calorie = calories
         }
     }
     

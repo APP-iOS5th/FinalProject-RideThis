@@ -12,6 +12,6 @@ struct BluetoothModel: Codable {
     let device_name: String
     let device_registration_status: Bool
     let device_serial_number: String
-    let device_wheel_circumference: String
+    let device_wheel_circumference: Double
     
 }

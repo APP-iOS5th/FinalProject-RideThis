@@ -100,6 +100,7 @@ class CompetitionView: RideThisViewController {
           
           // 데이터를 새로고침
           self.viewModel.fetchAllRecords()
+          self.viewModel.checkBluetoothStatus()
       }
     
     // MARK: setupUI
@@ -265,8 +266,9 @@ class CompetitionView: RideThisViewController {
                     self.navigationController?.pushViewController(distanceSelectionVC, animated: true)
                 } else {
                     showAlert(alertTitle: "장치연결이 필요합니다.", msg: "사용하시려면 장치를 연결해주세요.", confirm: "장치연결") {
-                        let deviceVC = DeviceView()
-                        self.navigationController?.pushViewController(deviceVC, animated: true)
+                        if let tabBarController = self.tabBarController {
+                            tabBarController.selectedIndex = 3
+                        }
                     }
                 }
             } else {

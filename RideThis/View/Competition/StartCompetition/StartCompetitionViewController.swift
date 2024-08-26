@@ -185,10 +185,10 @@ class StartCompetitionViewController: RideThisViewController {
     // MARK: Setup Binding Data
     private func setupBinding() {
         timerRecord.updateRecordText(text: viewModel.timer)
-        cadenceRecord.updateRecordText(text: "\(viewModel.cadence.formattedWithThousandsSeparator()) RPM")
-        speedRecord.updateRecordText(text: "\(viewModel.speed.formattedWithThousandsSeparator()) Km/h")
-        distanceRecord.updateRecordText(text: "\(viewModel.distance.formattedWithThousandsSeparator()) Km")
-        calorieRecord.updateRecordText(text: "\(viewModel.calorie.formattedWithThousandsSeparator()) Kcal")
+//        cadenceRecord.updateRecordText(text: "\(viewModel.cadence.formattedWithThousandsSeparator()) RPM")
+//        speedRecord.updateRecordText(text: "\(viewModel.speed.formattedWithThousandsSeparator()) Km/h")
+//        distanceRecord.updateRecordText(text: "\(viewModel.distance.formattedWithThousandsSeparator()) Km")
+//        calorieRecord.updateRecordText(text: "\(viewModel.calorie.formattedWithThousandsSeparator()) Kcal")
         
         self.viewModel.$isFinished
             .receive(on: DispatchQueue.main)
@@ -207,6 +207,34 @@ class StartCompetitionViewController: RideThisViewController {
                     let summaryRecordVC = SummaryRecordViewController(timer: self?.viewModel.timer ?? "", cadence: self?.viewModel.cadence ?? 0.0, speed: self?.viewModel.speed ?? 0.0, distance: self?.viewModel.goalDistance ?? 0.0, calorie: self?.viewModel.calorie ?? 0.0, startTime: self?.viewModel.startTime ?? Date(), endTime: self?.viewModel.endTime ?? Date())
                     navController.pushViewController(summaryRecordVC, animated: true)
                 }
+            }
+            .store(in: &cancellables)
+        
+        self.viewModel.$cadence
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] cadence in
+                self?.cadenceRecord.updateRecordText(text: "\(cadence.formattedWithThousandsSeparator()) RPM")
+            }
+            .store(in: &cancellables)
+        
+        self.viewModel.$speed
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] speed in
+                self?.speedRecord.updateRecordText(text: "\(speed.formattedWithThousandsSeparator()) Km/h")
+            }
+            .store(in: &cancellables)
+        
+        self.viewModel.$distance
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] distance in
+                self?.distanceRecord.updateRecordText(text: "\(distance.formattedWithThousandsSeparator()) Km")
+            }
+            .store(in: &cancellables)
+        
+        self.viewModel.$calorie
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] calorie in
+                self?.calorieRecord.updateRecordText(text: "\(calorie.formattedWithThousandsSeparator()) Kcal")
             }
             .store(in: &cancellables)
     }
