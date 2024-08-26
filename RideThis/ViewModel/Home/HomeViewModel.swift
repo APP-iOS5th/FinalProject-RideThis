@@ -4,14 +4,7 @@ import WeatherKit
 import Combine
 
 class HomeViewModel: NSObject, CLLocationManagerDelegate {
-    struct WeeklyRecord {
-        let runCount: Int
-        let runTime: String
-        let runDistance: Double
-    }
-    
-    let weeklyRecord: WeeklyRecord
-    let userName: String
+    @Published var model: HomeModel
     
     // MARK: Weather, Location
     private let locationManager = CLLocationManager()
@@ -22,9 +15,10 @@ class HomeViewModel: NSObject, CLLocationManagerDelegate {
     @Published var hourlyForecast: [HourWeather] = []
     
     override init() {
-        self.weeklyRecord = WeeklyRecord(runCount: 6, runTime: "15시간 34분", runDistance: 404.51)
-        self.userName = "규상"
+        let weeklyRecord = HomeModel.WeeklyRecord(runCount: 6, runTime: "15시간 34분", runDistance: 404.51)
+        self.model = HomeModel(weeklyRecord: weeklyRecord, userName: "전두광")
         super.init()
+        
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
