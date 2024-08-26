@@ -16,7 +16,7 @@ class FollowTableViewCell: UITableViewCell {
     private let profileImage: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.contentMode = .scaleAspectFit
+        iv.contentMode = .scaleAspectFill
         iv.widthAnchor.constraint(equalToConstant: 80).isActive = true
         iv.heightAnchor.constraint(equalToConstant: 80).isActive = true
         iv.clipsToBounds = true
@@ -97,7 +97,7 @@ class FollowTableViewCell: UITableViewCell {
                     signedUser.user_following.remove(at: signedUser.user_following.firstIndex(of: cellUser.user_id)!)
                 }
                 firebaseService.updateUserInfo(updated: cellUser, update: false)
-                firebaseService.updateUserInfo(updated: signedUser, update: false)
+                firebaseService.updateUserInfo(updated: signedUser, update: true)
             }
         }, for: .touchUpInside)
     }
@@ -107,7 +107,11 @@ class FollowTableViewCell: UITableViewCell {
         self.userNickName.text = user.user_nickname
         self.userEmail.text = user.user_email
         if let imgUrl = user.user_image {
-            self.profileImage.kf.setImage(with: URL(string: imgUrl))
+            if imgUrl.isEmpty {
+                self.profileImage.image = UIImage(named: "bokdonge")
+            } else {
+                self.profileImage.kf.setImage(with: URL(string: imgUrl))
+            }
         }
         
         var buttonTitle: String = "Follow"

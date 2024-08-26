@@ -26,6 +26,7 @@ class FireBaseService {
         }
     }
     
+    // MARK: UserId배열로 유저 확인
     func fetchUsers(by userIds: [String]) async throws -> [User] {
         var returnUserData: [User] = []
         
@@ -43,6 +44,7 @@ class FireBaseService {
         return returnUserData
     }
     
+    // MARK: 검색한 text로 이메일, 닉네임이 포함되는 유저 검색
     func findUser(text: String) async -> [User] {
         var allUsers: [User] = []
         do {
@@ -58,6 +60,19 @@ class FireBaseService {
             print(error)
         }
         return allUsers
+    }
+    
+    func findUser(nickName: String) async -> Int {
+        do {
+            let querySnapshot = try await db.collection("USERS")
+                .whereField("user_nickname", isEqualTo: nickName)
+                .getDocuments()
+            
+            return querySnapshot.count
+        } catch {
+            print("error \(#function)")
+        }
+        return 0
     }
     
     // MARK: USERS 컬렉션의 모든 데이터 가져오기
@@ -107,16 +122,48 @@ class FireBaseService {
     }
     
     // MARK: 각 USERS 문서의 RECORDS 컬렉션의 모든 데이터 가져오기
-        func fetchAllRecordsForUsers(_ userSnapshots: [QueryDocumentSnapshot]) async throws -> [RecordModel] {
-            var allRecordData: [RecordModel] = []
+    func fetchAllRecordsForUsers(_ userSnapshots: [QueryDocumentSnapshot]) async throws -> [RecordModel] {
+        var allRecordData: [RecordModel] = []
 
-            for userSnapshot in userSnapshots {
-                let userNickname = userSnapshot["user_nickname"] as? String ?? ""
-                let userId = userSnapshot["user_id"] as? String ?? ""
-                let recordsCollectionRef = userSnapshot.reference.collection("RECORDS")
-                let recordsQuerySnapshot = try await recordsCollectionRef.getDocuments()
+        for userSnapshot in userSnapshots {
+            let userNickname = userSnapshot["user_nickname"] as? String ?? ""
+            let userId = userSnapshot["user_id"] as? String ?? ""
+            let recordsCollectionRef = userSnapshot.reference.collection("RECORDS")
+            let recordsQuerySnapshot = try await recordsCollectionRef.getDocuments()
 
-                for recordSnapshot in recordsQuerySnapshot.documents {
+            for recordSnapshot in recordsQuerySnapshot.documents {
+                let recordData = RecordModel(
+                    record_timer: recordSnapshot["record_timer"] as? String ?? "",
+                    record_cadence: recordSnapshot["record_cadence"] as? Double ?? 0.0,
+                    record_speed: recordSnapshot["record_speed"] as? Double ?? 0.0,
+                    record_distance: recordSnapshot["record_distance"] as? Double ?? 0.0,
+                    record_calories: recordSnapshot["record_calories"] as? Double ?? 0.0,
+                    record_start_time: (recordSnapshot["record_start_time"] as? Timestamp)?.dateValue(),
+                    record_end_time: (recordSnapshot["record_end_time"] as? Timestamp)?.dateValue(),
+                    record_data: (recordSnapshot["record_date"] as? Timestamp)?.dateValue(),
+                    record_competetion_status: recordSnapshot["record_competetion_status"] as? Bool ?? false,
+                    record_target_distance: recordSnapshot["record_target_distance"] as? Int ?? 0,
+                    user_nickname: userNickname,
+                    user_id: userId
+                )
+                allRecordData.append(recordData)
+            }
+        }
+
+        return allRecordData
+    }
+    
+    func findRecordsBy(userId: String) async -> [RecordModel] {
+        var records: [RecordModel] = []
+        do {
+            if case .userSnapshot(let userSnapshot) = try await fetchUser(at: userId, userType: false) {
+                guard let snapshot = userSnapshot else { return [] }
+                let recordCollection = snapshot.reference.collection("RECORDS")
+                let recordSnapshots = try await recordCollection.getDocuments()
+                let userNickname = snapshot["user_nickname"] as? String ?? ""
+                let userId = snapshot["user_id"] as? String ?? ""
+                
+                for recordSnapshot in recordSnapshots.documents {
                     let recordData = RecordModel(
                         record_timer: recordSnapshot["record_timer"] as? String ?? "",
                         record_cadence: recordSnapshot["record_cadence"] as? Double ?? 0.0,
@@ -131,12 +178,14 @@ class FireBaseService {
                         user_nickname: userNickname,
                         user_id: userId
                     )
-                    allRecordData.append(recordData)
+                    records.append(recordData)
                 }
             }
-
-            return allRecordData
+        } catch {
+            print(error)
         }
+        return records
+    }
     
     // MARK: Following목록 가져오기
     func fetchUserFollowing(userId: String) async throws -> [String] {
@@ -160,15 +209,13 @@ class FireBaseService {
             "user_id": user.user_id,
             "user_image": user.user_image ?? "",
             "user_nickname": user.user_nickname,
-            "user_tall": user.user_tall ?? "",
+            "user_tall": user.user_tall,
             "user_weight": user.user_weight
         ]
         
         userInfo.updateData(updateData) { error in
             if let error = error {
                 print("Error updating document: \(error)")
-            } else {
-                print("Document successfully updated")
             }
         }
         
