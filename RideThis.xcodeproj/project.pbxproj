@@ -21,6 +21,8 @@
 		04E3C0D32C6B37F7006B844F /* DistancSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0D22C6B37F7006B844F /* DistancSelectionViewController.swift */; };
 		04E3C0D52C6B3818006B844F /* DistanceSelectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0D42C6B3818006B844F /* DistanceSelectionCoordinator.swift */; };
 		04E3C0D72C6B8C30006B844F /* DistanceSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0D62C6B8C30006B844F /* DistanceSelectionViewModel.swift */; };
+		78254FD42C7C05CB0069B10A /* DeviceSearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78254FD32C7C05CB0069B10A /* DeviceSearchTableViewCell.swift */; };
+		784D5DFE2C7B780700D2FE15 /* DeviceSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784D5DFD2C7B780700D2FE15 /* DeviceSearchViewController.swift */; };
 		786F60E02C770ECF00B277FE /* SplashCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786F60DF2C770ECF00B277FE /* SplashCoordinator.swift */; };
 		786F60E22C77103B00B277FE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 786F60E12C77103B00B277FE /* GoogleService-Info.plist */; };
 		78DBD01B2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DBD01A2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift */; };
@@ -116,6 +118,8 @@
 		04E3C0D22C6B37F7006B844F /* DistancSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistancSelectionViewController.swift; sourceTree = "<group>"; };
 		04E3C0D42C6B3818006B844F /* DistanceSelectionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceSelectionCoordinator.swift; sourceTree = "<group>"; };
 		04E3C0D62C6B8C30006B844F /* DistanceSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceSelectionViewModel.swift; sourceTree = "<group>"; };
+		78254FD32C7C05CB0069B10A /* DeviceSearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSearchTableViewCell.swift; sourceTree = "<group>"; };
+		784D5DFD2C7B780700D2FE15 /* DeviceSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSearchViewController.swift; sourceTree = "<group>"; };
 		786F60DF2C770ECF00B277FE /* SplashCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashCoordinator.swift; sourceTree = "<group>"; };
 		786F60E12C77103B00B277FE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		78DBD01A2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoTableViewCell.swift; sourceTree = "<group>"; };
@@ -268,6 +272,7 @@
 				78DBD01A2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift */,
 				78DBD01C2C7882B700B43A62 /* DeviceTableViewCell.swift */,
 				78DBD01E2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift */,
+				78254FD32C7C05CB0069B10A /* DeviceSearchTableViewCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -439,6 +444,7 @@
 				CD4214602C649A0800F7C3AE /* Coordinator */,
 				CD4213E42C64988B00F7C3AE /* DeviceView.swift */,
 				78DBD0202C7882EB00B43A62 /* DeviceDetailViewController.swift */,
+				784D5DFD2C7B780700D2FE15 /* DeviceSearchViewController.swift */,
 			);
 			path = Device;
 			sourceTree = "<group>";
@@ -700,6 +706,7 @@
 				CD4214562C64994F00F7C3AE /* RecordViewModel.swift in Sources */,
 				CD76A8CB2C6E5828003490B3 /* UITextField+Extension.swift in Sources */,
 				CD6662182C67900B005E2887 /* DeviceModel.swift in Sources */,
+				784D5DFE2C7B780700D2FE15 /* DeviceSearchViewController.swift in Sources */,
 				CD4214582C64996700F7C3AE /* MyPageViewModel.swift in Sources */,
 				CD4214542C64991500F7C3AE /* UIColor+Extension.swift in Sources */,
 				043E0C892C70AC2400F25AF7 /* SummaryRecordViewModel.swift in Sources */,
@@ -719,6 +726,7 @@
 				04E3C0CF2C6B32B8006B844F /* CompetitionCoordinator.swift in Sources */,
 				CDAC668B2C6CF0CF005506FB /* AccountQuitView.swift in Sources */,
 				CD0EC4D32C7227AB00E70452 /* LoginView.swift in Sources */,
+				78254FD42C7C05CB0069B10A /* DeviceSearchTableViewCell.swift in Sources */,
 				CD66621A2C679010005E2887 /* MyPageModel.swift in Sources */,
 				CD4213C52C64982000F7C3AE /* SceneDelegate.swift in Sources */,
 				043E0C822C6F232A00F25AF7 /* StartCompetitionViewModel.swift in Sources */,
