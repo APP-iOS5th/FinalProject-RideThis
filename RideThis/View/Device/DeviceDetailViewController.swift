@@ -90,7 +90,7 @@ class DeviceDetailViewController: RideThisViewController {
         self.view.addSubview(deviceInfoTableView)
         self.view.addSubview(wheelCircumferenceTableView)
         self.view.addSubview(deleteDeviceButton)
-
+        
         deviceInfoTableView.snp.makeConstraints { diTable in
             diTable.top.equalTo(safeArea.snp.top).offset(20)
             diTable.right.equalTo(safeArea.snp.right).offset(-5)
@@ -122,7 +122,7 @@ class DeviceDetailViewController: RideThisViewController {
         super.viewDidLayoutSubviews()
         updateTableViewHeights()
     }
-
+    
     private func updateTableViewHeights() {
         deviceInfoTableView.snp.updateConstraints { diTable in
             diTable.height.equalTo(deviceInfoTableView.contentSize.height)
@@ -194,7 +194,13 @@ extension DeviceDetailViewController: UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == wheelCircumferenceTableView {
-            print("휠 둘레 설정 화면으로 이동")
+            let wheelCircumferenceVC = WheelCircumferenceViewController(viewModel: viewModel)
+            wheelCircumferenceVC.selectedCircumference = viewModel.selectedDevice?.wheelCircumference
+            wheelCircumferenceVC.onCircumferenceSelected = { [weak self] circumference in
+                self?.viewModel.updateWheelCircumference(circumference)
+                self?.wheelCircumferenceTableView.reloadData()
+            }
+            navigationController?.pushViewController(wheelCircumferenceVC, animated: true)
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
