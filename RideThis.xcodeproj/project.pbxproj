@@ -78,6 +78,7 @@
 		CD76A8CB2C6E5828003490B3 /* UITextField+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD76A8CA2C6E5828003490B3 /* UITextField+Extension.swift */; };
 		CDAC668B2C6CF0CF005506FB /* AccountQuitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDAC668A2C6CF0CF005506FB /* AccountQuitView.swift */; };
 		CDB220082C7C19DD00973964 /* SignUpInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB220072C7C19DD00973964 /* SignUpInfoViewModel.swift */; };
+		CDB2200A2C7C4EF900973964 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB220092C7C4EF900973964 /* Date+Extension.swift */; };
 		CDB71BA02C78A72400DC5D57 /* MyPageProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB71B9F2C78A72400DC5D57 /* MyPageProtocol.swift */; };
 		CDC0C1D62C65FD6A00349DC4 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = CDC0C1D52C65FD6A00349DC4 /* FirebaseAuth */; };
 		CDC0C1D82C65FD6A00349DC4 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = CDC0C1D72C65FD6A00349DC4 /* FirebaseFirestore */; };
@@ -178,6 +179,7 @@
 		CD76A8CA2C6E5828003490B3 /* UITextField+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extension.swift"; sourceTree = "<group>"; };
 		CDAC668A2C6CF0CF005506FB /* AccountQuitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountQuitView.swift; sourceTree = "<group>"; };
 		CDB220072C7C19DD00973964 /* SignUpInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpInfoViewModel.swift; sourceTree = "<group>"; };
+		CDB220092C7C4EF900973964 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		CDB71B9F2C78A72400DC5D57 /* MyPageProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageProtocol.swift; sourceTree = "<group>"; };
 		CDC0C1D32C65FB4300349DC4 /* RideThis.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RideThis.entitlements; sourceTree = "<group>"; };
 		CDC0C1DD2C664E7400349DC4 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
@@ -551,6 +553,7 @@
 				CD76A8CA2C6E5828003490B3 /* UITextField+Extension.swift */,
 				041A673D2C6CF1E0000BA4C1 /* RecordContainer+Extension.swift */,
 				043E0C832C6F378D00F25AF7 /* Double+Extension.swift */,
+				CDB220092C7C4EF900973964 /* Date+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -725,6 +728,7 @@
 				CD4214762C64A63D00F7C3AE /* UIViewController+Extension.swift in Sources */,
 				043E0C842C6F378D00F25AF7 /* Double+Extension.swift in Sources */,
 				78254FD62C7C1CC90069B10A /* WheelCircumferenceViewController.swift in Sources */,
+				CDB2200A2C7C4EF900973964 /* Date+Extension.swift in Sources */,
 				CD4214562C64994F00F7C3AE /* RecordViewModel.swift in Sources */,
 				CD76A8CB2C6E5828003490B3 /* UITextField+Extension.swift in Sources */,
 				CD6662182C67900B005E2887 /* DeviceModel.swift in Sources */,

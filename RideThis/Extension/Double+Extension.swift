@@ -14,4 +14,16 @@ extension Double {
         numberFormatter.groupingSeparator = ","
         return numberFormatter.string(from: NSNumber(value: self)) ?? ""
     }
+    
+    var getTwoDecimal: String {
+        get {
+            return String(format: "%.2f", self)
+        }
+    }
+}
+
+extension Int {
+    func miniutesToHours(minutes: Int) -> String {
+        return "\(minutes / 60)시간 \(minutes % 60)분"
+    }
 }
