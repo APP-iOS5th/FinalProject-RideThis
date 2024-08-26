@@ -235,7 +235,7 @@ extension EditProfileInfoView: UIImagePickerControllerDelegate, UINavigationCont
     // 사용자가 이미지를 선택했을 때 호출되는 함수
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         // 선택한 이미지 가져오기
-        if let selectedImage = info[.originalImage] as? UIImage {
+        if let selectedImage = info[.originalImage] as? UIImage, let squareImage = selectedImage.toSquare() {
             selectedUserImage = selectedImage
             DispatchQueue.main.async {
                 self.profileImageView.image = selectedImage

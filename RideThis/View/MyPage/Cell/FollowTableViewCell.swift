@@ -16,7 +16,7 @@ class FollowTableViewCell: UITableViewCell {
     private let profileImage: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.contentMode = .scaleAspectFit
+        iv.contentMode = .scaleAspectFill
         iv.widthAnchor.constraint(equalToConstant: 80).isActive = true
         iv.heightAnchor.constraint(equalToConstant: 80).isActive = true
         iv.clipsToBounds = true
