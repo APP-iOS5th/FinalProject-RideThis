@@ -232,10 +232,12 @@ class EditProfileInfoView: RideThisViewController {
         self.user.user_weight = Int(self.userWeightTextField.text!)!
         self.user.user_tall = self.userHeightTextField.text! == "-" ? -1 : Int(self.userHeightTextField.text!)!
         
+        self.firebaseService.updateUserInfo(updated: self.user, update: true)
         if let img = selectedUserImage {
+            updateImageDelegate?.imageUpdate(image: img)
             firebaseService.saveImage(image: img, userId: user.user_id) { imgUrl in
                 self.user.user_image = imgUrl.absoluteString
-                self.firebaseService.updateUserInfo(updated: self.user, update: true)
+                self.firebaseService.updateUserInfo(updated: self.user, update: false)
             }
         }
         self.navigationController?.popViewController(animated: true)
