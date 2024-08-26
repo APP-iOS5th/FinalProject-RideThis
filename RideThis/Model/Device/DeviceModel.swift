@@ -5,5 +5,11 @@ struct Device {
     let serialNumber: String
     let firmwareVersion: String
     let registrationStatus: String
-    let wheelCircumference: String
+    var wheelCircumference: String
+}
+
+struct WheelCircumference {
+    let millimeter: String
+    let tireSize: String
+    let inch: String
 }
