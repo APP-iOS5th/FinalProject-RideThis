@@ -142,7 +142,7 @@ class EditProfileInfoView: RideThisViewController {
          self.userHeightLabel, self.userWeightLabel, self.userNickNameTextField,
          self.userHeightTextField, self.userWeightTextField].enumerated().forEach{ (idx, ui) in
             self.profileInfoContainer.addSubview(ui)
-            if [2, 3].contains(idx) {
+            if [2, 4].contains(idx) {
                 let mandatoryImgView = MandatoryMark(frame: .zero)
                 
                 profileInfoContainer.addSubview(mandatoryImgView)
@@ -219,7 +219,7 @@ class EditProfileInfoView: RideThisViewController {
         }
         
         self.viewModel.nickName = self.user.user_nickname
-        self.viewModel.height = self.user.tallStr
+        self.viewModel.weight = self.user.tallStr
     }
     
     func setProfileImageTapEvent() {
@@ -253,6 +253,19 @@ class EditProfileInfoView: RideThisViewController {
                 }
             }
             .store(in: &cancellable)
+        
+        viewModel.$isExistNickName
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] exist in
+                guard let self = self else { return }
+                
+                if exist {
+                    userNickNameTextField.textColor = .systemRed
+                } else {
+                    userNickNameTextField.textColor = .label
+                }
+            }
+            .store(in: &cancellable)
     }
     
     @objc func textFieldChanged(sender: UITextField) {
@@ -260,12 +273,11 @@ class EditProfileInfoView: RideThisViewController {
         case self.userNickNameTextField:
             self.viewModel.nickName = sender.text!
         case self.userHeightTextField:
-            self.viewModel.height = sender.text!
             if let text = sender.text, text.count > 3 {
                 sender.text?.removeLast()
             }
         case self.userWeightTextField:
-            self.viewModel.height = sender.text!
+            self.viewModel.weight = sender.text!
             if let text = sender.text, text.count > 3 {
                 sender.text?.removeLast()
             }

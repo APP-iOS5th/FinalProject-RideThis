@@ -299,6 +299,19 @@ class SignUpInfoView: RideThisViewController {
                 nextButton.backgroundColor = filled ? .primaryColor : .lightGray
             }
             .store(in: &cancellable)
+        
+        viewModel.$isExistNickName
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] exist in
+                guard let self = self else { return }
+                
+                if exist {
+                    userNickName.textColor = .systemRed
+                } else {
+                    userNickName.textColor = .label
+                }
+            }
+            .store(in: &cancellable)
     }
     
     @objc func textFieldValueChanged(_ sender: UITextField) {
