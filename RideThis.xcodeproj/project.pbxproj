@@ -872,6 +872,7 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = N954XS4D2X;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RideThis/Info.plist;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "앱의 원활한 사용을 위해서 블루투스 권한이 필요합니다.";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "현재 위치의 날씨 정보를 가져오기 위해 위치 접근이 필요합니다.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "현재 위치의 날씨 정보를 가져오기 위해 위치 접근이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -906,6 +907,7 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = N954XS4D2X;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RideThis/Info.plist;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "앱의 원활한 사용을 위해서 블루투스 권한이 필요합니다.";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "현재 위치의 날씨 정보를 가져오기 위해 위치 접근이 필요합니다.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "현재 위치의 날씨 정보를 가져오기 위해 위치 접근이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
