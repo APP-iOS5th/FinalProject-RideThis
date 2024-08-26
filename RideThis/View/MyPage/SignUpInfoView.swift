@@ -131,12 +131,7 @@ class SignUpInfoView: RideThisViewController {
          userNickNameLabel, userNickName].enumerated().forEach { (idx, ui) in
             userInfoContainer.addSubview(ui)
             if [0, 3].contains(idx) {
-                let mandatoryImgView = UIImageView()
-                mandatoryImgView.translatesAutoresizingMaskIntoConstraints = false
-                mandatoryImgView.image = UIImage(systemName: "staroflife.fill")
-                mandatoryImgView.tintColor = .primaryColor
-                mandatoryImgView.widthAnchor.constraint(equalToConstant: 8).isActive = true
-                mandatoryImgView.heightAnchor.constraint(equalToConstant: 8).isActive = true
+                let mandatoryImgView = MandatoryMark(frame: .zero)
                 
                 userInfoContainer.addSubview(mandatoryImgView)
                 mandatoryImgView.snp.makeConstraints {
@@ -197,12 +192,7 @@ class SignUpInfoView: RideThisViewController {
          userHeightLabel, userHeight, userInfoLabel2].enumerated().forEach { (idx, ui) in
             userInfoContainer2.addSubview(ui)
             if idx == 0 {
-                let mandatoryImgView = UIImageView()
-                mandatoryImgView.translatesAutoresizingMaskIntoConstraints = false
-                mandatoryImgView.image = UIImage(systemName: "staroflife.fill")
-                mandatoryImgView.tintColor = .primaryColor
-                mandatoryImgView.widthAnchor.constraint(equalToConstant: 8).isActive = true
-                mandatoryImgView.heightAnchor.constraint(equalToConstant: 8).isActive = true
+                let mandatoryImgView = MandatoryMark(frame: .zero)
                 
                 userInfoContainer2.addSubview(mandatoryImgView)
                 mandatoryImgView.snp.makeConstraints {

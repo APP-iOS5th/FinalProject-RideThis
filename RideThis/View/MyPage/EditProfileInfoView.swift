@@ -7,8 +7,10 @@ class EditProfileInfoView: RideThisViewController {
     
     // MARK: Data Components
     private let firebaseService = FireBaseService()
+    private let viewModel = EditProfileInfoViewModel()
     var user: User
     var selectedUserImage: UIImage? = nil
+    var updateImageDelegate: ProfileImageUpdateDelegate?
     
     init(user: User) {
         self.user = user
@@ -26,6 +28,7 @@ class EditProfileInfoView: RideThisViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.widthAnchor.constraint(equalToConstant: 120).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: 120).isActive = true
+        imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 60
         imageView.clipsToBounds = true
         if let imageURL = self.user.user_image {
@@ -61,8 +64,7 @@ class EditProfileInfoView: RideThisViewController {
         field.translatesAutoresizingMaskIntoConstraints = false
         field.placeholder = self.user.user_nickname
         field.text = self.user.user_nickname
-        field.tag = 0
-        field.addTarget(self, action: #selector(userNickNameChanged), for: .editingChanged)
+        field.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
         
         return field
     }()
@@ -72,6 +74,7 @@ class EditProfileInfoView: RideThisViewController {
         field.placeholder = self.user.tallStr
         field.text = self.user.tallStr
         field.keyboardType = .numberPad
+        field.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
         
         return field
     }()
@@ -80,9 +83,8 @@ class EditProfileInfoView: RideThisViewController {
         field.translatesAutoresizingMaskIntoConstraints = false
         field.placeholder = "\(self.user.user_weight)"
         field.text = "\(self.user.user_weight)"
-        field.tag = 1
-        field.addTarget(self, action: #selector(userNickNameChanged), for: .editingChanged)
         field.keyboardType = .numberPad
+        field.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
         
         return field
     }()
@@ -97,6 +99,7 @@ class EditProfileInfoView: RideThisViewController {
         
         setNavigationComponents()
         setUIComponents()
+        setBindingData()
     }
     
     func setNavigationComponents() {
@@ -137,7 +140,18 @@ class EditProfileInfoView: RideThisViewController {
         
         [self.firstSeparator, self.secondSeparator, self.userNickNameLabel,
          self.userHeightLabel, self.userWeightLabel, self.userNickNameTextField,
-         self.userHeightTextField, self.userWeightTextField].forEach{ self.profileInfoContainer.addSubview($0) }
+         self.userHeightTextField, self.userWeightTextField].enumerated().forEach{ (idx, ui) in
+            self.profileInfoContainer.addSubview(ui)
+            if [2, 3].contains(idx) {
+                let mandatoryImgView = MandatoryMark(frame: .zero)
+                
+                profileInfoContainer.addSubview(mandatoryImgView)
+                mandatoryImgView.snp.makeConstraints {
+                    $0.bottom.equalTo(ui.snp.top).offset(5)
+                    $0.right.equalTo(ui.snp.left).offset(3)
+                }
+            }
+        }
         
         self.userNickNameLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         self.userNickNameTextField.setContentHuggingPriority(.defaultLow, for: .horizontal)
@@ -203,6 +217,9 @@ class EditProfileInfoView: RideThisViewController {
             $0.left.equalTo(self.userNickNameTextField.snp.left)
             $0.right.equalTo(self.profileInfoContainer.snp.right).offset(-10)
         }
+        
+        self.viewModel.nickName = self.user.user_nickname
+        self.viewModel.height = self.user.tallStr
     }
     
     func setProfileImageTapEvent() {
@@ -224,8 +241,35 @@ class EditProfileInfoView: RideThisViewController {
         self.navigationController?.popViewController(animated: true)
     }
     
-    @objc func userNickNameChanged(sender: UITextField) {
-        
+    func setBindingData() {
+        viewModel.$allFieldFilled
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] filled in
+                guard let self = self else { return }
+                if let editButton = self.navigationItem.rightBarButtonItem {
+                    editButton.isEnabled = filled
+                }
+            }
+            .store(in: &cancellable)
+    }
+    
+    @objc func textFieldChanged(sender: UITextField) {
+        switch sender {
+        case self.userNickNameTextField:
+            self.viewModel.nickName = sender.text!
+        case self.userHeightTextField:
+            self.viewModel.height = sender.text!
+            if let text = sender.text, text.count > 3 {
+                sender.text?.removeLast()
+            }
+        case self.userWeightTextField:
+            self.viewModel.height = sender.text!
+            if let text = sender.text, text.count > 3 {
+                sender.text?.removeLast()
+            }
+        default:
+            break
+        }
     }
     
     @objc func openPhotoLibrary() {

@@ -196,7 +196,7 @@ class FireBaseService {
             "user_id": user.user_id,
             "user_image": user.user_image ?? "",
             "user_nickname": user.user_nickname,
-            "user_tall": user.user_tall ?? "",
+            "user_tall": user.user_tall,
             "user_weight": user.user_weight
         ]
         

@@ -366,6 +366,7 @@ class MyPageView: RideThisViewController {
         self.profileEditButton.addAction(UIAction { [weak self] _ in
             guard let self = self, let user = service.combineUser else { return }
             let profileEditView = EditProfileInfoView(user: user)
+            profileEditView.updateImageDelegate = self
             navigationController?.pushViewController(profileEditView, animated: true)
         }, for: .touchUpInside)
     }
@@ -643,6 +644,14 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
             self.showAlert(alertTitle: "알림", msg: "로그인이 필요한 기능입니다. 로그인 화면으로 이동할까요?", confirm: "예") {
                 self.navigationController?.pushViewController(LoginView(), animated: true)
             }
+        }
+    }
+}
+
+extension MyPageView: ProfileImageUpdateDelegate {
+    func imageUpdate(image: UIImage) {
+        DispatchQueue.main.async {
+            self.profileImageView.image = image
         }
     }
 }

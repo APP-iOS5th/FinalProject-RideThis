@@ -18,3 +18,23 @@ extension UIImage {
         return UIImage(cgImage: croppedCgImage)
     }
 }
+
+class MandatoryMark: UIImageView {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        configureUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        configureUI()
+    }
+    
+    func configureUI() {
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.image = UIImage(systemName: "staroflife.fill")
+        self.tintColor = .primaryColor
+        self.widthAnchor.constraint(equalToConstant: 8).isActive = true
+        self.heightAnchor.constraint(equalToConstant: 8).isActive = true
+    }
+}
