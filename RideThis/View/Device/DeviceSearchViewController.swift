@@ -46,8 +46,7 @@ class DeviceSearchViewController: RideThisViewController {
         return tableView
     }()
     
-    private var devices: [String] = ["블루투스 기기 - 1", "블루투스 기기 - 2", "블루투스 기기 - 2", "블루투스 기기 - 2", "블루투스 기기 - 2", "블루투스 기기 - 2", "블루투스 기기 - 2", "블루투스 기기 - 2", "블루투스 기기 - 2", "블루투스 기기 - 2", "블루투스 기기 - 2"]
-    
+    // MARK: Init
     init(viewModel: DeviceViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -57,6 +56,7 @@ class DeviceSearchViewController: RideThisViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -65,67 +65,72 @@ class DeviceSearchViewController: RideThisViewController {
         bindViewModel()
     }
     
+    // MARK: SetupUI
     private func setupUI() {
         view.backgroundColor = .primaryBackgroundColor
         
         view.addSubview(titleView)
         titleView.addSubview(titleLabel)
         titleView.addSubview(cancelButton)
+        
         view.addSubview(contentView)
         contentView.addSubview(imageView)
         contentView.addSubview(searchingLabel)
         contentView.addSubview(deviceTableView)
         
-        titleView.snp.makeConstraints { make in
-            make.top.left.right.equalToSuperview()
-            make.height.equalTo(60)
+        titleView.snp.makeConstraints { titleView in
+            titleView.top.left.right.equalToSuperview()
+            titleView.height.equalTo(60)
         }
         
-        titleLabel.snp.makeConstraints { make in
-            make.center.equalToSuperview()
+        titleLabel.snp.makeConstraints { titleLabel in
+            titleLabel.center.equalToSuperview()
         }
         
-        cancelButton.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(16)
-            make.centerY.equalToSuperview()
+        cancelButton.snp.makeConstraints { cancelButton in
+            cancelButton.left.equalToSuperview().offset(16)
+            cancelButton.centerY.equalToSuperview()
         }
         
-        contentView.snp.makeConstraints { make in
-            make.top.equalTo(titleView.snp.bottom)
-            make.left.right.bottom.equalToSuperview()
+        contentView.snp.makeConstraints { contentView in
+            contentView.top.equalTo(titleView.snp.bottom)
+            contentView.left.right.bottom.equalToSuperview()
         }
         
-        imageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(40)
-            make.centerX.equalToSuperview()
-            make.width.height.equalTo(100)
+        imageView.snp.makeConstraints { imageView in
+            imageView.top.equalToSuperview().offset(40)
+            imageView.centerX.equalToSuperview()
+            imageView.width.height.equalTo(100)
         }
         
-        searchingLabel.snp.makeConstraints { make in
-            make.top.equalTo(imageView.snp.bottom).offset(20)
-            make.centerX.equalToSuperview()
+        searchingLabel.snp.makeConstraints { searchingLabel in
+            searchingLabel.top.equalTo(imageView.snp.bottom).offset(20)
+            searchingLabel.centerX.equalToSuperview()
         }
         
-        deviceTableView.snp.makeConstraints { make in
-            make.top.equalTo(searchingLabel.snp.bottom).offset(20)
-            make.left.right.equalToSuperview()
-            make.height.equalTo(9 * 44)
-            make.bottom.lessThanOrEqualToSuperview()
+        deviceTableView.snp.makeConstraints { deviceTableView in
+            deviceTableView.top.equalTo(searchingLabel.snp.bottom).offset(20)
+            deviceTableView.left.right.equalToSuperview()
+            deviceTableView.height.equalTo(9 * 44)
+            deviceTableView.bottom.lessThanOrEqualToSuperview()
         }
     }
     
+    // MARK: Setup TableView
     private func setupTableView() {
         deviceTableView.delegate = self
         deviceTableView.dataSource = self
         deviceTableView.register(DeviceSearchTableViewCell.self, forCellReuseIdentifier: DeviceSearchTableViewCell.identifier)
     }
     
+    // MARK: Setup Actions
     private func setupActions() {
         cancelButton.addAction(UIAction { [weak self] _ in
             self?.dismiss(animated: true, completion: nil)
         }, for: .touchUpInside)
     }
     
+    // MARK: Binding Data
     private func bindViewModel() {
         viewModel.$searchedDevices
             .receive(on: DispatchQueue.main)
@@ -136,6 +141,7 @@ class DeviceSearchViewController: RideThisViewController {
     }
 }
 
+// MARK: Extension TableView
 extension DeviceSearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.searchedDevices.count

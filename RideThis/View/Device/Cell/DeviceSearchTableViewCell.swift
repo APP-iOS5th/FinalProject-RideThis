@@ -18,12 +18,11 @@ class DeviceSearchTableViewCell: UITableViewCell {
     private func setupUI() {
         contentView.addSubview(deviceLabel)
         
-        deviceLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(16)
-            make.centerY.equalToSuperview()
+        deviceLabel.snp.makeConstraints { deviceLabel in
+            deviceLabel.leading.equalToSuperview().offset(16)
+            deviceLabel.centerY.equalToSuperview()
         }
         
-        // 오른쪽 화살표 제거
         accessoryType = .none
     }
     
