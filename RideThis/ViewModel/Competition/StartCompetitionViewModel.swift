@@ -13,16 +13,22 @@ class StartCometitionViewModel {
     private let firebaseService = FireBaseService()
     private let service = UserService.shared
     
+    // 케이던스 정보 데이터
     var timer: String = "00:00" {
         didSet {
             timerUpdateCallback?(timer)
         }
     }
-    var cadence: Double = 38.13
-    var speed: Double = 29.32
-    var distance: Double = 39.2
-    var calorie: Double = 1592.12
+    var cadence: Double = 0
+    var speed: Double = 0
+    var distance: Double = 0
+    var calorie: Double = 0
+    var userWeight: Int
     
+    // Device데이터
+    var deviceInfo: BluetoothModel = BluetoothModel(device_firmware_version: "test123", device_name: "test", device_registration_status: false, device_serial_number: "13", device_wheel_circumference: "123")
+    
+    // 타이머 데이터
     var startTime: Date?
     var endTime: Date?
     var elapsedTime: TimeInterval = 0
@@ -34,9 +40,12 @@ class StartCometitionViewModel {
     
     var shouldSaveNewRecord = true
     
-    init(startTime: Date, goalDistnace: Double) {
+    init(startTime: Date, goalDistnace: Double, userWeight: Int) {
         self.startTime = startTime
         self.goalDistance = goalDistnace
+        self.userWeight = service.signedUser?.user_weight ?? 0
+        
+        fetchDeviceData()
     }
     
     func updateTimer() {
@@ -47,10 +56,10 @@ class StartCometitionViewModel {
             timer = String(format: "%02d:%02d", minutes, seconds)
             
             // 뷰 전환 타이머 초로 테스트
-//            if Double(seconds) >= goalDistance {
-//                endTime = Date()
-//                isFinished = true
-//            }
+            //            if Double(seconds) >= goalDistance {
+            //                endTime = Date()
+            //                isFinished = true
+            //            }
         }
     }
     
@@ -98,6 +107,42 @@ class StartCometitionViewModel {
             }
         } catch {
             print("경쟁 기록 처리 에러: \(error.localizedDescription)")
+        }
+    }
+    
+    // MARK: Fetch User Device Data
+    func fetchDeviceData() {
+        Task {
+            do {
+                let userDocument = try await firebaseService.fetchUser(at: service.signedUser?.user_id ?? "", userType: false)
+                
+                if case .userSnapshot(let queryDocumentSnapshot) = userDocument {
+                    guard let doc = queryDocumentSnapshot else {
+                        print("User가 존재하지 않습니다.")
+                        return
+                    }
+                    let recordsCollection = firebaseService.fetchCollection(document: doc, collectionName: "DEVICE")
+                    let deviceDocuments = try await recordsCollection.getDocuments()
+                    
+                    if let activeDeviceDocument = deviceDocuments.documents.first(where: { document in
+                        return document["device_registration_status"] as? Bool == true
+                    }) {
+                        // deviceInfo 업데이트
+                        deviceInfo = BluetoothModel(
+                            device_firmware_version: activeDeviceDocument["device_firmware_version"] as? String ?? "",
+                            device_name: activeDeviceDocument["device_name"] as? String ?? "",
+                            device_registration_status: activeDeviceDocument["device_registration_status"] as? Bool ?? false,
+                            device_serial_number: activeDeviceDocument["device_serial_number"] as? String ?? "",
+                            device_wheel_circumference: activeDeviceDocument["device_wheel_circumference"] as? String ?? "0"
+                        )
+                        print(deviceInfo)
+                    } else {
+                        print("등록된 DEVICE가 없습니다.")
+                    }
+                }
+            } catch {
+                print("FIREBASE 통신 오류: \(error.localizedDescription)")
+            }
         }
     }
     

@@ -18,6 +18,7 @@
 		043E0C842C6F378D00F25AF7 /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C832C6F378D00F25AF7 /* Double+Extension.swift */; };
 		043E0C872C6F38F700F25AF7 /* SummaryRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C862C6F38F700F25AF7 /* SummaryRecordViewController.swift */; };
 		043E0C892C70AC2400F25AF7 /* SummaryRecordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C882C70AC2400F25AF7 /* SummaryRecordViewModel.swift */; };
+		04DEE5012C7C1F0F00338A61 /* BluetoothModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DEE5002C7C1F0F00338A61 /* BluetoothModel.swift */; };
 		04E3C0C82C6AEE62006B844F /* CompetitionTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0C72C6AEE62006B844F /* CompetitionTVCell.swift */; };
 		04E3C0CF2C6B32B8006B844F /* CompetitionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0CE2C6B32B8006B844F /* CompetitionCoordinator.swift */; };
 		04E3C0D32C6B37F7006B844F /* DistancSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0D22C6B37F7006B844F /* DistancSelectionViewController.swift */; };
@@ -111,6 +112,7 @@
 		043E0C832C6F378D00F25AF7 /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
 		043E0C862C6F38F700F25AF7 /* SummaryRecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryRecordViewController.swift; sourceTree = "<group>"; };
 		043E0C882C70AC2400F25AF7 /* SummaryRecordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryRecordViewModel.swift; sourceTree = "<group>"; };
+		04DEE5002C7C1F0F00338A61 /* BluetoothModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothModel.swift; sourceTree = "<group>"; };
 		04E3C0C72C6AEE62006B844F /* CompetitionTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionTVCell.swift; sourceTree = "<group>"; };
 		04E3C0CE2C6B32B8006B844F /* CompetitionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionCoordinator.swift; sourceTree = "<group>"; };
 		04E3C0D22C6B37F7006B844F /* DistancSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistancSelectionViewController.swift; sourceTree = "<group>"; };
@@ -297,6 +299,7 @@
 			isa = PBXGroup;
 			children = (
 				CD6662132C678FFD005E2887 /* CompetitionModel.swift */,
+				04DEE5002C7C1F0F00338A61 /* BluetoothModel.swift */,
 			);
 			path = Competition;
 			sourceTree = "<group>";
@@ -694,6 +697,7 @@
 				040028BE2C762F310038CC10 /* SplashCoordinator.swift in Sources */,
 				04E3C0D72C6B8C30006B844F /* DistanceSelectionViewModel.swift in Sources */,
 				CD66F5D22C6C86EA00CDBB0B /* SettingTableToggleViewCell.swift in Sources */,
+				04DEE5012C7C1F0F00338A61 /* BluetoothModel.swift in Sources */,
 				CD4214112C64988C00F7C3AE /* DeviceView.swift in Sources */,
 				EBFE4DAE2C757AA800A36FCA /* ResultRankingViewController.swift in Sources */,
 				041A67392C6C6B0E000BA4C1 /* StartCompetitionViewController.swift in Sources */,

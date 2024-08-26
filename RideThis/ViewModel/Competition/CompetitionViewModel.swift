@@ -148,7 +148,7 @@ class CompetitionViewModel {
                 print("DEVICE데이터를 찾을 수 없습니다.")
             }
         } catch {
-            print("Database error: \(error.localizedDescription)")
+            print("FIREBASE 통신 오류: \(error.localizedDescription)")
             return false
         }
         

@@ -54,7 +54,7 @@ class StartCompetitionViewController: RideThisViewController {
     init(goalDistance: String) {
         self.goalDistance = goalDistance
         let goalDistanceDouble = Double(goalDistance) ?? 0.0
-        self.viewModel = StartCometitionViewModel(startTime: Date(), goalDistnace: goalDistanceDouble)
+        self.viewModel = StartCometitionViewModel(startTime: Date(), goalDistnace: goalDistanceDouble, userWeight: 0)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -190,21 +190,20 @@ class StartCompetitionViewController: RideThisViewController {
         distanceRecord.updateRecordText(text: "\(viewModel.distance.formattedWithThousandsSeparator()) Km")
         calorieRecord.updateRecordText(text: "\(viewModel.calorie.formattedWithThousandsSeparator()) Kcal")
         
-        // Combine Data Steaming
         self.viewModel.$isFinished
             .receive(on: DispatchQueue.main)
-            .removeDuplicates()  // 추가: 값이 변하지 않으면 반복 호출을 방지
+            .removeDuplicates()
             .sink { [weak self] finish in
-                guard finish else { return } // finish가 true일 때만 실행
-                // 이미 이동했다면 추가로 이동하지 않도록 처리
+                guard finish else { return }
+
                 if let navController = self?.navigationController,
                    !(navController.viewControllers.last is SummaryRecordViewController) {
-                    // 데이터
+
                     Task {
                         await self?.viewModel.competitionUpdateData()
                     }
                     
-                    // 데이터 뷰 바인딩
+
                     let summaryRecordVC = SummaryRecordViewController(timer: self?.viewModel.timer ?? "", cadence: self?.viewModel.cadence ?? 0.0, speed: self?.viewModel.speed ?? 0.0, distance: self?.viewModel.goalDistance ?? 0.0, calorie: self?.viewModel.calorie ?? 0.0, startTime: self?.viewModel.startTime ?? Date(), endTime: self?.viewModel.endTime ?? Date())
                     navController.pushViewController(summaryRecordVC, animated: true)
                 }

@@ -260,13 +260,13 @@ class CompetitionView: RideThisViewController {
             
             if self.viewModel.isLogin {
                 if self.viewModel.isBluetooth {
-                    print("경쟁하기 뷰 이동~")
 
                     let distanceSelectionVC = DistanceSelectionViewController()
                     self.navigationController?.pushViewController(distanceSelectionVC, animated: true)
                 } else {
                     showAlert(alertTitle: "장치연결이 필요합니다.", msg: "사용하시려면 장치를 연결해주세요.", confirm: "장치연결") {
-                        print("장치연결 뷰 이동~")
+                        let deviceVC = DeviceView()
+                        self.navigationController?.pushViewController(deviceVC, animated: true)
                     }
                 }
             } else {
