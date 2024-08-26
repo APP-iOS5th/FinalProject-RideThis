@@ -38,6 +38,7 @@ class SplashCoordinator {
         myPageView.tabBarItem = UITabBarItem(title: "마이페이지", image: UIImage(systemName: "person.circle.fill"), selectedImage: nil)
         
         tabBarController.viewControllers = [homeView, competitionView, recordView, deviceView, myPageView]
+        tabBarController.overrideUserInterfaceStyle = .light // 기본 라이트모드
         tabBarController.tabBar.tintColor = .primaryColor
         
         // 전환 애니메이션

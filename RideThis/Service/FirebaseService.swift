@@ -1,23 +1,69 @@
 import Foundation
 import FirebaseFirestore
+import FirebaseStorage
 
 class FireBaseService {
     
+    enum ReturnUserType {
+        case user(User?)
+        case userSnapshot(QueryDocumentSnapshot?)
+    }
+    
     private let db = Firestore.firestore()
+    
+    // MARK: UserId로 파이어베이스에 유저 확인
+    func fetchUser(at userId: String, userType: Bool) async throws -> ReturnUserType {
+        let querySnapshot = try await db.collection("USERS")
+            .whereField("user_id", isEqualTo: userId)
+            .getDocuments()
+        
+        if userType {
+            let foundUser = try querySnapshot.documents.first?.data(as: User.self)
+            
+            return .user(foundUser)
+        } else {
+            return .userSnapshot(querySnapshot.documents.first)
+        }
+    }
+    
+    func fetchUsers(by userIds: [String]) async throws -> [User] {
+        var returnUserData: [User] = []
+        
+        for id in userIds {
+            do {
+                if case .user(let userData) = try await fetchUser(at: id, userType: true) {
+                    guard let user = userData else { continue }
+                    returnUserData.append(user)
+                }
+            } catch {
+                print(error)
+            }
+        }
+        
+        return returnUserData
+    }
+    
+    func findUser(text: String) async -> [User] {
+        var allUsers: [User] = []
+        do {
+            let allUsersSnapshot = try await self.fetchAllUsers()
+            for snapshot in allUsersSnapshot {
+                let userData = try snapshot.data(as: User.self)
+                if !userData.user_email.contains(text) && !userData.user_nickname.contains(text) {
+                    continue
+                }
+                allUsers.append(userData)
+            }
+        } catch {
+            print(error)
+        }
+        return allUsers
+    }
     
     // MARK: USERS 컬렉션의 모든 데이터 가져오기
     func fetchAllUsers() async throws -> [QueryDocumentSnapshot] {
         let querySnapshot = try await db.collection("USERS").getDocuments()
         return querySnapshot.documents
-    }
-    
-    // MARK: UserId로 파이어베이스에 유저 확인
-    func fetchUser(at userId: String) async throws -> QueryDocumentSnapshot? {
-        let querySnapshot = try await db.collection("USERS")
-            .whereField("user_id", isEqualTo: userId)
-            .getDocuments()
-        
-        return querySnapshot.documents.first
     }
     
     // MARK: USERS 하위 Collection 찾기
@@ -94,10 +140,95 @@ class FireBaseService {
     
     // MARK: Following목록 가져오기
     func fetchUserFollowing(userId: String) async throws -> [String] {
-        let userSnapshot = try await fetchUser(at: userId)
-        guard let userFollowing = userSnapshot?.get("user_following") as? [String] else {
-            return []
+        if case .userSnapshot(let userSnapshot) = try await fetchUser(at: userId, userType: false) {
+            guard let userFollowing = userSnapshot?.get("user_following") as? [String] else {
+                return []
+            }
+            return userFollowing
         }
-        return userFollowing
+        return []
+    }
+    
+    // MARK: 유저 정보 수정
+    func updateUserInfo(updated user: User, update now: Bool) {
+        let userInfo = db.collection("USERS").document(user.user_id)
+        let updateData: [String: Any] = [
+            "user_account_public": user.user_account_public,
+            "user_email": user.user_email,
+            "user_follower": user.user_follower,
+            "user_following": user.user_following,
+            "user_id": user.user_id,
+            "user_image": user.user_image ?? "",
+            "user_nickname": user.user_nickname,
+            "user_tall": user.user_tall ?? "",
+            "user_weight": user.user_weight
+        ]
+        
+        userInfo.updateData(updateData) { error in
+            if let error = error {
+                print("Error updating document: \(error)")
+            } else {
+                print("Document successfully updated")
+            }
+        }
+        
+        if now {
+            UserService.shared.combineUser = user
+        }
+    }
+    
+    func saveImage(image: UIImage, userId: String, completion: @escaping (URL) -> Void) {
+        guard let imageData = image.jpegData(compressionQuality: 0.5) else {
+            print("이미지 변환 오류")
+            return
+        }
+        
+        let storageRef = Storage.storage().reference()
+        let imageRef = storageRef.child("userProfileImage/\(userId).jpg")
+        
+        imageRef.putData(imageData, metadata: nil) { metadata, error in
+            if let error = error {
+                print("이미지 업로드 실패: \(error.localizedDescription)")
+                return
+            }
+
+            // 업로드 완료 후 메타데이터 확인
+            imageRef.downloadURL { url, error in
+                if let error = error {
+                    print("이미지 다운로드 URL 가져오기 실패: \(error.localizedDescription)")
+                    return
+                }
+
+                if let downloadURL = url {
+                    completion(downloadURL)
+                }
+            }
+        }
+
+        // 업로드 진행 상태를 모니터링할 수 있습니다.
+        /*
+        uploadTask.observe(.progress) { snapshot in
+            let percentComplete = 100.0 * Double(snapshot.progress!.completedUnitCount) / Double(snapshot.progress!.totalUnitCount)
+            print("업로드 진행률: \(percentComplete)%")
+        }
+        */
+    }
+    
+    func loadImage(userId: String, loadCompletion: @escaping (URL?) -> Void) {
+        // Firebase Storage 참조
+        let storageRef = Storage.storage().reference()
+
+        // 다운로드할 이미지의 경로 설정 (예: "images/example.jpg")
+        let imageRef = storageRef.child("userProfileImage/\(userId).jpg")
+
+        // 이미지의 다운로드 URL 가져오기
+        imageRef.downloadURL { url, error in
+            if let error = error {
+                print("이미지 다운로드 URL 가져오기 실패: \(error.localizedDescription)")
+                return
+            }
+
+            loadCompletion(url)
+        }
     }
 }

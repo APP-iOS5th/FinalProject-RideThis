@@ -1,7 +1,22 @@
 import UIKit
 import SnapKit
+import Combine
 
 class FollowManageView: RideThisViewController {
+    
+    // MARK: Data Components
+    var user: User
+    private lazy var followViewModel = FollowManageViewModel()
+    private var cancellable = Set<AnyCancellable>()
+    
+    init(user: User) {
+        self.user = user
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: UIComponents
     // MARK: Search Bar
@@ -32,6 +47,7 @@ class FollowManageView: RideThisViewController {
         super.viewDidLoad()
         
         configureUI()
+        setCombineData()
     }
     
     func configureUI() {
@@ -42,7 +58,7 @@ class FollowManageView: RideThisViewController {
     }
     
     func setNavigationComponents() {
-        self.title = "매드카우"
+        self.title = ""
         let searchButton = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(searchUserButton))
         navigationItem.rightBarButtonItem = searchButton
     }
@@ -86,8 +102,25 @@ class FollowManageView: RideThisViewController {
         }
     }
     
-    @objc func optionChanged(_ sender: UISegmentedControl) {
+    func setCombineData() {
+        followViewModel.$followDatas
+            .receive(on: DispatchQueue.global())
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    self.followTable.reloadData()
+                }
+            }
+            .store(in: &cancellable)
         
+        Task {
+            await followViewModel.fetchFollowData(user: user, type: .follower)
+        }
+    }
+    
+    @objc func optionChanged(_ sender: UISegmentedControl) {
+        let followType: FollowType = self.followPicker.selectedSegmentIndex == 0 ? .follower : .following
+        followViewModel.changeSegmentValue(user: user, type: followType)
     }
     
     @objc func searchUserButton() {
@@ -97,7 +130,6 @@ class FollowManageView: RideThisViewController {
 }
 
 extension FollowManageView: UISearchBarDelegate {
-    // MARK: TODO - 키보드에서 입력할 때 event
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
     }
@@ -113,7 +145,7 @@ extension FollowManageView: UISearchBarDelegate {
 
 extension FollowManageView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return followViewModel.followDatas.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -121,10 +153,25 @@ extension FollowManageView: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         
+        let followUser = followViewModel.followDatas[indexPath.row]
+        cell.cellUser = followUser
+        cell.signedUser = user
+        
+        cell.configureUserInfo(viewType: .followView, followType: self.followPicker.selectedSegmentIndex == 0 ? .follower : .following)
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
+        return 100
+    }
+}
+
+extension FollowManageView: UpdateUserDelegate {
+    func updateUser(user: User) {
+        self.user = user
+        Task {
+            await followViewModel.fetchFollowData(user: user, type: self.followPicker.selectedSegmentIndex == 0 ? .follower : .following)
+        }
     }
 }

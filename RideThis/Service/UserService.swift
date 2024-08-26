@@ -12,6 +12,16 @@ class UserService {
     static let shared = UserService()
     private let keyChain = Keychain()
     var signedUser: User? = nil
+    @Published var combineUser: User? = nil
+    var loginStatus: UserStatus {
+        get {
+            if combineUser == nil {
+                return .signedOut
+            } else {
+                return .appleLogin
+            }
+        }
+    }
     
     func checkPrevAppleLogin() {
         
@@ -48,11 +58,15 @@ class UserService {
                 print("No valid user ID")
                 return
             }
-            guard let user = try await service.fetchUser(at: userId) else {
-                print("no user")
-                return
+            
+            if case .user(let userData) = try await service.fetchUser(at: userId, userType: true) {
+                guard let user = userData else {
+                    print("no user")
+                    return
+                }
+                self.signedUser = user
+                self.combineUser = user
             }
-            self.signedUser = try user.data(as: User.self)
         } catch {
             print(error)
         }
@@ -61,6 +75,7 @@ class UserService {
     func logout() {
         keyChain.delete(key: "appleUserId")
         self.signedUser = nil
+        self.combineUser = nil
         if let scene = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate) {
             scene.changeRootView(viewController: scene.getTabbarController(), animated: true)
         }
