@@ -10,6 +10,10 @@ import SnapKit
 
 class RecordListViewController: RideThisViewController {
     var records = RecordModel.sampleRecords
+    var groupedData = [(String, [RecordModel])]()
+//    var records = [RecordModel]()
+//    private let userService = UserService.shared
+//    private let firebaseService = FireBaseService()
     
     private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "기록 목록")
     
@@ -22,13 +26,52 @@ class RecordListViewController: RideThisViewController {
         setupNavigationBar()
         setupScrollView()
         
-        let groupedData = groupRecordsByMonth(records)
+        // fetchUserRecords()
+        
+        groupedData = groupRecordsByMonth(records)
         
         for (month, monthRecords) in groupedData {
             let monthView = createMonthView(for: month, with: monthRecords)
             stackView.addArrangedSubview(monthView)
         }
     }
+    
+    // 특정 유저의 기록을 가져오는 메서드
+//    func fetchUserRecords() {
+//        Task {
+//            do {
+//                guard let userId = userService.signedUser?.user_id else {
+//                    print("Unknown user id")
+//                    return
+//                }
+//                
+//                guard let userSnapshot = try await firebaseService.fetchUser(at: userId) else {
+//                    print("Unknown user data")
+//                    return
+//                }
+//                
+//                let userRecords = try await firebaseService.fetchAllRecordsForUsers([userSnapshot])
+//                
+//                // records 배열에 유저의 기록 저장하고 뷰 업데이트
+//                DispatchQueue.main.async {
+//                    self.records = userRecords
+//                    self.updateViewWithRecords()
+//                }
+//            } catch {
+//                print("기록을 가져오는 중 오류 발생: \(error)")
+//            }
+//        }
+//    }
+    
+    // 뷰 업데이트 메서드
+//    func updateViewWithRecords() {
+//        let groupedData = groupRecordsByMonth(records)
+//        
+//        for (month, monthRecords) in groupedData {
+//            let monthView = createMonthView(for: month, with: monthRecords)
+//            stackView.addArrangedSubview(monthView)
+//        }
+//    }
     
     func setupScrollView() {
         scrollView.transfersVerticalScrollingToParent = false
@@ -50,18 +93,18 @@ class RecordListViewController: RideThisViewController {
             stak.top.equalTo(scrollView.snp.top).offset(16)
             stak.leading.equalTo(scrollView.snp.leading).offset(16)
             stak.trailing.equalTo(scrollView.snp.trailing).offset(-16)
-            stak.bottom.equalToSuperview().offset(-16)
-            stak.width.equalTo(scrollView.snp.width).offset(-32)
+            stak.bottom.equalTo(scrollView.snp.bottom).offset(-16)
+            stak.width.equalTo(view.snp.width).offset(-32)
         }
     }
     
-    func groupRecordsByMonth(_ records: [RecordModel]) -> [String: [RecordModel]] {
+    func groupRecordsByMonth(_ records: [RecordModel]) -> [(String, [RecordModel])] {
         var groupedRecords = [String: [RecordModel]]()
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy.MM"
+        dateFormatter.dateFormat = "yyyy년 MM월"
         
         for record in records {
-            let dateKey = record.record_start_time != nil ? dateFormatter.string(from: record.record_start_time!) : "2024.08"
+            let dateKey = record.record_start_time != nil ? dateFormatter.string(from: record.record_start_time!) : "임의의 월"
             
             if groupedRecords[dateKey] == nil {
                 groupedRecords[dateKey] = []
@@ -69,7 +112,8 @@ class RecordListViewController: RideThisViewController {
             groupedRecords[dateKey]?.append(record)
         }
         
-        return groupedRecords
+        let sortedGroupedRecords = groupedRecords.sorted { $0.key > $1.key }
+        return sortedGroupedRecords.map { ($0.key, $0.value.sorted { $0.record_start_time ?? Date() > $1.record_start_time ?? Date() }) }
     }
     
     private func setupNavigationBar() {
@@ -94,7 +138,7 @@ class RecordListViewController: RideThisViewController {
         
         let totalWorkouts = Double(records.count)
         let totalDuration = records.reduce(0) { $0 + parseTimeToSeconds($1.record_timer) }
-        let averageDuration = Double(totalDuration) / totalWorkouts
+//        let averageDuration = Double(totalDuration) / totalWorkouts
         
         let totalDistance = records.reduce(0) { $0 + $1.record_distance }
         let averageDistance = totalDistance / totalWorkouts
@@ -120,6 +164,8 @@ class RecordListViewController: RideThisViewController {
         recordTableView.delegate = self
         recordTableView.register(RecordTableViewCell.self, forCellReuseIdentifier: "RecordCell")
         recordTableView.isScrollEnabled = false  // 테이블뷰의 스크롤을 비활성화하고 스크롤뷰가 스크롤되도록 함
+//        recordTableView.tag = records.hashValue // 테이블 뷰의 태그를 설정하여 구분
+//        recordTableView.separatorStyle = .none
         
         // 레이아웃 구성
         let monthStack = UIStackView(arrangedSubviews: [monthLabel, totalWorkoutsLabel, totalDurationLabel, totalDistanceLabel, avgDistanceLabel, recordTableView])
@@ -134,7 +180,8 @@ class RecordListViewController: RideThisViewController {
         
         // 테이블뷰 높이 설정 (셀 개수에 따라 동적 조정)
         recordTableView.snp.makeConstraints { make in
-            make.height.equalTo(CGFloat(records.count) * 60)  // 각 셀의 높이를 60으로 가정
+            make.height.equalTo(CGFloat(records.count) * 65).priority(.low)  // 각 셀의 높이를 70으로 가정
+            make.height.greaterThanOrEqualTo(1).priority(.high)
         }
         
         return containerView
@@ -159,12 +206,25 @@ extension RecordListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return records.count
+//        if let parentView = tableView.superview?.superview as? UIStackView,
+//           let containerIndex = parentView.arrangedSubviews.firstIndex(of: tableView.superview!) {
+//            return groupedData[containerIndex].1.count  // groupedData 사용
+//        }
+//        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "RecordCell", for: indexPath) as! RecordTableViewCell
         let record = records[indexPath.row]
         
+//        if let parentView = tableView.superview?.superview as? UIStackView,
+//           let containerIndex = parentView.arrangedSubviews.firstIndex(of: tableView.superview!) {
+//            let recordsForMonth = groupedData[containerIndex].1  // groupedData 사용
+//            let record = recordsForMonth[indexPath.row]
+//            
+//            cell.configure(with: record)
+//        }
+//        
         cell.configure(with: record)
         return cell
     }
@@ -207,7 +267,7 @@ class RecordTableViewCell: UITableViewCell {
     
     func configure(with record: RecordModel) {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy.MM.dd"
+        dateFormatter.dateFormat = "yyyy년 MM월 dd일"
         
         if let date = record.record_start_time {
             dateLabel.text = dateFormatter.string(from: date)

@@ -83,11 +83,18 @@ class RecordViewModel: ObservableObject {
     }
     
     // MARK: - 기록 요약 화면 버튼 동작
-    // TODO: - 버튼 동작 구현
+    @Published var cadence: Double = 0
+    @Published var speed: Double = 0
+    @Published var distance: Double = 0
+    @Published var calorie: Double = 0
+    @Published var competitionStatus: Bool = false
+    @Published var targetDistance: Double? = nil
     
     // 저장 또는 취소 시 화면 전환을 위한 클로저
     var onCancelSaveRecording: (() -> Void)?
     var onSaveRecroding: (() -> Void)?
+    
+    private let storageViewModel = RecordStorageViewModel()
     
     func cancelSaveRecording() {
         print("save cancel pushed")
@@ -98,6 +105,7 @@ class RecordViewModel: ObservableObject {
     func saveRecording() {
         print("save pushed")
         // 기록 요약 화면에서 저장 버튼 누르면
+        storageViewModel.saveRecord(timer: formatTime(recordedTime), cadence: cadence, speed: speed, distance: distance, calorie: calorie, startTime: Date().addingTimeInterval(-recordedTime), endTime: Date(), date: Date(), competitionStatus: competitionStatus, targetDistance: targetDistance)
         onSaveRecroding?()
     }
 }
