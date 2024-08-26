@@ -40,7 +40,6 @@ class MyPageView: RideThisViewController {
         imageView.heightAnchor.constraint(equalToConstant: 80).isActive = true
         imageView.layer.cornerRadius = 40
         imageView.clipsToBounds = true
-//        imageView.backgroundColor = .primaryColor
         
         return imageView
     }()

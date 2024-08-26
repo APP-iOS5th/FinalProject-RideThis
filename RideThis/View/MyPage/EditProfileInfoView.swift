@@ -68,6 +68,7 @@ class EditProfileInfoView: RideThisViewController {
         field.translatesAutoresizingMaskIntoConstraints = false
         field.placeholder = self.user.tallStr
         field.text = self.user.tallStr
+        field.keyboardType = .numberPad
         
         return field
     }()
@@ -78,6 +79,7 @@ class EditProfileInfoView: RideThisViewController {
         field.text = "\(self.user.user_weight)"
         field.tag = 1
         field.addTarget(self, action: #selector(userNickNameChanged), for: .editingChanged)
+        field.keyboardType = .numberPad
         
         return field
     }()
