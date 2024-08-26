@@ -19,6 +19,12 @@ class DeviceView: RideThisViewController {
     // 장치찾기 버튼
     private let competitionBtn = RideThisButton(buttonTitle: "장치찾기")
     
+    private let emptyLabel: RideThisLabel = {
+        let label = RideThisLabel(fontType: .defaultSize, fontColor: .gray, text: "등록된 장치 없음")
+        label.isHidden = true
+        return label
+    }()
+    
     private let viewModel = DeviceViewModel()
     private var cancellables = Set<AnyCancellable>()
     
@@ -28,12 +34,50 @@ class DeviceView: RideThisViewController {
         setupUI()
         setupTableView()
         bindViewModel()
+        
+        competitionBtn.addAction(UIAction { [weak self] _ in
+            guard let self = self else { return }
+            
+            let deviceSearchVC = DeviceSearchViewController(viewModel: viewModel)
+            deviceSearchVC.modalPresentationStyle = .pageSheet
+            
+            if let sheet = deviceSearchVC.sheetPresentationController {
+                sheet.detents = [.large()]
+                sheet.prefersGrabberVisible = true
+            }
+            
+            self.present(deviceSearchVC, animated: true, completion: nil)
+        }, for: .touchUpInside)
+    }
+    
+    private func setupActions() {
+        competitionBtn.addAction(UIAction { [weak self] _ in
+            self?.presentDeviceSearchBottomSheet()
+        }, for: .touchUpInside)
+    }
+    
+    private func presentDeviceSearchBottomSheet() {
+        let deviceSearchVC = DeviceSearchViewController(viewModel: viewModel)
+        deviceSearchVC.modalPresentationStyle = .pageSheet
+        
+        if let sheet = deviceSearchVC.sheetPresentationController {
+            sheet.detents = [.large()]
+            sheet.prefersGrabberVisible = true
+        }
+        
+        present(deviceSearchVC, animated: true, completion: nil)
     }
     
     // MARK: setupUI
     private func setupUI() {
         setupNavigationBar()
         setupLayout()
+        
+        view.addSubview(emptyLabel)
+        
+        emptyLabel.snp.makeConstraints { make in
+            make.center.equalTo(tableView)
+        }
     }
     
     // MARK: Navigation Bar
@@ -92,10 +136,16 @@ class DeviceView: RideThisViewController {
     private func bindViewModel() {
         viewModel.$devices
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
+            .sink { [weak self] devices in
                 self?.tableView.reloadData()
+                self?.updateEmptyLabelVisibility(isEmpty: devices.isEmpty)
             }
             .store(in: &cancellables)
+    }
+    
+    private func updateEmptyLabelVisibility(isEmpty: Bool) {
+        emptyLabel.isHidden = !isEmpty
+        tableView.isHidden = isEmpty
     }
 }
 
@@ -110,14 +160,14 @@ extension DeviceView: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         
-        cell.configure(with: viewModel.devices[indexPath.row].name)
+        cell.configure(with: viewModel.devices[indexPath.row])
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
-
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         

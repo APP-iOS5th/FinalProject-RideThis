@@ -37,7 +37,7 @@ class DeviceTableViewCell: UITableViewCell {
         ])
     }
     
-    func configure(with deviceName: String) {
-        deviceLabel.text = deviceName
+    func configure(with device: Device) {
+        deviceLabel.text = device.name
     }
 }
