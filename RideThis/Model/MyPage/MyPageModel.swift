@@ -27,7 +27,7 @@ class User: Decodable {
     let user_email: String
     var user_nickname: String
     var user_weight: Int
-    var user_tall: Int?
+    var user_tall: Int
     var user_following: [String]
     var user_follower: [String]
     var user_account_public: Bool
@@ -35,12 +35,12 @@ class User: Decodable {
 //    let device_id: [String]
     var tallStr: String {
         get {
-            guard let tall = user_tall else { return "-" }
-            return "\(tall)"
+            guard user_tall > 0 else { return "-" }
+            return "\(user_tall)"
         }
     }
     
-    init(user_id: String, user_image: String?, user_email: String, user_nickname: String, user_weight: Int, user_tall: Int?, user_following: [String], user_follower: [String], user_account_public: Bool/*, record_id: [String?], device_id: [String]*/) {
+    init(user_id: String, user_image: String?, user_email: String, user_nickname: String, user_weight: Int, user_tall: Int, user_following: [String], user_follower: [String], user_account_public: Bool/*, record_id: [String?], device_id: [String]*/) {
         self.user_id = user_id
         self.user_image = user_image
         self.user_email = user_email

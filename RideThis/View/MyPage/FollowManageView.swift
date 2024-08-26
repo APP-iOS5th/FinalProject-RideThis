@@ -131,7 +131,7 @@ class FollowManageView: RideThisViewController {
 
 extension FollowManageView: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
+        followViewModel.searchUser(text: searchText)
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {

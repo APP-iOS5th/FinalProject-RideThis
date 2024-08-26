@@ -29,9 +29,12 @@ class EditProfileInfoView: RideThisViewController {
         imageView.layer.cornerRadius = 60
         imageView.clipsToBounds = true
         if let imageURL = self.user.user_image {
-            imageView.kf.setImage(with: URL(string: imageURL))
+            if imageURL.isEmpty {
+                imageView.image = UIImage(named: "bokdonge")
+            } else {
+                imageView.kf.setImage(with: URL(string: imageURL))
+            }
         }
-        imageView.backgroundColor = .primaryColor
         imageView.isUserInteractionEnabled = true
         
         return imageView
@@ -210,7 +213,7 @@ class EditProfileInfoView: RideThisViewController {
     @objc func saveProfileInfo() {
         self.user.user_nickname = self.userNickNameTextField.text!
         self.user.user_weight = Int(self.userWeightTextField.text!)!
-        self.user.user_tall = Int(self.userHeightTextField.text!)!
+        self.user.user_tall = self.userHeightTextField.text! == "-" ? -1 : Int(self.userHeightTextField.text!)!
         
         if let img = selectedUserImage {
             firebaseService.saveImage(image: img, userId: user.user_id) { imgUrl in
@@ -238,7 +241,7 @@ extension EditProfileInfoView: UIImagePickerControllerDelegate, UINavigationCont
     // 사용자가 이미지를 선택했을 때 호출되는 함수
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         // 선택한 이미지 가져오기
-        if let selectedImage = info[.originalImage] as? UIImage, let squareImage = selectedImage.toSquare() {
+        if let selectedImage = info[.originalImage] as? UIImage {
             selectedUserImage = selectedImage
             DispatchQueue.main.async {
                 self.profileImageView.image = selectedImage

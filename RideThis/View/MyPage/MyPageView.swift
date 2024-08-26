@@ -8,11 +8,11 @@ import Combine
 class MyPageView: RideThisViewController {
     
     // MARK: Data Components
-    let viewModel = MyPageViewModel()
     let service = UserService.shared
     private let firebaseService = FireBaseService()
     private var cancellable = Set<AnyCancellable>()
     private var followDelegate: UpdateUserDelegate?
+    private lazy var viewModel = MyPageViewModel(firebaseService: firebaseService)
     
     // MARK: UIComponents
     // MARK: ScrollView
@@ -36,6 +36,7 @@ class MyPageView: RideThisViewController {
     private lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
         imageView.widthAnchor.constraint(equalToConstant: 80).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: 80).isActive = true
         imageView.layer.cornerRadius = 40
@@ -78,13 +79,13 @@ class MyPageView: RideThisViewController {
     private let totalRecordContainer = RideThisContainer(height: 100)
     private let totalRunCount = RideThisLabel(fontColor: .recordTitleColor, text: "총 달린 횟수")
     private let totalRunCountSeparator = RideThisSeparator()
-    private lazy var totalRunCountData = RideThisLabel(fontType: .classification, text: "3회"/*"\(self.user.record_id.count)회"*/)
+    private lazy var totalRunCountData = RideThisLabel(fontType: .classification)
     private let totalRunTime = RideThisLabel(fontColor: .recordTitleColor, text: "총 달린 시간")
     private let totalRunTimeSeparator = RideThisSeparator()
     private let totalRunTimeData = RideThisLabel(fontType: .classification, text: "2시간 15분")
     private let totalRunDistance = RideThisLabel(fontColor: .recordTitleColor, text: "총 달린 거리")
     private let totalRunDistanceSeparator = RideThisSeparator()
-    private lazy var totalRunDistanceData = RideThisLabel(fontType: .classification, text: "test123km")
+    private lazy var totalRunDistanceData = RideThisLabel(fontType: .classification)
     
     // MARK: Record By Period
     private let recordByPeriodLabel = RideThisLabel(fontType: .profileFont, text: "기간별 기록")
@@ -191,7 +192,7 @@ class MyPageView: RideThisViewController {
         for subview in view.subviews {
             subview.removeFromSuperview()
         }
-        if service.signedUser == nil {
+        if service.combineUser == nil {
             setLoginComponents()
         } else {
             setNavigationComponents()
@@ -502,18 +503,22 @@ class MyPageView: RideThisViewController {
     }
     
     func setUserData() {
-        guard let user = service.signedUser else { return }
+        guard let user = service.combineUser else { return }
         if let imageUrl = user.user_image {
-            self.profileImageView.kf.setImage(with: URL(string: imageUrl))
+            if imageUrl.isEmpty {
+                self.profileImageView.image = UIImage(named: "bokdonge")
+            } else {
+                self.profileImageView.kf.setImage(with: URL(string: imageUrl))
+            }
         }
         followerCountLabel.text = "\(user.user_follower.count)"
         followingCountLabel.text = "\(user.user_following.count)"
         userNickName.text = user.user_nickname
         userWeight.text = "\(user.user_weight)"
-        if let height = user.user_tall {
-            userHeight.text = "\(height)"
-        } else {
-            userHeight.text = "-"
+        userHeight.text = user.tallStr
+        
+        Task {
+            await viewModel.getRecords(userId: user.user_id)
         }
     }
     
@@ -523,19 +528,37 @@ class MyPageView: RideThisViewController {
                 guard let self = self, let combineUser = receivedUser else { return }
                 DispatchQueue.main.async {
                     if let imageUrl = combineUser.user_image {
-                        self.profileImageView.kf.setImage(with: URL(string: imageUrl))
+                        if imageUrl.isEmpty {
+                            self.profileImageView.image = UIImage(named: "bokdonge")
+                        } else {
+                            self.profileImageView.kf.setImage(with: URL(string: imageUrl))
+                        }
                     }
                     self.followerCountLabel.text = "\(combineUser.user_follower.count)"
                     self.followingCountLabel.text = "\(combineUser.user_following.count)"
                     self.userNickName.text = combineUser.user_nickname
                     self.userWeight.text = "\(combineUser.user_weight)"
-                    if let height = combineUser.user_tall {
-                        self.userHeight.text = "\(height)"
-                    } else {
-                        self.userHeight.text = "-"
-                    }
+                    self.userHeight.text = combineUser.tallStr
                 }
                 followDelegate?.updateUser(user: combineUser)
+            }
+            .store(in: &cancellable)
+        
+        viewModel.$recordsData
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] records in
+                guard let self = self else { return }
+                let count = records.count
+                var totalHour: Int = 0
+                var totalDistance: Double = 0
+                
+                for record in records {
+                    totalDistance += record.record_distance
+                    totalHour = Date.getDateDiff(startDate: record.record_start_time!, endDate: record.record_end_time!)
+                }
+                self.totalRunCountData.text = "\(count)회"
+                self.totalRunTimeData.text = Int().miniutesToHours(minutes: totalHour)
+                self.totalRunDistanceData.text = "\(totalDistance.getTwoDecimal)km"
             }
             .store(in: &cancellable)
     }
@@ -612,8 +635,8 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
     }
     
     @objc func toFollowerView() {
-        if service.signedUser != nil {
-            let followView = FollowManageView(user: service.signedUser!)
+        if service.combineUser != nil {
+            let followView = FollowManageView(user: service.combineUser!)
             followDelegate = followView
             self.navigationController?.pushViewController(followView, animated: true)
         } else {

@@ -6,11 +6,9 @@ class SearchUserViewModel {
     @Published var searchText: String = ""
     private var cancellable = Set<AnyCancellable>()
     private let firebaseService = FireBaseService()
-    var signedUser: User
+    private let signedUser = UserService.shared.combineUser
     
-    init(user: User) {
-        self.signedUser = user
-        
+    init() {
         self.$searchText
             .debounce(for: 0.5, scheduler: RunLoop.main)
             .sink { [weak self] text in
@@ -25,8 +23,9 @@ class SearchUserViewModel {
     
     func searchUser(text: String) async {
         let searchedUsers = await firebaseService.findUser(text: text)
+        guard let signedUser = self.signedUser else { return }
         users = searchedUsers.filter { user in
-            !signedUser.user_following.contains(user.user_id) && signedUser.user_id != user.user_id
+            !signedUser.user_following.contains(user.user_id) && signedUser.user_id != user.user_id && user.user_account_public == false
         }
     }
 }

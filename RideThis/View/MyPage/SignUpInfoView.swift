@@ -8,7 +8,7 @@ class SignUpInfoView: RideThisViewController {
     // MARK: Data Components
     let userId: String
     let userEmail: String?
-    private let userService = UserService()
+    private let userService = UserService.shared
     private let viewModel = SignUpInfoViewModel()
     private lazy var cancellable = Set<AnyCancellable>()
     
@@ -46,11 +46,10 @@ class SignUpInfoView: RideThisViewController {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.placeholder = "이메일을 입력해주세요"
+        tf.autocapitalizationType = .none
         tf.text = userEmail
         tf.addTarget(self, action: #selector(textFieldValueChanged(_:)), for: .editingChanged)
-//        if userEmail != nil {
-//            tf.isEnabled = false
-//        }
+        self.viewModel.emailText = userEmail ?? ""
         
         return tf
     }()
@@ -254,7 +253,7 @@ class SignUpInfoView: RideThisViewController {
             
             let db = Firestore.firestore()
             let usersCollection = db.collection("USERS")
-            let enteredEmail: String = userEmail ?? ""
+            let enteredEmail: String = userEmailTextField.text ?? ""
             let enteredNickname: String = userNickName.text ?? ""
             
             let newUser: [String: Any] = [
@@ -265,7 +264,7 @@ class SignUpInfoView: RideThisViewController {
                 "user_id": userId,
                 "user_image": "",
                 "user_nickname": enteredNickname,
-                "user_tall": Int(userHeight.text ?? "")!,
+                "user_tall": userHeight.text!.isEmpty ? -1 : Int(userHeight.text!)!,
                 "user_weight": Int(userWeight.text ?? "")!
             ]
             
@@ -282,15 +281,16 @@ class SignUpInfoView: RideThisViewController {
                                    user_email: enteredEmail,
                                    user_nickname: enteredNickname,
                                    user_weight: Int(userWeight.text!)!,
-                                   user_tall: Int(userHeight.text!),
+                                   user_tall: userHeight.text!.isEmpty ? -1 : Int(userHeight.text!)!,
                                    user_following: [],
                                    user_follower: [],
                                    user_account_public: false)
             
-            userService.signedUser = createdUser
+            userService.checkPrevAppleLogin()
             
             if let scene = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate) {
-                scene.changeRootView(viewController: scene.getTabbarController(), animated: true)
+                let tabbarCtr = scene.getTabbarController(selectedIndex: 4)
+                scene.changeRootView(viewController: tabbarCtr, animated: true)
             }
         }, for: .touchUpInside)
     }
