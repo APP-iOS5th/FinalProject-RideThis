@@ -26,7 +26,7 @@ class SearchUserViewModel {
     func searchUser(text: String) async {
         let searchedUsers = await firebaseService.findUser(text: text)
         users = searchedUsers.filter { user in
-            !signedUser.user_following.contains(user.user_id)
+            !signedUser.user_following.contains(user.user_id) && signedUser.user_id != user.user_id
         }
     }
 }
