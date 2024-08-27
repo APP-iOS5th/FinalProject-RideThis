@@ -220,7 +220,7 @@ class FireBaseService {
         }
         
         if now {
-            UserService.shared.combineUser = user
+            UserService.shared.signedUser = user
         }
     }
     
