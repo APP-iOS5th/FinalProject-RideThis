@@ -2,14 +2,19 @@ import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-    var splashCoordinator: SplashCoordinator?
+    var appCoordinator: AppCoordinator?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        self.window = UIWindow(windowScene: windowScene)
 
-        splashCoordinator = SplashCoordinator(window: self.window!)
-        splashCoordinator?.start()
+        let navigationController = UINavigationController()
+        window = UIWindow(windowScene: windowScene)
+        
+        appCoordinator = AppCoordinator(navigationController: navigationController, window: window)
+        appCoordinator?.start()
+
+        window?.rootViewController = navigationController
+        window?.makeKeyAndVisible()
     }
     
     func getTabbarController(selectedIndex: Int = 0) -> UITabBarController {

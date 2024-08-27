@@ -4,6 +4,8 @@ import Combine
 // 장치연결 초기 화면
 class DeviceView: RideThisViewController {
     
+    var coordinator: DeviceCoordinator?
+    
     // 커스텀 타이틀
     private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "장치연결")
     

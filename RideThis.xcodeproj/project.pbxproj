@@ -17,6 +17,13 @@
 		043E0C872C6F38F700F25AF7 /* SummaryRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C862C6F38F700F25AF7 /* SummaryRecordViewController.swift */; };
 		043E0C892C70AC2400F25AF7 /* SummaryRecordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C882C70AC2400F25AF7 /* SummaryRecordViewModel.swift */; };
 		0493F5C22C7CF26600290A4C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0493F5C12C7CF26600290A4C /* GoogleService-Info.plist */; };
+		0493F5C52C7DACCC00290A4C /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5C42C7DACCC00290A4C /* Coordinator.swift */; };
+		0493F5C82C7DB39200290A4C /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5C72C7DB39200290A4C /* AppCoordinator.swift */; };
+		0493F5CA2C7DB5FD00290A4C /* TabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5C92C7DB5FD00290A4C /* TabBarCoordinator.swift */; };
+		0493F5CC2C7DBC0600290A4C /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5CB2C7DBC0600290A4C /* HomeCoordinator.swift */; };
+		0493F5CF2C7DBDC500290A4C /* RecordCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5CE2C7DBDC500290A4C /* RecordCoordinator.swift */; };
+		0493F5D22C7DBE1A00290A4C /* DeviceCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5D12C7DBE1A00290A4C /* DeviceCoordinator.swift */; };
+		0493F5D52C7DBEA800290A4C /* MyPageCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5D42C7DBEA800290A4C /* MyPageCoordinator.swift */; };
 		04DEE5012C7C1F0F00338A61 /* RecordDeviceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DEE5002C7C1F0F00338A61 /* RecordDeviceModel.swift */; };
 		04DEE5032C7C3FC300338A61 /* BluetoothManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DEE5022C7C3FC300338A61 /* BluetoothManager.swift */; };
 		04E3C0C82C6AEE62006B844F /* CompetitionTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0C72C6AEE62006B844F /* CompetitionTVCell.swift */; };
@@ -28,7 +35,6 @@
 		78254FD62C7C1CC90069B10A /* WheelCircumferenceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78254FD52C7C1CC90069B10A /* WheelCircumferenceViewController.swift */; };
 		78254FD82C7C1CF40069B10A /* WheelCircumferenceSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78254FD72C7C1CF40069B10A /* WheelCircumferenceSelectionCell.swift */; };
 		784D5DFE2C7B780700D2FE15 /* DeviceSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784D5DFD2C7B780700D2FE15 /* DeviceSearchViewController.swift */; };
-		786F60E02C770ECF00B277FE /* SplashCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786F60DF2C770ECF00B277FE /* SplashCoordinator.swift */; };
 		78DBD01B2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DBD01A2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift */; };
 		78DBD01D2C7882B700B43A62 /* DeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DBD01C2C7882B700B43A62 /* DeviceTableViewCell.swift */; };
 		78DBD01F2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DBD01E2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift */; };
@@ -127,6 +133,13 @@
 		043E0C862C6F38F700F25AF7 /* SummaryRecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryRecordViewController.swift; sourceTree = "<group>"; };
 		043E0C882C70AC2400F25AF7 /* SummaryRecordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryRecordViewModel.swift; sourceTree = "<group>"; };
 		0493F5C12C7CF26600290A4C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		0493F5C42C7DACCC00290A4C /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		0493F5C72C7DB39200290A4C /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		0493F5C92C7DB5FD00290A4C /* TabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCoordinator.swift; sourceTree = "<group>"; };
+		0493F5CB2C7DBC0600290A4C /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
+		0493F5CE2C7DBDC500290A4C /* RecordCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordCoordinator.swift; sourceTree = "<group>"; };
+		0493F5D12C7DBE1A00290A4C /* DeviceCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceCoordinator.swift; sourceTree = "<group>"; };
+		0493F5D42C7DBEA800290A4C /* MyPageCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageCoordinator.swift; sourceTree = "<group>"; };
 		04DEE5002C7C1F0F00338A61 /* RecordDeviceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDeviceModel.swift; sourceTree = "<group>"; };
 		04DEE5022C7C3FC300338A61 /* BluetoothManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothManager.swift; sourceTree = "<group>"; };
 		04E3C0C72C6AEE62006B844F /* CompetitionTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionTVCell.swift; sourceTree = "<group>"; };
@@ -138,7 +151,6 @@
 		78254FD52C7C1CC90069B10A /* WheelCircumferenceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelCircumferenceViewController.swift; sourceTree = "<group>"; };
 		78254FD72C7C1CF40069B10A /* WheelCircumferenceSelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelCircumferenceSelectionCell.swift; sourceTree = "<group>"; };
 		784D5DFD2C7B780700D2FE15 /* DeviceSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSearchViewController.swift; sourceTree = "<group>"; };
-		786F60DF2C770ECF00B277FE /* SplashCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashCoordinator.swift; sourceTree = "<group>"; };
 		78DBD01A2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoTableViewCell.swift; sourceTree = "<group>"; };
 		78DBD01C2C7882B700B43A62 /* DeviceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceTableViewCell.swift; sourceTree = "<group>"; };
 		78DBD01E2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelCircumferenceTableViewCell.swift; sourceTree = "<group>"; };
@@ -248,6 +260,46 @@
 				043E0C862C6F38F700F25AF7 /* SummaryRecordViewController.swift */,
 			);
 			path = SummaryRecord;
+			sourceTree = "<group>";
+		};
+		0493F5C32C7DACBE00290A4C /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				0493F5C42C7DACCC00290A4C /* Coordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		0493F5C62C7DB35900290A4C /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				0493F5C72C7DB39200290A4C /* AppCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		0493F5CD2C7DBDB300290A4C /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				0493F5CE2C7DBDC500290A4C /* RecordCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		0493F5D02C7DBE0D00290A4C /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				0493F5D12C7DBE1A00290A4C /* DeviceCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		0493F5D32C7DBE9B00290A4C /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				0493F5D42C7DBEA800290A4C /* MyPageCoordinator.swift */,
+			);
+			path = Coordinator;
 			sourceTree = "<group>";
 		};
 		04E3C0C62C6AECE2006B844F /* Cell */ = {
@@ -472,8 +524,8 @@
 		CD4213E52C64988B00F7C3AE /* Device */ = {
 			isa = PBXGroup;
 			children = (
+				0493F5D02C7DBE0D00290A4C /* Coordinator */,
 				78DBD0132C78827B00B43A62 /* Cell */,
-				CD4214602C649A0800F7C3AE /* Coordinator */,
 				CD4213E42C64988B00F7C3AE /* DeviceView.swift */,
 				78DBD0202C7882EB00B43A62 /* DeviceDetailViewController.swift */,
 				784D5DFD2C7B780700D2FE15 /* DeviceSearchViewController.swift */,
@@ -495,8 +547,8 @@
 		CD4213E92C64988B00F7C3AE /* MyPage */ = {
 			isa = PBXGroup;
 			children = (
+				0493F5D32C7DBE9B00290A4C /* Coordinator */,
 				CD7000682C6AF9910071D4D2 /* Cell */,
-				CD4214622C649A1600F7C3AE /* Coordinator */,
 				CD4213E82C64988B00F7C3AE /* MyPageView.swift */,
 				CDE25C6D2C6913B8008E2A80 /* EditProfileInfoView.swift */,
 				CD0E1E842C6A409F0080CFED /* SettingView.swift */,
@@ -513,7 +565,7 @@
 		CD4213EB2C64988B00F7C3AE /* Record */ = {
 			isa = PBXGroup;
 			children = (
-				CD4214632C649A1C00F7C3AE /* Coordinator */,
+				0493F5CD2C7DBDB300290A4C /* Coordinator */,
 				CD4213EA2C64988B00F7C3AE /* RecordView.swift */,
 				EB07B0B82C6C79F20067BF0F /* RecordContainerView.swift */,
 				EB07B0B92C6C79F20067BF0F /* RecordInfoView.swift */,
@@ -548,6 +600,7 @@
 		CD4214212C64989000F7C3AE /* App */ = {
 			isa = PBXGroup;
 			children = (
+				0493F5C62C7DB35900290A4C /* Coordinator */,
 				CD4213C22C64982000F7C3AE /* AppDelegate.swift */,
 				CD4213C42C64982000F7C3AE /* SceneDelegate.swift */,
 			);
@@ -573,31 +626,11 @@
 			path = Extension;
 			sourceTree = "<group>";
 		};
-		CD4214602C649A0800F7C3AE /* Coordinator */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Coordinator;
-			sourceTree = "<group>";
-		};
 		CD4214612C649A1100F7C3AE /* Coordinator */ = {
 			isa = PBXGroup;
 			children = (
-				786F60DF2C770ECF00B277FE /* SplashCoordinator.swift */,
-			);
-			path = Coordinator;
-			sourceTree = "<group>";
-		};
-		CD4214622C649A1600F7C3AE /* Coordinator */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Coordinator;
-			sourceTree = "<group>";
-		};
-		CD4214632C649A1C00F7C3AE /* Coordinator */ = {
-			isa = PBXGroup;
-			children = (
+				0493F5C92C7DB5FD00290A4C /* TabBarCoordinator.swift */,
+				0493F5CB2C7DBC0600290A4C /* HomeCoordinator.swift */,
 			);
 			path = Coordinator;
 			sourceTree = "<group>";
@@ -616,6 +649,7 @@
 		CDE369FF2C7DA0E000B743B9 /* Protocol */ = {
 			isa = PBXGroup;
 			children = (
+				0493F5C32C7DACBE00290A4C /* Coordinator */,
 				CDE36A042C7DA11000B743B9 /* MyPage */,
 				CDE36A032C7DA10C00B743B9 /* Device */,
 				CDE36A022C7DA10700B743B9 /* Record */,
@@ -764,6 +798,7 @@
 			files = (
 				CDE36A0C2C7DA13800B743B9 /* HomeProtocol.swift in Sources */,
 				EB07B0BC2C6C79F20067BF0F /* RecordInfoView.swift in Sources */,
+				0493F5C82C7DB39200290A4C /* AppCoordinator.swift in Sources */,
 				78DBD01D2C7882B700B43A62 /* DeviceTableViewCell.swift in Sources */,
 				04E3C0D32C6B37F7006B844F /* DistancSelectionViewController.swift in Sources */,
 				CD42145E2C64998800F7C3AE /* CompetitionViewModel.swift in Sources */,
@@ -773,6 +808,7 @@
 				CDB220082C7C19DD00973964 /* SignUpInfoViewModel.swift in Sources */,
 				043E0C872C6F38F700F25AF7 /* SummaryRecordViewController.swift in Sources */,
 				78DBD01F2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift in Sources */,
+				0493F5CA2C7DB5FD00290A4C /* TabBarCoordinator.swift in Sources */,
 				041A673E2C6CF1E0000BA4C1 /* RecordContainer+Extension.swift in Sources */,
 				CD6662122C678FF7005E2887 /* HomeModel.swift in Sources */,
 				CD4214652C649D0100F7C3AE /* FirebaseService.swift in Sources */,
@@ -782,6 +818,7 @@
 				CD6662142C678FFD005E2887 /* CompetitionModel.swift in Sources */,
 				CD0EC4C92C71EE5400E70452 /* FollowManageView.swift in Sources */,
 				CD0EC4CB2C71F10500E70452 /* FollowTableViewCell.swift in Sources */,
+				0493F5C52C7DACCC00290A4C /* Coordinator.swift in Sources */,
 				CD4214522C64990D00F7C3AE /* UILabel+Extension.swift in Sources */,
 				EBFE4DAB2C757A7D00A36FCA /* ResultRankingTVCell.swift in Sources */,
 				CD0EC4CD2C71FC4800E70452 /* SearchUserView.swift in Sources */,
@@ -805,7 +842,6 @@
 				043E0C892C70AC2400F25AF7 /* SummaryRecordViewModel.swift in Sources */,
 				04DEE5032C7C3FC300338A61 /* BluetoothManager.swift in Sources */,
 				CD4214692C649F3600F7C3AE /* UIFont+Extension.swift in Sources */,
-				786F60E02C770ECF00B277FE /* SplashCoordinator.swift in Sources */,
 				04E3C0D72C6B8C30006B844F /* DistanceSelectionViewModel.swift in Sources */,
 				CD66F5D22C6C86EA00CDBB0B /* SettingTableToggleViewCell.swift in Sources */,
 				04DEE5012C7C1F0F00338A61 /* RecordDeviceModel.swift in Sources */,
@@ -819,11 +855,14 @@
 				CD42145A2C64997100F7C3AE /* HomeViewModel.swift in Sources */,
 				CD4214142C64988C00F7C3AE /* RecordView.swift in Sources */,
 				CD4214122C64988C00F7C3AE /* HomeView.swift in Sources */,
+				0493F5D22C7DBE1A00290A4C /* DeviceCoordinator.swift in Sources */,
 				CDE36A082C7DA12900B743B9 /* RecordProtocol.swift in Sources */,
 				04E3C0CF2C6B32B8006B844F /* CompetitionCoordinator.swift in Sources */,
+				0493F5CC2C7DBC0600290A4C /* HomeCoordinator.swift in Sources */,
 				CDAC668B2C6CF0CF005506FB /* AccountQuitView.swift in Sources */,
 				CDE36A0A2C7DA13100B743B9 /* CompetitionProtocol.swift in Sources */,
 				CD0EC4D32C7227AB00E70452 /* LoginView.swift in Sources */,
+				0493F5D52C7DBEA800290A4C /* MyPageCoordinator.swift in Sources */,
 				78254FD42C7C05CB0069B10A /* DeviceSearchTableViewCell.swift in Sources */,
 				CD3E646B2C777A180018C46E /* SearchUserViewModel.swift in Sources */,
 				CD66621A2C679010005E2887 /* MyPageModel.swift in Sources */,
@@ -843,6 +882,7 @@
 				EBFE4DB12C757AE800A36FCA /* UserService.swift in Sources */,
 				EB07B0BB2C6C79F20067BF0F /* RecordContainerView.swift in Sources */,
 				CDE25C6E2C6913B8008E2A80 /* EditProfileInfoView.swift in Sources */,
+				0493F5CF2C7DBDC500290A4C /* RecordCoordinator.swift in Sources */,
 				78254FD82C7C1CF40069B10A /* WheelCircumferenceSelectionCell.swift in Sources */,
 				CDC0C1E02C664FFE00349DC4 /* UIButton+Extension.swift in Sources */,
 			);

@@ -2,9 +2,21 @@ import UIKit
 
 // 앱 최초 실행하면 보이는 화면
 class SplashView: UIViewController {
+        
+    var coordinator: AppCoordinator?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        // 2초 후에 메인 화면으로 전환
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.coordinator?.changeTabBarView()
+        }
     }
     
     private func setupUI() {
