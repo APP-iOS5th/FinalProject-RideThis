@@ -25,8 +25,8 @@ class CompetitionViewModel {
     var followingUserIds: [String] = []
     
     init(isLogin: Bool, nickName: String) {
-        self.isLogin = (service.signedUser != nil) ? true : false
-        self.nickName = (service.signedUser != nil) ? service.signedUser?.user_nickname : "UNKOWNED"
+        self.isLogin = (service.combineUser != nil) ? true : false
+        self.nickName = (service.combineUser != nil) ? service.combineUser?.user_nickname : "UNKOWNED"
         
         fetchAllRecords()
         fetchFollowingUsers()
@@ -37,9 +37,9 @@ class CompetitionViewModel {
     private func fetchFollowingUsers() {
         Task {
             do {
-                self.followingUserIds = try await firebaseService.fetchUserFollowing(userId: service.signedUser?.user_id ?? "")
+                self.followingUserIds = try await firebaseService.fetchUserFollowing(userId: service.combineUser?.user_id ?? "")
                 
-                followingUserIds.append(service.signedUser?.user_id ?? "")
+                followingUserIds.append(service.combineUser?.user_id ?? "")
                 updateRecords()
             } catch {
                 print("팔로잉 목록 가져오기 실패")
@@ -123,7 +123,7 @@ class CompetitionViewModel {
     // MARK: Bluetooth 확인
     private func checkBluetooth() async -> Bool {
         do {
-            let userDocument = try await firebaseService.fetchUser(at: service.signedUser?.user_id ?? "", userType: false)
+            let userDocument = try await firebaseService.fetchUser(at: service.combineUser?.user_id ?? "", userType: false)
             
             if case .userSnapshot(let queryDocumentSnapshot) = userDocument {
                 guard let doc = queryDocumentSnapshot else {
