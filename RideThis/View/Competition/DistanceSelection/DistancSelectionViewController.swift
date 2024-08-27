@@ -155,8 +155,6 @@ class DistanceSelectionViewController: RideThisViewController, CountViewControll
     private func setupAction() {
         startBtn.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
-            print("시작~")
-            print(self.viewModel.distance)
             
             let countViewController = CountViewController()
             countViewController.countDelegate = self

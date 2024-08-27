@@ -10,7 +10,6 @@ class FollowManageViewModel {
     
     @Published var followDatas: [User] = []
     private let firebaseService = FireBaseService()
-    private var cancellable = Set<AnyCancellable>()
     
     func changeSegmentValue(user: User, type: FollowType) {
         Task {
@@ -25,5 +24,9 @@ class FollowManageViewModel {
         } catch {
             print(error)
         }
+    }
+    
+    func searchUser(text: String) {
+        
     }
 }

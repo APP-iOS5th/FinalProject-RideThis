@@ -15,18 +15,22 @@ class CompetitionViewModel {
     var selectedDistance: DistanceCase = .fiveKm
     
     let isLogin: Bool
-    let isBluetooth = true
+    var isBluetooth: Bool = false
+    
+    let nickName: String?
     
     private var allRecords: [RecordModel] = []
     @Published var records: [RecordModel] = []
     
     var followingUserIds: [String] = []
     
-    init(isLogin: Bool) {
+    init(isLogin: Bool, nickName: String) {
         self.isLogin = (service.signedUser != nil) ? true : false
+        self.nickName = (service.signedUser != nil) ? service.signedUser?.user_nickname : "UNKOWNED"
         
         fetchAllRecords()
         fetchFollowingUsers()
+        checkBluetoothStatus()
     }
     
     // MARK: Following
@@ -107,5 +111,47 @@ class CompetitionViewModel {
             return 0
         }
         return (minutes * 60) + seconds
+    }
+    
+    // MARK: Bluetooth 상태 확인
+    func checkBluetoothStatus() {
+        Task {
+            self.isBluetooth = await checkBluetooth()
+        }
+    }
+    
+    // MARK: Bluetooth 확인
+    private func checkBluetooth() async -> Bool {
+        do {
+            let userDocument = try await firebaseService.fetchUser(at: service.signedUser?.user_id ?? "", userType: false)
+            
+            if case .userSnapshot(let queryDocumentSnapshot) = userDocument {
+                guard let doc = queryDocumentSnapshot else {
+                    print("User가 존재하지 않습니다.")
+                    return false
+                }
+                
+                let recordsCollection = firebaseService.fetchCollection(document: doc, collectionName: "DEVICE")
+                
+                let deviceDocuments = try await recordsCollection.getDocuments()
+                
+                for deviceDocument in deviceDocuments.documents {
+                    if let registrationStatus = deviceDocument["device_registration_status"] as? Bool {
+                        if registrationStatus {
+                            return true
+                        }
+                    } else {
+                        print("Device상태를 가져올 수 없습니다.")
+                    }
+                }
+            } else {
+                print("DEVICE데이터를 찾을 수 없습니다.")
+            }
+        } catch {
+            print("FIREBASE 통신 오류: \(error.localizedDescription)")
+            return false
+        }
+        
+        return false
     }
 }

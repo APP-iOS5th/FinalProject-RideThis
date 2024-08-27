@@ -12,7 +12,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         splashCoordinator?.start()
     }
     
-    func getTabbarController() -> UITabBarController {
+    func getTabbarController(selectedIndex: Int = 0) -> UITabBarController {
         let homeView = UINavigationController(rootViewController: HomeView())
         homeView.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house.fill"), selectedImage: nil)
         
@@ -32,6 +32,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         tabbarController.viewControllers = [homeView, competitionView, recordView, deviceView, myPageView]
 //        tabbarController.viewControllers = [myPageView, competitionView, recordView, deviceView, homeView]
         tabbarController.tabBar.tintColor = .primaryColor
+        tabbarController.selectedIndex = selectedIndex
         
         return tabbarController
     }

@@ -38,7 +38,6 @@ class HomeViewModel: NSObject, CLLocationManagerDelegate {
 
                 let endDate = Date().addingTimeInterval(6 * 3600)
                 self.hourlyForecast = weather.hourlyForecast.forecast.filter { $0.date <= endDate }
-                print("Weather Hour@@@@: \(hourlyForecast)")
             }
             await fetchLocationName(for: location)
         } catch {

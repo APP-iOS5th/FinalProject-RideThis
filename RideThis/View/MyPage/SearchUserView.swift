@@ -5,7 +5,7 @@ import Combine
 class SearchUserView: RideThisViewController {
     
     // MARK: Data Components
-    private let viewModel = SearchUserViewModel(user: UserService.shared.combineUser!)
+    private let viewModel = SearchUserViewModel()
     private var cancellable = Set<AnyCancellable>()
     
     // MARK: UI Components

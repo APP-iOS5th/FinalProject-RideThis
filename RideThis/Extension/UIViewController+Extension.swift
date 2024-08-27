@@ -6,6 +6,7 @@ class RideThisViewController: UIViewController {
         super.viewDidLoad()
         
         self.view.backgroundColor = .primaryBackgroundColor
+        self.overrideUserInterfaceStyle = .light
     }
 }
 
