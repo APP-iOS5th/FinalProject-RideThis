@@ -8,7 +8,9 @@
 import UIKit
 import SnapKit
 
-class DistanceSelectionViewController: RideThisViewController, CountViewControllerDelegate {
+class DistanceSelectionViewController: RideThisViewController {
+    
+    var coordinator: DistanceSelectionCoordinator?
     
     private var viewModel = DistanceSelectionViewModel()
     
@@ -154,23 +156,10 @@ class DistanceSelectionViewController: RideThisViewController, CountViewControll
     // MARK: Setup Button Action
     private func setupAction() {
         startBtn.addAction(UIAction { [weak self] _ in
-            guard let self = self else { return }
-            
-            let countViewController = CountViewController()
-            countViewController.countDelegate = self
-            countViewController.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
-            present(countViewController, animated: true)
-            
+            self?.coordinator?.moveToCountView(with: self?.viewModel.distance ?? "")
         }, for: .touchUpInside)
     }
     
-    // MARK: CountViewController Delegate
-    func countdownFinish() {
-        dismiss(animated: true) {
-            let startCompetitionVC = StartCompetitionViewController(goalDistance: self.viewModel.distance)
-            self.navigationController?.pushViewController(startCompetitionVC, animated: true)
-        }
-    }
 }
 
 #Preview {

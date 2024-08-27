@@ -10,6 +10,8 @@ import SnapKit
 
 class SummaryRecordViewController: RideThisViewController {
     
+    var coordinator: SummaryRecordCoordinator?
+    
     private let viewModel: SummaryRecordViewModel
     
     private let scrollView = UIScrollView()
@@ -131,8 +133,10 @@ class SummaryRecordViewController: RideThisViewController {
     private func setupAction() {
         confirmButton.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
-            let ResultRankingVC = ResultRankingViewController(distance: self.viewModel.distance)
-            self.navigationController?.pushViewController(ResultRankingVC, animated: true)
+            
+            self.coordinator?.moveToResultView(distance: self.viewModel.distance)
+//            let ResultRankingVC = ResultRankingViewController(distance: self.viewModel.distance)
+//            self.navigationController?.pushViewController(ResultRankingVC, animated: true)
         }, for: .touchUpInside)
     }
 }

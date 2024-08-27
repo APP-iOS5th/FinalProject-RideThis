@@ -28,7 +28,7 @@ class TabBarCoordinator: Coordinator {
         
         // Competetion
         let competetionNavigationController = UINavigationController()
-        let competetionCoordinator = CompetitionCoordinator(navigationController: competetionNavigationController)
+        let competetionCoordinator = CompetitionCoordinator(navigationController: competetionNavigationController, tabBarController: tabBarController)
         competetionCoordinator.start()
         competetionNavigationController.tabBarItem = UITabBarItem(title: "경쟁", image: UIImage(systemName: "flag.checkered.2.crossed"), selectedImage: nil)
         childCoordinators.append(competetionCoordinator)

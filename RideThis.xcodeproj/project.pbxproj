@@ -23,6 +23,10 @@
 		0493F5D22C7DBE1A00290A4C /* DeviceCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5D12C7DBE1A00290A4C /* DeviceCoordinator.swift */; };
 		0493F5D52C7DBEA800290A4C /* MyPageCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5D42C7DBEA800290A4C /* MyPageCoordinator.swift */; };
 		0493F5D72C7E019C00290A4C /* RecordCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5D62C7E019C00290A4C /* RecordCoordinator.swift */; };
+		0493F5DA2C7E0BFA00290A4C /* CountCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5D92C7E0BFA00290A4C /* CountCoordinator.swift */; };
+		0493F5DD2C7E1A2C00290A4C /* StartCompetetionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5DC2C7E1A2C00290A4C /* StartCompetetionCoordinator.swift */; };
+		0493F5E02C7E22F100290A4C /* SummaryRecordCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5DF2C7E22F100290A4C /* SummaryRecordCoordinator.swift */; };
+		0493F5E32C7E256B00290A4C /* ResultRankingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5E22C7E256B00290A4C /* ResultRankingCoordinator.swift */; };
 		04DEE5012C7C1F0F00338A61 /* RecordDeviceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DEE5002C7C1F0F00338A61 /* RecordDeviceModel.swift */; };
 		04DEE5032C7C3FC300338A61 /* BluetoothManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DEE5022C7C3FC300338A61 /* BluetoothManager.swift */; };
 		04E3C0C82C6AEE62006B844F /* CompetitionTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0C72C6AEE62006B844F /* CompetitionTVCell.swift */; };
@@ -140,6 +144,10 @@
 		0493F5D12C7DBE1A00290A4C /* DeviceCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceCoordinator.swift; sourceTree = "<group>"; };
 		0493F5D42C7DBEA800290A4C /* MyPageCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageCoordinator.swift; sourceTree = "<group>"; };
 		0493F5D62C7E019C00290A4C /* RecordCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordCoordinator.swift; sourceTree = "<group>"; };
+		0493F5D92C7E0BFA00290A4C /* CountCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountCoordinator.swift; sourceTree = "<group>"; };
+		0493F5DC2C7E1A2C00290A4C /* StartCompetetionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartCompetetionCoordinator.swift; sourceTree = "<group>"; };
+		0493F5DF2C7E22F100290A4C /* SummaryRecordCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryRecordCoordinator.swift; sourceTree = "<group>"; };
+		0493F5E22C7E256B00290A4C /* ResultRankingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultRankingCoordinator.swift; sourceTree = "<group>"; };
 		04DEE5002C7C1F0F00338A61 /* RecordDeviceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDeviceModel.swift; sourceTree = "<group>"; };
 		04DEE5022C7C3FC300338A61 /* BluetoothManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothManager.swift; sourceTree = "<group>"; };
 		04E3C0C72C6AEE62006B844F /* CompetitionTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionTVCell.swift; sourceTree = "<group>"; };
@@ -244,6 +252,7 @@
 		041A67322C6C518F000BA4C1 /* Count */ = {
 			isa = PBXGroup;
 			children = (
+				0493F5D82C7E0BE800290A4C /* Coordinator */,
 				041A67332C6C519B000BA4C1 /* CountViewController.swift */,
 			);
 			path = Count;
@@ -252,6 +261,7 @@
 		041A67372C6C6AF5000BA4C1 /* StartCompetition */ = {
 			isa = PBXGroup;
 			children = (
+				0493F5DB2C7E1A1900290A4C /* Coordinator */,
 				041A67382C6C6B0E000BA4C1 /* StartCompetitionViewController.swift */,
 			);
 			path = StartCompetition;
@@ -260,6 +270,7 @@
 		043E0C852C6F38C800F25AF7 /* SummaryRecord */ = {
 			isa = PBXGroup;
 			children = (
+				0493F5DE2C7E22DE00290A4C /* Coordinator */,
 				043E0C862C6F38F700F25AF7 /* SummaryRecordViewController.swift */,
 			);
 			path = SummaryRecord;
@@ -301,6 +312,38 @@
 			isa = PBXGroup;
 			children = (
 				0493F5D42C7DBEA800290A4C /* MyPageCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		0493F5D82C7E0BE800290A4C /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				0493F5D92C7E0BFA00290A4C /* CountCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		0493F5DB2C7E1A1900290A4C /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				0493F5DC2C7E1A2C00290A4C /* StartCompetetionCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		0493F5DE2C7E22DE00290A4C /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				0493F5DF2C7E22F100290A4C /* SummaryRecordCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		0493F5E12C7E255900290A4C /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				0493F5E22C7E256B00290A4C /* ResultRankingCoordinator.swift */,
 			);
 			path = Coordinator;
 			sourceTree = "<group>";
@@ -707,6 +750,7 @@
 		EBFE4DAD2C757AA800A36FCA /* ResultRanking */ = {
 			isa = PBXGroup;
 			children = (
+				0493F5E12C7E255900290A4C /* Coordinator */,
 				EBFE4DAC2C757AA800A36FCA /* ResultRankingViewController.swift */,
 			);
 			path = ResultRanking;
@@ -814,6 +858,7 @@
 				78DBD01F2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift in Sources */,
 				0493F5CA2C7DB5FD00290A4C /* TabBarCoordinator.swift in Sources */,
 				041A673E2C6CF1E0000BA4C1 /* RecordContainer+Extension.swift in Sources */,
+				0493F5E02C7E22F100290A4C /* SummaryRecordCoordinator.swift in Sources */,
 				CD6662122C678FF7005E2887 /* HomeModel.swift in Sources */,
 				CD4214652C649D0100F7C3AE /* FirebaseService.swift in Sources */,
 				CD4214742C64A35400F7C3AE /* UIImage+Extension.swift in Sources */,
@@ -848,8 +893,10 @@
 				04DEE5032C7C3FC300338A61 /* BluetoothManager.swift in Sources */,
 				CD4214692C649F3600F7C3AE /* UIFont+Extension.swift in Sources */,
 				04E3C0D72C6B8C30006B844F /* DistanceSelectionViewModel.swift in Sources */,
+				0493F5E32C7E256B00290A4C /* ResultRankingCoordinator.swift in Sources */,
 				CD66F5D22C6C86EA00CDBB0B /* SettingTableToggleViewCell.swift in Sources */,
 				04DEE5012C7C1F0F00338A61 /* RecordDeviceModel.swift in Sources */,
+				0493F5DD2C7E1A2C00290A4C /* StartCompetetionCoordinator.swift in Sources */,
 				CD4214112C64988C00F7C3AE /* DeviceView.swift in Sources */,
 				EBFE4DAE2C757AA800A36FCA /* ResultRankingViewController.swift in Sources */,
 				041A67392C6C6B0E000BA4C1 /* StartCompetitionViewController.swift in Sources */,
@@ -870,6 +917,7 @@
 				0493F5D52C7DBEA800290A4C /* MyPageCoordinator.swift in Sources */,
 				78254FD42C7C05CB0069B10A /* DeviceSearchTableViewCell.swift in Sources */,
 				CD3E646B2C777A180018C46E /* SearchUserViewModel.swift in Sources */,
+				0493F5DA2C7E0BFA00290A4C /* CountCoordinator.swift in Sources */,
 				CD66621A2C679010005E2887 /* MyPageModel.swift in Sources */,
 				CD4213C52C64982000F7C3AE /* SceneDelegate.swift in Sources */,
 				043E0C822C6F232A00F25AF7 /* StartCompetitionViewModel.swift in Sources */,
