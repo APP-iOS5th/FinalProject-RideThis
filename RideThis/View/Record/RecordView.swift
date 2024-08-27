@@ -57,6 +57,20 @@ class RecordView: RideThisViewController {
         setupConstraints()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // RecordSumUpView에서 돌아올 때 타이머 초기화
+        if !viewModel.isRecording {
+            viewModel.resetRecording()
+            updateTimerDisplay()
+        }
+    }
+    
+    private func updateTimerDisplay() {
+        timerRecord.updateRecordText(text: viewModel.formatTime(viewModel.elapsedTime))
+    }
+    
     // MARK: - 레이아웃 설정
     private func setupConstraints() {
         // 기록 뷰 제약조건
