@@ -97,7 +97,6 @@ extension LoginView: ASAuthorizationControllerDelegate {
                                     (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(viewController: SignUpInfoView(userId: userId, userEmail: userEmail), animated: true)
                                 } else {
                                     self.userService.signedUser = userData
-                                    self.userService.combineUser = userData
                                     scene.changeRootView(viewController: scene.getTabbarController(), animated: true)
                                 }
                             }
