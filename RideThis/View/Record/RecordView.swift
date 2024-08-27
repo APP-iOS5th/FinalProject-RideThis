@@ -204,7 +204,7 @@ class RecordView: RideThisViewController {
     }
     
     private func navigateToSummaryView() {
-        let summaryViewController = RecordSumUpView()
+        let summaryViewController = RecordSumUpView(viewModel: viewModel)
         summaryViewController.recordedTime = viewModel.formatTime(viewModel.recordedTime)
         self.navigationController?.pushViewController(summaryViewController, animated: true) // 요약 화면으로 이동
     }

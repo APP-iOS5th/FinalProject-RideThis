@@ -30,8 +30,8 @@ class RecordViewModel: ObservableObject {
     var onFinishRecording: (() -> Void)?
     
     // 기록 시작 시간 & 종료 시간 저장
-    private var startTime: Date?
-    private var endTime: Date?
+    @Published var startTime: Date?
+    @Published var endTime: Date?
     
     func startRecording() {
         // 기록 시작
@@ -39,6 +39,7 @@ class RecordViewModel: ObservableObject {
         print("start pushed")
         startTime = Date()
         startTimer()
+        print("start time: \(String(describing: startTime))")
     }
     
     func resetRecording() {
@@ -60,6 +61,7 @@ class RecordViewModel: ObservableObject {
         stopTimer()
         recordedTime = elapsedTime
         endTime = Date()
+        print("end time: \(String(describing: endTime))")
         onFinishRecording?()
     }
     
@@ -111,15 +113,11 @@ class RecordViewModel: ObservableObject {
     
     func saveRecording() async {
         print("save pushed")
-        // 기록 요약 화면에서 저장 버튼 누르면
-//        guard let startTime = startTime, let endTime = endTime else {
-//            print("기록 시간을 설정할 수 없습니다.")
-//            return
-//        }
         
         // 기록이 없는 상태에서는 저장을 시도하지 않도록 확인
             guard let startTime = startTime else {
                 print("기록이 시작되지 않았습니다.")
+                print("start time: \(String(describing: startTime))")
                 return
             }
             
@@ -143,11 +141,13 @@ class RecordViewModel: ObservableObject {
                 try await firebaseService.fetchRecord(collection: recordsCollection, timer: formatTime(recordedTime), cadence: cadence, speed: speed, distance: distance, calorie: calorie, startTime: startTime, endTime: endTime, date: Date(), competetionStatus: false, tagetDistance: nil)
                 
                 print("기록 추가")
+                
+                await MainActor.run {
+                    self.onSaveRecording?()
+                }
             }
         } catch {
             print("기록 처리 에러: \(error.localizedDescription)")
         }
-        
-        onSaveRecording?()
     }
 }

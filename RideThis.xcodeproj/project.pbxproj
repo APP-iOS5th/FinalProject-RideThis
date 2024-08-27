@@ -16,7 +16,6 @@
 		043E0C842C6F378D00F25AF7 /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C832C6F378D00F25AF7 /* Double+Extension.swift */; };
 		043E0C872C6F38F700F25AF7 /* SummaryRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C862C6F38F700F25AF7 /* SummaryRecordViewController.swift */; };
 		043E0C892C70AC2400F25AF7 /* SummaryRecordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C882C70AC2400F25AF7 /* SummaryRecordViewModel.swift */; };
-		0493F5C22C7CF26600290A4C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0493F5C12C7CF26600290A4C /* GoogleService-Info.plist */; };
 		04DEE5012C7C1F0F00338A61 /* BluetoothModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DEE5002C7C1F0F00338A61 /* BluetoothModel.swift */; };
 		04DEE5032C7C3FC300338A61 /* BluetoothManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DEE5022C7C3FC300338A61 /* BluetoothManager.swift */; };
 		04E3C0C82C6AEE62006B844F /* CompetitionTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0C72C6AEE62006B844F /* CompetitionTVCell.swift */; };
@@ -91,7 +90,6 @@
 		EB07B0BC2C6C79F20067BF0F /* RecordInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0B92C6C79F20067BF0F /* RecordInfoView.swift */; };
 		EB07B0BD2C6C79F20067BF0F /* RecordSumUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0BA2C6C79F20067BF0F /* RecordSumUpView.swift */; };
 		EB3DFA3E2C77218A00FA366C /* RecordDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3DFA3D2C77218A00FA366C /* RecordDetailViewController.swift */; };
-		EB6A234E2C7C1D73006A49C6 /* RecordStorageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6A234D2C7C1D73006A49C6 /* RecordStorageViewModel.swift */; };
 		EBB1F4182C76CA75007B0E3C /* RecordListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB1F4172C76CA75007B0E3C /* RecordListViewController.swift */; };
 		EBDF95542C7C65940067EA93 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EBDF95532C7C65940067EA93 /* GoogleService-Info.plist */; };
 		EBFE4DAB2C757A7D00A36FCA /* ResultRankingTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFE4DAA2C757A7D00A36FCA /* ResultRankingTVCell.swift */; };
@@ -125,7 +123,6 @@
 		043E0C832C6F378D00F25AF7 /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
 		043E0C862C6F38F700F25AF7 /* SummaryRecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryRecordViewController.swift; sourceTree = "<group>"; };
 		043E0C882C70AC2400F25AF7 /* SummaryRecordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryRecordViewModel.swift; sourceTree = "<group>"; };
-		0493F5C12C7CF26600290A4C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		04DEE5002C7C1F0F00338A61 /* BluetoothModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothModel.swift; sourceTree = "<group>"; };
 		04DEE5022C7C3FC300338A61 /* BluetoothManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothManager.swift; sourceTree = "<group>"; };
 		04E3C0C72C6AEE62006B844F /* CompetitionTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionTVCell.swift; sourceTree = "<group>"; };
@@ -196,7 +193,6 @@
 		EB07B0B92C6C79F20067BF0F /* RecordInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordInfoView.swift; sourceTree = "<group>"; };
 		EB07B0BA2C6C79F20067BF0F /* RecordSumUpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordSumUpView.swift; sourceTree = "<group>"; };
 		EB3DFA3D2C77218A00FA366C /* RecordDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetailViewController.swift; sourceTree = "<group>"; };
-		EB6A234D2C7C1D73006A49C6 /* RecordStorageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordStorageViewModel.swift; sourceTree = "<group>"; };
 		EBB1F4172C76CA75007B0E3C /* RecordListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListViewController.swift; sourceTree = "<group>"; };
 		EBDF95532C7C65940067EA93 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EBFE4DAA2C757A7D00A36FCA /* ResultRankingTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultRankingTVCell.swift; sourceTree = "<group>"; };
@@ -324,7 +320,6 @@
 			children = (
 				EBDF95532C7C65940067EA93 /* GoogleService-Info.plist */,
 				CDC0C1D32C65FB4300349DC4 /* RideThis.entitlements */,
-				0493F5C12C7CF26600290A4C /* GoogleService-Info.plist */,
 				CD4214502C6498FF00F7C3AE /* Extension */,
 				CD4214212C64989000F7C3AE /* App */,
 				CD42140F2C64988C00F7C3AE /* Service */,
@@ -437,7 +432,6 @@
 			isa = PBXGroup;
 			children = (
 				CD4214552C64994F00F7C3AE /* RecordViewModel.swift */,
-				EB6A234D2C7C1D73006A49C6 /* RecordStorageViewModel.swift */,
 			);
 			path = Record;
 			sourceTree = "<group>";
@@ -700,7 +694,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CD4213CC2C64982200F7C3AE /* Assets.xcassets in Resources */,
-				0493F5C22C7CF26600290A4C /* GoogleService-Info.plist in Resources */,
 				CD4213CF2C64982200F7C3AE /* Base in Resources */,
 				EBDF95542C7C65940067EA93 /* GoogleService-Info.plist in Resources */,
 			);
@@ -737,7 +730,6 @@
 				CD0EC4CD2C71FC4800E70452 /* SearchUserView.swift in Sources */,
 				EB3DFA3E2C77218A00FA366C /* RecordDetailViewController.swift in Sources */,
 				CD42145C2C64998200F7C3AE /* DeviceViewModel.swift in Sources */,
-				EB6A234E2C7C1D73006A49C6 /* RecordStorageViewModel.swift in Sources */,
 				EBFE4DB22C757AE800A36FCA /* KeyChain.swift in Sources */,
 				CD3E64692C76F5390018C46E /* FollowManageViewModel.swift in Sources */,
 				CD66F5D42C6C887E00CDBB0B /* AccountSettingView.swift in Sources */,

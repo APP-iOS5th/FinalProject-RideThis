@@ -9,7 +9,16 @@ import UIKit
 import SnapKit
 
 class RecordSumUpView: RideThisViewController {
-    let viewModel = RecordViewModel()
+    let viewModel: RecordViewModel
+    
+    init(viewModel: RecordViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // 커스텀 타이틀
     private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "운동기록 요약")
@@ -60,13 +69,17 @@ class RecordSumUpView: RideThisViewController {
             guard let self = self else { return }
             
             if UserService.shared.loginStatus == .appleLogin { // 로그인 상태일 때
-                print("Logined")
+                print("로그인 유저")
                 showAlert(alertTitle: "기록 저장", msg: "기록을 저장하시겠습니까?", confirm: "저장"
                 ) {
                     self.updateViewModelWithRecordData()
                     
                     Task {
                         await self.viewModel.saveRecording()
+                        
+                        await MainActor.run {
+                            self.navigateToRecordView()
+                        }
                     }
                 }
             } else { // 미로그인 상태일 때
@@ -146,6 +159,7 @@ class RecordSumUpView: RideThisViewController {
         viewModel.calorie = Double(calorieRecord.recordLabel.text!.replacingOccurrences(of: " kcal", with: "")) ?? 0
     }
     
+    @MainActor
     private func navigateToRecordView() {
         self.navigationController?.popToRootViewController(animated: true) // 기록 화면으로 이동
     }
@@ -171,5 +185,5 @@ class RecordSumUpView: RideThisViewController {
 }
 
 #Preview {
-    UINavigationController(rootViewController: RecordSumUpView())
+    UINavigationController(rootViewController: RecordSumUpView(viewModel: RecordViewModel()))
 }
