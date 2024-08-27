@@ -57,6 +57,7 @@ class TabBarCoordinator: Coordinator {
         // 탭바 뷰 컨트롤러 설정
         tabBarController.viewControllers = [homeNavigationController, competetionNavigationController, recordNavigationController, deviceNavigationController, myPageNavigationController]
         
+        tabBarController.overrideUserInterfaceStyle = .light
         tabBarController.tabBar.tintColor = .primaryColor
     }
 }
