@@ -35,7 +35,7 @@ class StartCometitionViewModel: BluetoothManagerDelegate {
     private var speedValues: [Double] = []
     
     // Device데이터
-    var deviceInfo: BluetoothModel = BluetoothModel(device_firmware_version: "test123", device_name: "test", device_registration_status: false, device_serial_number: "13", device_wheel_circumference: 123)
+    var deviceInfo: RecordDeviceModel = RecordDeviceModel(device_firmware_version: "test123", device_name: "test", device_registration_status: false, device_serial_number: "13", device_wheel_circumference: 123)
     
     // 타이머 데이터
     var startTime: Date?
@@ -53,7 +53,7 @@ class StartCometitionViewModel: BluetoothManagerDelegate {
     init(startTime: Date, goalDistnace: Double, userWeight: Int) {
         self.startTime = startTime
          self.goalDistance = goalDistnace
-        self.userWeight = service.signedUser?.user_weight ?? 0
+        self.userWeight = service.combineUser?.user_weight ?? 0
     }
     
     // MARK: Timer 업데이트
@@ -76,7 +76,7 @@ class StartCometitionViewModel: BluetoothManagerDelegate {
     func competitionUpdateData() async {
         do {
             // 유저아이디가 존재하는지 확인
-            let userDocument = try await firebaseService.fetchUser(at: service.signedUser?.user_id ?? "", userType: false)
+            let userDocument = try await firebaseService.fetchUser(at: service.combineUser?.user_id ?? "", userType: false)
             
             if case .userSnapshot(let queryDocumentSnapshot) = userDocument {
                 guard let doc = queryDocumentSnapshot else {
@@ -117,7 +117,7 @@ class StartCometitionViewModel: BluetoothManagerDelegate {
     func fetchDeviceData() {
         Task {
             do {
-                let userDocument = try await firebaseService.fetchUser(at: service.signedUser?.user_id ?? "", userType: false)
+                let userDocument = try await firebaseService.fetchUser(at: service.combineUser?.user_id ?? "", userType: false)
                 
                 if case .userSnapshot(let queryDocumentSnapshot) = userDocument {
                     guard let doc = queryDocumentSnapshot else {
@@ -130,7 +130,7 @@ class StartCometitionViewModel: BluetoothManagerDelegate {
                     if let activeDeviceDocument = deviceDocuments.documents.first(where: { document in
                         return document["device_registration_status"] as? Bool == true
                     }) {
-                        deviceInfo = BluetoothModel(
+                        deviceInfo = RecordDeviceModel(
                             device_firmware_version: activeDeviceDocument["device_firmware_version"] as? String ?? "",
                             device_name: activeDeviceDocument["device_name"] as? String ?? "",
                             device_registration_status: activeDeviceDocument["device_registration_status"] as? Bool ?? false,

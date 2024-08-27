@@ -13,11 +13,18 @@ protocol BluetoothManagerDelegate: AnyObject {
     func didUpdateSpeed(_ speed: Double)
     func didUpdateDistance(_ distance: Double)
     func didUpdateCalories(_ calories: Double)
+    
+
+}
+
+protocol BluetoothViewDelegate: AnyObject {
+    func bluetoothDidTurnOff()
 }
 
 class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     
     weak var delegate: BluetoothManagerDelegate?
+    weak var viewDelegate: BluetoothViewDelegate?
     
     private var centralManager: CBCentralManager!
     private var cadencePeripheral: CBPeripheral?
@@ -75,6 +82,7 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
             print("블루투스가 켜졌습니다.")
         } else {
             print("블루투스가 꺼졌거나 사용 불가능한 상태입니다.")
+            viewDelegate?.bluetoothDidTurnOff()
         }
     }
     
