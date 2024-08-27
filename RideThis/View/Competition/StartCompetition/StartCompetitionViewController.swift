@@ -7,6 +7,7 @@ class StartCompetitionViewController: RideThisViewController {
     var goalDistance: String
     private let viewModel: StartCometitionViewModel
     private var cancellables = Set<AnyCancellable>()
+    private var bluetoothManager: BluetoothManager?
     
     private let timerRecord = RecordContainer(title: "Timer", recordText: "00:00", view: "record")
     private let cadenceRecord = RecordContainer(title: "Cadence", recordText: "0 RPM", view: "record")
@@ -56,6 +57,9 @@ class StartCompetitionViewController: RideThisViewController {
         let goalDistanceDouble = Double(goalDistance) ?? 0.0
         self.viewModel = StartCometitionViewModel(startTime: Date(), goalDistnace: goalDistanceDouble, userWeight: 0)
         super.init(nibName: nil, bundle: nil)
+        
+        self.bluetoothManager = BluetoothManager(targetDeviceName: "DeviceName", userWeight: 70, wheelCircumference: 2.105)
+        self.bluetoothManager?.viewDelegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -254,3 +258,15 @@ class StartCompetitionViewController: RideThisViewController {
 }
 
 
+// MARK: BluetoothDelegate
+extension StartCompetitionViewController: BluetoothViewDelegate {
+    
+    func bluetoothDidTurnOff() {
+        self.navigationController?.popToRootViewController(animated: true)
+        
+        if let tabBarController = self.tabBarController {
+            tabBarController.tabBar.items?.forEach{ $0.isEnabled = true }
+            tabBarController.selectedIndex = 3
+        }
+    }
+}
