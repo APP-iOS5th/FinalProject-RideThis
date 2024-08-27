@@ -86,6 +86,10 @@
 		CDC0C1DE2C664E7400349DC4 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC0C1DD2C664E7400349DC4 /* UIView+Extension.swift */; };
 		CDC0C1E02C664FFE00349DC4 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC0C1DF2C664FFE00349DC4 /* UIButton+Extension.swift */; };
 		CDE25C6E2C6913B8008E2A80 /* EditProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE25C6D2C6913B8008E2A80 /* EditProfileInfoView.swift */; };
+		CDE36A062C7DA12100B743B9 /* DeviceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE36A052C7DA12100B743B9 /* DeviceProtocol.swift */; };
+		CDE36A082C7DA12900B743B9 /* RecordProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE36A072C7DA12900B743B9 /* RecordProtocol.swift */; };
+		CDE36A0A2C7DA13100B743B9 /* CompetitionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE36A092C7DA13100B743B9 /* CompetitionProtocol.swift */; };
+		CDE36A0C2C7DA13800B743B9 /* HomeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE36A0B2C7DA13800B743B9 /* HomeProtocol.swift */; };
 		EB07B0BB2C6C79F20067BF0F /* RecordContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0B82C6C79F20067BF0F /* RecordContainerView.swift */; };
 		EB07B0BC2C6C79F20067BF0F /* RecordInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0B92C6C79F20067BF0F /* RecordInfoView.swift */; };
 		EB07B0BD2C6C79F20067BF0F /* RecordSumUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0BA2C6C79F20067BF0F /* RecordSumUpView.swift */; };
@@ -189,6 +193,10 @@
 		CDC0C1DD2C664E7400349DC4 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		CDC0C1DF2C664FFE00349DC4 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		CDE25C6D2C6913B8008E2A80 /* EditProfileInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileInfoView.swift; sourceTree = "<group>"; };
+		CDE36A052C7DA12100B743B9 /* DeviceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceProtocol.swift; sourceTree = "<group>"; };
+		CDE36A072C7DA12900B743B9 /* RecordProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordProtocol.swift; sourceTree = "<group>"; };
+		CDE36A092C7DA13100B743B9 /* CompetitionProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionProtocol.swift; sourceTree = "<group>"; };
+		CDE36A0B2C7DA13800B743B9 /* HomeProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeProtocol.swift; sourceTree = "<group>"; };
 		EB07B0B82C6C79F20067BF0F /* RecordContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordContainerView.swift; sourceTree = "<group>"; };
 		EB07B0B92C6C79F20067BF0F /* RecordInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordInfoView.swift; sourceTree = "<group>"; };
 		EB07B0BA2C6C79F20067BF0F /* RecordSumUpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordSumUpView.swift; sourceTree = "<group>"; };
@@ -320,6 +328,8 @@
 			children = (
 				EBDF95532C7C65940067EA93 /* GoogleService-Info.plist */,
 				CDC0C1D32C65FB4300349DC4 /* RideThis.entitlements */,
+				0493F5C12C7CF26600290A4C /* GoogleService-Info.plist */,
+				CDE369FF2C7DA0E000B743B9 /* Protocol */,
 				CD4214502C6498FF00F7C3AE /* Extension */,
 				CD4214212C64989000F7C3AE /* App */,
 				CD42140F2C64988C00F7C3AE /* Service */,
@@ -587,7 +597,6 @@
 		CD4214622C649A1600F7C3AE /* Coordinator */ = {
 			isa = PBXGroup;
 			children = (
-				CDB71B9F2C78A72400DC5D57 /* MyPageProtocol.swift */,
 			);
 			path = Coordinator;
 			sourceTree = "<group>";
@@ -608,6 +617,58 @@
 				CD0EC4CA2C71F10500E70452 /* FollowTableViewCell.swift */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		CDE369FF2C7DA0E000B743B9 /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				CDE36A042C7DA11000B743B9 /* MyPage */,
+				CDE36A032C7DA10C00B743B9 /* Device */,
+				CDE36A022C7DA10700B743B9 /* Record */,
+				CDE36A012C7DA0F100B743B9 /* Competition */,
+				CDE36A002C7DA0E900B743B9 /* Home */,
+			);
+			path = Protocol;
+			sourceTree = "<group>";
+		};
+		CDE36A002C7DA0E900B743B9 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				CDE36A0B2C7DA13800B743B9 /* HomeProtocol.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		CDE36A012C7DA0F100B743B9 /* Competition */ = {
+			isa = PBXGroup;
+			children = (
+				CDE36A092C7DA13100B743B9 /* CompetitionProtocol.swift */,
+			);
+			name = Competition;
+			sourceTree = "<group>";
+		};
+		CDE36A022C7DA10700B743B9 /* Record */ = {
+			isa = PBXGroup;
+			children = (
+				CDE36A072C7DA12900B743B9 /* RecordProtocol.swift */,
+			);
+			path = Record;
+			sourceTree = "<group>";
+		};
+		CDE36A032C7DA10C00B743B9 /* Device */ = {
+			isa = PBXGroup;
+			children = (
+				CDE36A052C7DA12100B743B9 /* DeviceProtocol.swift */,
+			);
+			path = Device;
+			sourceTree = "<group>";
+		};
+		CDE36A042C7DA11000B743B9 /* MyPage */ = {
+			isa = PBXGroup;
+			children = (
+				CDB71B9F2C78A72400DC5D57 /* MyPageProtocol.swift */,
+			);
+			path = MyPage;
 			sourceTree = "<group>";
 		};
 		EBFE4DAD2C757AA800A36FCA /* ResultRanking */ = {
@@ -706,6 +767,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CDE36A0C2C7DA13800B743B9 /* HomeProtocol.swift in Sources */,
 				EB07B0BC2C6C79F20067BF0F /* RecordInfoView.swift in Sources */,
 				78DBD01D2C7882B700B43A62 /* DeviceTableViewCell.swift in Sources */,
 				04E3C0D32C6B37F7006B844F /* DistancSelectionViewController.swift in Sources */,
@@ -756,14 +818,17 @@
 				CD4214112C64988C00F7C3AE /* DeviceView.swift in Sources */,
 				EBFE4DAE2C757AA800A36FCA /* ResultRankingViewController.swift in Sources */,
 				041A67392C6C6B0E000BA4C1 /* StartCompetitionViewController.swift in Sources */,
+				CDE36A062C7DA12100B743B9 /* DeviceProtocol.swift in Sources */,
 				78DBD01B2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift in Sources */,
 				CD0E1E852C6A409F0080CFED /* SettingView.swift in Sources */,
 				CD66F5D02C6C837E00CDBB0B /* SettingTableViewCell.swift in Sources */,
 				CD42145A2C64997100F7C3AE /* HomeViewModel.swift in Sources */,
 				CD4214142C64988C00F7C3AE /* RecordView.swift in Sources */,
 				CD4214122C64988C00F7C3AE /* HomeView.swift in Sources */,
+				CDE36A082C7DA12900B743B9 /* RecordProtocol.swift in Sources */,
 				04E3C0CF2C6B32B8006B844F /* CompetitionCoordinator.swift in Sources */,
 				CDAC668B2C6CF0CF005506FB /* AccountQuitView.swift in Sources */,
+				CDE36A0A2C7DA13100B743B9 /* CompetitionProtocol.swift in Sources */,
 				CD0EC4D32C7227AB00E70452 /* LoginView.swift in Sources */,
 				78254FD42C7C05CB0069B10A /* DeviceSearchTableViewCell.swift in Sources */,
 				CD3E646B2C777A180018C46E /* SearchUserViewModel.swift in Sources */,
