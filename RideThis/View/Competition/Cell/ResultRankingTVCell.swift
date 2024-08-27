@@ -123,11 +123,5 @@ class ResultRankingTVCell: UITableViewCell {
             timeLabel.textColor = .black
             numberImage.isHidden = true
         }
-        
-        // 해당 아이디 강조
-        if item.record_timer == "45:00" {
-            userNameLabel.textColor = .primaryColor
-            timeLabel.textColor = .primaryColor
-        }
     }
 }

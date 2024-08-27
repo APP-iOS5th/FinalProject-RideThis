@@ -5,7 +5,7 @@ import Combine
 // 경쟁 탭 초기 화면
 class CompetitionView: RideThisViewController {
     
-    private let viewModel = CompetitionViewModel(isLogin: false)
+    private let viewModel = CompetitionViewModel(isLogin: false, nickName: "")
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -100,6 +100,7 @@ class CompetitionView: RideThisViewController {
           
           // 데이터를 새로고침
           self.viewModel.fetchAllRecords()
+          self.viewModel.checkBluetoothStatus()
       }
     
     // MARK: setupUI
@@ -260,13 +261,14 @@ class CompetitionView: RideThisViewController {
             
             if self.viewModel.isLogin {
                 if self.viewModel.isBluetooth {
-                    print("경쟁하기 뷰 이동~")
 
                     let distanceSelectionVC = DistanceSelectionViewController()
                     self.navigationController?.pushViewController(distanceSelectionVC, animated: true)
                 } else {
                     showAlert(alertTitle: "장치연결이 필요합니다.", msg: "사용하시려면 장치를 연결해주세요.", confirm: "장치연결") {
-                        print("장치연결 뷰 이동~")
+                        if let tabBarController = self.tabBarController {
+                            tabBarController.selectedIndex = 3
+                        }
                     }
                 }
             } else {

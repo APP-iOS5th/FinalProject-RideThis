@@ -1,13 +1,16 @@
 import UIKit
 import FirebaseFirestore
 import FirebaseStorage
+import Combine
 
 class SignUpInfoView: RideThisViewController {
     
     // MARK: Data Components
     let userId: String
     let userEmail: String?
-    private let userService = UserService()
+    private let userService = UserService.shared
+    private let viewModel = SignUpInfoViewModel()
+    private lazy var cancellable = Set<AnyCancellable>()
     
     init(userId: String, userEmail: String?) {
         self.userId = userId
@@ -43,19 +46,22 @@ class SignUpInfoView: RideThisViewController {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.placeholder = "이메일을 입력해주세요"
+        tf.autocapitalizationType = .none
         tf.text = userEmail
-        if userEmail != nil {
-            tf.isEnabled = false
-        }
+        tf.addTarget(self, action: #selector(textFieldValueChanged(_:)), for: .editingChanged)
+        tf.setKeyboardHider()
+        self.viewModel.emailText = userEmail ?? ""
         
         return tf
     }()
     private let userInfoSeparator = CustomSeparator()
     private let userNickNameLabel = RideThisLabel(text: "닉네임")
-    private let userNickName: UITextField = {
+    private lazy var userNickName: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.placeholder = "닉네임을 입력해주세요."
+        tf.addTarget(self, action: #selector(textFieldValueChanged(_:)), for: .editingChanged)
+        tf.setKeyboardHider()
         
         return tf
     }()
@@ -64,34 +70,42 @@ class SignUpInfoView: RideThisViewController {
     // MARK: SignUp Info - 2
     private let userInfoContainer2 = RideThisContainer(height: 100)
     private let userWeightLabel = RideThisLabel(text: "몸무게(kg)")
-    private let userWeight: UITextField = {
+    private lazy var userWeight: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.placeholder = "몸무게를 입력해주세요."
+        tf.keyboardType = .numberPad
+        tf.addTarget(self, action: #selector(textFieldValueChanged(_:)), for: .editingChanged)
+        tf.setKeyboardHider()
         
         return tf
     }()
     private let userInfoSeparator2 = CustomSeparator()
     private let userHeightLabel = RideThisLabel(text: "키(cm)")
-    private let userHeight: UITextField = {
+    private lazy var userHeight: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.placeholder = "키를 입력해주세요."
+        tf.keyboardType = .numberPad
+        tf.addTarget(self, action: #selector(textFieldValueChanged(_:)), for: .editingChanged)
+        tf.setKeyboardHider()
         
         return tf
     }()
     private let userInfoLabel2 = RideThisLabel(fontType: .smallTitle, text: "키, 몸무게는 운동 시 칼로리 측정을 위해 입력해주세요.")
     
     // MARK: Next Button
-    private let nextButton = RideThisButton(buttonTitle: "회원가입", height: 50)
+    private let nextButton = RideThisButton(buttonTitle: "시작하기", height: 50)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureUI()
+        setBindingData()
     }
     
     func configureUI() {
+        self.overrideUserInterfaceStyle = .light
         setInfoLabel()
         setInfoContainer()
         setNextButton()
@@ -114,7 +128,18 @@ class SignUpInfoView: RideThisViewController {
     func setInfoContainer() {
         view.addSubview(userInfoContainer)
         [userEmailLabel, userEmailTextField, userInfoSeparator,
-         userNickNameLabel, userNickName].forEach { userInfoContainer.addSubview($0) }
+         userNickNameLabel, userNickName].enumerated().forEach { (idx, ui) in
+            userInfoContainer.addSubview(ui)
+            if [0, 3].contains(idx) {
+                let mandatoryImgView = MandatoryMark(frame: .zero)
+                
+                userInfoContainer.addSubview(mandatoryImgView)
+                mandatoryImgView.snp.makeConstraints {
+                    $0.bottom.equalTo(ui.snp.top).offset(5)
+                    $0.right.equalTo(ui.snp.left).offset(3)
+                }
+            }
+        }
         
         userInfoContainer.snp.makeConstraints {
             $0.top.equalTo(signUpInfoLabel.snp.bottom).offset(30)
@@ -164,7 +189,18 @@ class SignUpInfoView: RideThisViewController {
         }
         
         [userWeightLabel, userWeight, userInfoSeparator2,
-         userHeightLabel, userHeight, userInfoLabel2].forEach { userInfoContainer2.addSubview($0) }
+         userHeightLabel, userHeight, userInfoLabel2].enumerated().forEach { (idx, ui) in
+            userInfoContainer2.addSubview(ui)
+            if idx == 0 {
+                let mandatoryImgView = MandatoryMark(frame: .zero)
+                
+                userInfoContainer2.addSubview(mandatoryImgView)
+                mandatoryImgView.snp.makeConstraints {
+                    $0.bottom.equalTo(ui.snp.top).offset(5)
+                    $0.right.equalTo(ui.snp.left).offset(3)
+                }
+            }
+        }
         
         userWeightLabel.snp.makeConstraints {
             $0.top.equalTo(userInfoContainer2.snp.top).offset(15)
@@ -206,13 +242,13 @@ class SignUpInfoView: RideThisViewController {
             $0.left.equalTo(userInfoContainer.snp.left)
             $0.right.equalTo(userInfoContainer.snp.right)
         }
-        
+        nextButton.backgroundColor = self.viewModel.allFieldFilled ? .primaryColor : .lightGray
         nextButton.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
-            // MARK: next버튼 누르면 Firebase에 저장
+            
             let db = Firestore.firestore()
             let usersCollection = db.collection("USERS")
-            let enteredEmail: String = userEmail ?? ""
+            let enteredEmail: String = userEmailTextField.text ?? ""
             let enteredNickname: String = userNickName.text ?? ""
             
             let newUser: [String: Any] = [
@@ -223,7 +259,7 @@ class SignUpInfoView: RideThisViewController {
                 "user_id": userId,
                 "user_image": "",
                 "user_nickname": enteredNickname,
-                "user_tall": Int(userHeight.text ?? "")!,
+                "user_tall": userHeight.text!.isEmpty ? -1 : Int(userHeight.text!)!,
                 "user_weight": Int(userWeight.text ?? "")!
             ]
             
@@ -240,16 +276,62 @@ class SignUpInfoView: RideThisViewController {
                                    user_email: enteredEmail,
                                    user_nickname: enteredNickname,
                                    user_weight: Int(userWeight.text!)!,
-                                   user_tall: Int(userHeight.text!),
+                                   user_tall: userHeight.text!.isEmpty ? -1 : Int(userHeight.text!)!,
                                    user_following: [],
                                    user_follower: [],
                                    user_account_public: false)
             
-            userService.signedUser = createdUser
+            userService.combineUser = createdUser
             
             if let scene = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate) {
-                scene.changeRootView(viewController: scene.getTabbarController(), animated: true)
+                let tabbarCtr = scene.getTabbarController(selectedIndex: 4)
+                scene.changeRootView(viewController: tabbarCtr, animated: true)
             }
         }, for: .touchUpInside)
+    }
+    
+    func setBindingData() {
+        viewModel.$allFieldFilled
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] filled in
+                guard let self = self else { return }
+                nextButton.isEnabled = filled
+                nextButton.backgroundColor = filled ? .primaryColor : .lightGray
+            }
+            .store(in: &cancellable)
+        
+        viewModel.$isExistNickName
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] exist in
+                guard let self = self else { return }
+                
+                if exist {
+                    userNickName.textColor = .systemRed
+                } else {
+                    userNickName.textColor = .label
+                }
+            }
+            .store(in: &cancellable)
+    }
+    
+    @objc func textFieldValueChanged(_ sender: UITextField) {
+        switch sender {
+        case self.userEmailTextField:
+            self.viewModel.emailText = sender.text ?? ""
+        case self.userNickName:
+            self.viewModel.nickNameText = sender.text ?? ""
+        case self.userWeight:
+            if let text = sender.text, text.count > 3 {
+                sender.text?.removeLast()
+            }
+            self.viewModel.weightText = sender.text ?? ""
+        case self.userHeight:
+            if let text = sender.text, text.count > 3 {
+                sender.text?.removeLast()
+            }
+        default:
+            print("default")
+            break
+        }
     }
 }
