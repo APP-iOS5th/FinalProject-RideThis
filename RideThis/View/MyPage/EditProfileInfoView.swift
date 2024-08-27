@@ -23,7 +23,6 @@ class EditProfileInfoView: RideThisViewController {
     
     // MARK: UI Components
     private lazy var profileImageView: UIImageView = {
-        // TODO: 이미지를 탭 했을 때 이미지(사용자 사진첩)를 변경할 수 있는 화면
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.widthAnchor.constraint(equalToConstant: 120).isActive = true

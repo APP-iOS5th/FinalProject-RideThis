@@ -82,8 +82,7 @@ class FollowTableViewCell: UITableViewCell {
                   let btnLabel = self.followButton.titleLabel,
                   let cellUser = self.cellUser,
                   let signedUser = self.signedUser else { return }
-            // 버튼의 title이 Unfollow면 signedUser.user_following에서 cellUser.user_id를 삭제하고 cellUser.user_follower에서 signedUser.user_id를 삭제한다.
-            // 근데 바로 tableView에 업데이트 하지않고 title만 Unfollow -> Follow / Follow -> Unfollow로 수정하고 백그라운드에서 firebase에 데이터를 수정한다. 그리고 다시 화면을 띄울 때 적용된 화면을 보여준다
+            
             if let title = btnLabel.text {
                 if title == "Follow" {
                     self.followButton.setTitle("Unfollow", for: .normal)

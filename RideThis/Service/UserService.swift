@@ -9,10 +9,11 @@ enum UserStatus {
 }
 
 class UserService {
-    static let shared = UserService()
+    @Published var signedUser: User? = nil
+    private var cancellable = Set<AnyCancellable>()
     private let keyChain = Keychain()
-    var signedUser: User? = nil
-    @Published var combineUser: User? = nil
+    static let shared = UserService()
+    var combineUser: User? = nil
     var loginStatus: UserStatus {
         get {
             if combineUser == nil {
@@ -21,6 +22,16 @@ class UserService {
                 return .appleLogin
             }
         }
+    }
+    
+    init() {
+        $signedUser
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] user in
+                guard let self = self else { return }
+                self.combineUser = user
+            }
+            .store(in: &cancellable)
     }
     
     func checkPrevAppleLogin() {
@@ -65,7 +76,6 @@ class UserService {
                     return
                 }
                 self.signedUser = user
-                self.combineUser = user
             }
         } catch {
             print(error)
