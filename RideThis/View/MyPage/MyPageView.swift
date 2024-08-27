@@ -44,6 +44,7 @@ class MyPageView: RideThisViewController {
         
         return imageView
     }()
+    
     // MARK: TODO - 팔로워 / 팔로잉 숫자가 커질 때 잘 대비 해야함.
     private let followerLabel = RideThisLabel(fontType: .profileFont, text: "팔로워")
     private let followerCountLabel = RideThisLabel(fontType: .profileFont)
@@ -52,7 +53,7 @@ class MyPageView: RideThisViewController {
     private let notLoginLabel = RideThisLabel(fontType: .recordInfoTitle, text: "로그인이 필요한 화면입니다.")
     private let loginButton = RideThisButton(buttonTitle: "로그인", height: 50)
     
-    // MARK: User Info
+    // MARK: 접속한 사용자 정보
     private let userInfoLabel = RideThisLabel(fontType: .profileFont, text: "정보")
     private lazy var profileEditButton: UIButton = {
         let btn = UIButton()
@@ -169,8 +170,8 @@ class MyPageView: RideThisViewController {
     private var selectedPeriodDataUnit = ShowingData.cadence.unit
     
     // MARK: Data for UI
-    let graphSectionCount = 4
     lazy var itemSize = CGSize(width: self.view.frame.width - 65, height: 400)
+    let graphSectionCount = 4
     let itemSpacing = 15.0
     
     override func viewDidLoad() {
@@ -180,12 +181,6 @@ class MyPageView: RideThisViewController {
         setUIComponents()
         setUserData()
         setCombineData()
-    }
-    
-    func setNavigationComponents() {
-        let settingButton = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: #selector(settingButtonTapAction))
-        settingButton.tintColor = .label
-        self.navigationItem.rightBarButtonItem = settingButton
     }
     
     func setUIComponents() {
@@ -224,6 +219,12 @@ class MyPageView: RideThisViewController {
             guard let self = self else { return }
             self.navigationController?.pushViewController(LoginView(), animated: true)
         }, for: .touchUpInside)
+    }
+    
+    func setNavigationComponents() {
+        let settingButton = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: #selector(settingButtonTapAction))
+        settingButton.tintColor = .label
+        self.navigationItem.rightBarButtonItem = settingButton
     }
     
     func setScrollView() {
@@ -503,6 +504,7 @@ class MyPageView: RideThisViewController {
         }
     }
     
+    // MARK: 애플로그인으로 접속한 회원을 Firebase에서 조회해 각 Label에 뿌려줌
     func setUserData() {
         guard let user = service.combineUser else { return }
         if let imageUrl = user.user_image {
@@ -523,8 +525,9 @@ class MyPageView: RideThisViewController {
         }
     }
     
+    // MARK: 회원정보 수정 및 팔로우 등의 이벤트를 처리 후 접속한 사용자의 정보가 업데이트 되었을 때 UI동적으로 처리
     func setCombineData() {
-        service.$combineUser
+        service.$signedUser
             .sink { [weak self] receivedUser in
                 guard let self = self, let combineUser = receivedUser else { return }
                 DispatchQueue.main.async {
@@ -576,6 +579,7 @@ class MyPageView: RideThisViewController {
     }
 }
 
+// MARK: 케이던스, 거리, 속도, 칼로리 그래프를 페이징으로 보여주기 위한 UICollectionView delegate들
 extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return graphSectionCount
@@ -591,6 +595,7 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
         return cell
     }
     
+    // MARK: CollectionViewFolowLayout을 좌우로 스와이프 했을 때 event
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let scrolledOffsetX = targetContentOffset.pointee.x + scrollView.contentInset.left
         let cellWidth = itemSize.width + itemSpacing
@@ -632,11 +637,13 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
         }
     }
     
+    // MARK: 프로필 Container를 선택했을 때 팔로우 관리 페이지로 이동하는 event등록
     func setEventToProfileContainer() {
         let profileContainerTapEvent = UITapGestureRecognizer(target: self, action: #selector(toFollowerView))
         profileContainer.addGestureRecognizer(profileContainerTapEvent)
     }
     
+    // MARK: 프로필 Container를 선택했을 때 팔로우 관리 페이지로 이동
     @objc func toFollowerView() {
         if service.combineUser != nil {
             let followView = FollowManageView(user: service.combineUser!)
@@ -650,6 +657,7 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
     }
 }
 
+// MARK: 프로필 사진을 편집했을 때 서버에서 저장 후 프로필의 이미지를 갱신할 때 시간이 걸려서 UI를 먼저 업데이트하고 서버작업은 뒤에서 하도록 하기 위한 delegate
 extension MyPageView: ProfileImageUpdateDelegate {
     func imageUpdate(image: UIImage) {
         DispatchQueue.main.async {

@@ -113,7 +113,7 @@ class AccountSettingView: RideThisViewController {
     }
     
     func setUserData() {
-        guard let user = service.signedUser else { return }
+        guard let user = service.combineUser else { return }
         self.loginAccount.text = user.user_email
     }
 }
