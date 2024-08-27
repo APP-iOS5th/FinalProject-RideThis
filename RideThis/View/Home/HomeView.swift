@@ -480,7 +480,3 @@ class HomeView: RideThisViewController {
         letsRideTitleLabel.text = "\(model.userName)님, 라이딩 고고씽?"
     }
 }
-
-#Preview {
-    UINavigationController(rootViewController: HomeView())
-}
