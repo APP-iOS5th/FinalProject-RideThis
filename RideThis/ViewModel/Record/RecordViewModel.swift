@@ -29,10 +29,15 @@ class RecordViewModel: ObservableObject {
     // 기록 종료 시 화면 전환을 위한 클로저
     var onFinishRecording: (() -> Void)?
     
+    // 기록 시작 시간 & 종료 시간 저장
+    private var startTime: Date?
+    private var endTime: Date?
+    
     func startRecording() {
         // 기록 시작
         isRecording = true
         print("start pushed")
+        startTime = Date()
         startTimer()
     }
     
@@ -43,6 +48,8 @@ class RecordViewModel: ObservableObject {
         stopTimer()
         elapsedTime = 0.0
         recordedTime = 0.0
+        startTime = nil
+        endTime = nil
         onTimerUpdated?(formatTime(elapsedTime))
     }
     
@@ -52,7 +59,7 @@ class RecordViewModel: ObservableObject {
         print("finish pushed")
         stopTimer()
         recordedTime = elapsedTime
-        elapsedTime = 0 // 화면에 출력되는 값 초기화
+        endTime = Date()
         onFinishRecording?()
     }
     
@@ -70,12 +77,12 @@ class RecordViewModel: ObservableObject {
             self.onTimerUpdated?(self.formatTime(self.elapsedTime))
         }
     }
-
+    
     private func stopTimer() {
         timer?.invalidate()
         timer = nil
     }
-
+    
     func formatTime(_ time: TimeInterval) -> String {
         let minutes = Int(time) / 60
         let seconds = Int(time) % 60
@@ -90,11 +97,11 @@ class RecordViewModel: ObservableObject {
     @Published var competitionStatus: Bool = false
     @Published var targetDistance: Double? = nil
     
+    private let firebaseService = FireBaseService()
+    
     // 저장 또는 취소 시 화면 전환을 위한 클로저
     var onCancelSaveRecording: (() -> Void)?
-    var onSaveRecroding: (() -> Void)?
-    
-    private let storageViewModel = RecordStorageViewModel()
+    var onSaveRecording: (() -> Void)?
     
     func cancelSaveRecording() {
         print("save cancel pushed")
@@ -102,10 +109,45 @@ class RecordViewModel: ObservableObject {
         onCancelSaveRecording?()
     }
     
-    func saveRecording() {
+    func saveRecording() async {
         print("save pushed")
         // 기록 요약 화면에서 저장 버튼 누르면
-        storageViewModel.saveRecord(timer: formatTime(recordedTime), cadence: cadence, speed: speed, distance: distance, calorie: calorie, startTime: Date().addingTimeInterval(-recordedTime), endTime: Date(), date: Date(), competitionStatus: competitionStatus, targetDistance: targetDistance)
-        onSaveRecroding?()
+//        guard let startTime = startTime, let endTime = endTime else {
+//            print("기록 시간을 설정할 수 없습니다.")
+//            return
+//        }
+        
+        // 기록이 없는 상태에서는 저장을 시도하지 않도록 확인
+            guard let startTime = startTime else {
+                print("기록이 시작되지 않았습니다.")
+                return
+            }
+            
+            guard let endTime = endTime else {
+                print("기록이 종료되지 않았습니다.")
+                return
+            }
+        
+        do {
+            // 유저아이디가 존재하는지 확인
+            let userDocument = try await firebaseService.fetchUser(at: UserService.shared.signedUser?.user_id ?? "", userType: false)
+            
+            if case .userSnapshot(let queryDocumentSnapshot) = userDocument {
+                guard let doc = queryDocumentSnapshot else {
+                    print("유저를 찾을 수 없습니다.")
+                    return
+                }
+                // USERS 도큐먼트에서 Collection 찾기
+                let recordsCollection = firebaseService.fetchCollection(document: doc, collectionName: "RECORDS")
+                
+                try await firebaseService.fetchRecord(collection: recordsCollection, timer: formatTime(recordedTime), cadence: cadence, speed: speed, distance: distance, calorie: calorie, startTime: startTime, endTime: endTime, date: Date(), competetionStatus: false, tagetDistance: nil)
+                
+                print("기록 추가")
+            }
+        } catch {
+            print("기록 처리 에러: \(error.localizedDescription)")
+        }
+        
+        onSaveRecording?()
     }
 }

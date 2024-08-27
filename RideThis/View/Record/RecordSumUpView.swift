@@ -59,12 +59,15 @@ class RecordSumUpView: RideThisViewController {
         saveButton.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
             
-            if self.viewModel.isLogin { // 로그인 상태일 때
+            if UserService.shared.loginStatus == .appleLogin { // 로그인 상태일 때
                 print("Logined")
                 showAlert(alertTitle: "기록 저장", msg: "기록을 저장하시겠습니까?", confirm: "저장"
                 ) {
                     self.updateViewModelWithRecordData()
-                    self.viewModel.saveRecording()
+                    
+                    Task {
+                        await self.viewModel.saveRecording()
+                    }
                 }
             } else { // 미로그인 상태일 때
                 print("Not logined")
@@ -79,8 +82,7 @@ class RecordSumUpView: RideThisViewController {
             }
         }, for: .touchUpInside)
         
-        viewModel.onSaveRecroding = { [weak self] in
-            // TODO: - 저장 후 마이페이지 뷰-기록으로 이동인지 기록 뷰로 이동인지 확인 필요
+        viewModel.onSaveRecording = { [weak self] in
             // 일단 기록 뷰로 이동
             self?.navigateToRecordView()
         }

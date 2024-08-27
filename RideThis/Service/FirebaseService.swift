@@ -11,12 +11,6 @@ class FireBaseService {
     
     private let db = Firestore.firestore()
     
-    // MARK: USERS 컬렉션의 모든 데이터 가져오기
-    func fetchAllUsers() async throws -> [QueryDocumentSnapshot] {
-        let querySnapshot = try await db.collection("USERS").getDocuments()
-        return querySnapshot.documents
-    }
-    
     // MARK: UserId로 파이어베이스에 유저 확인
     func fetchUser(at userId: String, userType: Bool) async throws -> ReturnUserType {
         let querySnapshot = try await db.collection("USERS")

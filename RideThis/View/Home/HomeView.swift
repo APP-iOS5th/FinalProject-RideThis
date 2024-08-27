@@ -18,8 +18,6 @@ class HomeView: RideThisViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private var cancellables = Set<AnyCancellable>()
-    
     // MARK: 주간기록 안내 섹션 UI 요소들
     // 커스텀 타이틀
     private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "Home")
@@ -191,13 +189,6 @@ class HomeView: RideThisViewController {
         letsRideSectionContentView()
         weatherSectionContentView()
         setupBindings()
-    }
-    
-    // MARK: WeathrContainer 그라데이션
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        weatherContainer.setGradient(color1: UIColor(red: 12/255, green: 79/255, blue: 146/255, alpha: 1),
-                                     color2: UIColor(red: 77/255, green: 143/255, blue: 209/255, alpha: 1))
     }
     
     // MARK: WeathrContainer 그라데이션
