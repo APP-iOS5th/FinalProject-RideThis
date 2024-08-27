@@ -9,7 +9,16 @@ import UIKit
 import SnapKit
 
 class RecordSumUpView: RideThisViewController {
-    let viewModel = RecordViewModel()
+    let viewModel: RecordViewModel
+    
+    init(viewModel: RecordViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // 커스텀 타이틀
     private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "운동기록 요약")
@@ -40,7 +49,7 @@ class RecordSumUpView: RideThisViewController {
         self.view.addSubview(speedRecord)
         self.view.addSubview(distanceRecord)
         self.view.addSubview(calorieRecord)
-
+        
         // 버튼 추가
         self.view.addSubview(cancelButton)
         self.view.addSubview(saveButton)
@@ -59,26 +68,38 @@ class RecordSumUpView: RideThisViewController {
         saveButton.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
             
-            if self.viewModel.isLogin { // 로그인 상태일 때
+            if UserService.shared.loginStatus == .appleLogin { // 로그인 상태일 때
+                print("로그인 유저")
                 showAlert(alertTitle: "기록 저장", msg: "기록을 저장하시겠습니까?", confirm: "저장"
                 ) {
-                    self.viewModel.saveRecording()
+                    self.updateViewModelWithRecordData()
+                    
+                    Task {
+                        await self.viewModel.saveRecording()
+                        
+                        await MainActor.run {
+                            self.navigateToRecordView()
+                        }
+                    }
                 }
             } else { // 미로그인 상태일 때
+                print("Not logined")
                 showAlert(alertTitle: "로그인이 필요합니다.", msg: "기록 저장은 로그인이 필요한 서비스입니다.", confirm: "로그인") {
                     print("go to login")
-                    // TODO: - 로그인 페이지 이동 추가
+                    
+                    let loginVC = LoginView()
+                    self.navigationController?.pushViewController(loginVC, animated: true)
+                    
                     // MARK: - 설정한 '로그인'이 아니라 '확인'이 확인 버튼으로 출력
                 }
             }
         }, for: .touchUpInside)
         
-        viewModel.onSaveRecroding = { [weak self] in
-            // TODO: - 저장 후 마이페이지 뷰-기록으로 이동인지 기록 뷰로 이동인지 확인 필요
+        viewModel.onSaveRecording = { [weak self] in
             // 일단 기록 뷰로 이동
             self?.navigateToRecordView()
         }
-    
+        
         // 기록 뷰 제약조건
         timerRecord.snp.makeConstraints { timer in
             timer.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(10)
@@ -100,14 +121,14 @@ class RecordSumUpView: RideThisViewController {
             speed.right.equalToSuperview().offset(-20)
             speed.height.equalTo(100)
         }
-
+        
         distanceRecord.snp.makeConstraints { distance in
             distance.top.equalTo(speedRecord.snp.bottom).offset(20)
             distance.left.equalToSuperview().offset(20)
             distance.right.equalToSuperview().offset(-20)
             distance.height.equalTo(100)
         }
-
+        
         calorieRecord.snp.makeConstraints { calorie in
             calorie.top.equalTo(distanceRecord.snp.bottom).offset(20)
             calorie.left.equalToSuperview().offset(20)
@@ -131,9 +152,16 @@ class RecordSumUpView: RideThisViewController {
         }
     }
     
+    private func updateViewModelWithRecordData() {
+        viewModel.cadence = Double(cadenceRecord.recordLabel.text!.replacingOccurrences(of: " RPM", with: "")) ?? 0
+        viewModel.speed = Double(speedRecord.recordLabel.text!.replacingOccurrences(of: " km/h", with: "")) ?? 0
+        viewModel.distance = Double(distanceRecord.recordLabel.text!.replacingOccurrences(of: " km", with: "")) ?? 0
+        viewModel.calorie = Double(calorieRecord.recordLabel.text!.replacingOccurrences(of: " kcal", with: "")) ?? 0
+    }
+    
+    @MainActor
     private func navigateToRecordView() {
-        let recordViewController = RecordView()
-        self.navigationController?.pushViewController(recordViewController, animated: true) // 기록 화면으로 이동
+        self.navigationController?.popToRootViewController(animated: true) // 기록 화면으로 이동
     }
     
     // MARK: Navigation Bar
@@ -157,5 +185,5 @@ class RecordSumUpView: RideThisViewController {
 }
 
 #Preview {
-    UINavigationController(rootViewController: RecordSumUpView())
+    UINavigationController(rootViewController: RecordSumUpView(viewModel: RecordViewModel()))
 }
