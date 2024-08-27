@@ -16,14 +16,13 @@
 		043E0C842C6F378D00F25AF7 /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C832C6F378D00F25AF7 /* Double+Extension.swift */; };
 		043E0C872C6F38F700F25AF7 /* SummaryRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C862C6F38F700F25AF7 /* SummaryRecordViewController.swift */; };
 		043E0C892C70AC2400F25AF7 /* SummaryRecordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C882C70AC2400F25AF7 /* SummaryRecordViewModel.swift */; };
-		0493F5C22C7CF26600290A4C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0493F5C12C7CF26600290A4C /* GoogleService-Info.plist */; };
 		0493F5C52C7DACCC00290A4C /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5C42C7DACCC00290A4C /* Coordinator.swift */; };
 		0493F5C82C7DB39200290A4C /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5C72C7DB39200290A4C /* AppCoordinator.swift */; };
 		0493F5CA2C7DB5FD00290A4C /* TabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5C92C7DB5FD00290A4C /* TabBarCoordinator.swift */; };
 		0493F5CC2C7DBC0600290A4C /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5CB2C7DBC0600290A4C /* HomeCoordinator.swift */; };
-		0493F5CF2C7DBDC500290A4C /* RecordCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5CE2C7DBDC500290A4C /* RecordCoordinator.swift */; };
 		0493F5D22C7DBE1A00290A4C /* DeviceCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5D12C7DBE1A00290A4C /* DeviceCoordinator.swift */; };
 		0493F5D52C7DBEA800290A4C /* MyPageCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5D42C7DBEA800290A4C /* MyPageCoordinator.swift */; };
+		0493F5D72C7E019C00290A4C /* RecordCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5D62C7E019C00290A4C /* RecordCoordinator.swift */; };
 		04DEE5012C7C1F0F00338A61 /* RecordDeviceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DEE5002C7C1F0F00338A61 /* RecordDeviceModel.swift */; };
 		04DEE5032C7C3FC300338A61 /* BluetoothManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DEE5022C7C3FC300338A61 /* BluetoothManager.swift */; };
 		04E3C0C82C6AEE62006B844F /* CompetitionTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0C72C6AEE62006B844F /* CompetitionTVCell.swift */; };
@@ -39,7 +38,6 @@
 		78DBD01D2C7882B700B43A62 /* DeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DBD01C2C7882B700B43A62 /* DeviceTableViewCell.swift */; };
 		78DBD01F2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DBD01E2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift */; };
 		78DBD0212C7882EB00B43A62 /* DeviceDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DBD0202C7882EB00B43A62 /* DeviceDetailViewController.swift */; };
-		78FA3AB72C6EE55500EA1D18 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		CD0E1E852C6A409F0080CFED /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0E1E842C6A409F0080CFED /* SettingView.swift */; };
 		CD0EC4C92C71EE5400E70452 /* FollowManageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0EC4C82C71EE5400E70452 /* FollowManageView.swift */; };
 		CD0EC4CB2C71F10500E70452 /* FollowTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0EC4CA2C71F10500E70452 /* FollowTableViewCell.swift */; };
@@ -101,6 +99,9 @@
 		EB07B0BB2C6C79F20067BF0F /* RecordContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0B82C6C79F20067BF0F /* RecordContainerView.swift */; };
 		EB07B0BC2C6C79F20067BF0F /* RecordInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0B92C6C79F20067BF0F /* RecordInfoView.swift */; };
 		EB07B0BD2C6C79F20067BF0F /* RecordSumUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0BA2C6C79F20067BF0F /* RecordSumUpView.swift */; };
+		EB3DFA3E2C77218A00FA366C /* RecordDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3DFA3D2C77218A00FA366C /* RecordDetailViewController.swift */; };
+		EBB1F4182C76CA75007B0E3C /* RecordListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB1F4172C76CA75007B0E3C /* RecordListViewController.swift */; };
+		EBDF95542C7C65940067EA93 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EBDF95532C7C65940067EA93 /* GoogleService-Info.plist */; };
 		EBFE4DAB2C757A7D00A36FCA /* ResultRankingTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFE4DAA2C757A7D00A36FCA /* ResultRankingTVCell.swift */; };
 		EBFE4DAE2C757AA800A36FCA /* ResultRankingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFE4DAC2C757AA800A36FCA /* ResultRankingViewController.swift */; };
 		EBFE4DB12C757AE800A36FCA /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFE4DAF2C757AE800A36FCA /* UserService.swift */; };
@@ -132,14 +133,13 @@
 		043E0C832C6F378D00F25AF7 /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
 		043E0C862C6F38F700F25AF7 /* SummaryRecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryRecordViewController.swift; sourceTree = "<group>"; };
 		043E0C882C70AC2400F25AF7 /* SummaryRecordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryRecordViewModel.swift; sourceTree = "<group>"; };
-		0493F5C12C7CF26600290A4C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0493F5C42C7DACCC00290A4C /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		0493F5C72C7DB39200290A4C /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		0493F5C92C7DB5FD00290A4C /* TabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCoordinator.swift; sourceTree = "<group>"; };
 		0493F5CB2C7DBC0600290A4C /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
-		0493F5CE2C7DBDC500290A4C /* RecordCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordCoordinator.swift; sourceTree = "<group>"; };
 		0493F5D12C7DBE1A00290A4C /* DeviceCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceCoordinator.swift; sourceTree = "<group>"; };
 		0493F5D42C7DBEA800290A4C /* MyPageCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageCoordinator.swift; sourceTree = "<group>"; };
+		0493F5D62C7E019C00290A4C /* RecordCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordCoordinator.swift; sourceTree = "<group>"; };
 		04DEE5002C7C1F0F00338A61 /* RecordDeviceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDeviceModel.swift; sourceTree = "<group>"; };
 		04DEE5022C7C3FC300338A61 /* BluetoothManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothManager.swift; sourceTree = "<group>"; };
 		04E3C0C72C6AEE62006B844F /* CompetitionTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionTVCell.swift; sourceTree = "<group>"; };
@@ -212,6 +212,9 @@
 		EB07B0B82C6C79F20067BF0F /* RecordContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordContainerView.swift; sourceTree = "<group>"; };
 		EB07B0B92C6C79F20067BF0F /* RecordInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordInfoView.swift; sourceTree = "<group>"; };
 		EB07B0BA2C6C79F20067BF0F /* RecordSumUpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordSumUpView.swift; sourceTree = "<group>"; };
+		EB3DFA3D2C77218A00FA366C /* RecordDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetailViewController.swift; sourceTree = "<group>"; };
+		EBB1F4172C76CA75007B0E3C /* RecordListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListViewController.swift; sourceTree = "<group>"; };
+		EBDF95532C7C65940067EA93 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EBFE4DAA2C757A7D00A36FCA /* ResultRankingTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultRankingTVCell.swift; sourceTree = "<group>"; };
 		EBFE4DAC2C757AA800A36FCA /* ResultRankingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultRankingViewController.swift; sourceTree = "<group>"; };
 		EBFE4DAF2C757AE800A36FCA /* UserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
@@ -281,7 +284,7 @@
 		0493F5CD2C7DBDB300290A4C /* Coordinator */ = {
 			isa = PBXGroup;
 			children = (
-				0493F5CE2C7DBDC500290A4C /* RecordCoordinator.swift */,
+				0493F5D62C7E019C00290A4C /* RecordCoordinator.swift */,
 			);
 			path = Coordinator;
 			sourceTree = "<group>";
@@ -375,8 +378,8 @@
 		CD4213C12C64982000F7C3AE /* RideThis */ = {
 			isa = PBXGroup;
 			children = (
+				EBDF95532C7C65940067EA93 /* GoogleService-Info.plist */,
 				CDC0C1D32C65FB4300349DC4 /* RideThis.entitlements */,
-				0493F5C12C7CF26600290A4C /* GoogleService-Info.plist */,
 				CDE369FF2C7DA0E000B743B9 /* Protocol */,
 				CD4214502C6498FF00F7C3AE /* Extension */,
 				CD4214212C64989000F7C3AE /* App */,
@@ -570,6 +573,8 @@
 				EB07B0B82C6C79F20067BF0F /* RecordContainerView.swift */,
 				EB07B0B92C6C79F20067BF0F /* RecordInfoView.swift */,
 				EB07B0BA2C6C79F20067BF0F /* RecordSumUpView.swift */,
+				EBB1F4172C76CA75007B0E3C /* RecordListViewController.swift */,
+				EB3DFA3D2C77218A00FA366C /* RecordDetailViewController.swift */,
 			);
 			path = Record;
 			sourceTree = "<group>";
@@ -783,9 +788,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				CD4213CC2C64982200F7C3AE /* Assets.xcassets in Resources */,
-				0493F5C22C7CF26600290A4C /* GoogleService-Info.plist in Resources */,
-				78FA3AB72C6EE55500EA1D18 /* (null) in Resources */,
 				CD4213CF2C64982200F7C3AE /* Base in Resources */,
+				EBDF95542C7C65940067EA93 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -822,6 +826,7 @@
 				CD4214522C64990D00F7C3AE /* UILabel+Extension.swift in Sources */,
 				EBFE4DAB2C757A7D00A36FCA /* ResultRankingTVCell.swift in Sources */,
 				CD0EC4CD2C71FC4800E70452 /* SearchUserView.swift in Sources */,
+				EB3DFA3E2C77218A00FA366C /* RecordDetailViewController.swift in Sources */,
 				CD42145C2C64998200F7C3AE /* DeviceViewModel.swift in Sources */,
 				EBFE4DB22C757AE800A36FCA /* KeyChain.swift in Sources */,
 				CD3E64692C76F5390018C46E /* FollowManageViewModel.swift in Sources */,
@@ -870,6 +875,7 @@
 				043E0C822C6F232A00F25AF7 /* StartCompetitionViewModel.swift in Sources */,
 				EBFE4DB42C757B1200A36FCA /* LoginViewModel.swift in Sources */,
 				041A67342C6C519B000BA4C1 /* CountViewController.swift in Sources */,
+				0493F5D72C7E019C00290A4C /* RecordCoordinator.swift in Sources */,
 				04E3C0D52C6B3818006B844F /* DistanceSelectionCoordinator.swift in Sources */,
 				CD66F5CE2C6C75AA00CDBB0B /* EditProfileInfoViewModel.swift in Sources */,
 				CD6662162C679007005E2887 /* RecordModel.swift in Sources */,
@@ -882,7 +888,7 @@
 				EBFE4DB12C757AE800A36FCA /* UserService.swift in Sources */,
 				EB07B0BB2C6C79F20067BF0F /* RecordContainerView.swift in Sources */,
 				CDE25C6E2C6913B8008E2A80 /* EditProfileInfoView.swift in Sources */,
-				0493F5CF2C7DBDC500290A4C /* RecordCoordinator.swift in Sources */,
+				EBB1F4182C76CA75007B0E3C /* RecordListViewController.swift in Sources */,
 				78254FD82C7C1CF40069B10A /* WheelCircumferenceSelectionCell.swift in Sources */,
 				CDC0C1E02C664FFE00349DC4 /* UIButton+Extension.swift in Sources */,
 			);
@@ -907,7 +913,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NON = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_MODULES = YES;
