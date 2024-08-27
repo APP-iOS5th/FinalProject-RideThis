@@ -7,6 +7,8 @@ import Combine
 // 마이페이지 초기 화면
 class MyPageView: RideThisViewController {
     
+    var coordinator: MyPageCoordinator?
+    
     // MARK: Data Components
     let service = UserService.shared
     private let firebaseService = FireBaseService()
