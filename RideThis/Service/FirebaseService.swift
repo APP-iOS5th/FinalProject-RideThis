@@ -279,8 +279,5 @@ class FireBaseService {
         }
     }
     
-//    // MARK: Device데이터
-//    func fetchDeviceData(_ userSnapshots: [QueryDocumentSnapshot]) async throws -> [BluetoothModel] {
-//        
-//    }
+
 }

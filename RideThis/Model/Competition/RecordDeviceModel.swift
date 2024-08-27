@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct BluetoothModel: Codable {
+struct RecordDeviceModel: Codable {
     let device_firmware_version: String
     let device_name: String
     let device_registration_status: Bool

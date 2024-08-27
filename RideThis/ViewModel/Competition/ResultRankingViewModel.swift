@@ -22,7 +22,7 @@ class ResultRankingViewModel {
     
     init(distance: Double, nickName: String) {
         self.distance = distance
-        self.nickName = (service.signedUser != nil) ? service.signedUser?.user_nickname : "UNKOWNED"
+        self.nickName = (service.combineUser != nil) ? service.combineUser?.user_nickname : "UNKOWNED"
         
         updateRecords()
     }
