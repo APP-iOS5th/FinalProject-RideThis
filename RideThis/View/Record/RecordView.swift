@@ -4,6 +4,9 @@ import Combine
 
 // 기록 탭 초기 화면
 class RecordView: RideThisViewController {
+    
+    var coordinator: RecordCoordinator?
+    
     let viewModel = RecordViewModel()
     
     private var cancellables = Set<AnyCancellable>()
@@ -55,6 +58,20 @@ class RecordView: RideThisViewController {
         self.view.addSubview(finishButton)
         
         setupConstraints()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // RecordSumUpView에서 돌아올 때 타이머 초기화
+        if !viewModel.isRecording {
+            viewModel.resetRecording()
+            updateTimerDisplay()
+        }
+    }
+    
+    private func updateTimerDisplay() {
+        timerRecord.updateRecordText(text: viewModel.formatTime(viewModel.elapsedTime))
     }
     
     // MARK: - 레이아웃 설정
@@ -142,7 +159,11 @@ class RecordView: RideThisViewController {
             if self.viewModel.isBluetooth {
                 if self.viewModel.isRecording {
                     self.viewModel.pauseRecording()
-                    self.updateUI(isRecording: false)
+                    resetButton.isEnabled = true
+                    finishButton.isEnabled = true
+                    resetButton.backgroundColor = .black
+                    finishButton.backgroundColor = .black
+                    recordButton.setTitle("시작", for: .normal)
                 } else {
                     self.viewModel.startRecording()
                     self.updateUI(isRecording: true)
@@ -200,7 +221,7 @@ class RecordView: RideThisViewController {
     }
     
     private func navigateToSummaryView() {
-        let summaryViewController = RecordSumUpView()
+        let summaryViewController = RecordSumUpView(viewModel: viewModel)
         summaryViewController.recordedTime = viewModel.formatTime(viewModel.recordedTime)
         self.navigationController?.pushViewController(summaryViewController, animated: true) // 요약 화면으로 이동
     }

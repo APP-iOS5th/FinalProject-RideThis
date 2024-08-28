@@ -11,6 +11,8 @@ import Combine
 
 class ResultRankingViewController: RideThisViewController {
     
+    var coordinator: ResultRankingCoordinator?
+    
     private let viewModel: ResultRankingViewModel
     
     private var cancellables = Set<AnyCancellable>()
@@ -151,12 +153,11 @@ class ResultRankingViewController: RideThisViewController {
     // MARK: Setup Button Action
     private func setupAction() {
         finishBtn.addAction(UIAction { [weak self] _ in
-            self?.navigationController?.popToRootViewController(animated: true)
+            self?.coordinator?.popToRootView()
         }, for: .touchUpInside)
         
         retryBtn.addAction(UIAction { [weak self] _ in
-            let distanceSelectionVC = DistanceSelectionViewController()
-            self?.navigationController?.pushViewController(distanceSelectionVC, animated: true)
+            self?.coordinator?.moveToRetry()
         }, for: .touchUpInside)
     }
 }

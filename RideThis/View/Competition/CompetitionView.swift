@@ -5,6 +5,8 @@ import Combine
 // 경쟁 탭 초기 화면
 class CompetitionView: RideThisViewController {
     
+    var coordinator: CompetitionCoordinator?
+    
     private let viewModel = CompetitionViewModel(isLogin: false, nickName: "")
     
     private var cancellables = Set<AnyCancellable>()
@@ -261,18 +263,15 @@ class CompetitionView: RideThisViewController {
             
             if self.viewModel.isLogin {
                 if self.viewModel.isBluetooth {
-
-                    let distanceSelectionVC = DistanceSelectionViewController()
-                    self.navigationController?.pushViewController(distanceSelectionVC, animated: true)
+                    self.coordinator?.moveToDistanceSelectionView()
                 } else {
                     showAlert(alertTitle: "장치연결이 필요합니다.", msg: "사용하시려면 장치를 연결해주세요.", confirm: "장치연결") {
-                        if let tabBarController = self.tabBarController {
-                            tabBarController.selectedIndex = 3
-                        }
+                        self.coordinator?.moveToDeviceView()
                     }
                 }
             } else {
                 showAlert(alertTitle: "로그인이 필요합니다.", msg: "경쟁하기는 로그인이 필요한 서비스입니다.", confirm: "로그인") {
+                    // 코디네이터 패턴(개발 예정)
                     let loginVC = LoginView()
                     self.navigationController?.pushViewController(loginVC, animated: true)
                 }

@@ -1,41 +1,43 @@
-////
-////  CompetitionCoordinator.swift
-////  RideThis
-////
-////  Created by SeongKook on 8/13/24.
-////
 //
-//import UIKit
+//  CompetitionCoordinator.swift
+//  RideThis
 //
-//class CompetitionCoordinator: Coordinator {
-//    
-//    var navigationController: UINavigationController
-//    var childCoordinators: [Coordinator] = []
-//    
-//    init(navigationController: UINavigationController) {
-//        self.navigationController = navigationController
-//        
-//    }
-//    
-//    func start() {
-//        let competitionVC = CompetitionView()
-//        competitionVC.coordinator = self
-//    }
-//    
-////    func start() {
-////        let competitionVC = CompetitionView()
-////        competitionVC.coordinator = self
-////        print("CompetitionCoordinator is set: \(competitionVC.coordinator)")
-////        
-////        navigationController.pushViewController(competitionVC, animated: true)
-////    }
-//    
-//    func moveToDistanceSelectionView() {
-//        print("View Mooooooove")
-//        let distanceSelectionCoordinator = DistanceSelectionCoordinator(navigationController: navigationController)
-//        distanceSelectionCoordinator.parentCoordinator = self
-//        childCoordinators.append(distanceSelectionCoordinator)
-//        
-//        distanceSelectionCoordinator.start()
-//    }
-//}
+//  Created by SeongKook on 8/13/24.
+//
+
+import UIKit
+
+class CompetitionCoordinator: Coordinator {
+    
+    var navigationController: UINavigationController
+    var tabBarController: UITabBarController
+    var childCoordinators: [Coordinator] = []
+    
+    init(navigationController: UINavigationController, tabBarController: UITabBarController) {
+        self.navigationController = navigationController
+        self.tabBarController = tabBarController
+    }
+    
+    func start() {
+        let competitionVC = CompetitionView()
+        competitionVC.coordinator = self
+        
+        navigationController.pushViewController(competitionVC, animated: true)
+    }
+    
+    func moveToDistanceSelectionView() {
+       let distanceCoordinator = DistanceSelectionCoordinator(navigationController: navigationController)
+        childCoordinators.append(distanceCoordinator)
+        distanceCoordinator.start()
+    }
+    
+    func moveToDeviceView() {
+        tabBarController.selectedIndex = 3
+    }
+    
+    // 코디네이터 패턴(개발 예정)
+    func moveToLoginView() {
+        
+    }
+
+}

@@ -2,7 +2,10 @@ import UIKit
 import Combine
 
 class DeviceView: RideThisViewController {
-    // MARK: - Properties
+    
+    var coordinator: DeviceCoordinator?
+    
+    // 커스텀 타이틀
     private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "장치연결")
     private let tableView = UITableView(frame: .zero, style: .plain)
     private let findDeviceButton = RideThisButton(buttonTitle: "장치찾기")

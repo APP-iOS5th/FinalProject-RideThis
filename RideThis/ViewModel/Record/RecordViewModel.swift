@@ -8,9 +8,6 @@ class RecordViewModel: ObservableObject {
     let isBluetooth = true
     
     // 타이머
-//    @Published private(set) var elapsedTime: TimeInterval = 0
-//    private var timer: AnyCancellable?
-    
     var recordedTime: TimeInterval = 0.0
     
     // 타이머 업데이트 클로저
@@ -32,18 +29,17 @@ class RecordViewModel: ObservableObject {
     // 기록 종료 시 화면 전환을 위한 클로저
     var onFinishRecording: (() -> Void)?
     
+    // 기록 시작 시간 & 종료 시간 저장
+    @Published var startTime: Date?
+    @Published var endTime: Date?
+    
     func startRecording() {
         // 기록 시작
         isRecording = true
         print("start pushed")
+        startTime = Date()
         startTimer()
-        //        elapsedTime = 0
-        //        Timer.publish(every: 1.0, on: .main, in: .common)
-        //            .autoconnect()
-        //            .sink { [weak self] _ in
-        //                self?.elapsedTime += 1
-        //            }
-        //            .store(in: &cancellables)
+        print("start time: \(String(describing: startTime))")
     }
     
     func resetRecording() {
@@ -51,9 +47,10 @@ class RecordViewModel: ObservableObject {
         isRecording = false
         print("reset pushed")
         stopTimer()
-        //        cancellables.forEach { $0.cancel() }
         elapsedTime = 0.0
         recordedTime = 0.0
+        startTime = nil
+        endTime = nil
         onTimerUpdated?(formatTime(elapsedTime))
     }
     
@@ -63,8 +60,9 @@ class RecordViewModel: ObservableObject {
         print("finish pushed")
         stopTimer()
         recordedTime = elapsedTime
+        endTime = Date()
+        print("end time: \(String(describing: endTime))")
         onFinishRecording?()
-        //        cancellables.forEach { $0.cancel() }
     }
     
     func pauseRecording() {
@@ -72,7 +70,6 @@ class RecordViewModel: ObservableObject {
         isRecording = false
         print("pause pushed")
         stopTimer()
-        //        cancellables.forEach { $0.cancel() }
     }
     
     private func startTimer() {
@@ -82,37 +79,31 @@ class RecordViewModel: ObservableObject {
             self.onTimerUpdated?(self.formatTime(self.elapsedTime))
         }
     }
-
+    
     private func stopTimer() {
         timer?.invalidate()
         timer = nil
     }
-
+    
     func formatTime(_ time: TimeInterval) -> String {
         let minutes = Int(time) / 60
         let seconds = Int(time) % 60
         return String(format: "%02d:%02d", minutes, seconds)
     }
     
-//    private func startTimer() {
-//        timer = Timer.publish(every: 1, on: .main, in: .common)
-//            .autoconnect()
-//            .sink { [weak self] _ in
-//                self?.elapsedTime += 1
-//            }
-//    }
-//    
-//    private func stopTimer() {
-//        timer?.cancel()
-//        timer = nil
-//    }
-    
     // MARK: - 기록 요약 화면 버튼 동작
-    // TODO: - 버튼 동작 구현
+    @Published var cadence: Double = 0
+    @Published var speed: Double = 0
+    @Published var distance: Double = 0
+    @Published var calorie: Double = 0
+    @Published var competitionStatus: Bool = false
+    @Published var targetDistance: Double? = nil
+    
+    private let firebaseService = FireBaseService()
     
     // 저장 또는 취소 시 화면 전환을 위한 클로저
     var onCancelSaveRecording: (() -> Void)?
-    var onSaveRecroding: (() -> Void)?
+    var onSaveRecording: (() -> Void)?
     
     func cancelSaveRecording() {
         print("save cancel pushed")
@@ -120,9 +111,43 @@ class RecordViewModel: ObservableObject {
         onCancelSaveRecording?()
     }
     
-    func saveRecording() {
+    func saveRecording() async {
         print("save pushed")
-        // 기록 요약 화면에서 저장 버튼 누르면
-        onSaveRecroding?()
+        
+        // 기록이 없는 상태에서는 저장을 시도하지 않도록 확인
+            guard let startTime = startTime else {
+                print("기록이 시작되지 않았습니다.")
+                print("start time: \(String(describing: startTime))")
+                return
+            }
+            
+            guard let endTime = endTime else {
+                print("기록이 종료되지 않았습니다.")
+                return
+            }
+        
+        do {
+            // 유저아이디가 존재하는지 확인
+            let userDocument = try await firebaseService.fetchUser(at: UserService.shared.signedUser?.user_id ?? "", userType: false)
+            
+            if case .userSnapshot(let queryDocumentSnapshot) = userDocument {
+                guard let doc = queryDocumentSnapshot else {
+                    print("유저를 찾을 수 없습니다.")
+                    return
+                }
+                // USERS 도큐먼트에서 Collection 찾기
+                let recordsCollection = firebaseService.fetchCollection(document: doc, collectionName: "RECORDS")
+                
+                try await firebaseService.fetchRecord(collection: recordsCollection, timer: formatTime(recordedTime), cadence: cadence, speed: speed, distance: distance, calorie: calorie, startTime: startTime, endTime: endTime, date: Date(), competetionStatus: false, tagetDistance: nil)
+                
+                print("기록 추가")
+                
+                await MainActor.run {
+                    self.onSaveRecording?()
+                }
+            }
+        } catch {
+            print("기록 처리 에러: \(error.localizedDescription)")
+        }
     }
 }
