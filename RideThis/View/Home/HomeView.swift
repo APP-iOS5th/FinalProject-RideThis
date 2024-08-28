@@ -11,6 +11,17 @@ class HomeView: RideThisViewController {
     
     private var cancellables = Set<AnyCancellable>()
     
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.showsVerticalScrollIndicator = false
+        return scrollView
+    }()
+    
+    private let contentView: UIView = {
+        let view = UIView()
+        return view
+    }()
+    
     init(viewModel: HomeViewModel = HomeViewModel()) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -193,10 +204,32 @@ class HomeView: RideThisViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
+        setupScrollView()
+        setupContentView()
+        setupBindings()
+    }
+    
+    private func setupScrollView() {
+        view.addSubview(scrollView)
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+    }
+    
+    private func setupContentView() {
+        scrollView.addSubview(contentView)
+        contentView.snp.makeConstraints { contentView in
+            contentView.edges.equalTo(scrollView)
+            contentView.width.equalTo(scrollView)
+        }
+        
         weeklyRecordSectionContentView()
         letsRideSectionContentView()
         weatherSectionContentView()
-        setupBindings()
+        
+        contentView.snp.makeConstraints { contentView in
+            contentView.bottom.equalTo(weatherSectionView.snp.bottom).offset(20)
+        }
     }
     
     // MARK: WeathrContainer 그라데이션
@@ -226,9 +259,9 @@ class HomeView: RideThisViewController {
     
     // MARK: weeklyRecord(wr) Section View
     private func weeklyRecordSectionContentView() {
-        view.addSubview(weeklyRecordSectionView)
+        contentView.addSubview(weeklyRecordSectionView)
         weeklyRecordSectionView.snp.makeConstraints { wrSection in
-            wrSection.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
+            wrSection.top.equalTo(contentView.snp.top).offset(10)
             wrSection.leading.trailing.equalToSuperview()
             wrSection.height.equalTo(200)
         }
@@ -257,7 +290,7 @@ class HomeView: RideThisViewController {
     
     // MARK: letsRide(lr) Section View
     private func letsRideSectionContentView() {
-        view.addSubview(letsRideSectionView)
+        contentView.addSubview(letsRideSectionView)
         letsRideSectionView.snp.makeConstraints { lrSection in
             lrSection.top.equalTo(weeklyRecordSectionView.snp.bottom).offset(10)
             lrSection.leading.trailing.equalToSuperview()
@@ -289,7 +322,7 @@ class HomeView: RideThisViewController {
         
         setupWeatherUI()
         
-        view.addSubview(weatherSectionView)
+        contentView.addSubview(weatherSectionView)
         weatherSectionView.snp.makeConstraints { wSection in
             wSection.top.equalTo(letsRideSectionView.snp.bottom).offset(10)
             wSection.leading.trailing.equalToSuperview()
