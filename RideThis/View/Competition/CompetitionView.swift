@@ -7,7 +7,7 @@ class CompetitionView: RideThisViewController {
     
     var coordinator: CompetitionCoordinator?
     
-    private let viewModel = CompetitionViewModel(isLogin: false, nickName: "")
+    private var viewModel = CompetitionViewModel(isLogin: false, nickName: "")
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -100,9 +100,13 @@ class CompetitionView: RideThisViewController {
       override func viewWillAppear(_ animated: Bool) {
           super.viewWillAppear(animated)
           
+          self.viewModel = CompetitionViewModel(isLogin: UserService.shared.combineUser != nil, nickName: UserService.shared.combineUser?.user_nickname ?? "")
+          
           // 데이터를 새로고침
           self.viewModel.fetchAllRecords()
           self.viewModel.checkBluetoothStatus()
+          
+          setupBinding()
       }
     
     // MARK: setupUI
