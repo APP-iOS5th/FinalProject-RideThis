@@ -4,6 +4,8 @@ import Combine
 
 class StartCompetitionViewController: RideThisViewController {
     
+    var coordinator: StartCompetetionCoordinator?
+    
     var goalDistance: String
     private let viewModel: StartCometitionViewModel
     private var cancellables = Set<AnyCancellable>()
@@ -57,9 +59,6 @@ class StartCompetitionViewController: RideThisViewController {
         let goalDistanceDouble = Double(goalDistance) ?? 0.0
         self.viewModel = StartCometitionViewModel(startTime: Date(), goalDistnace: goalDistanceDouble, userWeight: 0)
         super.init(nibName: nil, bundle: nil)
-        
-        self.bluetoothManager = BluetoothManager(targetDeviceName: "DeviceName", userWeight: 70, wheelCircumference: 2.105)
-        self.bluetoothManager?.viewDelegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -204,10 +203,8 @@ class StartCompetitionViewController: RideThisViewController {
                     Task {
                         await self?.viewModel.competitionUpdateData()
                     }
-                    
+                    self?.coordinator?.moveToSummaryView(viewModel: self!.viewModel)
 
-                    let summaryRecordVC = SummaryRecordViewController(timer: self?.viewModel.timer ?? "", cadence: self?.viewModel.averageCadence ?? 0.0, speed: self?.viewModel.averageSpeed ?? 0.0, distance: self?.viewModel.goalDistance ?? 0.0, calorie: self?.viewModel.calorie ?? 0.0, startTime: self?.viewModel.startTime ?? Date(), endTime: self?.viewModel.endTime ?? Date())
-                    navController.pushViewController(summaryRecordVC, animated: true)
                 }
             }
             .store(in: &cancellables)
@@ -251,22 +248,23 @@ class StartCompetitionViewController: RideThisViewController {
     private func setupAction() {
         giveUpBtn.addAction(UIAction { [weak self] _ in
             self?.showAlert(alertTitle: "경쟁중지", msg: "현재 경쟁기록 진행중입니다. 포기하시겠습니까?", confirm: "포기") {
-                self?.navigationController?.popToRootViewController(animated: true)
+                self?.coordinator?.popToRootView()
             }
         }, for: .touchUpInside)
     }
 }
 
 
-// MARK: BluetoothDelegate
-extension StartCompetitionViewController: BluetoothViewDelegate {
-    
-    func bluetoothDidTurnOff() {
-        self.navigationController?.popToRootViewController(animated: true)
-        
-        if let tabBarController = self.tabBarController {
-            tabBarController.tabBar.items?.forEach{ $0.isEnabled = true }
-            tabBarController.selectedIndex = 3
-        }
-    }
-}
+
+//extension StartCompetitionViewController: BluetoothViewDelegate {
+//    
+//    
+//    func bluetoothDidTurnOff() {
+//        self.navigationController?.popToRootViewController(animated: true)
+//        
+//        if let tabBarController = self.tabBarController {
+//            tabBarController.tabBar.items?.forEach{ $0.isEnabled = true }
+//            tabBarController.selectedIndex = 3
+//        }
+//    }
+//}
