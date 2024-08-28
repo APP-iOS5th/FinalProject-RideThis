@@ -53,6 +53,8 @@ class DeviceViewModel {
         selectedDevice = device
     }
     
+    /// 휠 둘레 목록 검색어에 따라 필터링.
+    /// - Parameter searchText: 필터링에 사용할 검색어.
     func filterWheelCircumferences(with searchText: String) {
         if searchText.isEmpty {
             filteredWheelCircumferences = wheelCircumferences
