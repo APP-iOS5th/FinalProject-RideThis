@@ -52,8 +52,7 @@ class StartCometitionViewModel: BluetoothManagerDelegate {
     // MARK: 초기화
     init(startTime: Date, goalDistnace: Double, userWeight: Int) {
         self.startTime = startTime
-        // self.goalDistance = goalDistnace
-        self.goalDistance = 0.05
+         self.goalDistance = goalDistnace
         self.userWeight = service.combineUser?.user_weight ?? 0
     }
     

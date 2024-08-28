@@ -95,6 +95,8 @@ class CompetitionViewModel {
                 let userSnapshots = try await firebaseService.fetchAllUsers()
                 let allRecordData = try await firebaseService.fetchAllRecordsForUsers(userSnapshots)
                 self.allRecords = allRecordData
+                
+                fetchFollowingUsers()
                 updateRecords()
             } catch {
                 print("FIREBASE통신 오류")
