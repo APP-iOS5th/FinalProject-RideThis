@@ -41,7 +41,3 @@ class SplashView: UIViewController {
         ])
     }
 }
-
-#Preview {
-    UINavigationController(rootViewController: SplashView())
-}
