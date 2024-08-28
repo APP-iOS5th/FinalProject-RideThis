@@ -44,14 +44,14 @@ class TabBarCoordinator: Coordinator {
         let deviceNavigationController = UINavigationController()
         let deviceCoordinator = DeviceCoordinator(navigationController: deviceNavigationController)
         deviceCoordinator.start()
-        deviceNavigationController.tabBarItem = UITabBarItem(title: "기록", image: UIImage(systemName: "flag.checkered"), selectedImage: nil)
+        deviceNavigationController.tabBarItem = UITabBarItem(title: "장치연결", image: UIImage(systemName: "externaldrive.connected.to.line.below.fill"), selectedImage: nil)
         childCoordinators.append(deviceCoordinator)
         
         // MyPage
         let myPageNavigationController = UINavigationController()
         let myPageCoordinator = MyPageCoordinator(navigationController: myPageNavigationController)
         myPageCoordinator.start()
-        myPageNavigationController.tabBarItem = UITabBarItem(title: "기록", image: UIImage(systemName: "flag.checkered"), selectedImage: nil)
+        myPageNavigationController.tabBarItem = UITabBarItem(title: "마이페이지", image: UIImage(systemName: "person.circle.fill"), selectedImage: nil)
         childCoordinators.append(myPageCoordinator)
         
         // 탭바 뷰 컨트롤러 설정
