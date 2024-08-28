@@ -6,12 +6,15 @@ class DeviceViewModel {
     @Published private(set) var devices: [Device] = []
     @Published private(set) var searchedDevices: [Device] = []
     @Published private(set) var selectedDevice: Device?
+    @Published private(set) var filteredWheelCircumferences: [WheelCircumference]
+    
     let wheelCircumferences: [WheelCircumference]
     
     // MARK: - Initialization
     init() {
-        self.wheelCircumferences = Self.createWheelCircumferences() // 휠 둘레 목록 생성.
-        self.searchedDevices = Self.createMockSearchedDevices() // 더미 데이터 검색된 디바이스 목록 생성.
+        self.wheelCircumferences = Self.createWheelCircumferences()
+        self.filteredWheelCircumferences = self.wheelCircumferences
+        self.searchedDevices = Self.createMockSearchedDevices()
     }
     
     
@@ -48,6 +51,18 @@ class DeviceViewModel {
             devices[index] = device
         }
         selectedDevice = device
+    }
+    
+    func filterWheelCircumferences(with searchText: String) {
+        if searchText.isEmpty {
+            filteredWheelCircumferences = wheelCircumferences
+        } else {
+            filteredWheelCircumferences = wheelCircumferences.filter { circumference in
+                circumference.millimeter.lowercased().contains(searchText.lowercased()) ||
+                circumference.tireSize.lowercased().contains(searchText.lowercased()) ||
+                circumference.inch.lowercased().contains(searchText.lowercased())
+            }
+        }
     }
     
     
