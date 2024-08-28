@@ -77,9 +77,9 @@ class RecordSumUpView: RideThisViewController {
                     Task {
                         await self.viewModel.saveRecording()
                         
-                        await MainActor.run {
-                            self.navigateToRecordView()
-                        }
+//                        await MainActor.run {
+//                            self.navigateToRecordListView()
+//                        }
                     }
                 }
             } else { // 미로그인 상태일 때
@@ -97,7 +97,7 @@ class RecordSumUpView: RideThisViewController {
         
         viewModel.onSaveRecording = { [weak self] in
             // 일단 기록 뷰로 이동
-            self?.navigateToRecordView()
+            self?.navigateToRecordListView()
         }
         
         // 기록 뷰 제약조건
@@ -181,6 +181,12 @@ class RecordSumUpView: RideThisViewController {
         // 커스텀 타이틀 레이블을 왼쪽 바 버튼 아이템으로 설정
         let leftBarButtonItem = UIBarButtonItem(customView: customTitleLabel)
         navigationItem.leftBarButtonItem = leftBarButtonItem
+    }
+    
+    @MainActor
+    private func navigateToRecordListView() {
+        let recordListVC = RecordListViewController()
+        self.navigationController?.pushViewController(recordListVC, animated: true)
     }
 }
 

@@ -35,8 +35,8 @@ class RecordView: RideThisViewController {
         setupBindings()
         
         // BluetoothManager 초기화
-        viewModel.initializeBluetoothManager()
-        viewModel.bluetoothManager.viewDelegate = self
+//        viewModel.initializeBluetoothManager()
+//        viewModel.bluetoothManager.viewDelegate = self
         
         // ViewModel의 상태 변경 클로저 설정
         viewModel.onRecordingStatusChanged = { [weak self] isRecording in
