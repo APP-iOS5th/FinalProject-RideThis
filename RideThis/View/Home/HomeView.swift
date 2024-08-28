@@ -46,7 +46,10 @@ class HomeView: RideThisViewController {
         button.setTitle("더보기", for: .normal)
         button.setTitleColor(.primaryColor, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: FontCase.smallTitle.rawValue, weight: .regular)
-        button.addTarget(self, action: #selector(moreButtonTapped), for: .touchUpInside)
+        button.addAction(UIAction { [weak self] _ in
+            let myPageView = MyPageView()
+            self?.navigationController?.pushViewController(myPageView, animated: true)
+        }, for: .touchUpInside)
         return button
     }()
     
@@ -98,7 +101,10 @@ class HomeView: RideThisViewController {
     
     private lazy var letsRideButton: RideThisButton = {
         let button = RideThisButton(buttonTitle: "라이딩 고고씽", height: 50)
-        button.addTarget(self, action: #selector(letsRideButtonTapped), for: .touchUpInside)
+        button.addAction(UIAction { [weak self] _ in
+            let recordView = RecordView()
+            self?.navigationController?.pushViewController(recordView, animated: true)
+        }, for: .touchUpInside)
         return button
     }()
     
@@ -446,22 +452,6 @@ class HomeView: RideThisViewController {
         }
         
         return containerView
-    }
-    
-    // 더보기 버튼 누르면 일단 마이페이지로 이동
-    @objc private func moreButtonTapped() {
-        let myPageView = MyPageView()
-        navigationController?.pushViewController(myPageView, animated: true)
-    }
-    
-    // 라이딩 고고씽 버튼: 기록탭으로 전환
-    // TODO: 탭바 이슈
-    @objc private func letsRideButtonTapped() {
-        let recordView = RecordView()
-        navigationController?.pushViewController(recordView, animated: true)
-        
-        let recordTabIndex = 2
-        tabBarController?.selectedIndex = recordTabIndex
     }
     
     private func setupBindings() {
