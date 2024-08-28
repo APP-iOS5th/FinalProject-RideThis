@@ -14,9 +14,9 @@ class WheelCircumferenceViewController: UIViewController {
                                           text: "*일반적인 표준 로드 자전거 타이어 크기는 2110(700c X 25)mm이며, 이는 표준 로드 타이어로 직경 약 700mm, 폭 25mm를 나타냅니다.")
     private let tableView = UITableView(frame: .zero,
                                         style: .insetGrouped)
-
-    var selectedCircumference: String?
-    var onCircumferenceSelected: ((String) -> Void)?
+    
+    var selectedCircumference: (String, String)?
+    var onCircumferenceSelected: ((String, String) -> Void)?
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -153,19 +153,24 @@ extension WheelCircumferenceViewController: UITableViewDelegate, UITableViewData
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "WheelCircumferenceSelectionCell", for: indexPath) as? WheelCircumferenceSelectionCell else {
             return UITableViewCell()
         }
-
+        
         let wheelCircumference = viewModel.filteredWheelCircumferences[indexPath.row]
         cell.configure(with: wheelCircumference)
-        cell.isSelected = wheelCircumference.millimeter == selectedCircumference
-
+        
+        if let selectedCircumference = selectedCircumference {
+            cell.isSelected = selectedCircumference == (wheelCircumference.millimeter, wheelCircumference.tireSize)
+        } else {
+            cell.isSelected = false
+        }
+        
         return cell
     }
-
+    
     /// didSelectRowAt.
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedCircumference = viewModel.filteredWheelCircumferences[indexPath.row].millimeter
-        self.selectedCircumference = selectedCircumference
-        onCircumferenceSelected?(selectedCircumference)
+        let wheelCircumference = viewModel.filteredWheelCircumferences[indexPath.row]
+        self.selectedCircumference = (wheelCircumference.millimeter, wheelCircumference.tireSize)
+        onCircumferenceSelected?(wheelCircumference.millimeter, wheelCircumference.tireSize)
         tableView.reloadData()
     }
 

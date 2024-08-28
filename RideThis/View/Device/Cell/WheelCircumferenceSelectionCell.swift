@@ -73,7 +73,7 @@ class WheelCircumferenceSelectionCell: UITableViewCell {
     /// 주어진 휠 둘레 데이터를 사용하여 Cell 구성.
     /// - Parameter wheelCircumference: Cell 표시할 휠 둘레 데이터.
     func configure(with wheelCircumference: WheelCircumference) {
-        millimeterLabel.text = "\(wheelCircumference.millimeter)"
+        millimeterLabel.text = wheelCircumference.millimeter
         tireSizeLabel.text = wheelCircumference.tireSize
         inchLabel.text = wheelCircumference.inch
     }

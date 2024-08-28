@@ -244,11 +244,20 @@ extension DeviceDetailViewController: UITableViewDelegate, UITableViewDataSource
     /// 휠 둘레 선택 화면 표시.
     private func presentWheelCircumferenceViewController() {
         let wheelCircumferenceVC = WheelCircumferenceViewController(viewModel: viewModel)
-        wheelCircumferenceVC.selectedCircumference = viewModel.selectedDevice?.wheelCircumference
-        wheelCircumferenceVC.onCircumferenceSelected = { [weak self] circumference in
+        
+        // selectedCircumference의 타입을 명시적으로 지정
+        if let selectedDevice = viewModel.selectedDevice {
+            wheelCircumferenceVC.selectedCircumference = (selectedDevice.wheelCircumference, selectedDevice.name) // 적절한 튜플 구성
+        }
+
+        // onCircumferenceSelected 클로저의 타입을 명시적으로 지정
+        wheelCircumferenceVC.onCircumferenceSelected = { [weak self] (millimeter: String, tireSize: String) in
+            let circumference = "\(millimeter)" // 또는 적절한 튜플 형식으로 변환
             self?.viewModel.updateWheelCircumference(circumference)
             self?.wheelCircumferenceTableView.reloadData()
         }
+        
         navigationController?.pushViewController(wheelCircumferenceVC, animated: true)
     }
+
 }
