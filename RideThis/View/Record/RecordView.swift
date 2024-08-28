@@ -4,6 +4,9 @@ import Combine
 
 // 기록 탭 초기 화면
 class RecordView: RideThisViewController {
+    
+    var coordinator: RecordCoordinator?
+    
     let viewModel = RecordViewModel()
     
     private var cancellables = Set<AnyCancellable>()

@@ -5,6 +5,8 @@ import Combine
 
 class HomeView: RideThisViewController {
     
+    var coordinator: HomeCoordinator?
+    
     private let viewModel: HomeViewModel
     
     private var cancellables = Set<AnyCancellable>()

@@ -29,8 +29,13 @@ class CountViewController: RideThisViewController {
         super.viewDidLoad()
 
         setupUI()
-        self.viewModel.startCountdown()
         setupBinding()
+    }
+    
+    // MARK: ViewDidAppear
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.viewModel.startCountdown()
     }
     
     // MARK: SetupUI
