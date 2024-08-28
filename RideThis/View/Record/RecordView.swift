@@ -31,6 +31,10 @@ class RecordView: RideThisViewController {
         setupButtons()
         setupBindings()
         
+        // BluetoothManager 초기화
+        viewModel.initializeBluetoothManager()
+        viewModel.bluetoothManager.viewDelegate = self
+        
         // ViewModel의 상태 변경 클로저 설정
         viewModel.onRecordingStatusChanged = { [weak self] isRecording in
             guard let self = self else { return }
@@ -147,13 +151,11 @@ class RecordView: RideThisViewController {
             }
         }, for: .touchUpInside)
         
-        // TODO: - 클릭 시 버튼이 눌리는 모션이 보이지 않음(확인 필요)
-        // 커스텀이라 그런가
         recordButton.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
             // TODO: - 최초 기록 시작일 때 카운트다운 추가
             // 블루투스 연결 상태 확인
-            if self.viewModel.isBluetooth {
+            if self.viewModel.isBluetoothConnected {
                 if self.viewModel.isRecording {
                     self.viewModel.pauseRecording()
                     resetButton.isEnabled = true
@@ -195,6 +197,34 @@ class RecordView: RideThisViewController {
                 return String(format: "%02d:%02d", minutes, seconds)
             }
             .assign(to: \.recordLabel.text, on: timerRecord)
+            .store(in: &cancellables)
+        
+        self.viewModel.$cadence
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] cadence in
+                self?.cadenceRecord.updateRecordText(text: "\(cadence.formattedWithThousandsSeparator()) RPM")
+            }
+            .store(in: &cancellables)
+        
+        self.viewModel.$speed
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] speed in
+                self?.speedRecord.updateRecordText(text: "\(speed.formattedWithThousandsSeparator()) Km/h")
+            }
+            .store(in: &cancellables)
+        
+        self.viewModel.$distance
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] distance in
+                self?.distanceRecord.updateRecordText(text: "\(distance.formattedWithThousandsSeparator()) Km")
+            }
+            .store(in: &cancellables)
+        
+        self.viewModel.$calorie
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] calorie in
+                self?.calorieRecord.updateRecordText(text: "\(calorie.formattedWithThousandsSeparator()) Kcal")
+            }
             .store(in: &cancellables)
     }
     
@@ -248,6 +278,17 @@ class RecordView: RideThisViewController {
         tabBarController?.tabBar.items?.forEach { $0.isEnabled = true }
     }
     
+}
+
+// 블루투스가 꺼졌을 때
+extension RecordView: BluetoothViewDelegate {
+    func bluetoothDidTurnOff() {
+        DispatchQueue.main.async {
+            self.showAlert(alertTitle: "블루투스 꺼짐", msg: "블루투스가 꺼졌습니다. 다시 켜주세요.", confirm: "확인") {
+                print("블루투스 꺼짐")
+            }
+        }
+    }
 }
 
 // MARK: - Preview

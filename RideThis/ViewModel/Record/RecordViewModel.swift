@@ -1,11 +1,19 @@
 import Foundation
 import Combine
 
-class RecordViewModel: ObservableObject {
+class RecordViewModel: BluetoothManagerDelegate {
+    
     // MARK: - 기록 화면 동작
     
+    var bluetoothManager: BluetoothManager!
+    var deviceInfo: RecordDeviceModel = RecordDeviceModel(device_firmware_version: "test123", device_name: "test", device_registration_status: false, device_serial_number: "13", device_wheel_circumference: 123)
+    
     let isLogin = false
-    let isBluetooth = true
+    @Published var isBluetoothConnected: Bool = false
+    
+    func initializeBluetoothManager() {
+        fetchDeviceData()
+    }
     
     // 타이머
     var recordedTime: TimeInterval = 0.0
@@ -115,16 +123,16 @@ class RecordViewModel: ObservableObject {
         print("save pushed")
         
         // 기록이 없는 상태에서는 저장을 시도하지 않도록 확인
-            guard let startTime = startTime else {
-                print("기록이 시작되지 않았습니다.")
-                print("start time: \(String(describing: startTime))")
-                return
-            }
-            
-            guard let endTime = endTime else {
-                print("기록이 종료되지 않았습니다.")
-                return
-            }
+        guard let startTime = startTime else {
+            print("기록이 시작되지 않았습니다.")
+            print("start time: \(String(describing: startTime))")
+            return
+        }
+        
+        guard let endTime = endTime else {
+            print("기록이 종료되지 않았습니다.")
+            return
+        }
         
         do {
             // 유저아이디가 존재하는지 확인
@@ -149,5 +157,82 @@ class RecordViewModel: ObservableObject {
         } catch {
             print("기록 처리 에러: \(error.localizedDescription)")
         }
+    }
+    
+    // MARK: Fetch User Device Data
+    func fetchDeviceData() {
+        Task {
+            do {
+                let userDocument = try await firebaseService.fetchUser(at: UserService.shared.combineUser?.user_id ?? "", userType: false)
+                
+                if case .userSnapshot(let queryDocumentSnapshot) = userDocument {
+                    guard let doc = queryDocumentSnapshot else {
+                        print("User가 존재하지 않습니다.")
+                        return
+                    }
+                    let recordsCollection = firebaseService.fetchCollection(document: doc, collectionName: "DEVICE")
+                    let deviceDocuments = try await recordsCollection.getDocuments()
+                    
+                    if let activeDeviceDocument = deviceDocuments.documents.first(where: { document in
+                        return document["device_registration_status"] as? Bool == true
+                    }) {
+                        deviceInfo = RecordDeviceModel(
+                            device_firmware_version: activeDeviceDocument["device_firmware_version"] as? String ?? "",
+                            device_name: activeDeviceDocument["device_name"] as? String ?? "",
+                            device_registration_status: activeDeviceDocument["device_registration_status"] as? Bool ?? false,
+                            device_serial_number: activeDeviceDocument["device_serial_number"] as? String ?? "",
+                            device_wheel_circumference: activeDeviceDocument["device_wheel_circumference"] as? Double ?? 0
+                        )
+                        
+                        DispatchQueue.main.async {
+                            self.bluetoothManager = BluetoothManager(
+                                targetDeviceName: self.deviceInfo.device_name,
+                                userWeight: Double(UserService.shared.combineUser?.user_weight ?? -1),
+                                wheelCircumference: self.deviceInfo.device_wheel_circumference
+                            )
+                            self.bluetoothManager.delegate = self
+                            self.bluetoothManager.connect()
+                        }
+                    } else {
+                        print("등록된 DEVICE가 없습니다.")
+                    }
+                }
+            } catch {
+                print("FIREBASE 통신 오류: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    // MARK: - BluetoothManagerDelegate Methods
+    func didUpdateCadence(_ cadence: Double) {
+        DispatchQueue.main.async {
+            self.cadence = cadence
+        }
+    }
+    
+    func didUpdateSpeed(_ speed: Double) {
+        DispatchQueue.main.async {
+            self.speed = speed
+        }
+    }
+    
+    func didUpdateDistance(_ distance: Double) {
+        DispatchQueue.main.async {
+            self.distance = distance
+        }
+    }
+    
+    func didUpdateCalories(_ calories: Double) {
+        DispatchQueue.main.async {
+            self.calorie = calories
+        }
+    }
+    
+    func didConnectBluetooth() {
+        isBluetoothConnected = true
+    }
+    
+    func didDisconnectBluetooth() {
+        isBluetoothConnected = false
     }
 }
