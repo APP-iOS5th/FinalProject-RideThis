@@ -209,6 +209,11 @@ class HomeView: RideThisViewController {
         setupBindings()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.refreshUserData()
+    }
+    
     private func setupScrollView() {
         view.addSubview(scrollView)
         scrollView.snp.makeConstraints { make in
