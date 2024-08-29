@@ -44,6 +44,7 @@ class WheelCircumferenceViewController: UIViewController {
         setupUI()
         setupTableView()
         setupBindings()
+        setupKeyboardDismiss()
     }
 
     // MARK: - Setup NavigationBar
@@ -93,7 +94,7 @@ class WheelCircumferenceViewController: UIViewController {
             inchHeaderLabel.text = "Inch"
             
             millimeterHeaderLabel.snp.makeConstraints { millimeterHeaderLabel in
-                millimeterHeaderLabel.left.equalToSuperview().offset(16)
+                millimeterHeaderLabel.left.equalToSuperview().offset(13)
                 millimeterHeaderLabel.centerY.equalToSuperview()
                 millimeterHeaderLabel.width.equalTo(90)
             }
@@ -137,7 +138,8 @@ class WheelCircumferenceViewController: UIViewController {
 
             infoLabel.snp.makeConstraints { infoLabel in
                 infoLabel.top.equalTo(searchTextField.snp.bottom).offset(10)
-                infoLabel.left.right.equalToSuperview().inset(20)
+                infoLabel.left.equalTo(searchTextField.snp.left).inset(8)
+                infoLabel.right.equalTo(searchTextField.snp.right).inset(5)
             }
 
             headerView.snp.makeConstraints { headerView in
@@ -186,6 +188,19 @@ class WheelCircumferenceViewController: UIViewController {
                 self?.tableView.reloadData()
             }
             .store(in: &cancellables)
+    }
+    
+    // MARK: - Setup Keyboard Dismiss
+    private func setupKeyboardDismiss() {
+        tableView.keyboardDismissMode = .onDrag
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
     }
 }
 
