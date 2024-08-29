@@ -75,8 +75,3 @@ class CountViewController: RideThisViewController {
             .store(in: &cancellables)
     }
 }
-
-
-#Preview {
-    UINavigationController(rootViewController: CountViewController())
-}

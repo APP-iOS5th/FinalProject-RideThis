@@ -140,7 +140,3 @@ class SummaryRecordViewController: RideThisViewController {
         }, for: .touchUpInside)
     }
 }
-
-#Preview {
-    UINavigationController(rootViewController: SummaryRecordViewController(timer: "11:11", cadence: 12.3, speed: 12.1, distance: 1.2, calorie: 123.2, startTime: Date(), endTime: Date()))
-}

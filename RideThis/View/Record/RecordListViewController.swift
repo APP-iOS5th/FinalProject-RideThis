@@ -127,6 +127,3 @@ class RecordListViewController: RideThisViewController, UIScrollViewDelegate {
     }
 }
 
-#Preview {
-    UINavigationController(rootViewController: RecordListViewController())
-}

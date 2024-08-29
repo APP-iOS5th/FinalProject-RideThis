@@ -359,6 +359,3 @@ extension CompetitionView: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-#Preview {
-    UINavigationController(rootViewController: CompetitionView())
-}

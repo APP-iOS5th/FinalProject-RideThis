@@ -161,7 +161,3 @@ class DistanceSelectionViewController: RideThisViewController {
     }
     
 }
-
-#Preview {
-    UINavigationController(rootViewController: DistanceSelectionViewController())
-}

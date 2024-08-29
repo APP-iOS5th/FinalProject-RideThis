@@ -71,7 +71,3 @@ class RecordContainerView: UIView {
         }
     }
 }
-
-#Preview {
-    RecordContainerView()
-}

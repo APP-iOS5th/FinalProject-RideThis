@@ -333,7 +333,7 @@ class FireBaseService {
                 serialNumber: doc["device_serial_number"] as? String ?? "",
                 firmwareVersion: doc["device_firmware_version"] as? String ?? "",
                 registrationStatus: doc["device_registration_status"] as? Bool ?? false,
-                wheelCircumference: doc["device_wheel_circumference"] as? String ?? ""
+                wheelCircumference: doc["device_wheel_circumference"] as? Int ?? 0
             )
         }
         return nil
@@ -344,7 +344,7 @@ class FireBaseService {
     ///   - userId: 유저 ID
     ///   - deviceName: 디바이스 이름
     ///   - circumference: 업데이트할 바퀴 둘레 값
-    func updateDeviceWheelCircumference(userId: String, deviceName: String, circumference: String) async throws {
+    func updateDeviceWheelCircumference(userId: String, deviceName: String, circumference: Int) async throws {
         let userRef = db.collection("USERS").document(userId)
         let deviceRef = userRef.collection("DEVICES").document(deviceName)
         
