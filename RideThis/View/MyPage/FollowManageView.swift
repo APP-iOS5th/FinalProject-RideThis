@@ -64,9 +64,10 @@ class FollowManageView: RideThisViewController {
     }
     
     func setSearchBar() {
-        searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.delegate = self
         searchController.searchBar.placeholder = "이메일 또는 닉네임을 검색해주세요."
+        searchController.searchBar.autocapitalizationType = .none
         searchController.searchBar.sizeToFit()
         navigationItem.hidesSearchBarWhenScrolling = false
         navigationItem.searchController = searchController
@@ -131,7 +132,7 @@ class FollowManageView: RideThisViewController {
 
 extension FollowManageView: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        followViewModel.searchUser(text: searchText)
+        followViewModel.searchUser(text: searchText, user: self.user, type: self.followPicker.selectedSegmentIndex == 0 ? .follower : .following)
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {

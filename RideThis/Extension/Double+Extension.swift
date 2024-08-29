@@ -15,9 +15,37 @@ extension Double {
         return numberFormatter.string(from: NSNumber(value: self)) ?? ""
     }
     
-    var getTwoDecimal: String {
+    func rounded(toPlaces places: Int) -> Double {
+        let multiplier = pow(10.0, Double(places))
+        return (self * multiplier).rounded() / multiplier
+    }
+    
+    var getTwoDecimal: Double {
         get {
-            return String(format: "%.2f", self)
+            return Double(String(format: "%.2f", self))!
+        }
+    }
+    
+    var overThousandStr: String {
+        get {
+            let num = abs(self)
+            let sign = (self < 0) ? "-" : ""
+            
+            switch num {
+            case 1_000_000_000...:
+                let formatted = num / 1_000_000_000
+                return "\(sign)\(formatted.rounded(toPlaces: 1))B"
+            case 1_000_000...:
+                let formatted = num / 1_000_000
+                return "\(sign)\(formatted.rounded(toPlaces: 1))M"
+            case 1_000...:
+                let formatted = num / 1_000
+                return "\(sign)\(formatted.rounded(toPlaces: 1))K"
+            case 0...:
+                return "\(sign)\(self.getTwoDecimal)"
+            default:
+                return "\(sign)\(self.getTwoDecimal)"
+            }
         }
     }
 }
@@ -25,24 +53,17 @@ extension Double {
 extension Int {
     var secondsToRecordTime: String {
         get {
-            var hours = self / 3600
-            var minutes = self / 60
-            let seconds = self % 60
-            if seconds > 30 {
-                minutes += 1
-            }
-            if minutes >= 60 {
-                hours += 1
-            }
+            let hours = self / 3600
+            let minutes = (self % 3600) / 60
             
             if hours > 0 {
-                return "\(hours)시간 \(minutes)분"
-            } else if hours == 0 && minutes > 0 {
+//                return "\(hours)시간 \(minutes)분"
+                return "\(hours)시간"
+            } else if minutes > 0 {
                 return "\(minutes)분"
-            } else if hours == 0 && minutes == 0 {
-                return "1분"
+            } else {
+                return "0분"
             }
-            return ""
         }
     }
 }
