@@ -191,8 +191,3 @@ extension ResultRankingViewController: UITableViewDelegate, UITableViewDataSourc
         return cell
     }
 }
-
-
-#Preview {
-    UINavigationController(rootViewController: ResultRankingViewController(distance: 5))
-}

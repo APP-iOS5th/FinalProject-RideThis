@@ -305,7 +305,3 @@ extension RecordView: BluetoothViewDelegate {
     }
 }
 
-// MARK: - Preview
-#Preview {
-    UINavigationController(rootViewController: RecordView())
-}
