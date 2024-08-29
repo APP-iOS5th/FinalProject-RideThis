@@ -117,6 +117,33 @@ class DeviceView: RideThisViewController {
     
     // MARK: - Present Device Search BottomSheet
     private func presentDeviceSearchBottomSheet() {
+        if viewModel.devices.count == 1 {
+            showAlert(
+                alertTitle: "블루투스 기기는 1대만 등록이 가능합니다.",
+                msg: "등록되어있던 블루투스 기기를 삭제하시겠습니까?",
+                confirm: "삭제"
+            ) { [weak self] in
+                guard let self = self, let deviceToDelete = self.viewModel.devices.first else { return }
+                
+                Task {
+                    do {
+                        try await self.viewModel.deleteDeviceFromFirebase(deviceToDelete.name)
+                        DispatchQueue.main.async {
+                            self.viewModel.deleteDevice(deviceToDelete.name)
+                            self.presentDeviceSearchVC()
+                        }
+                    } catch {
+                        print("Error deleting device: \(error)")
+                    }
+                }
+            }
+        } else {
+            presentDeviceSearchVC()
+        }
+    }
+    
+    /// DeviceSearchViewController를 페이지 시트로 표시하고 기기 검색을 시작하는 함수
+    private func presentDeviceSearchVC() {
         let deviceSearchVC = DeviceSearchViewController(viewModel: viewModel)
         deviceSearchVC.modalPresentationStyle = .pageSheet
         
