@@ -51,9 +51,9 @@ class RecordViewModel: BluetoothManagerDelegate {
     }
     
     func resetRecording() {
-        // 기록 시작 후 누르면 리셋하고 초기상태
+        // 기록 리셋하고 초기상태
         isRecording = false
-        print("reset pushed")
+        print("record reset")
         stopTimer()
         elapsedTime = 0.0
         recordedTime = 0.0

@@ -3,14 +3,14 @@
 //  RideThis
 //
 //  Created by 황승혜 on 8/28/24.
-//
+//  기록 테이블 뷰 셀
 
 import UIKit
 import SnapKit
 
 class RecordCell: UITableViewCell {
-    private let dateLabel = UILabel()
-    private let distanceLabel = UILabel()
+    private let dateLabel = RideThisLabel(fontType: .defaultSize, fontColor: .gray)
+    private let distanceLabel = RideThisLabel(fontType: .profileFont, fontColor: .black)
     private let arrowImageView = UIImageView()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -22,13 +22,12 @@ class RecordCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // 제약조건
     private func setupViews() {
         contentView.addSubview(dateLabel)
         contentView.addSubview(distanceLabel)
         contentView.addSubview(arrowImageView)
 
-        dateLabel.font = UIFont.systemFont(ofSize: 16)
-        distanceLabel.font = UIFont.boldSystemFont(ofSize: 18)
         arrowImageView.image = UIImage(systemName: "chevron.right")
         arrowImageView.tintColor = .gray
 

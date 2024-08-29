@@ -273,6 +273,17 @@ class RecordView: RideThisViewController {
         // 커스텀 타이틀 레이블을 왼쪽 바 버튼 아이템으로 설정
         let leftBarButtonItem = UIBarButtonItem(customView: customTitleLabel)
         navigationItem.leftBarButtonItem = leftBarButtonItem
+        
+        // 오른쪽 바 버튼 아이템에 기록 목록 추가
+        let rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "list.bullet"), style: .plain, target: self, action: #selector(recordListButtonTapped))
+        rightBarButtonItem.tintColor = .primaryColor
+        navigationItem.rightBarButtonItem = rightBarButtonItem
+    }
+    
+    @objc private func recordListButtonTapped() {
+        let recordListVC = RecordListViewController()
+        self.navigationController?.pushViewController(recordListVC, animated: true)
+        print("기록 목록 출력")
     }
     
     // MARK: - 탭바 활성화

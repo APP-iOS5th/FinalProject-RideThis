@@ -97,7 +97,7 @@ class RecordSumUpView: RideThisViewController {
         
         viewModel.onSaveRecording = { [weak self] in
             // 일단 기록 뷰로 이동
-            self?.navigateToRecordListView()
+            self?.navigateToRecordView()
         }
         
         // 기록 뷰 제약조건
@@ -183,11 +183,11 @@ class RecordSumUpView: RideThisViewController {
         navigationItem.leftBarButtonItem = leftBarButtonItem
     }
     
-    @MainActor
-    private func navigateToRecordListView() {
-        let recordListVC = RecordListViewController()
-        self.navigationController?.pushViewController(recordListVC, animated: true)
-    }
+//    @MainActor
+//    private func navigateToRecordListView() {
+//        let recordListVC = RecordListViewController()
+//        self.navigationController?.pushViewController(recordListVC, animated: true)
+//    }
 }
 
 #Preview {

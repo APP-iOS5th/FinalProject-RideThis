@@ -20,11 +20,10 @@ class RecordListViewController: RideThisViewController, UIScrollViewDelegate {
     private let firebaseService = FireBaseService()
     private var cancellables = Set<AnyCancellable>()
     
-    private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "기록 목록")
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupNavigationBar()
+        self.title = "기록 목록"
+        
         setupScrollView()
         setupContentView()
         fetchRecordsFromFirebase()
@@ -38,23 +37,6 @@ class RecordListViewController: RideThisViewController, UIScrollViewDelegate {
         scrollView.snp.makeConstraints { scrol in
             scrol.edges.equalToSuperview()
         }
-    }
-    
-    private func setupNavigationBar() {
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .systemBackground
-        
-        navigationController?.navigationBar.prefersLargeTitles = false
-        navigationItem.largeTitleDisplayMode = .never
-        navigationController?.navigationBar.isTranslucent = false
-        
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        navigationController?.navigationBar.compactAppearance = appearance
-        
-        let leftBarButtonItem = UIBarButtonItem(customView: customTitleLabel)
-        navigationItem.leftBarButtonItem = leftBarButtonItem
     }
     
     private func setupContentView() {
