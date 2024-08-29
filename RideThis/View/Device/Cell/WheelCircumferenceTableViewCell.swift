@@ -2,34 +2,21 @@ import UIKit
 import SnapKit
 
 class WheelCircumferenceTableViewCell: UITableViewCell {
+    // MARK: - Properties
     static let identifier = "WheelCircumferenceTableViewCell"
     
-    private let containerView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+    private let containerView = UIView()
+    private let titleLabel = UILabel()
+    private let valueLabel = UILabel()
+    private let arrowImageView = UIImageView(image: UIImage(systemName: "chevron.right"))
     
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16)
-        return label
-    }()
     
-    private let valueLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.textAlignment = .right
-        return label
-    }()
+    // MARK: - Initialization
     
-    private let arrowImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(systemName: "chevron.right"))
-        imageView.tintColor = .gray
-        imageView.contentMode = .scaleAspectFit
-        return imageView
-    }()
-    
+    /// WheelCircumferenceTableViewCell 새 인스턴스 초기화.
+    /// - Parameters:
+    ///   - style: Cell 스타일.
+    ///   - reuseIdentifier: tableView에서 Cell을 재사용하기 위한 식별자.
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
@@ -39,12 +26,33 @@ class WheelCircumferenceTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    // MARK: - UI Setup
     private func setupUI() {
+        configureSubviews()
+        addSubviews()
+        setupConstraints()
+    }
+    
+    /// subviews 속성 설정.
+    private func configureSubviews() {
+        titleLabel.font = UIFont.systemFont(ofSize: 16)
+        valueLabel.font = UIFont.systemFont(ofSize: 16)
+        valueLabel.textAlignment = .right
+        arrowImageView.tintColor = .gray
+        arrowImageView.contentMode = .scaleAspectFit
+    }
+    
+    /// subviews를 contentView에 추가.
+    private func addSubviews() {
         contentView.addSubview(containerView)
         containerView.addSubview(titleLabel)
         containerView.addSubview(valueLabel)
         containerView.addSubview(arrowImageView)
-        
+    }
+    
+    /// SnapKit 사용하여 UI 제약 조건 설정.
+    private func setupConstraints() {
         containerView.snp.makeConstraints { containerView in
             containerView.edges.equalToSuperview()
             containerView.height.greaterThanOrEqualTo(44)
@@ -67,6 +75,13 @@ class WheelCircumferenceTableViewCell: UITableViewCell {
         }
     }
     
+    
+    // MARK: - Configuration
+    
+    /// 주어진 Title 값으로 Cell 구성.
+    /// - Parameters:
+    ///   - title: Cell에 표시할 title.
+    ///   - value: Cell에 표시할 value.
     func configure(title: String, value: String) {
         titleLabel.text = title
         valueLabel.text = value

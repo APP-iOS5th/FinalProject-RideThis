@@ -17,16 +17,23 @@ class FollowManageViewModel {
         }
     }
     
-    func fetchFollowData(user: User, type: FollowType) async {
+    func fetchFollowData(user: User, type: FollowType, search text: String? = nil) async {
         let target = type == .follower ? user.user_follower : user.user_following
         do {
-            followDatas = try await firebaseService.fetchUsers(by: target)
+            let followUsers = try await firebaseService.fetchUsers(by: target)
+            if let text = text {
+                followDatas = followUsers.filter{ $0.user_nickname.contains(text) || $0.user_email.contains(text) }
+            } else {
+                followDatas = followUsers
+            }
         } catch {
             print(error)
         }
     }
     
-    func searchUser(text: String) {
-        
+    func searchUser(text: String, user: User, type: FollowType) {
+        Task {
+            await fetchFollowData(user: user, type: type, search: text.isEmpty ? nil : text)
+        }
     }
 }

@@ -1,6 +1,6 @@
 import Foundation
 
-enum ShowingData: String, CaseIterable {
+enum RecordDataCase: String, CaseIterable {
     case cadence = "Cadence"
     case distance = "Distance"
     case speed = "Speed"
@@ -21,6 +21,7 @@ enum ShowingData: String, CaseIterable {
         }
     }
 }
+
 class User: Decodable {
     var user_id: String
     var user_image: String?
@@ -31,8 +32,6 @@ class User: Decodable {
     var user_following: [String]
     var user_follower: [String]
     var user_account_public: Bool
-//    let record_id: [String?]
-//    let device_id: [String]
     var tallStr: String {
         get {
             guard user_tall > 0 else { return "-" }
@@ -40,7 +39,7 @@ class User: Decodable {
         }
     }
     
-    init(user_id: String, user_image: String?, user_email: String, user_nickname: String, user_weight: Int, user_tall: Int, user_following: [String], user_follower: [String], user_account_public: Bool/*, record_id: [String?], device_id: [String]*/) {
+    init(user_id: String, user_image: String?, user_email: String, user_nickname: String, user_weight: Int, user_tall: Int, user_following: [String], user_follower: [String], user_account_public: Bool) {
         self.user_id = user_id
         self.user_image = user_image
         self.user_email = user_email
@@ -50,7 +49,5 @@ class User: Decodable {
         self.user_following = user_following
         self.user_follower = user_follower
         self.user_account_public = user_account_public
-//        self.record_id = record_id
-//        self.device_id = device_id
     }
 }

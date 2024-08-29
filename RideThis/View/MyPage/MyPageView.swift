@@ -14,7 +14,24 @@ class MyPageView: RideThisViewController {
     private let firebaseService = FireBaseService()
     private var cancellable = Set<AnyCancellable>()
     private var followDelegate: UpdateUserDelegate?
-    private lazy var viewModel = MyPageViewModel(firebaseService: firebaseService)
+    private lazy var viewModel = MyPageViewModel(firebaseService: firebaseService, periodCase: .oneWeek)
+    private var selectedDataType: RecordDataCase = .cadence
+    private var selectedPeriod: RecordPeriodCase {
+        get {
+            switch self.recordByPeriodPicker.selectedSegmentIndex {
+            case 0:
+                return .oneWeek
+            case 1:
+                return .oneMonth
+            case 2:
+                return .threeMonths
+            case 3:
+                return .sixMonths
+            default:
+                return .oneWeek
+            }
+        }
+    }
     
     // MARK: UIComponents
     // MARK: ScrollView
@@ -102,9 +119,9 @@ class MyPageView: RideThisViewController {
         
         return btn
     }()
-    private let periodOptions: [String] = ["1주", "1개월", "3개월", "6개월"]
+    private let periodOptions: [RecordPeriodCase] = RecordPeriodCase.allCases
     private lazy var recordByPeriodPicker: UISegmentedControl = {
-        let picker = UISegmentedControl(items: self.periodOptions)
+        let picker = UISegmentedControl(items: self.periodOptions.map{ $0.rawValue })
         picker.translatesAutoresizingMaskIntoConstraints = false
         picker.selectedSegmentIndex = 0
         picker.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
@@ -169,7 +186,7 @@ class MyPageView: RideThisViewController {
     private let selectedPeriodTitle = RideThisLabel(fontType: .recordInfoTitle, text: "Cadence")
     private let selectedPeriodSeparator = RideThisSeparator()
     private let selectedPeriodData = RideThisLabel(fontType: .title)
-    private var selectedPeriodDataUnit = ShowingData.cadence.unit
+    private var selectedPeriodDataUnit = RecordDataCase.cadence.unit
     
     // MARK: Data for UI
     lazy var itemSize = CGSize(width: self.view.frame.width - 65, height: 400)
@@ -501,8 +518,6 @@ class MyPageView: RideThisViewController {
         self.selectedPeriodData.snp.makeConstraints {
             $0.top.equalTo(self.selectedPeriodSeparator.snp.bottom).offset(15)
             $0.centerX.equalTo(self.selectedPeriodTitle.snp.centerX)
-            
-            selectedPeriodData.text = "121.23\(selectedPeriodDataUnit)"
         }
     }
     
@@ -554,21 +569,61 @@ class MyPageView: RideThisViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] records in
                 guard let self = self else { return }
+                self.graphCollectionView.reloadData()
+                
                 let count = records.count
                 var totalSeconds: Int = 0
                 var totalDistance: Double = 0
-                
+
                 for record in records {
                     totalDistance += record.record_distance
                     if let endTime = record.record_end_time, let startTime = record.record_start_time {
                         totalSeconds += viewModel.getRecordTimeDiff(endDate: endTime, startDate: startTime)
                     }
                 }
+                
                 self.totalRunCountData.text = "\(count)회"
                 self.totalRunTimeData.text = totalSeconds.secondsToRecordTime
-                self.totalRunDistanceData.text = "\(totalDistance.getTwoDecimal)km"
+                self.totalRunDistanceData.text = "\(totalDistance.overThousandStr) km"
             }
             .store(in: &cancellable)
+        
+        viewModel.$cadenceAvg
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] avg in
+                guard let self = self else { return }
+                
+                self.selectedPeriodData.text = "\(avg)\(self.selectedPeriodDataUnit)"
+            }
+            .store(in: &cancellable)
+        
+        viewModel.$distanceAvg
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] avg in
+                guard let self = self else { return }
+                
+                self.selectedPeriodData.text = "\(avg)\(self.selectedPeriodDataUnit)"
+            }
+            .store(in: &cancellable)
+        
+        viewModel.$speedAvg
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] avg in
+                guard let self = self else { return }
+                
+                self.selectedPeriodData.text = "\(avg)\(self.selectedPeriodDataUnit)"
+            }
+            .store(in: &cancellable)
+        
+        viewModel.$caloriesAvg
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] avg in
+                guard let self = self else { return }
+                
+                self.selectedPeriodData.text = "\(avg)\(self.selectedPeriodDataUnit)"
+            }
+            .store(in: &cancellable)
+        
     }
     
     @objc func settingButtonTapAction() {
@@ -578,6 +633,7 @@ class MyPageView: RideThisViewController {
     
     @objc func segmentChanged(_ sender: UISegmentedControl) {
         // MARK: TODO - picker의 선택된 기간에 따라 그래프 변경 로직 추가
+        graphCollectionView.reloadData()
     }
 }
 
@@ -591,8 +647,9 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GraphCollectionViewCell", for: indexPath) as? GraphCollectionViewCell else {
             return UICollectionViewCell()
         }
-        
-        cell.setGraph(type: .cadence)
+       
+        let periodRecords = viewModel.getRecordsBy(period: self.selectedPeriod, dataCase: self.selectedDataType)
+        cell.setGraph(type: selectedDataType, records: periodRecords, period: self.selectedPeriod)
         
         return cell
     }
@@ -605,25 +662,23 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
         targetContentOffset.pointee = CGPoint(x: index * cellWidth - scrollView.contentInset.left, y: scrollView.contentInset.top)
         
         let indexInt = Int(index)
-        var changeDataLabel: ShowingData = .cadence
         switch indexInt {
         case 0:
-            changeDataLabel = .cadence
+            selectedDataType = .cadence
         case 1:
-            changeDataLabel = .distance
+            selectedDataType = .distance
         case 2:
-            changeDataLabel = .speed
+            selectedDataType = .speed
         case 3:
-            changeDataLabel = .calories
+            selectedDataType = .calories
         default:
             break
         }
-        self.selectedPeriodDataUnit = changeDataLabel.unit
+        self.selectedPeriodDataUnit = selectedDataType.unit
         
         DispatchQueue.main.async {
-            self.dataLabel.text = changeDataLabel.rawValue
-            self.selectedPeriodTitle.text = changeDataLabel.rawValue
-            self.selectedPeriodData.text = "121.23\(self.selectedPeriodDataUnit)"
+            self.dataLabel.text = self.selectedDataType.rawValue
+            self.selectedPeriodTitle.text = self.selectedDataType.rawValue
             for (index, subView) in self.pagingIndicator.subviews.enumerated() {
                 guard let page = subView as? UIImageView else { continue }
                 if index == indexInt {
@@ -633,7 +688,10 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
                 }
             }
             if let graphCell = self.graphCollectionView.cellForItem(at: IndexPath(row: indexInt, section: 0)) as? GraphCollectionViewCell {
-                graphCell.lineChartDataSet?.label = changeDataLabel.rawValue
+                graphCell.setGraph(type: self.selectedDataType, 
+                                   records: self.viewModel.getRecordsBy(period: self.selectedPeriod, dataCase: self.selectedDataType),
+                                   period: self.selectedPeriod)
+                graphCell.lineChartDataSet?.label = self.selectedDataType.rawValue
                 graphCell.lineChartView.notifyDataSetChanged()
             }
         }
