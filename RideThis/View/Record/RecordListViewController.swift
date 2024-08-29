@@ -63,8 +63,6 @@ class RecordListViewController: RideThisViewController, UIScrollViewDelegate {
                 await MainActor.run {
                     loadMoreMonths()
                 }
-            } catch {
-                print("error: \(error)")
             }
         }
     }

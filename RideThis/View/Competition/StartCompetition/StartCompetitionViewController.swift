@@ -253,18 +253,3 @@ class StartCompetitionViewController: RideThisViewController {
         }, for: .touchUpInside)
     }
 }
-
-
-
-//extension StartCompetitionViewController: BluetoothViewDelegate {
-//    
-//    
-//    func bluetoothDidTurnOff() {
-//        self.navigationController?.popToRootViewController(animated: true)
-//        
-//        if let tabBarController = self.tabBarController {
-//            tabBarController.tabBar.items?.forEach{ $0.isEnabled = true }
-//            tabBarController.selectedIndex = 3
-//        }
-//    }
-//}
