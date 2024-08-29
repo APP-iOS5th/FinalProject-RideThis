@@ -1,6 +1,6 @@
 import Foundation
 
-enum ShowingData: String, CaseIterable {
+enum RecordDataCase: String, CaseIterable {
     case cadence = "Cadence"
     case distance = "Distance"
     case speed = "Speed"

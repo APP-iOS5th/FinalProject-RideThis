@@ -21,51 +21,50 @@ class GraphCollectionViewCell: UICollectionViewCell {
         self.contentView.layer.cornerRadius = 13
     }
     
-    func setGraph(type: ShowingData, records: [RecordModel], periodCase: RecordPeriodCase) {
-        // MARK: 1안 - width를 넓혀서 여기를 스크롤뷰로 해보기
-        // MARK: 2안 - 3개월 넘었을 때는 평균값으로 표시
+    // MARK: TODO - 평균값 수평선으로 그래프로 보여주기
+    // MARK: TODO - 3개월 부터는 주차별로 좀 더 간소하게 보여줄 수 있으면 진행
+    func setGraph(type: RecordDataCase, records: [RecordModel], period: RecordPeriodCase) {
+        
+        contentView.subviews.forEach { $0.removeFromSuperview() }
+        scrollView.removeFromSuperview()
+        lineChartView.removeFromSuperview()
+
         lineChartView.translatesAutoresizingMaskIntoConstraints = false
         lineChartView.isUserInteractionEnabled = true
         lineChartView.delegate = self
-        scrollView.subviews.forEach{ $0.removeFromSuperview() }
-        contentView.subviews.forEach{ $0.removeFromSuperview() }
-        if periodCase == .threeMonths || periodCase == .sixMonths {
-            scrollView.translatesAutoresizingMaskIntoConstraints = false
+
+        switch period {
+        case .oneWeek:
+            contentView.addSubview(lineChartView)
+            lineChartView.snp.remakeConstraints {
+                $0.edges.equalToSuperview()
+                $0.height.equalTo(400)
+            }
+        case .oneMonth, .threeMonths, .sixMonths:
+            let widthMultiplier: CGFloat = period == .oneMonth ? 2 : period == .threeMonths ? 4 : 6
             
+            scrollView.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview(scrollView)
             scrollView.addSubview(lineChartView)
-            
-            scrollView.snp.makeConstraints {
-                $0.top.equalTo(contentView.snp.top)
-                $0.right.equalTo(contentView.snp.right)
-                $0.left.equalTo(contentView.snp.left)
-                $0.bottom.equalTo(contentView.snp.bottom)
+
+            scrollView.snp.remakeConstraints {
+                $0.edges.equalToSuperview()
             }
-            
-            let widthConstraint: CGFloat = periodCase == .threeMonths ? 4 : 6
-            lineChartView.snp.makeConstraints {
-                $0.top.equalTo(scrollView.snp.top)
-                $0.right.equalTo(scrollView.snp.right)
-                $0.left.equalTo(scrollView.snp.left)
-                $0.bottom.equalTo(scrollView.snp.bottom)
-                $0.width.equalTo(contentView.frame.size.width * widthConstraint)
+
+            lineChartView.snp.remakeConstraints {
+                $0.edges.equalTo(scrollView.contentLayoutGuide)
                 $0.height.equalTo(400)
+                $0.width.equalTo(contentView.snp.width).multipliedBy(widthMultiplier)
             }
-        } else {
-            lineChartView.center = contentView.center
-            
-            contentView.addSubview(lineChartView)
-            lineChartView.snp.makeConstraints {
-                $0.top.equalTo(contentView.snp.top)
-                $0.left.equalTo(contentView.snp.left)
-                $0.right.equalTo(contentView.snp.right)
-                $0.bottom.equalTo(contentView.snp.bottom)
-                $0.height.equalTo(400)
+
+            scrollView.contentLayoutGuide.snp.makeConstraints {
+                $0.width.equalTo(lineChartView)
+                $0.height.equalTo(scrollView.frameLayoutGuide)
             }
         }
         
         // 데이터 설정
-        let dataEntries = generateLineChartDataEntries(type: type, records: records, periodCase: periodCase)
+        let dataEntries = generateLineChartDataEntries(type: type, records: records, periodCase: period)
         lineChartDataSet = LineChartDataSet(entries: dataEntries, label: type.rawValue)
         
         // 데이터 스타일 설정
@@ -89,15 +88,13 @@ class GraphCollectionViewCell: UICollectionViewCell {
         lineChartView.pinchZoomEnabled = false
         lineChartView.xAxis.labelPosition = .bottom
         lineChartView.rightAxis.enabled = false
-        // x축 격자무늬 없애기
         lineChartView.xAxis.drawGridLinesEnabled = false
-        // 왼쪽 y축 격자무늬 없애기
         lineChartView.leftAxis.drawGridLinesEnabled = false
-        // 오른쪽 y축 격자무늬 없애기
         lineChartView.rightAxis.drawGridLinesEnabled = false
     }
     
-    func generateLineChartDataEntries(type: ShowingData, records: [RecordModel], periodCase: RecordPeriodCase) -> [ChartDataEntry] {
+    // MARK: TODO - 데이터 관련 로직들 ViewModel에서 처리하도록 수정
+    func generateLineChartDataEntries(type: RecordDataCase, records: [RecordModel], periodCase: RecordPeriodCase) -> [ChartDataEntry] {
         var dataEntries: [ChartDataEntry] = []
         let today = Date()
         let calendar = Calendar.current
@@ -151,12 +148,12 @@ class GraphCollectionViewCell: UICollectionViewCell {
         let dataSet = LineChartDataSet(entries: dataEntries, label: "My Data")
         let data = LineChartData(dataSet: dataSet)
         lineChartView.data = data
-        if periodCase == .threeMonths || periodCase == .sixMonths {
-            lineChartView.xAxis.granularity = 3
-        } else {
+        switch periodCase {
+        case .oneWeek:
             lineChartView.xAxis.granularity = 1
+        default:
+            lineChartView.xAxis.granularity = 3
         }
-        
         lineChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: periodCase.graphXAxis)
         
         return dataEntries
