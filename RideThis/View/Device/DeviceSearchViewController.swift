@@ -14,12 +14,12 @@ class DeviceSearchViewController: RideThisViewController {
     private let imageView = UIImageView(image: UIImage(named: "deviceSearch"))
     private let searchingLabel = RideThisLabel(fontType: .sectionTitle, text: "검색중...")
     private let deviceTableView = UITableView(frame: .zero, style: .insetGrouped)
-    
+    private var isProcessingSelection = false
     
     // MARK: - Initialization
     
-    /// DeviceSearchViewController를 주어진 ViewModel로 초기화.
-    /// - Parameter viewModel: DeviceSearchViewController에서 사용할 ViewModel.
+    /// DeviceSearchViewController를 주어진 ViewModel로 초기화
+    /// - Parameter viewModel: DeviceSearchViewController에서 사용할 ViewModel
     init(viewModel: DeviceViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -29,13 +29,25 @@ class DeviceSearchViewController: RideThisViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - ViewDidLoad
+    // MARK: - View DidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupTableView()
         setupActions()
         bindViewModel()
+    }
+    
+    // MARK: - View DidAppear
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        viewModel.startDeviceSearch()
+    }
+    
+    // MARK: - View WillDisappear
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        viewModel.stopDeviceSearch()
     }
     
     // MARK: - Setup UI
@@ -45,7 +57,7 @@ class DeviceSearchViewController: RideThisViewController {
         setupConstraints()
     }
     
-    /// subViews를 추가하여 뷰 계층 구성.
+    /// subViews를 추가하여 뷰 계층 구성
     private func configureViewHierarchy() {
         view.addSubview(titleView)
         titleView.addSubview(titleLabel)
@@ -145,22 +157,34 @@ class DeviceSearchViewController: RideThisViewController {
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
 extension DeviceSearchViewController: UITableViewDelegate, UITableViewDataSource {
-    /// numberOfRowsInSection.
+    /// numberOfRowsInSection
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.searchedDevices.count
     }
     
-    /// cellForRowAt.
+    /// cellForRowAt
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: DeviceSearchTableViewCell.identifier, for: indexPath) as! DeviceSearchTableViewCell
         cell.configure(with: viewModel.searchedDevices[indexPath.row].name)
         return cell
     }
     
-    /// didSelectRowAt.
+    /// didSelectRowAt
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard !isProcessingSelection else { return }
+        isProcessingSelection = true
+        
         let selectedDevice = viewModel.searchedDevices[indexPath.row]
-        viewModel.addDevice(selectedDevice)
-        dismiss(animated: true, completion: nil)
+        Task {
+            do {
+                try await viewModel.addDeviceWithDefaultSettings(selectedDevice)
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true, completion: nil)
+                }
+            } catch {
+                print("Error adding device: \(error)")
+            }
+            isProcessingSelection = false
+        }
     }
 }
