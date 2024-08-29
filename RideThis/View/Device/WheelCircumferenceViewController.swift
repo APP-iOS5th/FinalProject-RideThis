@@ -26,8 +26,8 @@ class WheelCircumferenceViewController: UIViewController {
     private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Initialization
-    /// WheelCircumferenceViewController를 주어진 ViewModel로 초기화.
-    /// - Parameter viewModel: WheelCircumferenceViewController에서 사용할 ViewModel.
+    /// WheelCircumferenceViewController를 주어진 ViewModel로 초기화
+    /// - Parameter viewModel: WheelCircumferenceViewController에서 사용할 ViewModel
     init(viewModel: DeviceViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -172,7 +172,6 @@ class WheelCircumferenceViewController: UIViewController {
 
     // MARK: - Setup Bindings
     private func setupBindings() {
-        // 검색 텍스트 필드의 텍스트 변경을 관찰하고 뷰모델의 필터링 메서드 호출
         searchTextField.textPublisher
             .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
             .removeDuplicates()
@@ -181,7 +180,6 @@ class WheelCircumferenceViewController: UIViewController {
             }
             .store(in: &cancellables)
 
-        // 필터링된 휠 둘레 목록을 관찰하고 테이블 뷰 업데이트
         viewModel.$filteredWheelCircumferences
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
@@ -206,12 +204,12 @@ class WheelCircumferenceViewController: UIViewController {
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
 extension WheelCircumferenceViewController: UITableViewDelegate, UITableViewDataSource {
-    /// numberOfRowsInSection.
+    /// numberOfRowsInSection
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.filteredWheelCircumferences.count
     }
 
-    /// cellForRowAt.
+    /// cellForRowAt
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "WheelCircumferenceSelectionCell", for: indexPath) as? WheelCircumferenceSelectionCell else {
             return UITableViewCell()
@@ -229,15 +227,26 @@ extension WheelCircumferenceViewController: UITableViewDelegate, UITableViewData
         return cell
     }
     
-    /// didSelectRowAt.
+    /// didSelectRowAt
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let wheelCircumference = viewModel.filteredWheelCircumferences[indexPath.row]
         self.selectedCircumference = (wheelCircumference.millimeter, wheelCircumference.tireSize)
-        onCircumferenceSelected?(wheelCircumference.millimeter, wheelCircumference.tireSize)
-        tableView.reloadData()
+        
+        // Firebase 업데이트
+        Task {
+            do {
+                try await viewModel.updateWheelCircumferenceInFirebase(wheelCircumference.millimeter)
+                DispatchQueue.main.async {
+                    self.onCircumferenceSelected?(wheelCircumference.millimeter, wheelCircumference.tireSize)
+                    tableView.reloadData()
+                }
+            } catch {
+                print("Error updating wheel circumference: \(error)")
+            }
+        }
     }
 
-    /// heightForRowAt.
+    /// heightForRowAt
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 44
     }
