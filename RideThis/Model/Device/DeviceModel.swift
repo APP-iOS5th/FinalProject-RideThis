@@ -5,7 +5,7 @@ struct Device {
     let name: String
     let serialNumber: String
     let firmwareVersion: String
-    let registrationStatus: String
+    var registrationStatus: Bool
     var wheelCircumference: String
 }
 
