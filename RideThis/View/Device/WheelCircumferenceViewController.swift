@@ -20,8 +20,8 @@ class WheelCircumferenceViewController: UIViewController {
     private let tireSizeHeaderLabel = UILabel()
     private let inchHeaderLabel = UILabel()
 
-    var selectedCircumference: (String, String)?
-    var onCircumferenceSelected: ((String, String) -> Void)?
+    var selectedCircumference: (Int, String)?
+    var onCircumferenceSelected: ((Int, String) -> Void)?
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -67,10 +67,11 @@ class WheelCircumferenceViewController: UIViewController {
 
     // MARK: - Configure SearchTextField
     private func configureSearchTextField() {
-        searchTextField.placeholder = "휠 크기를 검색해주세요.(ex: 1020mm)"
+        searchTextField.placeholder = "휠 크기를 검색해주세요.(ex: 1020)"
         searchTextField.borderStyle = .roundedRect
         searchTextField.backgroundColor = .white
         searchTextField.font = UIFont.systemFont(ofSize: FontCase.defaultSize.rawValue)
+        searchTextField.keyboardType = .numberPad
     }
 
     // MARK: - Configure InfoLabel
@@ -79,81 +80,81 @@ class WheelCircumferenceViewController: UIViewController {
     }
 
     // MARK: - Configure HeaderView
-        private func configureHeaderView() {
-            headerView.backgroundColor = .primaryBackgroundColor
-            headerView.clipsToBounds = true
-            
-            [millimeterHeaderLabel, tireSizeHeaderLabel, inchHeaderLabel].forEach {
-                $0.font = UIFont.boldSystemFont(ofSize: 14)
-                $0.textColor = .black
-                headerView.addSubview($0)
-            }
-            
-            millimeterHeaderLabel.text = "Millimeter"
-            tireSizeHeaderLabel.text = "Tire Size"
-            inchHeaderLabel.text = "Inch"
-            
-            millimeterHeaderLabel.snp.makeConstraints { millimeterHeaderLabel in
-                millimeterHeaderLabel.left.equalToSuperview().offset(13)
-                millimeterHeaderLabel.centerY.equalToSuperview()
-                millimeterHeaderLabel.width.equalTo(90)
-            }
-            
-            tireSizeHeaderLabel.snp.makeConstraints { tireSizeHeaderLabel in
-                tireSizeHeaderLabel.left.equalTo(millimeterHeaderLabel.snp.right).offset(16)
-                tireSizeHeaderLabel.centerY.equalToSuperview()
-                tireSizeHeaderLabel.width.equalTo(100)
-            }
-            
-            inchHeaderLabel.snp.makeConstraints { inchHeaderLabel in
-                inchHeaderLabel.left.equalTo(tireSizeHeaderLabel.snp.right).offset(16)
-                inchHeaderLabel.centerY.equalToSuperview()
-                inchHeaderLabel.width.equalTo(50)
-            }
+    private func configureHeaderView() {
+        headerView.backgroundColor = .primaryBackgroundColor
+        headerView.clipsToBounds = true
+
+        [millimeterHeaderLabel, tireSizeHeaderLabel, inchHeaderLabel].forEach {
+            $0.font = UIFont.boldSystemFont(ofSize: 14)
+            $0.textColor = .black
+            headerView.addSubview($0)
         }
 
-        // MARK: - Configure TableView
-        private func configureTableView() {
-            tableView.register(WheelCircumferenceSelectionCell.self, forCellReuseIdentifier: "WheelCircumferenceSelectionCell")
-            tableView.separatorStyle = .none
-            tableView.backgroundColor = .primaryBackgroundColor
-            tableView.isScrollEnabled = true
-            tableView.layer.cornerRadius = 10
-            tableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-            tableView.clipsToBounds = true
+        millimeterHeaderLabel.text = "Millimeter"
+        tireSizeHeaderLabel.text = "Tire Size"
+        inchHeaderLabel.text = "Inch"
+
+        millimeterHeaderLabel.snp.makeConstraints { millimeterHeaderLabel in
+            millimeterHeaderLabel.left.equalToSuperview().offset(13)
+            millimeterHeaderLabel.centerY.equalToSuperview()
+            millimeterHeaderLabel.width.equalTo(90)
         }
 
-        // MARK: - Setup Constraints
-        private func setupConstraints() {
-            wheelSearchLabel.snp.makeConstraints { wheelSearchLabel in
-                wheelSearchLabel.top.equalTo(view.safeAreaLayoutGuide).offset(20)
-                wheelSearchLabel.left.right.equalToSuperview().inset(20)
-            }
-
-            searchTextField.snp.makeConstraints { searchTextField in
-                searchTextField.top.equalTo(wheelSearchLabel.snp.bottom).offset(10)
-                searchTextField.left.right.equalToSuperview().inset(20)
-                searchTextField.height.equalTo(45)
-            }
-
-            infoLabel.snp.makeConstraints { infoLabel in
-                infoLabel.top.equalTo(searchTextField.snp.bottom).offset(10)
-                infoLabel.left.equalTo(searchTextField.snp.left).inset(8)
-                infoLabel.right.equalTo(searchTextField.snp.right).inset(5)
-            }
-
-            headerView.snp.makeConstraints { headerView in
-                headerView.top.equalTo(infoLabel.snp.bottom).offset(10)
-                headerView.left.right.equalTo(searchTextField)
-                headerView.height.equalTo(44)
-            }
-
-            tableView.snp.makeConstraints { tableView in
-                tableView.top.equalTo(headerView.snp.bottom)
-                tableView.left.right.equalTo(searchTextField)
-                tableView.bottom.equalTo(view.safeAreaLayoutGuide)
-            }
+        tireSizeHeaderLabel.snp.makeConstraints { tireSizeHeaderLabel in
+            tireSizeHeaderLabel.left.equalTo(millimeterHeaderLabel.snp.right).offset(16)
+            tireSizeHeaderLabel.centerY.equalToSuperview()
+            tireSizeHeaderLabel.width.equalTo(100)
         }
+
+        inchHeaderLabel.snp.makeConstraints { inchHeaderLabel in
+            inchHeaderLabel.left.equalTo(tireSizeHeaderLabel.snp.right).offset(16)
+            inchHeaderLabel.centerY.equalToSuperview()
+            inchHeaderLabel.width.equalTo(50)
+        }
+    }
+
+    // MARK: - Configure TableView
+    private func configureTableView() {
+        tableView.register(WheelCircumferenceSelectionCell.self, forCellReuseIdentifier: "WheelCircumferenceSelectionCell")
+        tableView.separatorStyle = .none
+        tableView.backgroundColor = .primaryBackgroundColor
+        tableView.isScrollEnabled = true
+        tableView.layer.cornerRadius = 10
+        tableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        tableView.clipsToBounds = true
+    }
+
+    // MARK: - Setup Constraints
+    private func setupConstraints() {
+        wheelSearchLabel.snp.makeConstraints { wheelSearchLabel in
+            wheelSearchLabel.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+            wheelSearchLabel.left.right.equalToSuperview().inset(20)
+        }
+
+        searchTextField.snp.makeConstraints { searchTextField in
+            searchTextField.top.equalTo(wheelSearchLabel.snp.bottom).offset(10)
+            searchTextField.left.right.equalToSuperview().inset(20)
+            searchTextField.height.equalTo(45)
+        }
+
+        infoLabel.snp.makeConstraints { infoLabel in
+            infoLabel.top.equalTo(searchTextField.snp.bottom).offset(10)
+            infoLabel.left.equalTo(searchTextField.snp.left).inset(8)
+            infoLabel.right.equalTo(searchTextField.snp.right).inset(5)
+        }
+
+        headerView.snp.makeConstraints { headerView in
+            headerView.top.equalTo(infoLabel.snp.bottom).offset(10)
+            headerView.left.right.equalTo(searchTextField)
+            headerView.height.equalTo(44)
+        }
+
+        tableView.snp.makeConstraints { tableView in
+            tableView.top.equalTo(headerView.snp.bottom)
+            tableView.left.right.equalTo(searchTextField)
+            tableView.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
+    }
 
     // MARK: - Add Subviews
     private func addSubviews() {

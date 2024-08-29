@@ -6,12 +6,12 @@ struct Device {
     let serialNumber: String
     let firmwareVersion: String
     var registrationStatus: Bool
-    var wheelCircumference: String
+    var wheelCircumference: Int
 }
 
 /// 휠 둘레 속성.
 struct WheelCircumference {
-    let millimeter: String
+    let millimeter: Int
     let tireSize: String
     let inch: String
 }

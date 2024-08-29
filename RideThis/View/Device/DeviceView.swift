@@ -157,7 +157,7 @@ class DeviceView: RideThisViewController {
         }
     }
     
-    /// Device 목록이 비었을 때 빈 레이블 업데이트.
+    /// Device 목록이 비었을 때 빈 레이블 업데이트
     /// - Parameter isEmpty: Device 목록 비었는지 여부
     private func updateEmptyLabelVisibility(isEmpty: Bool) {
         emptyLabel.isHidden = !isEmpty
@@ -168,12 +168,12 @@ class DeviceView: RideThisViewController {
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
 extension DeviceView: UITableViewDelegate, UITableViewDataSource {
-    /// numberOfRowsInSection.
+    /// numberOfRowsInSection
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.devices.count
     }
     
-    /// cellForRowAt.
+    /// cellForRowAt
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: DeviceTableViewCell.identifier, for: indexPath) as? DeviceTableViewCell else {
             return UITableViewCell()
@@ -183,12 +183,12 @@ extension DeviceView: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
-    /// heightForRowAt.
+    /// heightForRowAt
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
     
-    /// didSelectRowAt.
+    /// didSelectRowAt
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         

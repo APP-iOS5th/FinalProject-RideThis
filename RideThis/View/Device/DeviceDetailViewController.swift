@@ -6,7 +6,7 @@ class DeviceDetailViewController: RideThisViewController {
     private let viewModel: DeviceViewModel
     private let deviceName: String
     private var cancellables = Set<AnyCancellable>()
-    
+
     private let deviceInfoTableView = UITableView(frame: .zero, style: .insetGrouped)
     private let wheelCircumferenceTableView = UITableView(frame: .zero, style: .insetGrouped)
     private lazy var deleteDeviceButton = RideThisButton(buttonTitle: "장치 삭제")
@@ -246,19 +246,7 @@ extension DeviceDetailViewController: UITableViewDelegate, UITableViewDataSource
         } else {
             cell.alignValueToLeft()
         }
-        
-//        // 일련번호 두 셀 사이의 구분선 제거
-//        if indexPath.row == 1 {
-//            cell.hideSeparator()
-//        } else {
-//            cell.showSeparator()
-//        }
-//        
-//        // 펌웨어 버전과 등록 상태 사이에 구분선 표시
-//        if indexPath.row == 3 {
-//            cell.showSeparator()
-//        }
-        
+
         return cell
     }
     
@@ -267,9 +255,13 @@ extension DeviceDetailViewController: UITableViewDelegate, UITableViewDataSource
     /// - Returns: 구성된 UITableViewCell
     private func configureWheelCircumferenceCell(for indexPath: IndexPath) -> UITableViewCell {
         let cell = wheelCircumferenceTableView.dequeueReusableCell(withIdentifier: WheelCircumferenceTableViewCell.identifier, for: indexPath) as! WheelCircumferenceTableViewCell
-        
-        cell.configure(title: "휠 둘레", value: viewModel.selectedDevice?.wheelCircumference ?? "")
-        
+
+        if let wheelCircumference = viewModel.selectedDevice?.wheelCircumference {
+            cell.configure(title: "휠 둘레", value: "\(wheelCircumference)mm")
+        } else {
+            cell.configure(title: "휠 둘레", value: "")
+        }
+
         return cell
     }
     
@@ -281,10 +273,17 @@ extension DeviceDetailViewController: UITableViewDelegate, UITableViewDataSource
             wheelCircumferenceVC.selectedCircumference = (selectedDevice.wheelCircumference, selectedDevice.name)
         }
         
-        wheelCircumferenceVC.onCircumferenceSelected = { [weak self] (millimeter: String, tireSize: String) in
-            let circumference = "\(millimeter)"
-            self?.viewModel.updateWheelCircumference(circumference)
-            self?.wheelCircumferenceTableView.reloadData()
+        wheelCircumferenceVC.onCircumferenceSelected = { [weak self] (millimeter: Int, tireSize: String) in
+            Task {
+                do {
+                    try await self?.viewModel.updateWheelCircumferenceInFirebase(millimeter)
+                    DispatchQueue.main.async {
+                        self?.wheelCircumferenceTableView.reloadData()
+                    }
+                } catch {
+                    print("Error updating wheel circumference: \(error)")
+                }
+            }
         }
         
         navigationController?.pushViewController(wheelCircumferenceVC, animated: true)
