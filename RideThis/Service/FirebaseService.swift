@@ -62,6 +62,7 @@ class FireBaseService {
         return allUsers
     }
     
+    // MARK: 서버에 동일한 닉네임이 있는지 검사
     func findUser(nickName: String) async -> Int {
         do {
             let querySnapshot = try await db.collection("USERS")
