@@ -253,7 +253,3 @@ class RecordView: RideThisViewController {
     
 }
 
-// MARK: - Preview
-#Preview {
-    UINavigationController(rootViewController: RecordView())
-}

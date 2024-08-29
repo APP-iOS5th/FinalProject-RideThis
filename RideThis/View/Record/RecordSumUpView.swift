@@ -184,6 +184,3 @@ class RecordSumUpView: RideThisViewController {
     }
 }
 
-#Preview {
-    UINavigationController(rootViewController: RecordSumUpView(viewModel: RecordViewModel()))
-}

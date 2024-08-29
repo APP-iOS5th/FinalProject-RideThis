@@ -279,6 +279,3 @@ class RecordTableViewCell: UITableViewCell {
     }
 }
 
-#Preview {
-    UINavigationController(rootViewController: RecordListViewController())
-}
