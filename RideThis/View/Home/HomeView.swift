@@ -11,6 +11,17 @@ class HomeView: RideThisViewController {
     
     private var cancellables = Set<AnyCancellable>()
     
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.showsVerticalScrollIndicator = false
+        return scrollView
+    }()
+    
+    private let contentView: UIView = {
+        let view = UIView()
+        return view
+    }()
+    
     init(viewModel: HomeViewModel = HomeViewModel()) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -46,7 +57,10 @@ class HomeView: RideThisViewController {
         button.setTitle("더보기", for: .normal)
         button.setTitleColor(.primaryColor, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: FontCase.smallTitle.rawValue, weight: .regular)
-        button.addTarget(self, action: #selector(moreButtonTapped), for: .touchUpInside)
+        button.addAction(UIAction { [weak self] _ in
+            let myPageView = MyPageView()
+            self?.navigationController?.pushViewController(myPageView, animated: true)
+        }, for: .touchUpInside)
         return button
     }()
     
@@ -98,7 +112,10 @@ class HomeView: RideThisViewController {
     
     private lazy var letsRideButton: RideThisButton = {
         let button = RideThisButton(buttonTitle: "라이딩 고고씽", height: 50)
-        button.addTarget(self, action: #selector(letsRideButtonTapped), for: .touchUpInside)
+        button.addAction(UIAction { [weak self] _ in
+            let recordView = RecordView()
+            self?.navigationController?.pushViewController(recordView, animated: true)
+        }, for: .touchUpInside)
         return button
     }()
     
@@ -187,10 +204,37 @@ class HomeView: RideThisViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
+        setupScrollView()
+        setupContentView()
+        setupBindings()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.refreshUserData()
+    }
+    
+    private func setupScrollView() {
+        view.addSubview(scrollView)
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+    }
+    
+    private func setupContentView() {
+        scrollView.addSubview(contentView)
+        contentView.snp.makeConstraints { contentView in
+            contentView.edges.equalTo(scrollView)
+            contentView.width.equalTo(scrollView)
+        }
+        
         weeklyRecordSectionContentView()
         letsRideSectionContentView()
         weatherSectionContentView()
-        setupBindings()
+        
+        contentView.snp.makeConstraints { contentView in
+            contentView.bottom.equalTo(weatherSectionView.snp.bottom).offset(20)
+        }
     }
     
     // MARK: WeathrContainer 그라데이션
@@ -220,9 +264,9 @@ class HomeView: RideThisViewController {
     
     // MARK: weeklyRecord(wr) Section View
     private func weeklyRecordSectionContentView() {
-        view.addSubview(weeklyRecordSectionView)
+        contentView.addSubview(weeklyRecordSectionView)
         weeklyRecordSectionView.snp.makeConstraints { wrSection in
-            wrSection.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
+            wrSection.top.equalTo(contentView.snp.top).offset(10)
             wrSection.leading.trailing.equalToSuperview()
             wrSection.height.equalTo(200)
         }
@@ -251,7 +295,7 @@ class HomeView: RideThisViewController {
     
     // MARK: letsRide(lr) Section View
     private func letsRideSectionContentView() {
-        view.addSubview(letsRideSectionView)
+        contentView.addSubview(letsRideSectionView)
         letsRideSectionView.snp.makeConstraints { lrSection in
             lrSection.top.equalTo(weeklyRecordSectionView.snp.bottom).offset(10)
             lrSection.leading.trailing.equalToSuperview()
@@ -283,7 +327,7 @@ class HomeView: RideThisViewController {
         
         setupWeatherUI()
         
-        view.addSubview(weatherSectionView)
+        contentView.addSubview(weatherSectionView)
         weatherSectionView.snp.makeConstraints { wSection in
             wSection.top.equalTo(letsRideSectionView.snp.bottom).offset(10)
             wSection.leading.trailing.equalToSuperview()
@@ -448,22 +492,6 @@ class HomeView: RideThisViewController {
         return containerView
     }
     
-    // 더보기 버튼 누르면 일단 마이페이지로 이동
-    @objc private func moreButtonTapped() {
-        let myPageView = MyPageView()
-        navigationController?.pushViewController(myPageView, animated: true)
-    }
-    
-    // 라이딩 고고씽 버튼: 기록탭으로 전환
-    // TODO: 탭바 이슈
-    @objc private func letsRideButtonTapped() {
-        let recordView = RecordView()
-        navigationController?.pushViewController(recordView, animated: true)
-        
-        let recordTabIndex = 2
-        tabBarController?.selectedIndex = recordTabIndex
-    }
-    
     private func setupBindings() {
         viewModel.$model
             .receive(on: DispatchQueue.main)
@@ -481,8 +509,4 @@ class HomeView: RideThisViewController {
         
         letsRideTitleLabel.text = "\(model.userName)님, 라이딩 고고씽?"
     }
-}
-
-#Preview {
-    UINavigationController(rootViewController: HomeView())
 }

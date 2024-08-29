@@ -280,5 +280,88 @@ class FireBaseService {
         }
     }
     
+    
+    // MARK: - 디바이스 관리
+        
+    /// 사용자의 디바이스 정보 추가 또는 업데이트
+    /// - Parameters:
+    ///   - device: 디바이스 객체
+    ///   - userId: 유저 ID
+    func upsertDeviceInFirebase(_ device: Device, for userId: String) async throws {
+        let userRef = db.collection("USERS").document(userId)
+        let deviceRef = userRef.collection("DEVICES").document(device.name)
+        
+        try await deviceRef.setData([
+            "device_name": device.name,
+            "device_serial_number": device.serialNumber,
+            "device_firmware_version": device.firmwareVersion,
+            "device_registration_status": device.registrationStatus,
+            "device_wheel_circumference": device.wheelCircumference
+        ], merge: true)
+    }
+    
+    /// 사용자의 모든 디바이스 상태 업데이트
+    /// - Parameters:
+    ///   - userId: 유저 ID
+    ///   - exceptDevice: 제외할 디바이스 이름
+    func updateAllDevicesStatus(for userId: String, exceptDevice: String) async throws {
+        let userRef = db.collection("USERS").document(userId)
+        let devicesRef = userRef.collection("DEVICES")
+        
+        let snapshot = try await devicesRef.getDocuments()
+        for doc in snapshot.documents {
+            if doc.documentID != exceptDevice {
+                try await doc.reference.updateData([
+                    "device_registration_status": false
+                ])
+            }
+        }
+    }
+    
+    /// 사용자의 등록된 디바이스 가져오기
+    /// - Parameter userId: 유저 ID
+    /// - Returns: 등록된 Device 객체
+    func getRegisteredDevice(for userId: String) async throws -> Device? {
+        let userRef = db.collection("USERS").document(userId)
+        let devicesRef = userRef.collection("DEVICES")
+        
+        let snapshot = try await devicesRef.whereField("device_registration_status", isEqualTo: true).getDocuments()
+        
+        if let doc = snapshot.documents.first {
+            return Device(
+                name: doc["device_name"] as? String ?? "",
+                serialNumber: doc["device_serial_number"] as? String ?? "",
+                firmwareVersion: doc["device_firmware_version"] as? String ?? "",
+                registrationStatus: doc["device_registration_status"] as? Bool ?? false,
+                wheelCircumference: doc["device_wheel_circumference"] as? String ?? ""
+            )
+        }
+        return nil
+    }
+    
+    /// 디바이스의 바퀴 둘레 정보 업데이트
+    /// - Parameters:
+    ///   - userId: 유저 ID
+    ///   - deviceName: 디바이스 이름
+    ///   - circumference: 업데이트할 바퀴 둘레 값
+    func updateDeviceWheelCircumference(userId: String, deviceName: String, circumference: String) async throws {
+        let userRef = db.collection("USERS").document(userId)
+        let deviceRef = userRef.collection("DEVICES").document(deviceName)
+        
+        try await deviceRef.updateData([
+            "device_wheel_circumference": circumference
+        ])
+    }
+    
+    /// 디바이스 삭제
+    /// - Parameters:
+    ///   - userId: 유저 ID
+    ///   - deviceName: 삭제할 디바이스 이름
+    func deleteDevice(userId: String, deviceName: String) async throws {
+        let userRef = db.collection("USERS").document(userId)
+        let deviceRef = userRef.collection("DEVICES").document(deviceName)
+        
+        try await deviceRef.delete()
+    }
 
 }
