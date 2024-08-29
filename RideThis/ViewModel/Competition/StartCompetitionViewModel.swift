@@ -52,7 +52,8 @@ class StartCometitionViewModel: BluetoothManagerDelegate {
     // MARK: 초기화
     init(startTime: Date, goalDistnace: Double, userWeight: Int) {
         self.startTime = startTime
-         self.goalDistance = goalDistnace
+        self.goalDistance = goalDistnace
+        
         self.userWeight = service.combineUser?.user_weight ?? 0
     }
     
@@ -178,7 +179,7 @@ class StartCometitionViewModel: BluetoothManagerDelegate {
             
             if distance >= self.goalDistance {
                 self.endTime = Date()
-
+                
                 // 평균 계산
                 let averageCadence = self.cadenceValues.isEmpty ? 0 : self.cadenceValues.reduce(0, +) / Double(self.cadenceValues.count)
                 self.averageCadence = Double(averageCadence)

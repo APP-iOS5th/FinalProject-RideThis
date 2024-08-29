@@ -24,23 +24,22 @@ class CompetitionViewModel {
     
     var followingUserIds: [String] = []
     
+    // isLoading
+    @Published var isLoading: Bool = false
+    
     init(isLogin: Bool, nickName: String) {
-        self.isLogin = (service.combineUser != nil) ? true : false
-        self.nickName = (service.combineUser != nil) ? service.combineUser?.user_nickname : "UNKOWNED"
-        
-        fetchAllRecords()
-        fetchFollowingUsers()
-        checkBluetoothStatus()
+        self.isLogin = isLogin
+        self.nickName = nickName
     }
     
     // MARK: Following
     private func fetchFollowingUsers() {
         Task {
             do {
-                self.followingUserIds = try await firebaseService.fetchUserFollowing(userId: service.combineUser?.user_id ?? "")
+                self.followingUserIds = try await self.firebaseService.fetchUserFollowing(userId: self.service.combineUser?.user_id ?? "")
                 
-                followingUserIds.append(service.combineUser?.user_id ?? "")
-                updateRecords()
+                self.followingUserIds.append(self.service.combineUser?.user_id ?? "")
+                self.updateRecords()
             } catch {
                 print("팔로잉 목록 가져오기 실패")
             }
@@ -90,6 +89,7 @@ class CompetitionViewModel {
     
     // MARK: allUSERS
     func fetchAllRecords() {
+        self.isLoading = true
         Task {
             do {
                 let userSnapshots = try await firebaseService.fetchAllUsers()
@@ -101,6 +101,7 @@ class CompetitionViewModel {
             } catch {
                 print("FIREBASE통신 오류")
             }
+            self.isLoading = false
         }
     }
     
