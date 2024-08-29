@@ -41,7 +41,7 @@ class GraphCollectionViewCell: UICollectionViewCell {
                 $0.height.equalTo(400)
             }
         case .oneMonth, .threeMonths, .sixMonths:
-            let widthMultiplier: CGFloat = period == .oneMonth ? 2 : period == .threeMonths ? 4 : 6
+            let widthMultiplier: CGFloat = period == .oneMonth ? 2 : period == .threeMonths ? 4 : 8
             
             scrollView.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview(scrollView)
@@ -144,7 +144,6 @@ class GraphCollectionViewCell: UICollectionViewCell {
             dataEntries.append(dataEntry)
         }
         
-        // MARK: 3개월 부터는 월 평균으로 보여준다?
         let dataSet = LineChartDataSet(entries: dataEntries, label: "My Data")
         let data = LineChartData(dataSet: dataSet)
         lineChartView.data = data
@@ -166,16 +165,14 @@ class GraphCollectionViewCell: UICollectionViewCell {
     }
 }
 
+// MARK: 나중에 그래프 데이터를 선택했을 때 작은 말풍선에 보여준다던가 하는거 할 수도?
 extension GraphCollectionViewCell: ChartViewDelegate {
     
-    // ChartViewDelegate 메소드 구현
     func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
         print("Selected entry: \(entry)")
-        // 여기서 특정 데이터 포인트를 선택했을 때의 동작을 정의할 수 있습니다.
     }
     
     func chartValueNothingSelected(_ chartView: ChartViewBase) {
         print("Deselected entry")
-        // 포인트 외부를 터치했을 때의 동작을 정의할 수 있습니다.
     }
 }
