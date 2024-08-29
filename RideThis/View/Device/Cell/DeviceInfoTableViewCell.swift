@@ -40,14 +40,14 @@ class DeviceInfoTableViewCell: UITableViewCell {
     
     /// SnapKit을 사용하여 UI 요소의 제약 조건 설정
     private func setupConstraints() {
-        titleLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(16)
-            make.centerY.equalToSuperview()
+        titleLabel.snp.makeConstraints { titleLabel in
+            titleLabel.leading.top.equalToSuperview().offset(16)
         }
         
-        valueLabel.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().offset(-16)
-            make.centerY.equalToSuperview()
+        valueLabel.snp.makeConstraints { valueLabel in
+            valueLabel.trailing.equalToSuperview().offset(-16)
+            valueLabel.top.equalTo(titleLabel.snp.bottom).offset(4)
+            valueLabel.bottom.equalToSuperview().offset(-16)
         }
     }
     
@@ -57,48 +57,43 @@ class DeviceInfoTableViewCell: UITableViewCell {
     /// - Parameters:
     ///   - title: Cell에 표시할 title
     ///   - value: Cell에 표시할 value
-    func configure(title: String, value: String) {
+    func configure(title: String, value: String, isSerialNumber: Bool = false) {
         titleLabel.text = title
         valueLabel.text = value
-    }
-    
-    /// valueLabel을 오른쪽으로 정렬하고 titleLabel을 숨김
-    func alignValueToRight() {
-        valueLabel.textAlignment = .right
-        titleLabel.isHidden = true
-    }
-    
-    /// valueLabel을 왼쪽으로 정렬하고 titleLabel을 표시
-    func alignValueToLeft() {
-        valueLabel.textAlignment = .left
-        titleLabel.isHidden = false
-    }
-    
-    /// 셀의 구분선을 숨김
-    func hideSeparator() {
-        separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
-    }
-    
-    /// 셀의 구분선을 표시
-    func showSeparator() {
-        separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-    }
-    
-    // MARK: - Layout
-    
-    /// 셀이 레이아웃을 설정할 때 호출되는 메소드. 텍스트가 범위를 벗어나지 않도록 조정
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        valueLabel.numberOfLines = 1
-        valueLabel.adjustsFontSizeToFitWidth = true
-        valueLabel.minimumScaleFactor = 0.5
-        
-        let padding: CGFloat = 10
-        valueLabel.snp.remakeConstraints { make in
-            make.leading.equalTo(titleLabel.snp.trailing).offset(padding)
-            make.trailing.equalToSuperview().offset(-16)
-            make.centerY.equalToSuperview()
+
+        if isSerialNumber {
+            valueLabel.numberOfLines = 1
+            valueLabel.adjustsFontSizeToFitWidth = true
+            valueLabel.minimumScaleFactor = 0.5
+            valueLabel.textAlignment = .left
+            
+            titleLabel.snp.remakeConstraints { titleLabel in
+                titleLabel.leading.top.equalToSuperview().offset(16)
+            }
+            
+            valueLabel.snp.remakeConstraints { valueLabel in
+                valueLabel.top.equalTo(titleLabel.snp.bottom).offset(8)
+                valueLabel.leading.equalTo(titleLabel).offset(16)
+                valueLabel.trailing.equalToSuperview().offset(-16)
+                valueLabel.bottom.equalToSuperview().offset(-16)
+            }
+        } else {
+            valueLabel.numberOfLines = 1
+            valueLabel.adjustsFontSizeToFitWidth = false
+            valueLabel.minimumScaleFactor = 1.0
+            valueLabel.textAlignment = .left
+            
+            titleLabel.snp.remakeConstraints { titleLabel in
+                titleLabel.leading.equalToSuperview().offset(16)
+                titleLabel.centerY.equalToSuperview()
+            }
+            
+            valueLabel.snp.remakeConstraints { valueLabel in
+                valueLabel.trailing.equalToSuperview().offset(-16)
+                valueLabel.centerY.equalToSuperview()
+            }
         }
+
+        setNeedsLayout()
     }
 }

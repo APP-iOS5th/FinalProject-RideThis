@@ -201,7 +201,7 @@ class DeviceDetailViewController: RideThisViewController {
 extension DeviceDetailViewController: UITableViewDelegate, UITableViewDataSource {
     /// numberOfRowsInSection
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableView == deviceInfoTableView ? 5 : 1
+        return tableView == deviceInfoTableView ? 4 : 1
     }
     
     /// cellForRowAt
@@ -231,25 +231,29 @@ extension DeviceDetailViewController: UITableViewDelegate, UITableViewDataSource
         
         let infoData: [(String, String)] = [
             ("이름", device.name),
-            ("일련번호", ""),
-            ("", device.serialNumber),
+            ("일련번호", device.serialNumber),
             ("펌웨어 버전", device.firmwareVersion),
             ("등록 상태", device.registrationStatus ? "등록" : "미등록")
         ]
         
         let (title, value) = infoData[indexPath.row]
-        cell.configure(title: title, value: value)
-        
-        // 일련번호 두 번째 셀의 경우 오른쪽 정렬
-        if indexPath.row == 2 {
-            cell.alignValueToRight()
-        } else {
-            cell.alignValueToLeft()
-        }
+        cell.configure(title: title, value: value, isSerialNumber: indexPath.row == 1)
 
         return cell
     }
     
+    /// 테이블 뷰의 각 행의 높이 결정
+    /// - Parameters:
+    ///   - tableView: 높이 요청하는 테이블 뷰
+    ///   - indexPath: 높이 요청하는 행의 인덱스
+    /// - Returns: 해당 행의 높이
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if tableView == deviceInfoTableView && indexPath.row == 1 {
+            return 85
+        }
+        return UITableView.automaticDimension
+    }
+        
     /// 휠 둘레 tableView Cell 구성하고 반환
     /// - Parameter indexPath: Cell 인덱스 경로
     /// - Returns: 구성된 UITableViewCell
