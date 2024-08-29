@@ -162,6 +162,9 @@ class DeviceDetailViewController: RideThisViewController {
     
     /// TableView content에 따라 높이 업데이트
     private func updateTableViewHeights() {
+        deviceInfoTableView.layoutIfNeeded()
+        wheelCircumferenceTableView.layoutIfNeeded()
+        
         deviceInfoTableView.snp.updateConstraints { deviceInfoTV in
             deviceInfoTV.height.equalTo(deviceInfoTableView.contentSize.height)
         }
@@ -244,12 +247,17 @@ extension DeviceDetailViewController: UITableViewDelegate, UITableViewDataSource
             cell.alignValueToLeft()
         }
         
-        // 일련번호 두 셀 사이의 구분선 제거
-        if indexPath.row == 1 {
-            cell.hideSeparator()
-        } else {
-            cell.showSeparator()
-        }
+//        // 일련번호 두 셀 사이의 구분선 제거
+//        if indexPath.row == 1 {
+//            cell.hideSeparator()
+//        } else {
+//            cell.showSeparator()
+//        }
+//        
+//        // 펌웨어 버전과 등록 상태 사이에 구분선 표시
+//        if indexPath.row == 3 {
+//            cell.showSeparator()
+//        }
         
         return cell
     }
