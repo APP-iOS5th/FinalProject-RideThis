@@ -77,9 +77,9 @@ class RecordSumUpView: RideThisViewController {
                     Task {
                         await self.viewModel.saveRecording()
                         
-                        await MainActor.run {
-                            self.navigateToRecordView()
-                        }
+//                        await MainActor.run {
+//                            self.navigateToRecordListView()
+//                        }
                     }
                 }
             } else { // 미로그인 상태일 때
@@ -182,5 +182,11 @@ class RecordSumUpView: RideThisViewController {
         let leftBarButtonItem = UIBarButtonItem(customView: customTitleLabel)
         navigationItem.leftBarButtonItem = leftBarButtonItem
     }
+    
+//    @MainActor
+//    private func navigateToRecordListView() {
+//        let recordListVC = RecordListViewController()
+//        self.navigationController?.pushViewController(recordListVC, animated: true)
+//    }
 }
 

@@ -69,8 +69,9 @@ class HomeViewModel: NSObject, CLLocationManagerDelegate {
     /// 사용자 기록 가져오기
     private func fetchUserRecords(userId: String) async {
         do {
-            let records = await firebaseService.findRecordsBy(userId: userId)
-
+            let allRecords = await firebaseService.findRecordsBy(userId: userId)
+            let records = allRecords.filter{ !$0.record_competetion_status }
+            
             let sortedRecords = records.sorted { $0.record_start_time ?? Date() > $1.record_start_time ?? Date() }
             let recentRecords = Array(sortedRecords.prefix(7))
 
