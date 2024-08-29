@@ -16,10 +16,10 @@ class DeviceDetailViewController: RideThisViewController {
     
     // MARK: - Initialization
     
-    /// DeviceDetailViewController 새 인스턴스 초기화.
+    /// DeviceDetailViewController 새 인스턴스 초기화
     /// - Parameters:
-    ///   - viewModel: DeviceDetailViewController에서 사용할 viewModel.
-    ///   - deviceName: 표시할 Device 이름.
+    ///   - viewModel: DeviceDetailViewController에서 사용할 viewModel
+    ///   - deviceName: 표시할 Device 이름
     init(viewModel: DeviceViewModel, deviceName: String) {
         self.viewModel = viewModel
         self.deviceName = deviceName
@@ -44,7 +44,7 @@ class DeviceDetailViewController: RideThisViewController {
     // MARK: - ViewDidLayoutSubviews
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        updateTableViewHeights() // 테이블 뷰의 높이를 업데이트
+        updateTableViewHeights()
     }
     
     // MARK: - Setup UI
@@ -68,8 +68,8 @@ class DeviceDetailViewController: RideThisViewController {
         setupDeleteButtonConstraints(safeArea, screenHeight)
     }
     
-    /// 장치 정보 TableView 제약 조건 설정.
-    /// - Parameter safeArea: View의 safeArea 가이드.
+    /// 장치 정보 TableView 제약 조건 설정
+    /// - Parameter safeArea: View의 safeArea 가이드
     private func setupDeviceInfoTableViewConstraints(_ safeArea: UILayoutGuide) {
         deviceInfoTableView.snp.makeConstraints { deviceInfoTableView in
             deviceInfoTableView.top.equalTo(safeArea.snp.top).offset(20)
@@ -79,8 +79,8 @@ class DeviceDetailViewController: RideThisViewController {
         }
     }
     
-    /// 휠 둘레 TableView 제약 조건 설정.
-    /// - Parameter safeArea: View의 safeArea 가이드.
+    /// 휠 둘레 TableView 제약 조건 설정
+    /// - Parameter safeArea: View의 safeArea 가이드
     private func setupWheelCircumferenceTableViewConstraints(_ safeArea: UILayoutGuide) {
         wheelCircumferenceTableView.snp.makeConstraints { wheelCircumferenceTableView in
             wheelCircumferenceTableView.top.equalTo(deviceInfoTableView.snp.bottom).offset(10)
@@ -90,10 +90,10 @@ class DeviceDetailViewController: RideThisViewController {
         }
     }
     
-    /// DeleteButton 제약 조건 설정.
+    /// DeleteButton 제약 조건 설정
     /// - Parameters:
-    ///   - safeArea: View의 safeArea 가이드.
-    ///   - screenHeight: 화면 높이.
+    ///   - safeArea: View의 safeArea 가이드
+    ///   - screenHeight: 화면 높이
     private func setupDeleteButtonConstraints(_ safeArea: UILayoutGuide, _ screenHeight: CGFloat) {
         deleteDeviceButton.snp.makeConstraints { deleteDeviceButton in
             deleteDeviceButton.top.greaterThanOrEqualTo(wheelCircumferenceTableView.snp.bottom).offset(20)
@@ -123,8 +123,8 @@ class DeviceDetailViewController: RideThisViewController {
         wheelCircumferenceTableView.reloadData()
     }
     
-    /// TableView 공통 속성 설정.
-    /// - Parameter tableView: 설정할 tableView.
+    /// TableView 공통 속성 설정
+    /// - Parameter tableView: 설정할 tableView
     private func configureTableView(_ tableView: UITableView) {
         tableView.delegate = self
         tableView.dataSource = self
@@ -152,15 +152,15 @@ class DeviceDetailViewController: RideThisViewController {
     
     // MARK: - UI Updates
     
-    /// Device Data를 사용하여 UI 업데이트.
-    /// - Parameter device: 표시할 Device Data.
+    /// Device Data를 사용하여 UI 업데이트
+    /// - Parameter device: 표시할 Device Data
     private func updateUI(with device: Device) {
         deviceInfoTableView.reloadData()
         wheelCircumferenceTableView.reloadData()
         updateTableViewHeights()
     }
     
-    /// TableView content에 따라 높이 업데이트.
+    /// TableView content에 따라 높이 업데이트
     private func updateTableViewHeights() {
         deviceInfoTableView.snp.updateConstraints { deviceInfoTV in
             deviceInfoTV.height.equalTo(deviceInfoTableView.contentSize.height)
@@ -173,13 +173,22 @@ class DeviceDetailViewController: RideThisViewController {
     
     
     // MARK: - Actions
-    /// deleteDeviceButton을 눌렀을 때 실행.
+    /// deleteDeviceButton을 눌렀을 때 실행
     private func deleteDeviceTapped() {
         showAlert(alertTitle: "장치 삭제", msg: "정말로 이 장치를 삭제하시겠습니까?", confirm: "삭제") { [weak self] in
             guard let self = self else { return }
-            self.viewModel.deleteDevice(self.deviceName)
-            self.onDeviceDeleted?()
-            self.navigationController?.popViewController(animated: true)
+            Task {
+                do {
+                    try await self.viewModel.deleteDeviceFromFirebase(self.deviceName)
+                    DispatchQueue.main.async {
+                        self.viewModel.deleteDevice(self.deviceName)
+                        self.onDeviceDeleted?()
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                } catch {
+                    print("Error deleting device: \(error)")
+                }
+            }
         }
     }
 }
@@ -187,12 +196,12 @@ class DeviceDetailViewController: RideThisViewController {
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
 extension DeviceDetailViewController: UITableViewDelegate, UITableViewDataSource {
-    /// numberOfRowsInSection.
+    /// numberOfRowsInSection
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableView == deviceInfoTableView ? 4 : 1
+        return tableView == deviceInfoTableView ? 5 : 1
     }
     
-    /// cellForRowAt.
+    /// cellForRowAt
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == deviceInfoTableView {
             return configureDeviceInfoCell(for: indexPath)
@@ -201,7 +210,7 @@ extension DeviceDetailViewController: UITableViewDelegate, UITableViewDataSource
         }
     }
     
-    /// didSelectRowAt.
+    /// didSelectRowAt
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == wheelCircumferenceTableView {
             presentWheelCircumferenceViewController()
@@ -209,30 +218,45 @@ extension DeviceDetailViewController: UITableViewDelegate, UITableViewDataSource
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    /// DeviceInfoTableView Cell 구성하고 반환.
-    /// - Parameter indexPath: Cell 인덱스 경로.
-    /// - Returns: 구성된 UITableViewCell.
+    /// DeviceInfoTableView Cell 구성하고 반환
+    /// - Parameter indexPath: Cell 인덱스 경로
+    /// - Returns: 구성된 UITableViewCell
     private func configureDeviceInfoCell(for indexPath: IndexPath) -> UITableViewCell {
         let cell = deviceInfoTableView.dequeueReusableCell(withIdentifier: DeviceInfoTableViewCell.identifier, for: indexPath) as! DeviceInfoTableViewCell
         
         guard let device = viewModel.selectedDevice else { return cell }
         
-        let infoData = [
+        let infoData: [(String, String)] = [
             ("이름", device.name),
-            ("일련번호", device.serialNumber),
+            ("일련번호", ""),
+            ("", device.serialNumber),
             ("펌웨어 버전", device.firmwareVersion),
-            ("등록 상태", device.registrationStatus)
+            ("등록 상태", device.registrationStatus ? "등록" : "미등록")
         ]
         
         let (title, value) = infoData[indexPath.row]
         cell.configure(title: title, value: value)
         
+        // 일련번호 두 번째 셀의 경우 오른쪽 정렬
+        if indexPath.row == 2 {
+            cell.alignValueToRight()
+        } else {
+            cell.alignValueToLeft()
+        }
+        
+        // 일련번호 두 셀 사이의 구분선 제거
+        if indexPath.row == 1 {
+            cell.hideSeparator()
+        } else {
+            cell.showSeparator()
+        }
+        
         return cell
     }
     
-    /// 휠 둘레 tableView Cell 구성하고 반환.
-    /// - Parameter indexPath: Cell 인덱스 경로.
-    /// - Returns: 구성된 UITableViewCell.
+    /// 휠 둘레 tableView Cell 구성하고 반환
+    /// - Parameter indexPath: Cell 인덱스 경로
+    /// - Returns: 구성된 UITableViewCell
     private func configureWheelCircumferenceCell(for indexPath: IndexPath) -> UITableViewCell {
         let cell = wheelCircumferenceTableView.dequeueReusableCell(withIdentifier: WheelCircumferenceTableViewCell.identifier, for: indexPath) as! WheelCircumferenceTableViewCell
         
@@ -241,16 +265,14 @@ extension DeviceDetailViewController: UITableViewDelegate, UITableViewDataSource
         return cell
     }
     
-    /// 휠 둘레 선택 화면 표시.
+    /// 휠 둘레 선택 화면 표시
     private func presentWheelCircumferenceViewController() {
         let wheelCircumferenceVC = WheelCircumferenceViewController(viewModel: viewModel)
         
-        // selectedCircumference의 타입 명시적 지정
         if let selectedDevice = viewModel.selectedDevice {
             wheelCircumferenceVC.selectedCircumference = (selectedDevice.wheelCircumference, selectedDevice.name)
         }
-
-        // onCircumferenceSelected 클로저 타입 명시적으로 지정
+        
         wheelCircumferenceVC.onCircumferenceSelected = { [weak self] (millimeter: String, tireSize: String) in
             let circumference = "\(millimeter)"
             self?.viewModel.updateWheelCircumference(circumference)
@@ -259,5 +281,4 @@ extension DeviceDetailViewController: UITableViewDelegate, UITableViewDataSource
         
         navigationController?.pushViewController(wheelCircumferenceVC, animated: true)
     }
-
 }
