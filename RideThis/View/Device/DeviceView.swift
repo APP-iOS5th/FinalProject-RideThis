@@ -22,6 +22,7 @@ class DeviceView: RideThisViewController {
         setupTableView()
         bindViewModel()
         setupActions()
+        viewModel.loadRegisteredDevices()
     }
     
     
@@ -124,7 +125,9 @@ class DeviceView: RideThisViewController {
             sheet.prefersGrabberVisible = true
         }
         
-        present(deviceSearchVC, animated: true, completion: nil)
+        present(deviceSearchVC, animated: true) {
+            self.viewModel.startDeviceSearch()
+        }
     }
     
     /// Device 목록이 비었을 때 빈 레이블 업데이트.
