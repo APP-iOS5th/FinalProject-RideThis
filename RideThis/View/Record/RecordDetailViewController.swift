@@ -10,6 +10,11 @@ import SnapKit
 
 class RecordDetailViewController: RideThisViewController {
     // 로고
+    private let logoImageView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "logoTransparent"))
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
     
     var record: RecordModel?
     
@@ -31,6 +36,7 @@ class RecordDetailViewController: RideThisViewController {
     }
     
     func setupViews() {
+        view.addSubview(logoImageView)
         view.addSubview(detailTitleLabel)
         
         // 기록 뷰 추가
@@ -43,8 +49,14 @@ class RecordDetailViewController: RideThisViewController {
     
     // MARK: - 제약조건
     func setupConstraints() {
+        logoImageView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(16)
+            make.centerX.equalToSuperview()
+            make.width.height.equalTo(170)
+        }
+        
         detailTitleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(32) // 로고 이미지 추가 후 수정
+            make.top.equalTo(logoImageView.snp.bottom).offset(16) // 로고 이미지 추가 후 수정
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().offset(-16)
         }
