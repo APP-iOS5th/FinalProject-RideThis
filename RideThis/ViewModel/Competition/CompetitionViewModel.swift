@@ -134,7 +134,7 @@ class CompetitionViewModel {
                     return false
                 }
                 
-                let recordsCollection = firebaseService.fetchCollection(document: doc, collectionName: "DEVICE")
+                let recordsCollection = firebaseService.fetchCollection(document: doc, collectionName: "DEVICES")
                 
                 let deviceDocuments = try await recordsCollection.getDocuments()
                 

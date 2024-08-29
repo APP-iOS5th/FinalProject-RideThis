@@ -125,7 +125,7 @@ class StartCometitionViewModel: BluetoothManagerDelegate {
                         print("User가 존재하지 않습니다.")
                         return
                     }
-                    let recordsCollection = firebaseService.fetchCollection(document: doc, collectionName: "DEVICE")
+                    let recordsCollection = firebaseService.fetchCollection(document: doc, collectionName: "DEVICES")
                     let deviceDocuments = try await recordsCollection.getDocuments()
                     
                     if let activeDeviceDocument = deviceDocuments.documents.first(where: { document in
