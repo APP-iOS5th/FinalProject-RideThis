@@ -7,7 +7,7 @@ class CompetitionView: RideThisViewController {
     
     var coordinator: CompetitionCoordinator?
     
-    private let viewModel = CompetitionViewModel(isLogin: false, nickName: "")
+    private var viewModel = CompetitionViewModel(isLogin: false, nickName: "")
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -58,6 +58,15 @@ class CompetitionView: RideThisViewController {
     // 로그인 안되어 있을경우 문구
     private let loginLabel = RideThisLabel(fontType: .defaultSize, fontColor: .black, text: "로그인 후 사용해주세요.")
     
+    // indicatorView
+    private let activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.hidesWhenStopped = true
+        
+        return activityIndicator
+    }()
+    
     // 로그인 유도 버튼
     private let loginButton: UIButton = {
         let button = UIButton(type: .custom)
@@ -90,6 +99,8 @@ class CompetitionView: RideThisViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
+        self.viewModel = CompetitionViewModel(isLogin: UserService.shared.combineUser != nil, nickName: UserService.shared.combineUser?.user_nickname ?? "")
+        
         setupUI()
         setupDropdownMenu()
         setupBinding()
@@ -100,9 +111,16 @@ class CompetitionView: RideThisViewController {
       override func viewWillAppear(_ animated: Bool) {
           super.viewWillAppear(animated)
           
+          self.viewModel = CompetitionViewModel(isLogin: UserService.shared.combineUser != nil, nickName: UserService.shared.combineUser?.user_nickname ?? "")
+          
           // 데이터를 새로고침
           self.viewModel.fetchAllRecords()
           self.viewModel.checkBluetoothStatus()
+          
+          self.dropdownButton.setTitle("5Km", for: .normal)
+          self.segmentedControl.selectedSegmentIndex = 0
+
+           setupBinding()
       }
     
     // MARK: setupUI
@@ -142,6 +160,7 @@ class CompetitionView: RideThisViewController {
         self.view.addSubview(loginButton)
         self.view.addSubview(noRecordLabel)
         self.view.addSubview(competitionBtn)
+        self.view.addSubview(activityIndicator)
         
         let screenHeight = UIScreen.main.bounds.height
         
@@ -196,6 +215,11 @@ class CompetitionView: RideThisViewController {
             btn.right.equalTo(safeArea.snp.right).offset(-20)
             btn.left.equalTo(safeArea.snp.left).offset(20)
         }
+        
+        activityIndicator.snp.makeConstraints { indicator in
+            indicator.centerX.equalTo(safeArea.snp.centerX)
+            indicator.centerY.equalTo(safeArea.snp.centerY)
+        }
     }
     
     // MARK: Binding Data
@@ -203,7 +227,27 @@ class CompetitionView: RideThisViewController {
         self.viewModel.$records
             .receive(on: DispatchQueue.main)
             .sink { [weak self] records in
-                self?.updateUI(for: records)
+                guard let self = self else { return }
+
+                self.updateUI(for: records)
+            }
+            .store(in: &cancellables)
+        
+        self.viewModel.$isLoading
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isLoading in
+                guard let self = self else { return }
+
+                if isLoading {
+                    self.activityIndicator.startAnimating()
+                    self.noRecordLabel.isHidden = true
+                    self.tableView.isHidden = true
+                    self.loginLabel.isHidden = true
+                    self.loginButton.isHidden = true
+                } else {
+                    self.activityIndicator.stopAnimating()
+                    self.updateUI(for: self.viewModel.records) // 로딩이 끝난 후 UI 업데이트
+                }
             }
             .store(in: &cancellables)
     }
@@ -213,22 +257,29 @@ class CompetitionView: RideThisViewController {
         let isFollowingSegmentSelected = self.viewModel.selectedSegment.rawValue == "팔로잉 순위"
         
         // isLoggedIn 명확하게 보기 위해 == false 사용
-        if isLoggedIn == false && isFollowingSegmentSelected {
-            tableView.isHidden = true
-            noRecordLabel.isHidden = true
-            loginLabel.isHidden = false
-            loginButton.isHidden = false
-        } else if records.isEmpty {
-            tableView.isHidden = true
-            noRecordLabel.isHidden = false
-            loginLabel.isHidden = true
-            loginButton.isHidden = true
-        } else {
-            tableView.isHidden = false
-            noRecordLabel.isHidden = true
-            loginLabel.isHidden = true
-            loginButton.isHidden = true
-            tableView.reloadData()
+        DispatchQueue.main.async {
+            if self.viewModel.isLoading {
+                self.noRecordLabel.isHidden = true
+                self.tableView.isHidden = true
+                self.loginLabel.isHidden = true
+                self.loginButton.isHidden = true
+            } else if !isLoggedIn && isFollowingSegmentSelected {
+                self.tableView.isHidden = true
+                self.noRecordLabel.isHidden = true
+                self.loginLabel.isHidden = false
+                self.loginButton.isHidden = false
+            } else if records.isEmpty {
+                self.tableView.isHidden = true
+                self.noRecordLabel.isHidden = false
+                self.loginLabel.isHidden = true
+                self.loginButton.isHidden = true
+            } else {
+                self.tableView.isHidden = false
+                self.noRecordLabel.isHidden = true
+                self.loginLabel.isHidden = true
+                self.loginButton.isHidden = true
+                self.tableView.reloadData()
+            }
         }
     }
     
@@ -294,6 +345,11 @@ extension CompetitionView: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CompetitionTVCell", for: indexPath) as! CompetitionTVCell
+        
+        // 데이터가 유효한지 확인
+        guard indexPath.row < self.viewModel.records.count else {
+            return UITableViewCell()
+        }
         
         let record = self.viewModel.records[indexPath.row]
         cell.selectionStyle = .none
