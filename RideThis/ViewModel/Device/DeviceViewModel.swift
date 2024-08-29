@@ -1,33 +1,40 @@
 import Foundation
 import Combine
+import CoreBluetooth
 
-class DeviceViewModel {
+class DeviceViewModel: NSObject, CBCentralManagerDelegate {
     // MARK: - Published Properties
     @Published private(set) var devices: [Device] = []
     @Published private(set) var searchedDevices: [Device] = []
     @Published private(set) var selectedDevice: Device?
     @Published private(set) var filteredWheelCircumferences: [WheelCircumference]
     
+    // MARK: - Properties
     let wheelCircumferences: [WheelCircumference]
+    private var centralManager: CBCentralManager!
+    private var cancellables = Set<AnyCancellable>()
     
     // MARK: - Initialization
-    init() {
+    
+    /// 초기화 메서드
+    /// 휠 둘레 목록을 생성하고, 블루투스 센트럴 매니저를 초기화
+    override init() {
         self.wheelCircumferences = Self.createWheelCircumferences()
         self.filteredWheelCircumferences = self.wheelCircumferences
-        self.searchedDevices = Self.createMockSearchedDevices()
+        super.init()
+        self.centralManager = CBCentralManager(delegate: self, queue: nil)
     }
-    
     
     // MARK: - Public Methods
     
-    /// 디바이스 이름으로 디바이스 선택.
-    /// - Parameter name: 선택할 디바이스 이름.
+    /// 디바이스 이름으로 디바이스 선택
+    /// - Parameter name: 선택할 디바이스 이름
     func selectDevice(name: String) {
         selectedDevice = devices.first { $0.name == name }
     }
     
-    /// 디바이스 이름으로 디바이스를 삭제.
-    /// - Parameter deviceName: 삭제할 디바이스 이름.
+    /// 디바이스 이름으로 디바이스 삭제
+    /// - Parameter deviceName: 삭제할 디바이스 이름
     func deleteDevice(_ deviceName: String) {
         devices.removeAll { $0.name == deviceName }
         if selectedDevice?.name == deviceName {
@@ -35,15 +42,15 @@ class DeviceViewModel {
         }
     }
     
-    /// 새 디바이스를 목록에 추가.
-    /// - Parameter device: 추가할 디바이스.
+    /// 새 디바이스를 목록에 추가
+    /// - Parameter device: 추가할 디바이스
     func addDevice(_ device: Device) {
         guard !devices.contains(where: { $0.name == device.name }) else { return }
         devices.append(device)
     }
     
-    /// 선택된 디바이스의 휠 둘레 업데이트.
-    /// - Parameter circumference: 새로운 휠 둘레.
+    /// 선택된 디바이스의 휠 둘레 업데이트
+    /// - Parameter circumference: 새로운 휠 둘레
     func updateWheelCircumference(_ circumference: String) {
         guard var device = selectedDevice else { return }
         device.wheelCircumference = circumference
@@ -53,8 +60,8 @@ class DeviceViewModel {
         selectedDevice = device
     }
     
-    /// 휠 둘레 목록 검색어에 따라 필터링.
-    /// - Parameter searchText: 필터링에 사용할 검색어.
+    /// 휠 둘레 목록을 검색어에 따라 필터링
+    /// - Parameter searchText: 필터링에 사용할 검색어
     func filterWheelCircumferences(with searchText: String) {
         if searchText.isEmpty {
             filteredWheelCircumferences = wheelCircumferences
@@ -67,21 +74,148 @@ class DeviceViewModel {
         }
     }
     
+    /// 새 디바이스를 기본 설정으로 추가
+    /// - Parameter device: 추가할 디바이스
+    func addDeviceWithDefaultSettings(_ device: Device) async throws {
+        guard let userId = UserService.shared.combineUser?.user_id else { return }
+        
+        // 이미 등록된 디바이스인지 확인
+        let firebaseService = FireBaseService()
+        if let existingDevice = try await firebaseService.getRegisteredDevice(for: userId) {
+            if existingDevice.name == device.name {
+                print("Device already registered")
+                return
+            }
+        }
+        
+        let newDevice = Device(
+            name: device.name,
+            serialNumber: device.serialNumber,
+            firmwareVersion: device.firmwareVersion,
+            registrationStatus: true,
+            wheelCircumference: "2110mm"
+        )
+        
+        // 기존에 등록된 디바이스가 있다면 상태 변경
+        if let registeredDevice = try await firebaseService.getRegisteredDevice(for: userId) {
+            var updatedDevice = registeredDevice
+            updatedDevice.registrationStatus = false
+            
+            // Firebase 업데이트
+            try await firebaseService.upsertDeviceInFirebase(updatedDevice, for: userId)
+        }
+        
+        // 다른 모든 디바이스 상태 업데이트
+        try await firebaseService.updateAllDevicesStatus(for: userId, exceptDevice: newDevice.name)
+        
+        // 새 디바이스 추가
+        try await firebaseService.upsertDeviceInFirebase(newDevice, for: userId)
+        
+        // UI 업데이트는 메인 스레드에서 수행
+        await MainActor.run {
+            self.devices.append(newDevice)
+        }
+    }
+    
+    /// Firebase에서 등록된 디바이스 로드
+    func loadRegisteredDevices() {
+        guard let userId = UserService.shared.combineUser?.user_id else { return }
+        
+        Task {
+            do {
+                if let registeredDevice = try await FireBaseService().getRegisteredDevice(for: userId) {
+                    DispatchQueue.main.async {
+                        self.devices = [registeredDevice]
+                    }
+                }
+            } catch {
+                print("Error loading registered devices: \(error)")
+            }
+        }
+    }
+    
+    /// 선택된 디바이스의 휠 둘레 업데이트 및 Firebase 동기화
+    /// - Parameter circumference: 새로운 휠 둘레
+    func updateWheelCircumference(_ circumference: String) async throws {
+        guard var device = selectedDevice else { return }
+        device.wheelCircumference = circumference
+        if let index = devices.firstIndex(where: { $0.name == device.name }) {
+            devices[index] = device
+        }
+        selectedDevice = device
+        
+        // Firebase 업데이트
+        guard let userId = UserService.shared.combineUser?.user_id else { return }
+        try await FireBaseService().updateDeviceWheelCircumference(userId: userId, deviceName: device.name, circumference: circumference)
+    }
+    
+    /// Firebase에서 휠 둘레 업데이트
+    /// - Parameter circumference: 새로운 휠 둘레
+    func updateWheelCircumferenceInFirebase(_ circumference: String) async throws {
+        guard let userId = UserService.shared.combineUser?.user_id,
+              let deviceName = selectedDevice?.name else { return }
+        
+        let firebaseService = FireBaseService()
+        try await firebaseService.updateDeviceWheelCircumference(userId: userId, deviceName: deviceName, circumference: circumference)
+        
+        // 로컬 상태 업데이트
+        try await self.updateWheelCircumference(circumference)
+    }
+    
+    /// Firebase에서 디바이스 삭제
+    /// - Parameter deviceName: 삭제할 디바이스 이름
+    func deleteDeviceFromFirebase(_ deviceName: String) async throws {
+        guard let userId = UserService.shared.combineUser?.user_id else { return }
+        
+        let firebaseService = FireBaseService()
+        try await firebaseService.deleteDevice(userId: userId, deviceName: deviceName)
+    }
+    
+    // MARK: - Bluetooth Scanning Methods
+    
+    /// 블루투스 장치 검색 시작
+    func startDeviceSearch() {
+        if centralManager.state == .poweredOn {
+            centralManager.scanForPeripherals(withServices: nil, options: nil)
+        }
+    }
+    
+    /// 블루투스 장치 검색 중지
+    func stopDeviceSearch() {
+        centralManager.stopScan()
+    }
+    
+    // MARK: - CBCentralManagerDelegate Methods
+    
+    /// 블루투스 상태 변경 시 호출되는 메서드
+    func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        if central.state == .poweredOn {
+            startDeviceSearch()
+        }
+    }
+    
+    /// 블루투스 장치 발견 시 호출되는 메서드
+    /// - Parameters:
+    ///   - central: CBCentralManager 인스턴스
+    ///   - peripheral: 발견된 CBPeripheral 인스턴스
+    ///   - advertisementData: 주변 장치에서 전송한 광고 데이터
+    ///   - RSSI: 신호 강도
+    func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
+        let newDevice = Device(name: peripheral.name ?? "Unknown",
+                               serialNumber: peripheral.identifier.uuidString,
+                               firmwareVersion: "Unknown",
+                               registrationStatus: false,
+                               wheelCircumference: "Unknown")
+        
+        if !searchedDevices.contains(where: { $0.name == newDevice.name }) {
+            searchedDevices.append(newDevice)
+        }
+    }
     
     // MARK: - Private Methods
     
-    /// 검색된 디바이스 목록 생성.
-    /// - Returns: Device 객체 배열 반환.
-    private static func createMockSearchedDevices() -> [Device] {
-        return [
-            Device(name: "30832-1", serialNumber: "Serial 30832-1", firmwareVersion: "1.112", registrationStatus: "완료", wheelCircumference: "2110mm"),
-            Device(name: "30832-2", serialNumber: "Serial 0832-2", firmwareVersion: "2.521", registrationStatus: "미완료", wheelCircumference: "1195mm"),
-            Device(name: "30832-3", serialNumber: "Serial 0832-3", firmwareVersion: "3.164", registrationStatus: "미완료", wheelCircumference: "1920mm")
-        ]
-    }
-    
-    /// 휠 둘레 목록 생성.
-    /// - Returns: WheelCircumference 객체 배열 반환.
+    /// 휠 둘레 목록 생성
+    /// - Returns: WheelCircumference 객체 배열 반환
     private static func createWheelCircumferences() -> [WheelCircumference] {
         return [
             WheelCircumference(millimeter: "935mm", tireSize: "12x1.75", inch: "11"),
