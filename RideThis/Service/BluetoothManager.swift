@@ -8,19 +8,6 @@
 import Foundation
 import CoreBluetooth
 
-protocol BluetoothManagerDelegate: AnyObject {
-    func didUpdateCadence(_ cadence: Double)
-    func didUpdateSpeed(_ speed: Double)
-    func didUpdateDistance(_ distance: Double)
-    func didUpdateCalories(_ calories: Double)
-    
-
-}
-
-protocol BluetoothViewDelegate: AnyObject {
-    func bluetoothDidTurnOff()
-}
-
 class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     
     weak var delegate: BluetoothManagerDelegate?

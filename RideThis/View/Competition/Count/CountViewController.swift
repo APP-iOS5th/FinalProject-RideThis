@@ -9,9 +9,6 @@ import UIKit
 import SnapKit
 import Combine
 
-protocol CountViewControllerDelegate: AnyObject {
-    func countdownFinish()
-}
 
 class CountViewController: RideThisViewController {
     
