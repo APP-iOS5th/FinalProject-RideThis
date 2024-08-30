@@ -92,15 +92,17 @@ class MyPageViewModel {
     }
     
     func getTypeAverageby(records: [RecordModel], dataCase: RecordDataCase, periodCase: RecordPeriodCase) {
-        switch dataCase {
-        case .cadence:
-            cadenceAvg = (records.map{ $0.record_cadence }.reduce(0, +) / Double(records.count)).getTwoDecimal
-        case .distance:
-            distanceAvg = (records.map{ $0.record_distance }.reduce(0, +) / Double(records.count)).getTwoDecimal
-        case .speed:
-            speedAvg = (records.map{ $0.record_speed }.reduce(0, +) / Double(records.count)).getTwoDecimal
-        case .calories:
-            caloriesAvg = (records.map{ $0.record_calories }.reduce(0, +) / Double(records.count)).getTwoDecimal
+        if records.count > 0 {
+            switch dataCase {
+            case .cadence:
+                cadenceAvg = (records.map{ $0.record_cadence }.reduce(0, +) / Double(records.count)).getTwoDecimal
+            case .distance:
+                distanceAvg = (records.map{ $0.record_distance }.reduce(0, +) / Double(records.count)).getTwoDecimal
+            case .speed:
+                speedAvg = (records.map{ $0.record_speed }.reduce(0, +) / Double(records.count)).getTwoDecimal
+            case .calories:
+                caloriesAvg = (records.map{ $0.record_calories }.reduce(0, +) / Double(records.count)).getTwoDecimal
+            }
         }
     }
 }

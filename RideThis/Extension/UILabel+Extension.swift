@@ -29,5 +29,6 @@ class RideThisLabel: UILabel {
     
     func configureLabel() {
         self.translatesAutoresizingMaskIntoConstraints = false
+        self.isUserInteractionEnabled = true
     }
 }

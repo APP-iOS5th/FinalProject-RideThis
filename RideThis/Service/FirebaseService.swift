@@ -329,7 +329,7 @@ class FireBaseService {
                 .documents
                 .map{ try $0.data(as: User.self) }
             
-            for follow in followerData {
+            for follow in followingData {
                 if let idx = follow.user_following.firstIndex(of: userId) {
                     follow.user_following.remove(at: idx)
                     self.updateUserInfo(updated: follow, update: false)

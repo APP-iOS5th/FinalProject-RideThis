@@ -165,19 +165,26 @@ class MyPageView: RideThisViewController {
         stack.layoutMargins = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
 
         for i in 0..<graphSectionCount {
-            let dotImage = UIImageView(image: UIImage(systemName: "circle.fill"))
-            dotImage.contentMode = .scaleAspectFit
-            dotImage.translatesAutoresizingMaskIntoConstraints = false
-            dotImage.widthAnchor.constraint(equalToConstant: 12).isActive = true
-            dotImage.heightAnchor.constraint(equalToConstant: 12).isActive = true
-
+            let btn = UIButton()
+            btn.translatesAutoresizingMaskIntoConstraints = false
+            btn.setImage(UIImage(systemName: "circle.fill"), for: .normal)
+            btn.widthAnchor.constraint(equalToConstant: 12).isActive = true
+            btn.heightAnchor.constraint(equalToConstant: 12).isActive = true
+            btn.tag = i
+            
             if i == 0 {
-                dotImage.tintColor = .primaryColor
+                btn.tintColor = .primaryColor
             } else {
-                dotImage.tintColor = .lightGray
+                btn.tintColor = .lightGray
             }
             
-            stack.addArrangedSubview(dotImage)
+            btn.addAction(UIAction { [weak self] _ in
+                guard let self = self else { return }
+                
+                
+            }, for: .touchUpInside)
+            
+            stack.addArrangedSubview(btn)
         }
         
         return stack
@@ -681,7 +688,7 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
             self.dataLabel.text = self.selectedDataType.rawValue
             self.selectedPeriodTitle.text = self.selectedDataType.rawValue
             for (index, subView) in self.pagingIndicator.subviews.enumerated() {
-                guard let page = subView as? UIImageView else { continue }
+                guard let page = subView as? UIButton else { continue }
                 if index == indexInt {
                     page.tintColor = .primaryColor
                 } else {

@@ -147,8 +147,8 @@ class EditProfileInfoView: RideThisViewController {
                 
                 profileInfoContainer.addSubview(mandatoryImgView)
                 mandatoryImgView.snp.makeConstraints {
-                    $0.bottom.equalTo(ui.snp.top).offset(5)
-                    $0.right.equalTo(ui.snp.left).offset(3)
+                    $0.bottom.equalTo(ui.snp.top).offset(4)
+                    $0.right.equalTo(ui.snp.left).offset(1)
                 }
             }
         }
