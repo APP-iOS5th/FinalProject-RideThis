@@ -13,7 +13,6 @@ class MyPageCoordinator: Coordinator {
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
-        
     }
     
     func start() {

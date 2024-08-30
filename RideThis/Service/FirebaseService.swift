@@ -1,6 +1,7 @@
 import Foundation
 import FirebaseFirestore
 import FirebaseStorage
+import FirebaseAuth
 
 class FireBaseService {
     
@@ -280,6 +281,72 @@ class FireBaseService {
         }
     }
     
+    /// 사용자 정보 삭제
+    ///  - Parameters:
+    ///   - userId: 사용자 UID
+    func deleteUser(userId: String) {
+        // MARK: TODO 1. userId에 맞는 USERS Collection삭제 (기록, 장치 먼저 삭제해야하는지 확인)✅
+        // MARK:      2. 파라미터로 넘어온 userId가 user_follower에 있는 사람들 데이터를 모두 지워야함
+        // MARK:      3. Firebase Auth 기록 삭제✅
+        // MARK:      4. AppleLogin할 때 했던 뭐 Keychain같은 유저 정보들 삭제✅
+        db.collection("USERS").document(userId).delete() { error in
+            if let error = error {
+                print(error)
+            } else {
+                print("사용자 삭제 완료!")
+            }
+        }
+        
+        let storage = Storage.storage()
+        let imagePath = "userProfileImage/\(userId).jpg"
+        let imageRef = storage.reference(withPath: imagePath)
+        
+        imageRef.delete { error in
+            if let error = error {
+                print("error in deleteUser >> \(error.localizedDescription)")
+            } else {
+                print("image delete complete")
+            }
+        }
+        
+        Task {
+            let followerData = try await db.collection("USERS")
+                .whereField("user_follower", arrayContains: userId)
+                .getDocuments()
+                .documents
+                .map{ try $0.data(as: User.self) }
+            
+            for follow in followerData {
+                if let idx = follow.user_follower.firstIndex(of: userId) {
+                    follow.user_follower.remove(at: idx)
+                    self.updateUserInfo(updated: follow, update: false)
+                }
+            }
+            
+            let followingData = try await db.collection("USERS")
+                .whereField("user_following", arrayContains: userId)
+                .getDocuments()
+                .documents
+                .map{ try $0.data(as: User.self) }
+            
+            for follow in followerData {
+                if let idx = follow.user_following.firstIndex(of: userId) {
+                    follow.user_following.remove(at: idx)
+                    self.updateUserInfo(updated: follow, update: false)
+                }
+            }
+        }
+        UserService.shared.logout()
+        if let currentUser = Auth.auth().currentUser {
+            currentUser.delete() { error in
+                if let error = error {
+                    print("error while delete auth user >> \(error.localizedDescription)")
+                } else {
+                    print("complete to delete user")
+                }
+            }
+        }
+    }
     
     // MARK: - 디바이스 관리
         

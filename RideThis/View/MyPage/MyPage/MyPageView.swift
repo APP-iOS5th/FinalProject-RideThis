@@ -386,6 +386,7 @@ class MyPageView: RideThisViewController {
         self.profileEditButton.addAction(UIAction { [weak self] _ in
             guard let self = self, let user = service.combineUser else { return }
             let profileEditView = EditProfileInfoView(user: user)
+//            profileEditView.editProfileCoordinator = self
             profileEditView.updateImageDelegate = self
             navigationController?.pushViewController(profileEditView, animated: true)
         }, for: .touchUpInside)
