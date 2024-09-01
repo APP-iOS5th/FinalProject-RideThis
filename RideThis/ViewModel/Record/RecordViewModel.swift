@@ -170,7 +170,7 @@ class RecordViewModel: BluetoothManagerDelegate {
                         print("User가 존재하지 않습니다.")
                         return
                     }
-                    let recordsCollection = firebaseService.fetchCollection(document: doc, collectionName: "DEVICE")
+                    let recordsCollection = firebaseService.fetchCollection(document: doc, collectionName: "DEVICES")
                     let deviceDocuments = try await recordsCollection.getDocuments()
                     
                     if let activeDeviceDocument = deviceDocuments.documents.first(where: { document in
@@ -194,7 +194,7 @@ class RecordViewModel: BluetoothManagerDelegate {
                             self.bluetoothManager.connect()
                         }
                     } else {
-                        print("등록된 DEVICE가 없습니다.")
+                        print("등록된 DEVICES가 없습니다.")
                     }
                 }
             } catch {
