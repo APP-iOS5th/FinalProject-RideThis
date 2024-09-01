@@ -16,7 +16,7 @@ class MyPageCoordinator: Coordinator {
     }
     
     func start() {
-        let myPageVC = MyPageView()
+        let myPageVC = MyPageView(viewModel: MyPageViewModel(firebaseService: FireBaseService(), periodCase: .oneWeek))
         myPageVC.coordinator = self
 
         navigationController.pushViewController(myPageVC, animated: true)

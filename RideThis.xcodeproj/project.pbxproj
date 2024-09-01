@@ -97,6 +97,8 @@
 		CDC0C1DE2C664E7400349DC4 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC0C1DD2C664E7400349DC4 /* UIView+Extension.swift */; };
 		CDC0C1E02C664FFE00349DC4 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC0C1DF2C664FFE00349DC4 /* UIButton+Extension.swift */; };
 		CDE25C6E2C6913B8008E2A80 /* EditProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE25C6D2C6913B8008E2A80 /* EditProfileInfoView.swift */; };
+		CDE28F222C849658004FE443 /* SettingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE28F212C849658004FE443 /* SettingCoordinator.swift */; };
+		CDE28F242C8497CC004FE443 /* AccountSettingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE28F232C8497CC004FE443 /* AccountSettingCoordinator.swift */; };
 		CDE36A062C7DA12100B743B9 /* DeviceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE36A052C7DA12100B743B9 /* DeviceProtocol.swift */; };
 		CDE36A082C7DA12900B743B9 /* RecordProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE36A072C7DA12900B743B9 /* RecordProtocol.swift */; };
 		CDE36A0A2C7DA13100B743B9 /* CompetitionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE36A092C7DA13100B743B9 /* CompetitionProtocol.swift */; };
@@ -217,6 +219,8 @@
 		CDC0C1DD2C664E7400349DC4 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		CDC0C1DF2C664FFE00349DC4 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		CDE25C6D2C6913B8008E2A80 /* EditProfileInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileInfoView.swift; sourceTree = "<group>"; };
+		CDE28F212C849658004FE443 /* SettingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCoordinator.swift; sourceTree = "<group>"; };
+		CDE28F232C8497CC004FE443 /* AccountSettingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSettingCoordinator.swift; sourceTree = "<group>"; };
 		CDE36A052C7DA12100B743B9 /* DeviceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceProtocol.swift; sourceTree = "<group>"; };
 		CDE36A072C7DA12900B743B9 /* RecordProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordProtocol.swift; sourceTree = "<group>"; };
 		CDE36A092C7DA13100B743B9 /* CompetitionProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionProtocol.swift; sourceTree = "<group>"; };
@@ -594,8 +598,7 @@
 				CD7000682C6AF9910071D4D2 /* Cell */,
 				CD4215772C805A7C0033A511 /* MyPage */,
 				CD4215792C805ADB0033A511 /* EditProfile */,
-				CD0E1E842C6A409F0080CFED /* SettingView.swift */,
-				CD66F5D32C6C887E00CDBB0B /* AccountSettingView.swift */,
+				CDE28F1F2C849641004FE443 /* Setting */,
 				CDAC668A2C6CF0CF005506FB /* AccountQuitView.swift */,
 				CD76A8C82C6E53FF003490B3 /* SignUpInfoView.swift */,
 				CD0EC4C82C71EE5400E70452 /* FollowManageView.swift */,
@@ -725,6 +728,25 @@
 				CD0EC4CA2C71F10500E70452 /* FollowTableViewCell.swift */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		CDE28F1F2C849641004FE443 /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				CDE28F202C84964C004FE443 /* SettingCoordinator */,
+				CD0E1E842C6A409F0080CFED /* SettingView.swift */,
+				CD66F5D32C6C887E00CDBB0B /* AccountSettingView.swift */,
+			);
+			path = Setting;
+			sourceTree = "<group>";
+		};
+		CDE28F202C84964C004FE443 /* SettingCoordinator */ = {
+			isa = PBXGroup;
+			children = (
+				CDE28F212C849658004FE443 /* SettingCoordinator.swift */,
+				CDE28F232C8497CC004FE443 /* AccountSettingCoordinator.swift */,
+			);
+			path = SettingCoordinator;
 			sourceTree = "<group>";
 		};
 		CDE369FF2C7DA0E000B743B9 /* Protocol */ = {
@@ -893,6 +915,7 @@
 				041A673E2C6CF1E0000BA4C1 /* RecordContainer+Extension.swift in Sources */,
 				0493F5E02C7E22F100290A4C /* SummaryRecordCoordinator.swift in Sources */,
 				CD6662122C678FF7005E2887 /* HomeModel.swift in Sources */,
+				CDE28F222C849658004FE443 /* SettingCoordinator.swift in Sources */,
 				CD4214652C649D0100F7C3AE /* FirebaseService.swift in Sources */,
 				CD4214742C64A35400F7C3AE /* UIImage+Extension.swift in Sources */,
 				CDB71BA02C78A72400DC5D57 /* MyPageProtocol.swift in Sources */,
@@ -917,6 +940,7 @@
 				78254FD62C7C1CC90069B10A /* WheelCircumferenceViewController.swift in Sources */,
 				CDB2200A2C7C4EF900973964 /* Date+Extension.swift in Sources */,
 				CD4214562C64994F00F7C3AE /* RecordViewModel.swift in Sources */,
+				CDE28F242C8497CC004FE443 /* AccountSettingCoordinator.swift in Sources */,
 				CD76A8CB2C6E5828003490B3 /* UITextField+Extension.swift in Sources */,
 				CD6662182C67900B005E2887 /* DeviceModel.swift in Sources */,
 				784D5DFE2C7B780700D2FE15 /* DeviceSearchViewController.swift in Sources */,

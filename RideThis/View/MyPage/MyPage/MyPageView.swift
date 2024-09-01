@@ -11,10 +11,10 @@ class MyPageView: RideThisViewController {
     
     // MARK: Data Components
     let service = UserService.shared
+    var viewModel: MyPageViewModel
     private let firebaseService = FireBaseService()
     private var cancellable = Set<AnyCancellable>()
     private var followDelegate: UpdateUserDelegate?
-    private lazy var viewModel = MyPageViewModel(firebaseService: firebaseService, periodCase: .oneWeek)
     private var selectedDataType: RecordDataCase = .cadence
     private var selectedPeriod: RecordPeriodCase {
         get {
@@ -31,6 +31,15 @@ class MyPageView: RideThisViewController {
                 return .oneWeek
             }
         }
+    }
+    
+    init(viewModel: MyPageViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: UIComponents
@@ -255,18 +264,6 @@ class MyPageView: RideThisViewController {
         setUIComponents()
         setUserData()
         setCombineData()
-        contentView.addSubview(leftButton)
-        contentView.addSubview(rightButton)
-        
-        leftButton.snp.makeConstraints {
-            $0.centerY.equalTo(graphCollectionView.snp.centerY)
-            $0.right.equalTo(graphCollectionView.snp.left).offset(-5)
-        }
-        
-        rightButton.snp.makeConstraints {
-            $0.centerY.equalTo(graphCollectionView.snp.centerY)
-            $0.left.equalTo(graphCollectionView.snp.right).offset(5)
-        }
     }
     
     func setUIComponents() {
@@ -452,10 +449,8 @@ class MyPageView: RideThisViewController {
         
         self.profileEditButton.addAction(UIAction { [weak self] _ in
             guard let self = self, let user = service.combineUser else { return }
-            let profileEditView = EditProfileInfoView(user: user)
-//            profileEditView.editProfileCoordinator = self
-            profileEditView.updateImageDelegate = self
-            navigationController?.pushViewController(profileEditView, animated: true)
+            let editCoordinator = EditProfileCoordinator(navigationController: self.navigationController!, user: user)
+            editCoordinator.start()
         }, for: .touchUpInside)
     }
     
@@ -527,7 +522,7 @@ class MyPageView: RideThisViewController {
     }
     
     func setRecordByPeriodView() {
-        [self.recordByPeriodLabel, self.recordByPeriodDetailButton, self.recordByPeriodPicker,
+        [self.recordByPeriodLabel, self.recordByPeriodDetailButton, self.recordByPeriodPicker, self.leftButton, self.rightButton,
          self.dataLabel, self.graphCollectionView, self.pagingIndicator, self.selectedPeriodTotalRecordContainer].forEach{ self.contentView.addSubview($0) }
         
         self.recordByPeriodLabel.snp.makeConstraints {
@@ -556,6 +551,16 @@ class MyPageView: RideThisViewController {
             $0.left.equalTo(self.recordByPeriodPicker.snp.left)
             $0.right.equalTo(self.recordByPeriodPicker.snp.right)
             $0.height.equalTo(400)
+        }
+
+        self.leftButton.snp.makeConstraints {
+            $0.centerY.equalTo(graphCollectionView.snp.centerY)
+            $0.right.equalTo(graphCollectionView.snp.left).offset(-5)
+        }
+        
+        self.rightButton.snp.makeConstraints {
+            $0.centerY.equalTo(graphCollectionView.snp.centerY)
+            $0.left.equalTo(graphCollectionView.snp.right).offset(5)
         }
         
         self.pagingIndicator.snp.makeConstraints {
@@ -695,8 +700,8 @@ class MyPageView: RideThisViewController {
     }
     
     @objc func settingButtonTapAction() {
-        let settingView = SettingView()
-        self.navigationController?.pushViewController(settingView, animated: true)
+        let settingCoordinator = SettingCoordinator(navigationController: self.navigationController!)
+        settingCoordinator.start()
     }
     
     @objc func segmentChanged(_ sender: UISegmentedControl) {
@@ -743,7 +748,7 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
         profileContainer.addGestureRecognizer(profileContainerTapEvent)
     }
     
-    // MARK: indicator 버튼 색상 재설정
+    // MARK: 그래프 cell이동 후 UI업데이트
     func reloadGraphCell(indexInt: Int) {
         switch indexInt {
         case 0:

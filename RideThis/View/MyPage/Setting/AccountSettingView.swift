@@ -3,6 +3,7 @@ import SnapKit
 
 class AccountSettingView: RideThisViewController {
     
+    var coordinator: AccountSettingCoordinator?
     private let service = UserService.shared
     private lazy var logoImage: UIImageView = {
         let image = UIImageView()

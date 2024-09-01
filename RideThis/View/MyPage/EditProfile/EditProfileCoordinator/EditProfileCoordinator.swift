@@ -1,15 +1,30 @@
 import UIKit
 
-class EditProfileCoordinator: Coordinator {
-    var navigationController: UINavigationController
-    var childCoordinators: [any Coordinator]
+class EditProfileCoordinator: Coordinator, ProfileImageUpdateDelegate {
     
-    init(navigationController: UINavigationController, childCoordinators: [any Coordinator]) {
+    var navigationController: UINavigationController
+    var childCoordinators: [any Coordinator] = []
+    var user: User
+    
+    init(navigationController: UINavigationController, user: User) {
         self.navigationController = navigationController
-        self.childCoordinators = childCoordinators
+        self.user = user
     }
     
     func start() {
+        let editView = EditProfileInfoView(user: self.user)
+        editView.editProfileCoordinator = self
+        editView.updateImageDelegate = self
         
+        navigationController.pushViewController(editView, animated: true)
+    }
+    
+    func imageUpdate(image: UIImage) {
+        for controller in navigationController.viewControllers {
+            if let myPage = controller as? MyPageView {
+                myPage.imageUpdate(image: image)
+                break
+            }
+        }
     }
 }
