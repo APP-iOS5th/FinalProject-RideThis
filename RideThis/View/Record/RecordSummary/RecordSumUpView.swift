@@ -9,9 +9,10 @@ import UIKit
 import SnapKit
 
 class RecordSumUpView: RideThisViewController {
-    let viewModel: RecordViewModel
+    let viewModel: RecordSumUpViewModel
+    weak var coordinator: RecordSumUpCoordinator?
     
-    init(viewModel: RecordViewModel) {
+    init(viewModel: RecordSumUpViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -43,6 +44,8 @@ class RecordSumUpView: RideThisViewController {
         
         timerRecord.updateRecordText(text: recordedTime)
         
+        updateUI(with: viewModel.summaryData)
+        
         // 기록 뷰 추가
         self.view.addSubview(timerRecord)
         self.view.addSubview(cadenceRecord)
@@ -56,14 +59,8 @@ class RecordSumUpView: RideThisViewController {
         cancelButton.backgroundColor = .black
         
         cancelButton.addAction(UIAction { [weak self] _ in
-            self?.viewModel.cancelSaveRecording()
+            self?.coordinator?.didCancelSaveRecording()
         }, for: .touchUpInside)
-        
-        // 뷰 모델에서 기록 저장 취소 트리거 처리
-        viewModel.onCancelSaveRecording = { [weak self] in
-            // 저장 없이 기록 뷰로 이동
-            self?.navigateToRecordView()
-        }
         
         saveButton.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
@@ -76,10 +73,7 @@ class RecordSumUpView: RideThisViewController {
                     
                     Task {
                         await self.viewModel.saveRecording()
-                        
-//                        await MainActor.run {
-//                            self.navigateToRecordListView()
-//                        }
+                        self.coordinator?.didSaveRecording()
                     }
                 }
             } else { // 미로그인 상태일 때
@@ -94,11 +88,6 @@ class RecordSumUpView: RideThisViewController {
                 }
             }
         }, for: .touchUpInside)
-        
-        viewModel.onSaveRecording = { [weak self] in
-            // 일단 기록 뷰로 이동
-            self?.navigateToRecordView()
-        }
         
         // 기록 뷰 제약조건
         timerRecord.snp.makeConstraints { timer in
@@ -153,10 +142,20 @@ class RecordSumUpView: RideThisViewController {
     }
     
     private func updateViewModelWithRecordData() {
-        viewModel.cadence = Double(cadenceRecord.recordLabel.text!.replacingOccurrences(of: " RPM", with: "")) ?? 0
-        viewModel.speed = Double(speedRecord.recordLabel.text!.replacingOccurrences(of: " km/h", with: "")) ?? 0
-        viewModel.distance = Double(distanceRecord.recordLabel.text!.replacingOccurrences(of: " km", with: "")) ?? 0
-        viewModel.calorie = Double(calorieRecord.recordLabel.text!.replacingOccurrences(of: " kcal", with: "")) ?? 0
+        let cadence = Double(cadenceRecord.recordLabel.text!.replacingOccurrences(of: " RPM", with: "")) ?? 0
+        let speed = Double(speedRecord.recordLabel.text!.replacingOccurrences(of: " km/h", with: "")) ?? 0
+        let distance = Double(distanceRecord.recordLabel.text!.replacingOccurrences(of: " km", with: "")) ?? 0
+        let calorie = Double(calorieRecord.recordLabel.text!.replacingOccurrences(of: " kcal", with: "")) ?? 0
+        
+        viewModel.updateSummaryData(cadence: cadence, speed: speed, distance: distance, calorie: calorie)
+    }
+    
+    private func updateUI(with data: RecordViewModel.SummaryData) {
+        timerRecord.updateRecordText(text: data.recordedTime)
+        cadenceRecord.updateRecordText(text: "\(data.cadence) RPM")
+        speedRecord.updateRecordText(text: "\(data.speed) km/h")
+        distanceRecord.updateRecordText(text: "\(data.distance) km")
+        calorieRecord.updateRecordText(text: "\(data.calorie) kcal")
     }
     
     @MainActor
@@ -182,11 +181,5 @@ class RecordSumUpView: RideThisViewController {
         let leftBarButtonItem = UIBarButtonItem(customView: customTitleLabel)
         navigationItem.leftBarButtonItem = leftBarButtonItem
     }
-    
-//    @MainActor
-//    private func navigateToRecordListView() {
-//        let recordListVC = RecordListViewController()
-//        self.navigationController?.pushViewController(recordListVC, animated: true)
-//    }
 }
 

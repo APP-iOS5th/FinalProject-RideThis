@@ -10,10 +10,12 @@ import SnapKit
 import Combine
 
 class RecordListViewController: RideThisViewController, UIScrollViewDelegate {
+    weak var coordinator: RecordListCoordinator?
+    
+    private let viewModel = RecordListViewModel()
+    
     private var scrollView: UIScrollView!
     private var contentView: UIStackView!
-    private var records: [String: [RecordModel]] = [:] // 월별로 그룹화된 기록
-    private var months: [String] = [] // 정렬된 월 목록
     private var loadedMonths = 0
     private let monthsToLoadPerBatch = 3
     
@@ -26,7 +28,18 @@ class RecordListViewController: RideThisViewController, UIScrollViewDelegate {
         
         setupScrollView()
         setupContentView()
-        fetchRecordsFromFirebase()
+        
+        viewModel.$records
+            .combineLatest(viewModel.$months)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] (_, _) in
+                self?.contentView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+                self?.loadedMonths = 0
+                self?.loadMoreMonths()
+            }
+            .store(in: &cancellables)
+        
+        viewModel.fetchRecordsFromFirebase()
     }
     
     func setupScrollView() {
@@ -50,48 +63,11 @@ class RecordListViewController: RideThisViewController, UIScrollViewDelegate {
         }
     }
     
-    private func fetchRecordsFromFirebase() {
-        guard let userId = UserService.shared.signedUser?.user_id else {
-            print("사용자 ID를 찾을 수 없습니다.")
-            return
-        }
-        
-        Task {
-            do {
-                let fetchedRecords = await firebaseService.findRecordsBy(userId: userId)
-                organizeRecords(fetchedRecords)
-                await MainActor.run {
-                    loadMoreMonths()
-                }
-            }
-        }
-    }
-    
-    private func organizeRecords(_ fetchedRecords: [RecordModel]) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy년 MM월"
-        
-        for record in fetchedRecords {
-            guard let startTime = record.record_start_time else { continue }
-            let monthKey = dateFormatter.string(from: startTime)
-            if records[monthKey] == nil {
-                records[monthKey] = []
-            }
-            records[monthKey]?.append(record)
-        }
-        
-        // 월 및 기록 정렬
-        months = records.keys.sorted(by: >)
-        for month in months {
-            records[month]?.sort { $0.record_start_time ?? Date() > $1.record_start_time ?? Date() }
-        }
-    }
-    
     private func loadMoreMonths() {
-        let endIndex = min(loadedMonths + monthsToLoadPerBatch, months.count)
+        let endIndex = min(loadedMonths + monthsToLoadPerBatch, viewModel.months.count)
         for i in loadedMonths..<endIndex {
-            let month = months[i]
-            let monthView = createMonthView(for: month, with: records[month] ?? [])
+            let month = viewModel.months[i]
+            let monthView = createMonthView(for: month, with: viewModel.getRecordsForMonth(month))
             contentView.addArrangedSubview(monthView)
         }
         loadedMonths = endIndex
@@ -107,9 +83,7 @@ class RecordListViewController: RideThisViewController, UIScrollViewDelegate {
     }
     
     private func showRecordDetail(record: RecordModel) {
-        let detailVC = RecordDetailViewController()
-        detailVC.record = record
-        navigationController?.pushViewController(detailVC, animated: true)
+        coordinator?.moveToRecordDetailView(with: record)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -118,10 +92,9 @@ class RecordListViewController: RideThisViewController, UIScrollViewDelegate {
         let scrollViewHeight = scrollView.frame.size.height
         
         if offsetY > contentHeight - scrollViewHeight - 100 {
-            if loadedMonths < months.count {
+            if loadedMonths < viewModel.months.count {
                 loadMoreMonths()
             }
         }
     }
 }
-

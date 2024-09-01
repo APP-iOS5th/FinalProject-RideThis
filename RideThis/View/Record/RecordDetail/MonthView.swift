@@ -146,6 +146,12 @@ class MonthView: UIView {
         let totalDistance = records.reduce(0.0) { $0 + $1.record_distance }
         
         let uniqueDays = Set(records.compactMap { Calendar.current.dateComponents([.year, .month, .day], from: $0.record_start_time ?? Date()).day }).count
+        
+        // 0으로 나누는 것을 방지
+        if uniqueDays == 0 {
+            return ((totalCount, Int(totalTime), totalDistance), (0, 0, 0))
+        }
+        
         let avgCount = Float(totalCount) / Float(uniqueDays)
         let avgTime = Int(totalTime / Double(uniqueDays))
         let avgDistance = totalDistance / Double(uniqueDays)
@@ -161,9 +167,9 @@ class MonthView: UIView {
         timeLabel.text = "시간       \(formatTime(minutes: stats.total.time))"
         distanceLabel.text = "거리       \(String(format: "%.3f Km", stats.total.distance))"
         
-        avgCountLabel.text = String(format: "%.1f", stats.avg.count)
+        avgCountLabel.text = stats.avg.count.isNaN ? "0" : String(format: "%.1f", stats.avg.count)
         avgTimeLabel.text = formatTime(minutes: stats.avg.time)
-        avgDistanceLabel.text = String(format: "%.3f Km", stats.avg.distance)
+        avgDistanceLabel.text = stats.avg.distance.isNaN ? "0 Km" : String(format: "%.3f Km", stats.avg.distance)
     }
     private func formatTime(minutes: Int) -> String {
         let hours = minutes / 60

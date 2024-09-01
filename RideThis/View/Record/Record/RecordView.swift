@@ -6,8 +6,7 @@ import Combine
 class RecordView: RideThisViewController {
     
     var coordinator: RecordCoordinator?
-    
-    let viewModel = RecordViewModel()
+    var viewModel: RecordViewModel?
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -30,25 +29,26 @@ class RecordView: RideThisViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if viewModel == nil {
+            viewModel = RecordViewModel()
+        }
+        
         setupNavigationBar()
         setupButtons()
-        setupBindings()
         
-        // BluetoothManager 초기화
-//        viewModel.initializeBluetoothManager()
-//        viewModel.bluetoothManager.viewDelegate = self
-        
-        // ViewModel의 상태 변경 클로저 설정
-        viewModel.onRecordingStatusChanged = { [weak self] isRecording in
-            guard let self = self else { return }
-            self.updateUI(isRecording: isRecording)
+        if let viewModel = viewModel {
+            setupBindings()
+            
+            // ViewModel의 상태 변경 클로저 설정
+            viewModel.onRecordingStatusChanged = { [weak self] isRecording in
+                guard let self = self else { return }
+                self.updateUI(isRecording: isRecording)
+            }
+            
+            // 뷰 모델에서 기록 종료 트리거 처리
+            viewModel.delegate = self
         }
-        
-        // 뷰 모델에서 기록 종료 트리거 처리
-        viewModel.onFinishRecording = { [weak self] in
-            self?.navigateToSummaryView()
-        }
-        
+           
         // 기록 뷰 추가
         self.view.addSubview(timerRecord)
         self.view.addSubview(cadenceRecord)
@@ -68,14 +68,15 @@ class RecordView: RideThisViewController {
         super.viewWillAppear(animated)
         
         // RecordSumUpView에서 돌아올 때 타이머 초기화
-        if !viewModel.isRecording {
-            viewModel.resetRecording()
+        if !(viewModel?.isRecording ?? false) {
+            viewModel?.resetRecording()
             updateTimerDisplay()
+            updateUI(isRecording: false)
         }
     }
     
     private func updateTimerDisplay() {
-        timerRecord.updateRecordText(text: viewModel.formatTime(viewModel.elapsedTime))
+        timerRecord.updateRecordText(text: viewModel?.formatTime(viewModel?.elapsedTime ?? 0.0) ?? "00:00")
     }
     
     // MARK: - 레이아웃 설정
@@ -150,7 +151,7 @@ class RecordView: RideThisViewController {
         resetButton.addAction(UIAction { [weak self] _ in
             self?.showAlert(alertTitle: "기록을 리셋할까요?", msg: "지금까지의 기록이 초기화됩니다.", confirm: "리셋"
             ) {
-                self?.viewModel.resetRecording()
+                self?.viewModel?.resetRecording()
             }
         }, for: .touchUpInside)
         
@@ -158,24 +159,19 @@ class RecordView: RideThisViewController {
             guard let self = self else { return }
             // TODO: - 최초 기록 시작일 때 카운트다운 추가
             // 블루투스 연결 상태 확인
-            if self.viewModel.isBluetoothConnected {
-                if self.viewModel.isRecording {
-                    self.viewModel.pauseRecording()
-                    resetButton.isEnabled = true
-                    finishButton.isEnabled = true
-                    resetButton.backgroundColor = .black
-                    finishButton.backgroundColor = .black
-                    recordButton.setTitle("시작", for: .normal)
+            if self.viewModel?.isBluetoothConnected == true {
+                if self.viewModel?.isRecording == true {
+                    self.viewModel?.pauseRecording()
                 } else {
-                    self.viewModel.startRecording()
-                    self.updateUI(isRecording: true)
+                    self.viewModel?.startRecording()
+//                    self.updateUI(isRecording: true)
                     // 기록 시작 시 탭바 비활성화
                     self.tabBarController?.tabBar.items?.forEach { $0.isEnabled = false }
                 }
             } else {
                 showAlert(alertTitle: "장치연결이 필요합니다.", msg: "사용하시려면 장치를 연결해주세요.", confirm: "장치연결") {
                     print("connect Bluetooth")
-                    // TODO: - 장치 연결 페이지 이동 추가
+                    self.coordinator?.showDeviceConnectionView()
                 }
             }
         }, for: .touchUpInside)
@@ -184,7 +180,7 @@ class RecordView: RideThisViewController {
             guard let self = self else { return }
             self.showAlert(alertTitle: "기록을 종료할까요?", msg: "요약 화면으로 이동합니다.", confirm: "기록 종료"
             ) {
-                self.viewModel.finishRecording()
+                self.viewModel?.finishRecording()
                 self.tabBarController?.tabBar.items?.forEach { $0.isEnabled = true }
             }
         }, for: .touchUpInside)
@@ -193,7 +189,7 @@ class RecordView: RideThisViewController {
     // 바인딩 설정
     private func setupBindings() {
         // elapsedTime이 변경될 때마다 timerRecord의 recordText 업데이트
-        viewModel.$elapsedTime
+        viewModel?.$elapsedTime
             .map { elapsedTime -> String in
                 let minutes = Int(elapsedTime) / 60
                 let seconds = Int(elapsedTime) % 60
@@ -202,28 +198,28 @@ class RecordView: RideThisViewController {
             .assign(to: \.recordLabel.text, on: timerRecord)
             .store(in: &cancellables)
         
-        self.viewModel.$cadence
+        self.viewModel?.$cadence
             .receive(on: DispatchQueue.main)
             .sink { [weak self] cadence in
                 self?.cadenceRecord.updateRecordText(text: "\(cadence.formattedWithThousandsSeparator()) RPM")
             }
             .store(in: &cancellables)
         
-        self.viewModel.$speed
+        self.viewModel?.$speed
             .receive(on: DispatchQueue.main)
             .sink { [weak self] speed in
                 self?.speedRecord.updateRecordText(text: "\(speed.formattedWithThousandsSeparator()) Km/h")
             }
             .store(in: &cancellables)
         
-        self.viewModel.$distance
+        self.viewModel?.$distance
             .receive(on: DispatchQueue.main)
             .sink { [weak self] distance in
                 self?.distanceRecord.updateRecordText(text: "\(distance.formattedWithThousandsSeparator()) Km")
             }
             .store(in: &cancellables)
         
-        self.viewModel.$calorie
+        self.viewModel?.$calorie
             .receive(on: DispatchQueue.main)
             .sink { [weak self] calorie in
                 self?.calorieRecord.updateRecordText(text: "\(calorie.formattedWithThousandsSeparator()) Kcal")
@@ -233,27 +229,30 @@ class RecordView: RideThisViewController {
     
     // 버튼 UI 업데이트
     private func updateUI(isRecording: Bool) {
-        if isRecording { // 기록중일 때
-            resetButton.isEnabled = true
-            finishButton.isEnabled = true
-            resetButton.backgroundColor = .black
-            finishButton.backgroundColor = .black
-            
-            recordButton.setTitle("정지", for: .normal)
-        } else { // 정지, 리셋, 종료 눌렸을 때
-            resetButton.isEnabled = false
-            finishButton.isEnabled = false
-            resetButton.backgroundColor = .systemGray
-            finishButton.backgroundColor = .systemGray
-            
-            recordButton.setTitle("시작", for: .normal)
+        DispatchQueue.main.async {
+            if isRecording { // 기록중일 때
+                self.resetButton.isEnabled = true
+                self.finishButton.isEnabled = true
+                self.resetButton.backgroundColor = .black
+                self.finishButton.backgroundColor = .black
+                // MARK: - 수정 확인
+                self.recordButton.setTitle("정지", for: .normal)
+            } else if self.viewModel?.isPaused == true { // 일시정지일 때
+                self.resetButton.isEnabled = true
+                self.finishButton.isEnabled = true
+                self.resetButton.backgroundColor = .black
+                self.finishButton.backgroundColor = .black
+                
+                self.recordButton.setTitle("시작", for: .normal)
+            } else { // 정지, 리셋, 종료 눌렸을 때
+                self.resetButton.isEnabled = false
+                self.finishButton.isEnabled = false
+                self.resetButton.backgroundColor = .systemGray
+                self.finishButton.backgroundColor = .systemGray
+                
+                self.recordButton.setTitle("시작", for: .normal)
+            }
         }
-    }
-    
-    private func navigateToSummaryView() {
-        let summaryViewController = RecordSumUpView(viewModel: viewModel)
-        summaryViewController.recordedTime = viewModel.formatTime(viewModel.recordedTime)
-        self.navigationController?.pushViewController(summaryViewController, animated: true) // 요약 화면으로 이동
     }
     
     // MARK: Navigation Bar
@@ -281,8 +280,7 @@ class RecordView: RideThisViewController {
     }
     
     @objc private func recordListButtonTapped() {
-        let recordListVC = RecordListViewController()
-        self.navigationController?.pushViewController(recordListVC, animated: true)
+        coordinator?.showRecordListView()
         print("기록 목록 출력")
     }
     
@@ -292,6 +290,25 @@ class RecordView: RideThisViewController {
         tabBarController?.tabBar.items?.forEach { $0.isEnabled = true }
     }
     
+}
+
+extension RecordView: RecordViewModelDelegate {
+    func didFinishRecording() {
+        coordinator?.showSummaryView(viewModel: viewModel ?? RecordViewModel())
+    }
+    
+    func didPauseRecording() {
+        updateUI(isRecording: false)
+    }
+    
+    func didStartRecording() {
+        updateUI(isRecording: true)
+    }
+    
+    func didResetRecording() {
+        updateUI(isRecording: false)
+        updateTimerDisplay()
+    }
 }
 
 // 블루투스가 꺼졌을 때
@@ -304,4 +321,3 @@ extension RecordView: BluetoothViewDelegate {
         }
     }
 }
-
