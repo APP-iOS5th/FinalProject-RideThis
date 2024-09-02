@@ -205,10 +205,10 @@ class RecordViewModel: BluetoothManagerDelegate {
         let seconds = Int(time) % 60
         return String(format: "%02d:%02d", minutes, seconds)
     }
-    // MARK: - RecordListView
     
-    
-    // MARK: - RecordDetailView
+    func updateTimerDisplay() -> String {
+        return formatTime(elapsedTime)
+    }
 }
 
 protocol RecordViewModelDelegate: AnyObject {

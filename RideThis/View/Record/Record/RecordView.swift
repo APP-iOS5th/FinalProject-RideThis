@@ -76,7 +76,7 @@ class RecordView: RideThisViewController {
     }
     
     private func updateTimerDisplay() {
-        timerRecord.updateRecordText(text: viewModel?.formatTime(viewModel?.elapsedTime ?? 0.0) ?? "00:00")
+        timerRecord.updateRecordText(text: viewModel?.updateTimerDisplay() ?? "00:00")
     }
     
     // MARK: - 레이아웃 설정
@@ -152,6 +152,7 @@ class RecordView: RideThisViewController {
             self?.showAlert(alertTitle: "기록을 리셋할까요?", msg: "지금까지의 기록이 초기화됩니다.", confirm: "리셋"
             ) {
                 self?.viewModel?.resetRecording()
+                self?.enableTabBar()
             }
         }, for: .touchUpInside)
         
@@ -164,9 +165,7 @@ class RecordView: RideThisViewController {
                     self.viewModel?.pauseRecording()
                 } else {
                     self.viewModel?.startRecording()
-//                    self.updateUI(isRecording: true)
-                    // 기록 시작 시 탭바 비활성화
-                    self.tabBarController?.tabBar.items?.forEach { $0.isEnabled = false }
+                    self.disableTabBar() // 탭바 비활성화
                 }
             } else {
                 showAlert(alertTitle: "장치연결이 필요합니다.", msg: "사용하시려면 장치를 연결해주세요.", confirm: "장치연결") {
@@ -181,9 +180,18 @@ class RecordView: RideThisViewController {
             self.showAlert(alertTitle: "기록을 종료할까요?", msg: "요약 화면으로 이동합니다.", confirm: "기록 종료"
             ) {
                 self.viewModel?.finishRecording()
-                self.tabBarController?.tabBar.items?.forEach { $0.isEnabled = true }
+                self.enableTabBar() // 탭바 활성화
             }
         }, for: .touchUpInside)
+    }
+    
+    // MARK: - 탭바 활성화 / 비활성화
+    private func enableTabBar() {
+        tabBarController?.tabBar.items?.forEach { $0.isEnabled = true }
+    }
+    
+    private func disableTabBar() {
+        tabBarController?.tabBar.items?.forEach { $0.isEnabled = false }
     }
     
     // 바인딩 설정
@@ -235,7 +243,7 @@ class RecordView: RideThisViewController {
                 self.finishButton.isEnabled = true
                 self.resetButton.backgroundColor = .black
                 self.finishButton.backgroundColor = .black
-                // MARK: - 수정 확인
+
                 self.recordButton.setTitle("정지", for: .normal)
             } else if self.viewModel?.isPaused == true { // 일시정지일 때
                 self.resetButton.isEnabled = true
@@ -287,7 +295,7 @@ class RecordView: RideThisViewController {
     // MARK: - 탭바 활성화
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        tabBarController?.tabBar.items?.forEach { $0.isEnabled = true }
+        enableTabBar()
     }
     
 }
@@ -295,19 +303,23 @@ class RecordView: RideThisViewController {
 extension RecordView: RecordViewModelDelegate {
     func didFinishRecording() {
         coordinator?.showSummaryView(viewModel: viewModel ?? RecordViewModel())
+        enableTabBar()
     }
     
     func didPauseRecording() {
         updateUI(isRecording: false)
+        disableTabBar()
     }
     
     func didStartRecording() {
         updateUI(isRecording: true)
+        disableTabBar()
     }
     
     func didResetRecording() {
         updateUI(isRecording: false)
         updateTimerDisplay()
+        enableTabBar()
     }
 }
 
