@@ -30,7 +30,7 @@ class EditProfileInfoView: RideThisViewController {
         imageView.widthAnchor.constraint(equalToConstant: 120).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: 120).isActive = true
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 60
+        imageView.layer.cornerRadius = 40
         imageView.clipsToBounds = true
         if let imageURL = self.user.user_image {
             if imageURL.isEmpty {
@@ -47,8 +47,8 @@ class EditProfileInfoView: RideThisViewController {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
-        imageView.widthAnchor.constraint(equalToConstant: 20).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: 25).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 25).isActive = true
         imageView.image = UIImage(systemName: "camera")
         imageView.tintColor = .primaryColor
         
@@ -142,7 +142,7 @@ class EditProfileInfoView: RideThisViewController {
         
         self.cameraContainerView.snp.makeConstraints {
             $0.bottom.equalTo(self.profileImageView.snp.bottom)
-            $0.right.equalTo(self.profileImageView.snp.right)
+            $0.right.equalTo(self.profileImageView.snp.right).offset(10)
         }
     }
     
