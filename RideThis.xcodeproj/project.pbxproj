@@ -99,6 +99,9 @@
 		CDE25C6E2C6913B8008E2A80 /* EditProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE25C6D2C6913B8008E2A80 /* EditProfileInfoView.swift */; };
 		CDE28F222C849658004FE443 /* SettingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE28F212C849658004FE443 /* SettingCoordinator.swift */; };
 		CDE28F242C8497CC004FE443 /* AccountSettingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE28F232C8497CC004FE443 /* AccountSettingCoordinator.swift */; };
+		CDE28F262C84B1D4004FE443 /* AccountQuitCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE28F252C84B1D4004FE443 /* AccountQuitCoordinator.swift */; };
+		CDE28F2A2C84B38C004FE443 /* FollowManageCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE28F292C84B38C004FE443 /* FollowManageCoordinator.swift */; };
+		CDE28F2C2C84B995004FE443 /* SearchUserCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE28F2B2C84B995004FE443 /* SearchUserCoordinator.swift */; };
 		CDE36A062C7DA12100B743B9 /* DeviceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE36A052C7DA12100B743B9 /* DeviceProtocol.swift */; };
 		CDE36A082C7DA12900B743B9 /* RecordProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE36A072C7DA12900B743B9 /* RecordProtocol.swift */; };
 		CDE36A0A2C7DA13100B743B9 /* CompetitionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE36A092C7DA13100B743B9 /* CompetitionProtocol.swift */; };
@@ -221,6 +224,9 @@
 		CDE25C6D2C6913B8008E2A80 /* EditProfileInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileInfoView.swift; sourceTree = "<group>"; };
 		CDE28F212C849658004FE443 /* SettingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCoordinator.swift; sourceTree = "<group>"; };
 		CDE28F232C8497CC004FE443 /* AccountSettingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSettingCoordinator.swift; sourceTree = "<group>"; };
+		CDE28F252C84B1D4004FE443 /* AccountQuitCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountQuitCoordinator.swift; sourceTree = "<group>"; };
+		CDE28F292C84B38C004FE443 /* FollowManageCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowManageCoordinator.swift; sourceTree = "<group>"; };
+		CDE28F2B2C84B995004FE443 /* SearchUserCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUserCoordinator.swift; sourceTree = "<group>"; };
 		CDE36A052C7DA12100B743B9 /* DeviceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceProtocol.swift; sourceTree = "<group>"; };
 		CDE36A072C7DA12900B743B9 /* RecordProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordProtocol.swift; sourceTree = "<group>"; };
 		CDE36A092C7DA13100B743B9 /* CompetitionProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitionProtocol.swift; sourceTree = "<group>"; };
@@ -599,10 +605,8 @@
 				CD4215772C805A7C0033A511 /* MyPage */,
 				CD4215792C805ADB0033A511 /* EditProfile */,
 				CDE28F1F2C849641004FE443 /* Setting */,
-				CDAC668A2C6CF0CF005506FB /* AccountQuitView.swift */,
+				CDE28F272C84B372004FE443 /* Follow */,
 				CD76A8C82C6E53FF003490B3 /* SignUpInfoView.swift */,
-				CD0EC4C82C71EE5400E70452 /* FollowManageView.swift */,
-				CD0EC4CC2C71FC4800E70452 /* SearchUserView.swift */,
 				CD0EC4D22C7227AB00E70452 /* LoginView.swift */,
 			);
 			path = MyPage;
@@ -736,6 +740,7 @@
 				CDE28F202C84964C004FE443 /* SettingCoordinator */,
 				CD0E1E842C6A409F0080CFED /* SettingView.swift */,
 				CD66F5D32C6C887E00CDBB0B /* AccountSettingView.swift */,
+				CDAC668A2C6CF0CF005506FB /* AccountQuitView.swift */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -745,8 +750,28 @@
 			children = (
 				CDE28F212C849658004FE443 /* SettingCoordinator.swift */,
 				CDE28F232C8497CC004FE443 /* AccountSettingCoordinator.swift */,
+				CDE28F252C84B1D4004FE443 /* AccountQuitCoordinator.swift */,
 			);
 			path = SettingCoordinator;
+			sourceTree = "<group>";
+		};
+		CDE28F272C84B372004FE443 /* Follow */ = {
+			isa = PBXGroup;
+			children = (
+				CDE28F282C84B37D004FE443 /* FollowCoordinator */,
+				CD0EC4C82C71EE5400E70452 /* FollowManageView.swift */,
+				CD0EC4CC2C71FC4800E70452 /* SearchUserView.swift */,
+			);
+			path = Follow;
+			sourceTree = "<group>";
+		};
+		CDE28F282C84B37D004FE443 /* FollowCoordinator */ = {
+			isa = PBXGroup;
+			children = (
+				CDE28F292C84B38C004FE443 /* FollowManageCoordinator.swift */,
+				CDE28F2B2C84B995004FE443 /* SearchUserCoordinator.swift */,
+			);
+			path = FollowCoordinator;
 			sourceTree = "<group>";
 		};
 		CDE369FF2C7DA0E000B743B9 /* Protocol */ = {
@@ -899,6 +924,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CDE28F262C84B1D4004FE443 /* AccountQuitCoordinator.swift in Sources */,
 				CDE36A0C2C7DA13800B743B9 /* HomeProtocol.swift in Sources */,
 				EB07B0BC2C6C79F20067BF0F /* RecordInfoView.swift in Sources */,
 				0493F5C82C7DB39200290A4C /* AppCoordinator.swift in Sources */,
@@ -920,6 +946,7 @@
 				CD4214742C64A35400F7C3AE /* UIImage+Extension.swift in Sources */,
 				CDB71BA02C78A72400DC5D57 /* MyPageProtocol.swift in Sources */,
 				041A672B2C6C400E000BA4C1 /* DistanceCase+Extension.swift in Sources */,
+				CDE28F2A2C84B38C004FE443 /* FollowManageCoordinator.swift in Sources */,
 				CD6662142C678FFD005E2887 /* CompetitionModel.swift in Sources */,
 				CD0EC4C92C71EE5400E70452 /* FollowManageView.swift in Sources */,
 				CD0EC4CB2C71F10500E70452 /* FollowTableViewCell.swift in Sources */,
@@ -929,6 +956,7 @@
 				CD0EC4CD2C71FC4800E70452 /* SearchUserView.swift in Sources */,
 				EB3DFA3E2C77218A00FA366C /* RecordDetailViewController.swift in Sources */,
 				CD42145C2C64998200F7C3AE /* DeviceViewModel.swift in Sources */,
+				CDE28F2C2C84B995004FE443 /* SearchUserCoordinator.swift in Sources */,
 				EBFE4DB22C757AE800A36FCA /* KeyChain.swift in Sources */,
 				CD3E64692C76F5390018C46E /* FollowManageViewModel.swift in Sources */,
 				CD66F5D42C6C887E00CDBB0B /* AccountSettingView.swift in Sources */,

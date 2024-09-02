@@ -3,6 +3,7 @@ import SnapKit
 
 class AccountQuitView: RideThisViewController {
     
+    var quitCoordinator: AccountQuitCoordinator?
     private let firebaseService = FireBaseService()
     
     private let scrollView: UIScrollView = {
