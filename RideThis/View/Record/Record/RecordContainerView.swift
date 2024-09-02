@@ -1,10 +1,3 @@
-//
-//  RecordContainerView.swift
-//  RideThis
-//
-//  Created by 황승혜 on 8/13/24.
-//  컴포넌트 분리
-
 import UIKit
 import SnapKit
 

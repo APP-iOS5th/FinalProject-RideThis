@@ -1,10 +1,3 @@
-//
-//  RecordListViewModel.swift
-//  RideThis
-//
-//  Created by 황승혜 on 9/2/24.
-//
-
 import Foundation
 import Combine
 

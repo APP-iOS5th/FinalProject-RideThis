@@ -1,10 +1,3 @@
-//
-//  RecordSumUpViewModel.swift
-//  RideThis
-//
-//  Created by 황승혜 on 8/30/24.
-//
-
 import Foundation
 
 class RecordSumUpViewModel {

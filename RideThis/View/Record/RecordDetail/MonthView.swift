@@ -1,10 +1,3 @@
-//
-//  MonthView.swift
-//  RideThis
-//
-//  Created by 황승혜 on 8/28/24.
-//
-
 import UIKit
 import SnapKit
 

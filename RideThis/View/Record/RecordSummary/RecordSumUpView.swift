@@ -1,10 +1,3 @@
-//
-//  RecordSumUpView.swift
-//  RideThis
-//
-//  Created by 황승혜 on 8/13/24.
-//  기록 요약 뷰
-
 import UIKit
 import SnapKit
 

@@ -1,10 +1,3 @@
-//
-//  RecordDetailViewController.swift
-//  RideThis
-//
-//  Created by 황승혜 on 8/22/24.
-//
-
 import UIKit
 import SnapKit
 
