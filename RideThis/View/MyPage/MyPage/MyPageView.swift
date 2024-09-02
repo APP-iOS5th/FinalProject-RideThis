@@ -378,7 +378,7 @@ class MyPageView: RideThisViewController {
         [self.userInfoLabel, self.profileEditButton, self.userInfoContainer].forEach{ self.contentView.addSubview($0) }
         
         self.userInfoLabel.snp.makeConstraints {
-            $0.top.equalTo(self.profileContainer.snp.bottom).offset(20)
+            $0.top.equalTo(self.profileContainer.snp.bottom).offset(30)
             $0.left.equalTo(self.profileContainer.snp.left).offset(5)
         }
         
@@ -450,7 +450,7 @@ class MyPageView: RideThisViewController {
         [self.totalRecordLabel, self.totalRecordContainer].forEach{ self.contentView.addSubview($0) }
         
         totalRecordLabel.snp.makeConstraints {
-            $0.top.equalTo(self.userInfoContainer.snp.bottom).offset(20)
+            $0.top.equalTo(self.userInfoContainer.snp.bottom).offset(30)
             $0.left.equalTo(self.userInfoLabel.snp.left)
         }
         
@@ -518,7 +518,7 @@ class MyPageView: RideThisViewController {
          self.dataLabel, self.graphCollectionView, self.pagingIndicator, self.selectedPeriodTotalRecordContainer].forEach{ self.contentView.addSubview($0) }
         
         self.recordByPeriodLabel.snp.makeConstraints {
-            $0.top.equalTo(self.totalRecordContainer.snp.bottom).offset(20)
+            $0.top.equalTo(self.totalRecordContainer.snp.bottom).offset(30)
             $0.left.equalTo(self.totalRecordContainer.snp.left)
         }
         
@@ -534,7 +534,7 @@ class MyPageView: RideThisViewController {
         }
         
         self.dataLabel.snp.makeConstraints {
-            $0.top.equalTo(self.recordByPeriodPicker.snp.bottom).offset(8)
+            $0.top.equalTo(self.recordByPeriodPicker.snp.bottom).offset(30)
             $0.left.equalTo(self.recordByPeriodPicker.snp.left)
         }
         
@@ -556,12 +556,12 @@ class MyPageView: RideThisViewController {
         }
         
         self.pagingIndicator.snp.makeConstraints {
-            $0.top.equalTo(self.graphCollectionView.snp.bottom).offset(8)
+            $0.top.equalTo(self.graphCollectionView.snp.bottom).offset(20)
             $0.centerX.equalTo(self.graphCollectionView.snp.centerX)
         }
         
         self.selectedPeriodTotalRecordContainer.snp.makeConstraints {
-            $0.top.equalTo(self.pagingIndicator.snp.bottom).offset(8)
+            $0.top.equalTo(self.pagingIndicator.snp.bottom).offset(20)
             $0.left.equalTo(self.graphCollectionView.snp.left)
             $0.right.equalTo(self.graphCollectionView.snp.right)
             $0.bottom.equalTo(self.contentView.snp.bottom).offset(-20)

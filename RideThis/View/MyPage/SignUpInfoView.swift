@@ -196,8 +196,8 @@ class SignUpInfoView: RideThisViewController {
                 
                 userInfoContainer2.addSubview(mandatoryImgView)
                 mandatoryImgView.snp.makeConstraints {
-                    $0.bottom.equalTo(ui.snp.top).offset(4)
-                    $0.right.equalTo(ui.snp.left).offset(1)
+                    $0.top.equalTo(ui.snp.top).offset(1.5)
+                    $0.left.equalTo(ui.snp.right)
                 }
             }
         }
