@@ -47,14 +47,28 @@ class EditProfileInfoView: RideThisViewController {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
-        imageView.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 20).isActive = true
         imageView.image = UIImage(systemName: "camera")
-        imageView.layer.cornerRadius = 15
-        imageView.clipsToBounds = true
         imageView.tintColor = .primaryColor
         
         return imageView
+    }()
+    private lazy var cameraContainerView: UIView = {
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        container.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        container.layer.cornerRadius = 15
+        container.clipsToBounds = true
+        container.backgroundColor = .white
+        container.addSubview(self.cameraImageView)
+        cameraImageView.snp.makeConstraints {
+            $0.centerX.equalTo(container.snp.centerX)
+            $0.centerY.equalTo(container.snp.centerY)
+        }
+        
+        return container
     }()
     private let profileInfoContainer = RideThisContainer(height: 150)
     private let firstSeparator = CustomSeparator()
@@ -119,16 +133,16 @@ class EditProfileInfoView: RideThisViewController {
     }
     
     func setProfileImage() {
-        [self.profileImageView, self.cameraImageView].forEach{ self.view.addSubview($0) }
+        [self.profileImageView, self.cameraContainerView].forEach{ self.view.addSubview($0) }
         
         self.profileImageView.snp.makeConstraints {
             $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(20)
             $0.centerX.equalTo(self.view.snp.centerX)
         }
         
-        self.cameraImageView.snp.makeConstraints {
+        self.cameraContainerView.snp.makeConstraints {
             $0.bottom.equalTo(self.profileImageView.snp.bottom)
-            $0.right.equalTo(self.profileImageView.snp.right).offset(-15)
+            $0.right.equalTo(self.profileImageView.snp.right)
         }
     }
     
