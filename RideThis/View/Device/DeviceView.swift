@@ -144,7 +144,7 @@ class DeviceView: RideThisViewController {
     
     /// DeviceSearchViewController를 페이지 시트로 표시하고 기기 검색을 시작하는 함수
     private func presentDeviceSearchVC() {
-        let deviceSearchVC = DeviceSearchViewController(viewModel: viewModel)
+        let deviceSearchVC = DeviceSearchView(viewModel: viewModel)
         deviceSearchVC.modalPresentationStyle = .pageSheet
         
         if let sheet = deviceSearchVC.sheetPresentationController {
@@ -193,7 +193,7 @@ extension DeviceView: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         
         let selectedDeviceName = viewModel.devices[indexPath.row].name
-        let deviceDetailVC = DeviceDetailViewController(viewModel: viewModel, deviceName: selectedDeviceName)
+        let deviceDetailVC = DeviceDetailView(viewModel: viewModel, deviceName: selectedDeviceName)
         
         deviceDetailVC.onDeviceDeleted = { [weak self] in
             self?.viewModel.deleteDevice(selectedDeviceName)

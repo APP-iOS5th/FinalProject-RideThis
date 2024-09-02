@@ -2,7 +2,7 @@ import UIKit
 import SnapKit
 import Combine
 
-class DeviceSearchViewController: RideThisViewController {
+class DeviceSearchView: RideThisViewController {
     // MARK: - Properties
     private let viewModel: DeviceViewModel
     private var cancellables = Set<AnyCancellable>()
@@ -156,7 +156,7 @@ class DeviceSearchViewController: RideThisViewController {
 
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
-extension DeviceSearchViewController: UITableViewDelegate, UITableViewDataSource {
+extension DeviceSearchView: UITableViewDelegate, UITableViewDataSource {
     /// numberOfRowsInSection
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.searchedDevices.count

@@ -1,7 +1,7 @@
 import UIKit
 import Combine
 
-class DeviceDetailViewController: RideThisViewController {
+class DeviceDetailView: RideThisViewController {
     // MARK: - Properties
     private let viewModel: DeviceViewModel
     private let deviceName: String
@@ -198,7 +198,7 @@ class DeviceDetailViewController: RideThisViewController {
 
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
-extension DeviceDetailViewController: UITableViewDelegate, UITableViewDataSource {
+extension DeviceDetailView: UITableViewDelegate, UITableViewDataSource {
     /// numberOfRowsInSection
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tableView == deviceInfoTableView ? 4 : 1
@@ -271,7 +271,7 @@ extension DeviceDetailViewController: UITableViewDelegate, UITableViewDataSource
     
     /// 휠 둘레 선택 화면 표시
     private func presentWheelCircumferenceViewController() {
-        let wheelCircumferenceVC = WheelCircumferenceViewController(viewModel: viewModel)
+        let wheelCircumferenceVC = WheelCircumferenceView(viewModel: viewModel)
         
         if let selectedDevice = viewModel.selectedDevice {
             wheelCircumferenceVC.selectedCircumference = (selectedDevice.wheelCircumference, selectedDevice.name)

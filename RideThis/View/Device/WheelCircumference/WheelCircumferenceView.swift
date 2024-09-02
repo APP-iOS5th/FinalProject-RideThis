@@ -2,7 +2,7 @@ import UIKit
 import SnapKit
 import Combine
 
-class WheelCircumferenceViewController: UIViewController {
+class WheelCircumferenceView: UIViewController {
     // MARK: - Properties
     private let viewModel: DeviceViewModel
     private let wheelSearchLabel = RideThisLabel(fontType: .sectionTitle,
@@ -204,7 +204,7 @@ class WheelCircumferenceViewController: UIViewController {
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
-extension WheelCircumferenceViewController: UITableViewDelegate, UITableViewDataSource {
+extension WheelCircumferenceView: UITableViewDelegate, UITableViewDataSource {
     /// numberOfRowsInSection
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.filteredWheelCircumferences.count
