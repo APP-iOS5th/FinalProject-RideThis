@@ -107,7 +107,6 @@ extension LoginView: ASAuthorizationControllerDelegate {
                         print(error)
                     }
                 }
-                
             }
         }
     }

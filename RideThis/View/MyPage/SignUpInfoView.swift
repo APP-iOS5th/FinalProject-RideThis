@@ -135,8 +135,8 @@ class SignUpInfoView: RideThisViewController {
                 
                 userInfoContainer.addSubview(mandatoryImgView)
                 mandatoryImgView.snp.makeConstraints {
-                    $0.bottom.equalTo(ui.snp.top).offset(5)
-                    $0.right.equalTo(ui.snp.left).offset(3)
+                    $0.top.equalTo(ui.snp.top).offset(1.5)
+                    $0.left.equalTo(ui.snp.right)
                 }
             }
         }
@@ -285,8 +285,6 @@ class SignUpInfoView: RideThisViewController {
             
             if let scene = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate) {
                 scene.appCoordinator?.changeTabBarView(change: true)
-//                let tabbarCtr = scene.getTabbarController(selectedIndex: 4)
-//                scene.changeRootView(viewController: tabbarCtr, animated: true)
             }
         }, for: .touchUpInside)
     }

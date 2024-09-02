@@ -296,7 +296,6 @@ class FireBaseService {
                 print("사용자 삭제 완료!")
             }
         }
-        UserService.shared.logout()
         
         let storage = Storage.storage()
         let imagePath = "userProfileImage/\(userId).jpg"
@@ -346,6 +345,7 @@ class FireBaseService {
                 }
             }
         }
+        UserService.shared.logout()
     }
     
     // MARK: - 디바이스 관리
