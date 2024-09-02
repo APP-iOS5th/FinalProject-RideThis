@@ -12,6 +12,7 @@ class RecordView: RideThisViewController {
     
     // 커스텀 타이틀
     private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "기록")
+    private var recordListButton: UIBarButtonItem?
     
     // 기록 뷰 선언
     private let timerRecord = RecordContainer(title: "Timer", recordText: "00:00", view: "record")
@@ -62,6 +63,8 @@ class RecordView: RideThisViewController {
         self.view.addSubview(finishButton)
         
         setupConstraints()
+        
+        tabBarController?.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -243,22 +246,22 @@ class RecordView: RideThisViewController {
                 self.finishButton.isEnabled = true
                 self.resetButton.backgroundColor = .black
                 self.finishButton.backgroundColor = .black
-
                 self.recordButton.setTitle("정지", for: .normal)
+                self.recordListButton?.isEnabled = false
             } else if self.viewModel?.isPaused == true { // 일시정지일 때
                 self.resetButton.isEnabled = true
                 self.finishButton.isEnabled = true
                 self.resetButton.backgroundColor = .black
                 self.finishButton.backgroundColor = .black
-                
                 self.recordButton.setTitle("시작", for: .normal)
+                self.recordListButton?.isEnabled = false
             } else { // 정지, 리셋, 종료 눌렸을 때
                 self.resetButton.isEnabled = false
                 self.finishButton.isEnabled = false
                 self.resetButton.backgroundColor = .systemGray
                 self.finishButton.backgroundColor = .systemGray
-                
                 self.recordButton.setTitle("시작", for: .normal)
+                self.recordListButton?.isEnabled = true
             }
         }
     }
@@ -282,9 +285,9 @@ class RecordView: RideThisViewController {
         navigationItem.leftBarButtonItem = leftBarButtonItem
         
         // 오른쪽 바 버튼 아이템에 기록 목록 추가
-        let rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "list.bullet"), style: .plain, target: self, action: #selector(recordListButtonTapped))
-        rightBarButtonItem.tintColor = .primaryColor
-        navigationItem.rightBarButtonItem = rightBarButtonItem
+        recordListButton = UIBarButtonItem(image: UIImage(systemName: "list.bullet"), style: .plain, target: self, action: #selector(recordListButtonTapped))
+        recordListButton?.tintColor = .primaryColor
+        navigationItem.rightBarButtonItem = recordListButton
     }
     
     @objc private func recordListButtonTapped() {
@@ -300,6 +303,7 @@ class RecordView: RideThisViewController {
     
 }
 
+// MARK: - extension
 extension RecordView: RecordViewModelDelegate {
     func didFinishRecording() {
         coordinator?.showSummaryView(viewModel: viewModel ?? RecordViewModel())
@@ -320,6 +324,21 @@ extension RecordView: RecordViewModelDelegate {
         updateUI(isRecording: false)
         updateTimerDisplay()
         enableTabBar()
+    }
+}
+
+extension RecordView: UITabBarControllerDelegate {
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        if viewController == tabBarController.selectedViewController {
+            return true
+        }
+        
+        // 기록 중이거나 일시정지 상태일 때 탭 전환 막기
+        if viewModel?.isRecording == true || viewModel?.isPaused == true {
+            return false
+        }
+        
+        return true
     }
 }
 
