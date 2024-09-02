@@ -7,14 +7,15 @@ class EditProfileInfoView: RideThisViewController {
     
     // MARK: Data Components
     private let firebaseService = FireBaseService()
-    private let viewModel = EditProfileInfoViewModel()
     var user: User
+    let viewModel: EditProfileInfoViewModel
     var selectedUserImage: UIImage? = nil
     var updateImageDelegate: ProfileImageUpdateDelegate?
     var editProfileCoordinator: EditProfileCoordinator?
     
-    init(user: User) {
+    init(user: User, viewModel: EditProfileInfoViewModel) {
         self.user = user
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     

@@ -23,7 +23,7 @@ class AppCoordinator: Coordinator {
         navigationController.pushViewController(splashVC, animated: true)
     }
     
-    func changeTabBarView() {
+    func changeTabBarView(change immedialtely: Bool = false) {
         let tabBarController = UITabBarController()
         let tabBarCoordinator = TabBarCoordinator(tabBarController: tabBarController)
         childCoordinators.append(tabBarCoordinator)
@@ -31,10 +31,22 @@ class AppCoordinator: Coordinator {
 
         // window의 rootViewController를 tabBarController로 변경
         if let window = window {
-            UIView.transition(with: window, duration: 0.5, options: .transitionCrossDissolve, animations: {
+            if immedialtely {
                 window.rootViewController = tabBarController
                 window.makeKeyAndVisible()
-            }, completion: nil)
+            } else {            
+                UIView.transition(with: window, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                    window.rootViewController = tabBarController
+                    window.makeKeyAndVisible()
+                }, completion: nil)
+            }
+        }
+    }
+    
+    func changeRootView(viewController: UIViewController) {
+        if let window = window {        
+            window.rootViewController = viewController
+            window.makeKeyAndVisible()
         }
     }
 }

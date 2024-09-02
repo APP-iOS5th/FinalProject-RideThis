@@ -12,7 +12,7 @@ class EditProfileCoordinator: Coordinator, ProfileImageUpdateDelegate {
     }
     
     func start() {
-        let editView = EditProfileInfoView(user: self.user)
+        let editView = EditProfileInfoView(user: self.user, viewModel: EditProfileInfoViewModel())
         editView.editProfileCoordinator = self
         editView.updateImageDelegate = self
         

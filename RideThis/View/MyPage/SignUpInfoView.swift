@@ -284,8 +284,9 @@ class SignUpInfoView: RideThisViewController {
             userService.combineUser = createdUser
             
             if let scene = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate) {
-                let tabbarCtr = scene.getTabbarController(selectedIndex: 4)
-                scene.changeRootView(viewController: tabbarCtr, animated: true)
+                scene.appCoordinator?.changeTabBarView(change: true)
+//                let tabbarCtr = scene.getTabbarController(selectedIndex: 4)
+//                scene.changeRootView(viewController: tabbarCtr, animated: true)
             }
         }, for: .touchUpInside)
     }
