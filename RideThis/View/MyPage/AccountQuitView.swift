@@ -3,6 +3,8 @@ import SnapKit
 
 class AccountQuitView: RideThisViewController {
     
+    private let firebaseService = FireBaseService()
+    
     private let scrollView: UIScrollView = {
         let scroll = UIScrollView()
         scroll.translatesAutoresizingMaskIntoConstraints = false
@@ -28,7 +30,7 @@ class AccountQuitView: RideThisViewController {
         
         return image
     }()
-    private let nickNameLabel = RideThisLabel(fontType: .classification, text: "매드카우 회원님,")
+    private let nickNameLabel = RideThisLabel(fontType: .classification, text: "\(UserService.shared.combineUser!.user_nickname) 회원님,")
     private let nickNameLabel2 = RideThisLabel(fontType: .classification, text: "정말 탈퇴하시겠습니까?")
     private let quitMessagelabel = RideThisLabel(fontType: .defaultSize, text: "탈퇴하시면 그동안의 랭킹, 기록, 장치연결 정보 및 친구 목록 등 모든 정보가 삭제됩니다.")
     private lazy var confirmCheckbox: UIButton = {
@@ -44,11 +46,15 @@ class AccountQuitView: RideThisViewController {
                 self.confirmCheckbox.tag = 1
                 DispatchQueue.main.async {
                     self.confirmCheckbox.setImage(UIImage(systemName: "checkmark.square"), for: .normal)
+                    self.quitButton.backgroundColor = .primaryColor
+                    self.quitButton.isEnabled = true
                 }
             } else {
                 self.confirmCheckbox.tag = 0
                 DispatchQueue.main.async {
                     self.confirmCheckbox.setImage(UIImage(systemName: "square"), for: .normal)
+                    self.quitButton.backgroundColor = .darkGray
+                    self.quitButton.isEnabled = false
                 }
             }
         }, for: .touchUpInside)
@@ -163,5 +169,14 @@ class AccountQuitView: RideThisViewController {
             $0.width.equalTo(self.cancelButton.snp.width)
             $0.bottom.equalTo(self.contentView.snp.bottom).offset(-15)
         }
+        
+        quitButton.isEnabled = false
+        quitButton.backgroundColor = .darkGray
+        quitButton.addAction(UIAction { [weak self] _ in
+            guard let self = self else { return }
+            showAlert(alertTitle: "확인", msg: "정말 탈퇴하시겠습니까?", confirm: "예") {
+                self.firebaseService.deleteUser(userId: UserService.shared.combineUser!.user_id)
+            }
+        }, for: .touchUpInside)
     }
 }
