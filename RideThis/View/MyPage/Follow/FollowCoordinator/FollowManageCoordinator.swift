@@ -5,19 +5,20 @@ class FollowManageCoordinator: Coordinator, UpdateUserDelegate {
     var navigationController: UINavigationController
     var childCoordinators: [any Coordinator] = []
     var user: User
+    let followView: FollowManageView
     
     init(navigationController: UINavigationController, user: User) {
         self.navigationController = navigationController
         self.user = user
+        self.followView = FollowManageView(user: user, followViewModel: FollowManageViewModel())
     }
     
     func start() {
-        let followView = FollowManageView(user: user, followViewModel: FollowManageViewModel())
         followView.followCoordinator = self
         self.navigationController.pushViewController(followView, animated: true)
     }
     
     func updateUser(user: User) {
-        UserService.shared.signedUser = user
+        followView.updateUser(user: user)
     }
 }
