@@ -296,6 +296,7 @@ class FireBaseService {
                 print("사용자 삭제 완료!")
             }
         }
+        UserService.shared.logout()
         
         let storage = Storage.storage()
         let imagePath = "userProfileImage/\(userId).jpg"
@@ -336,7 +337,6 @@ class FireBaseService {
                 }
             }
         }
-        UserService.shared.logout()
         if let currentUser = Auth.auth().currentUser {
             currentUser.delete() { error in
                 if let error = error {

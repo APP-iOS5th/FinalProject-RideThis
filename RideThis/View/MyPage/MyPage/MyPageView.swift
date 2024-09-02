@@ -8,7 +8,7 @@ import Combine
 class MyPageView: RideThisViewController {
     
     var coordinator: MyPageCoordinator?
-    lazy var followCoordinator = FollowManageCoordinator(navigationController: self.navigationController!, user: self.service.combineUser!)
+    lazy var followCoordinator = FollowManageCoordinator(navigationController: self.navigationController!, user: self.service.combineUser)
     
     // MARK: Data Components
     let service = UserService.shared
@@ -636,7 +636,6 @@ class MyPageView: RideThisViewController {
                     self.userHeight.text = combineUser.tallStr
                 }
                 followCoordinator.updateUser(user: combineUser)
-//                followDelegate?.updateUser(user: combineUser)
             }
             .store(in: &cancellable)
         
@@ -788,7 +787,7 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
     
     // MARK: 프로필 Container를 선택했을 때 팔로우 관리 페이지로 이동
     @objc func toFollowerView() {
-        if let user = service.combineUser {
+        if let _ = service.combineUser {
             followCoordinator.start()
         } else {
             self.showAlert(alertTitle: "알림", msg: "로그인이 필요한 기능입니다. 로그인 화면으로 이동할까요?", confirm: "예") {

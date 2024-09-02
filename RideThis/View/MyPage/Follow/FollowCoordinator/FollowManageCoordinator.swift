@@ -4,10 +4,10 @@ class FollowManageCoordinator: Coordinator, UpdateUserDelegate {
     
     var navigationController: UINavigationController
     var childCoordinators: [any Coordinator] = []
-    var user: User
+    var user: User?
     let followView: FollowManageView
     
-    init(navigationController: UINavigationController, user: User) {
+    init(navigationController: UINavigationController, user: User?) {
         self.navigationController = navigationController
         self.user = user
         self.followView = FollowManageView(user: user, followViewModel: FollowManageViewModel())

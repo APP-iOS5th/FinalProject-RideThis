@@ -5,12 +5,12 @@ import Combine
 class FollowManageView: RideThisViewController {
     
     // MARK: Data Components
-    var user: User
+    var user: User?
     let followViewModel: FollowManageViewModel
     var followCoordinator: FollowManageCoordinator?
     private var cancellable = Set<AnyCancellable>()
     
-    init(user: User, followViewModel: FollowManageViewModel) {
+    init(user: User?, followViewModel: FollowManageViewModel) {
         self.user = user
         self.followViewModel = followViewModel
         super.init(nibName: nil, bundle: nil)
@@ -117,13 +117,13 @@ class FollowManageView: RideThisViewController {
             .store(in: &cancellable)
         
         Task {
-            await followViewModel.fetchFollowData(user: user, type: .follower)
+            await followViewModel.fetchFollowData(user: user!, type: .follower)
         }
     }
     
     @objc func optionChanged(_ sender: UISegmentedControl) {
         let followType: FollowType = self.followPicker.selectedSegmentIndex == 0 ? .follower : .following
-        followViewModel.changeSegmentValue(user: user, type: followType)
+        followViewModel.changeSegmentValue(user: user!, type: followType)
     }
     
     @objc func searchUserButton() {
@@ -134,7 +134,7 @@ class FollowManageView: RideThisViewController {
 
 extension FollowManageView: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        followViewModel.searchUser(text: searchText, user: self.user, type: self.followPicker.selectedSegmentIndex == 0 ? .follower : .following)
+        followViewModel.searchUser(text: searchText, user: self.user!, type: self.followPicker.selectedSegmentIndex == 0 ? .follower : .following)
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
