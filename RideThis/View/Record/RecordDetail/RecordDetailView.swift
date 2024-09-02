@@ -1,14 +1,10 @@
-//
-//  RecordDetailViewController.swift
-//  RideThis
-//
-//  Created by 황승혜 on 8/22/24.
-//
-
 import UIKit
 import SnapKit
 
-class RecordDetailViewController: RideThisViewController {
+class RecordDetailView: RideThisViewController {
+    weak var coordinator: RecordDetailCoordinator?
+    var viewModel: RecordDetailViewModel!
+    
     // 로고
     private let logoImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "logoTransparent"))
@@ -99,24 +95,12 @@ class RecordDetailViewController: RideThisViewController {
     }
     
     func configureView() {
-        guard let record = record else { return }
+        self.title = viewModel.title
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy년 MM월 dd일"
-        let formattedDate = record.record_start_time != nil ? dateFormatter.string(from: record.record_start_time!) : "Unknown Date"
-        
-        self.title = formattedDate
-        
-        // 시작 시간과 종료 시간 포맷
-        let timeFormatter = DateFormatter()
-        timeFormatter.dateFormat = "HH:mm"
-        let startTimeString = record.record_start_time != nil ? timeFormatter.string(from: record.record_start_time!) : "00:00"
-        let endTimeString = record.record_end_time != nil ? timeFormatter.string(from: record.record_end_time!) : "23:59"
-        
-        durationRecord.updateRecordText(text: "\(startTimeString) ~ \(endTimeString)")
-        timeRecord.updateRecordText(text: record.record_timer)
-        distanceRecord.updateRecordText(text: String(format: "%.2f km", record.record_distance))
-        SpeedRecord.updateRecordText(text: String(format: "%.2f km/h", record.record_speed))
-        calorieRecord.updateRecordText(text: String(format: "%.0f kcal", record.record_calories))
+        durationRecord.updateRecordText(text: viewModel.durationText)
+        timeRecord.updateRecordText(text: viewModel.timeText)
+        distanceRecord.updateRecordText(text: viewModel.distanceText)
+        SpeedRecord.updateRecordText(text: viewModel.speedText)
+        calorieRecord.updateRecordText(text: viewModel.calorieText)
     }
 }

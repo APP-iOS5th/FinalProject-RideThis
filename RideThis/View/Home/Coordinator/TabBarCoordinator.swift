@@ -35,7 +35,7 @@ class TabBarCoordinator: Coordinator {
         
         // Record
         let recordNavigationController = UINavigationController()
-        let recordCoordinator = RecordCoordinator(navigationController: recordNavigationController)
+        let recordCoordinator = RecordCoordinator(navigationController: recordNavigationController, tabBarController: tabBarController)
         recordCoordinator.start()
         recordNavigationController.tabBarItem = UITabBarItem(title: "기록", image: UIImage(systemName: "flag.checkered"), selectedImage: nil)
         childCoordinators.append(recordCoordinator)
