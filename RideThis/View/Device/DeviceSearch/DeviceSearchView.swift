@@ -4,6 +4,8 @@ import Combine
 
 class DeviceSearchView: RideThisViewController {
     // MARK: - Properties
+    var coordinator: DeviceSearchCoordinator?
+    
     private let viewModel: DeviceViewModel
     private var cancellables = Set<AnyCancellable>()
     
@@ -18,8 +20,8 @@ class DeviceSearchView: RideThisViewController {
     
     // MARK: - Initialization
     
-    /// DeviceSearchViewController를 주어진 ViewModel로 초기화
-    /// - Parameter viewModel: DeviceSearchViewController에서 사용할 ViewModel
+    /// DeviceSearchView의 새 인스턴스를 초기화
+    /// - Parameter viewModel: DeviceSearchView에서 사용할 ViewModel
     init(viewModel: DeviceViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -29,7 +31,8 @@ class DeviceSearchView: RideThisViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - View DidLoad
+    // MARK: - Lifecycle Methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -38,19 +41,18 @@ class DeviceSearchView: RideThisViewController {
         bindViewModel()
     }
     
-    // MARK: - View DidAppear
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         viewModel.startDeviceSearch()
     }
     
-    // MARK: - View WillDisappear
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         viewModel.stopDeviceSearch()
     }
     
-    // MARK: - Setup UI
+    // MARK: - UI Setup
+    
     private func setupUI() {
         configureViewHierarchy()
         configureViewProperties()
@@ -69,7 +71,7 @@ class DeviceSearchView: RideThisViewController {
         contentView.addSubview(deviceTableView)
     }
     
-    // MARK: - Configure View Properties
+    /// View 속성 구성
     private func configureViewProperties() {
         view.backgroundColor = .primaryBackgroundColor
         titleView.backgroundColor = .white
@@ -79,7 +81,7 @@ class DeviceSearchView: RideThisViewController {
         configureTableView()
     }
     
-    // MARK: - Setup Constraints
+    /// 뷰 제약 조건 설정
     private func setupConstraints() {
         titleView.snp.makeConstraints { titleView in
             titleView.top.left.right.equalToSuperview()
@@ -119,7 +121,7 @@ class DeviceSearchView: RideThisViewController {
         }
     }
     
-    // MARK: - Configure TableView
+    /// TableView 구성
     private func configureTableView() {
         deviceTableView.translatesAutoresizingMaskIntoConstraints = false
         deviceTableView.layer.cornerRadius = 10
@@ -129,21 +131,23 @@ class DeviceSearchView: RideThisViewController {
         deviceTableView.rowHeight = 44
     }
     
-    // MARK: - Setup TableView
+    /// TableView의 delegate와 dataSource를 설정하고 cell을 등록
     private func setupTableView() {
         deviceTableView.delegate = self
         deviceTableView.dataSource = self
         deviceTableView.register(DeviceSearchTableViewCell.self, forCellReuseIdentifier: DeviceSearchTableViewCell.identifier)
     }
     
-    // MARK: - Setup Actions
+    /// 버튼 액션 설정
     private func setupActions() {
         cancelButton.addAction(UIAction { [weak self] _ in
-            self?.dismiss(animated: true, completion: nil)
+            self?.coordinator?.dismissView()
         }, for: .touchUpInside)
     }
     
     // MARK: - ViewModel Binding
+    
+    /// ViewModel과 View를 바인딩
     private func bindViewModel() {
         viewModel.$searchedDevices
             .receive(on: DispatchQueue.main)
@@ -154,22 +158,19 @@ class DeviceSearchView: RideThisViewController {
     }
 }
 
-
 // MARK: - UITableViewDelegate, UITableViewDataSource
+
 extension DeviceSearchView: UITableViewDelegate, UITableViewDataSource {
-    /// numberOfRowsInSection
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.searchedDevices.count
     }
     
-    /// cellForRowAt
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: DeviceSearchTableViewCell.identifier, for: indexPath) as! DeviceSearchTableViewCell
         cell.configure(with: viewModel.searchedDevices[indexPath.row].name)
         return cell
     }
     
-    /// didSelectRowAt
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard !isProcessingSelection else { return }
         isProcessingSelection = true
@@ -179,7 +180,7 @@ extension DeviceSearchView: UITableViewDelegate, UITableViewDataSource {
             do {
                 try await viewModel.addDeviceWithDefaultSettings(selectedDevice)
                 DispatchQueue.main.async {
-                    self.dismiss(animated: true, completion: nil)
+                    self.coordinator?.dismissView()
                 }
             } catch {
                 print("Error adding device: \(error)")

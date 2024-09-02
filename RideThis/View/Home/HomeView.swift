@@ -4,13 +4,13 @@ import SnapKit
 import Combine
 
 class HomeView: RideThisViewController {
-    
+    // MARK: - Properties
     var coordinator: HomeCoordinator?
     
     private let viewModel: HomeViewModel
-    
     private var cancellables = Set<AnyCancellable>()
     
+    // MARK: - UI Components
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.showsVerticalScrollIndicator = false
@@ -22,27 +22,17 @@ class HomeView: RideThisViewController {
         return view
     }()
     
-    init(viewModel: HomeViewModel = HomeViewModel()) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    // MARK: 주간기록 안내 섹션 UI 요소들
-    // 커스텀 타이틀
+    // MARK: - Custom Title
     private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "Home")
     
-    // sectionView: 흰색 배경
+    // MARK: - Weekly Record Section
     private let weeklyRecordSectionView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemBackground
         return view
     }()
     
-    // 주간기록: 세컨 타이틀 라벨
+    /// 주간기록: 세컨 타이틀 라벨
     private let weeklyRecordTitleLabel: UILabel = {
         let label = RideThisLabel(fontType: .sectionTitle, fontColor: .black, text: "주간 기록")
         if let currentFont = label.font {
@@ -51,20 +41,19 @@ class HomeView: RideThisViewController {
         return label
     }()
     
-    // 주간기록: 더보기 버튼
+    /// 주간기록: 더보기 버튼
     private lazy var weeklyRecordMoreButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("더보기", for: .normal)
         button.setTitleColor(.primaryColor, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: FontCase.smallTitle.rawValue, weight: .regular)
         button.addAction(UIAction { [weak self] _ in
-//            let myPageView = MyPageView()
-//            self?.navigationController?.pushViewController(myPageView, animated: true)
+            // TODO: Implement navigation to MyPageView
         }, for: .touchUpInside)
         return button
     }()
     
-    // 주간기록: 데이터 배경 뷰
+    /// 주간기록: 데이터 배경 뷰
     private let weeklyRecordBackgroundView: UIView = {
         let view = UIView()
         view.backgroundColor = .primaryBackgroundColor
@@ -72,7 +61,7 @@ class HomeView: RideThisViewController {
         return view
     }()
     
-    // 주간기록: 헤더 뷰
+    /// 주간기록: 헤더 뷰
     private lazy var weeklyRecordHeaderView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [weeklyRecordTitleLabel, weeklyRecordMoreButton])
         stackView.axis = .horizontal
@@ -81,7 +70,7 @@ class HomeView: RideThisViewController {
         return stackView
     }()
     
-    // 주간기록: 데이터
+    /// 주간기록: 데이터
     private lazy var weeklyRecordDataView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
@@ -91,7 +80,7 @@ class HomeView: RideThisViewController {
         return stackView
     }()
     
-    // MARK: 라이딩 안내 섹션 UI 요소들
+    // MARK: - Let's Ride Section
     private let letsRideSectionView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemBackground
@@ -119,7 +108,7 @@ class HomeView: RideThisViewController {
         return button
     }()
     
-    // MARK: 날씨 안내 섹션 UI 요소들
+    // MARK: - Weather Section
     private let weatherSectionView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemBackground
@@ -129,10 +118,10 @@ class HomeView: RideThisViewController {
     private lazy var weatherTitleLabel: UILabel = {
         let label = RideThisLabel(fontType: .sectionTitle, fontColor: .black, text: "라이딩하기 따악 좋은 날이고만!")
         label.font = UIFont.boldSystemFont(ofSize: label.font.pointSize)
+        
         return label
     }()
     
-    // MARK: Weather
     private let weatherContainer: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 10
@@ -192,7 +181,7 @@ class HomeView: RideThisViewController {
     }()
     
     private let weatherHStackView: UIStackView = {
-       let stack = UIStackView()
+        let stack = UIStackView()
         stack.axis = .horizontal
         stack.distribution = .fillEqually
         stack.spacing = 10
@@ -201,6 +190,17 @@ class HomeView: RideThisViewController {
         return stack
     }()
     
+    // MARK: - Initialization
+    init(viewModel: HomeViewModel = HomeViewModel()) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
@@ -214,6 +214,14 @@ class HomeView: RideThisViewController {
         viewModel.refreshUserData()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        applyGradientToWeatherContainer()
+    }
+    
+    // MARK: - Setup Methods
+    
+    /// 메인 콘텐츠를 위한 스크롤 뷰 설정
     private func setupScrollView() {
         view.addSubview(scrollView)
         scrollView.snp.makeConstraints { make in
@@ -221,6 +229,7 @@ class HomeView: RideThisViewController {
         }
     }
     
+    /// 스크롤 뷰 내의 콘텐츠 뷰 설정
     private func setupContentView() {
         scrollView.addSubview(contentView)
         contentView.snp.makeConstraints { contentView in
@@ -237,14 +246,7 @@ class HomeView: RideThisViewController {
         }
     }
     
-    // MARK: WeathrContainer 그라데이션
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        weatherContainer.setGradient(color1: UIColor(red: 12/255, green: 79/255, blue: 146/255, alpha: 1),
-                                     color2: UIColor(red: 77/255, green: 143/255, blue: 209/255, alpha: 1))
-    }
-    
-    // MARK: Navigation Bar
+    /// NavigationBar 설정
     private func setupNavigationBar() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
@@ -262,7 +264,7 @@ class HomeView: RideThisViewController {
         navigationItem.leftBarButtonItem = leftBarButtonItem
     }
     
-    // MARK: weeklyRecord(wr) Section View
+    /// 주간 기록 섹션 콘텐츠 뷰 설정
     private func weeklyRecordSectionContentView() {
         contentView.addSubview(weeklyRecordSectionView)
         weeklyRecordSectionView.snp.makeConstraints { wrSection in
@@ -293,7 +295,7 @@ class HomeView: RideThisViewController {
         }
     }
     
-    // MARK: letsRide(lr) Section View
+    /// "라이딩 고고씽" 섹션 콘텐츠 뷰 설정
     private func letsRideSectionContentView() {
         contentView.addSubview(letsRideSectionView)
         letsRideSectionView.snp.makeConstraints { lrSection in
@@ -322,9 +324,8 @@ class HomeView: RideThisViewController {
         }
     }
     
-    // MARK: weather(w) Section View
+    /// 날씨 섹션 콘텐츠 뷰 설정
     private func weatherSectionContentView() {
-        
         setupWeatherUI()
         
         contentView.addSubview(weatherSectionView)
@@ -356,9 +357,9 @@ class HomeView: RideThisViewController {
         weatherContainer.addSubview(weatherHStackView)
         
         locationLabel.snp.makeConstraints { label in
-               label.top.equalTo(weatherContainer.snp.top).offset(15)
-               label.left.equalTo(weatherContainer.snp.left).offset(15)
-           }
+            label.top.equalTo(weatherContainer.snp.top).offset(15)
+            label.left.equalTo(weatherContainer.snp.left).offset(15)
+        }
         currentTemp.snp.makeConstraints { temp in
             temp.top.equalTo(locationLabel.snp.bottom)
             temp.left.equalTo(weatherContainer.snp.left).offset(15)
@@ -380,21 +381,19 @@ class HomeView: RideThisViewController {
             con.left.equalTo(weatherContainer.snp.left).offset(15)
             con.right.equalTo(weatherContainer.snp.right).offset(-15)
         }
-           
     }
     
-    // MARK: Setup Weather UI
+    /// 날씨 UI 컴포넌트와 바인딩 설정
     private func setupWeatherUI() {
-        // 지역이름
+        // 위치 이름 바인딩
         self.viewModel.$locationName
             .receive(on: DispatchQueue.main)
             .sink { [weak self] location in
                 self?.locationLabel.text = "\(location)"
-                
             }
             .store(in: &cancellables)
         
-        // 현재 날씨
+        // 현재 날씨 바인딩
         self.viewModel.$currentWeather
             .receive(on: DispatchQueue.main)
             .sink { [weak self] weather in
@@ -411,11 +410,10 @@ class HomeView: RideThisViewController {
                 } else {
                     self?.averageTempLabel.text = ""
                 }
-                
             }
             .store(in: &cancellables)
         
-        // 시간별 날씨
+        // 시간별 예보 바인딩
         self.viewModel.$hourlyForecast
             .receive(on: DispatchQueue.main)
             .sink { [weak self] hourlyForecast in
@@ -436,10 +434,13 @@ class HomeView: RideThisViewController {
                 }
             }
             .store(in: &cancellables)
-        
     }
     
-    // Weather 시간별 날씨배열 함수
+    /// 시간별 날씨 예보를 위한 수직 스택 뷰 생성
+    /// - Parameters:
+    ///   - forecast: 시간별 날씨 예보
+    ///   - hourOffset: 현재 시간으로부터의 시간 오프셋
+    /// - Returns: 시간별 예보에 맞게 구성된 UIStackView
     private func createWeatherVStackView(forecast: HourWeather, hourOffset: Int) -> UIStackView {
         let timeFormatter = DateFormatter()
         timeFormatter.dateFormat = "ha"
@@ -468,7 +469,11 @@ class HomeView: RideThisViewController {
         return weatherVStackView
     }
     
-    // MARK: weeklyRecord Data Set
+    /// 단일 기록 항목을 표시하는 뷰 생성
+    /// - Parameters:
+    ///   - title: 기록 항목의 제목
+    ///   - value: 기록 항목의 값
+    /// - Returns: 기록 항목에 맞게 구성된 UIView
     private func createRecordItemView(title: String, value: String) -> UIView {
         let containerView = UIView()
         
@@ -492,6 +497,7 @@ class HomeView: RideThisViewController {
         return containerView
     }
     
+    /// 뷰 모델의 데이터 바인딩 설정
     private func setupBindings() {
         viewModel.$model
             .receive(on: DispatchQueue.main)
@@ -501,6 +507,8 @@ class HomeView: RideThisViewController {
             .store(in: &cancellables)
     }
     
+    /// 전달받은 모델 데이터를 사용하여 UI 업데이트
+    /// - Parameter model: 화면에 표시할 데이터를 담고 있는 HomeModel
     private func updateUI(with model: HomeModel) {
         weeklyRecordDataView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         weeklyRecordDataView.addArrangedSubview(createRecordItemView(title: "달린 횟수", value: "\(model.weeklyRecord.runCount)회"))
@@ -508,5 +516,11 @@ class HomeView: RideThisViewController {
         weeklyRecordDataView.addArrangedSubview(createRecordItemView(title: "달린 거리", value: String(format: "%.2f Km", model.weeklyRecord.runDistance)))
         
         letsRideTitleLabel.text = "\(model.userName)님, 라이딩 고고씽?"
+    }
+    
+    /// 날씨 컨테이너 뷰에 그라디언트 적용
+    private func applyGradientToWeatherContainer() {
+        weatherContainer.setGradient(color1: UIColor(red: 12/255, green: 79/255, blue: 146/255, alpha: 1),
+                                     color2: UIColor(red: 77/255, green: 143/255, blue: 209/255, alpha: 1))
     }
 }

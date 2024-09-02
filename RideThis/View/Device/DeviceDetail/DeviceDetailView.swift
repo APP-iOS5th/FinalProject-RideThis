@@ -3,6 +3,8 @@ import Combine
 
 class DeviceDetailView: RideThisViewController {
     // MARK: - Properties
+    var coordinator: DeviceDetailCoordinator?
+    
     private let viewModel: DeviceViewModel
     private let deviceName: String
     private var cancellables = Set<AnyCancellable>()
@@ -13,12 +15,11 @@ class DeviceDetailView: RideThisViewController {
     
     var onDeviceDeleted: (() -> Void)?
     
-    
     // MARK: - Initialization
     
-    /// DeviceDetailViewController 새 인스턴스 초기화
+    /// DeviceDetailView의 새 인스턴스를 초기화합니다.
     /// - Parameters:
-    ///   - viewModel: DeviceDetailViewController에서 사용할 viewModel
+    ///   - viewModel: DeviceDetailView에서 사용할 viewModel
     ///   - deviceName: 표시할 Device 이름
     init(viewModel: DeviceViewModel, deviceName: String) {
         self.viewModel = viewModel
@@ -30,8 +31,8 @@ class DeviceDetailView: RideThisViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Lifecycle Methods
     
-    // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -40,14 +41,13 @@ class DeviceDetailView: RideThisViewController {
         viewModel.selectDevice(name: deviceName)
     }
     
-    
-    // MARK: - ViewDidLayoutSubviews
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         updateTableViewHeights()
     }
     
-    // MARK: - Setup UI
+    // MARK: - UI Setup
+    
     private func setupUI() {
         title = "장치 상세"
         view.backgroundColor = .primaryBackgroundColor
@@ -55,8 +55,6 @@ class DeviceDetailView: RideThisViewController {
         setupDeleteButton()
     }
     
-    
-    // MARK: - Setup Layout
     private func setupLayout() {
         let safeArea = view.safeAreaLayoutGuide
         let screenHeight = UIScreen.main.bounds.height
@@ -103,16 +101,12 @@ class DeviceDetailView: RideThisViewController {
         }
     }
     
-    
-    // MARK: - Setup DeleteButton
     private func setupDeleteButton() {
         deleteDeviceButton.addAction(UIAction { [weak self] _ in
             self?.deleteDeviceTapped()
         }, for: .touchUpInside)
     }
     
-    
-    // MARK: - Setup TableViews
     private func setupTableViews() {
         [deviceInfoTableView, wheelCircumferenceTableView].forEach { configureTableView($0) }
         
@@ -137,8 +131,8 @@ class DeviceDetailView: RideThisViewController {
         tableView.estimatedRowHeight = 44
     }
     
-    
     // MARK: - ViewModel Binding
+    
     private func bindViewModel() {
         viewModel.$selectedDevice
             .receive(on: DispatchQueue.main)
@@ -148,7 +142,6 @@ class DeviceDetailView: RideThisViewController {
             }
             .store(in: &cancellables)
     }
-    
     
     // MARK: - UI Updates
     
@@ -174,8 +167,8 @@ class DeviceDetailView: RideThisViewController {
         }
     }
     
-    
     // MARK: - Actions
+    
     /// deleteDeviceButton을 눌렀을 때 실행
     private func deleteDeviceTapped() {
         showAlert(alertTitle: "장치 삭제", msg: "정말로 이 장치를 삭제하시겠습니까?", confirm: "삭제") { [weak self] in
@@ -186,7 +179,7 @@ class DeviceDetailView: RideThisViewController {
                     DispatchQueue.main.async {
                         self.viewModel.deleteDevice(self.deviceName)
                         self.onDeviceDeleted?()
-                        self.navigationController?.popViewController(animated: true)
+                        self.coordinator?.popToRootView()
                     }
                 } catch {
                     print("Error deleting device: \(error)")
@@ -196,15 +189,12 @@ class DeviceDetailView: RideThisViewController {
     }
 }
 
-
 // MARK: - UITableViewDelegate, UITableViewDataSource
 extension DeviceDetailView: UITableViewDelegate, UITableViewDataSource {
-    /// numberOfRowsInSection
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tableView == deviceInfoTableView ? 4 : 1
     }
     
-    /// cellForRowAt
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == deviceInfoTableView {
             return configureDeviceInfoCell(for: indexPath)
@@ -213,7 +203,6 @@ extension DeviceDetailView: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    /// didSelectRowAt
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == wheelCircumferenceTableView {
             presentWheelCircumferenceViewController()
@@ -242,11 +231,6 @@ extension DeviceDetailView: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
-    /// 테이블 뷰의 각 행의 높이 결정
-    /// - Parameters:
-    ///   - tableView: 높이 요청하는 테이블 뷰
-    ///   - indexPath: 높이 요청하는 행의 인덱스
-    /// - Returns: 해당 행의 높이
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tableView == deviceInfoTableView && indexPath.row == 1 {
             return 85
@@ -271,25 +255,6 @@ extension DeviceDetailView: UITableViewDelegate, UITableViewDataSource {
     
     /// 휠 둘레 선택 화면 표시
     private func presentWheelCircumferenceViewController() {
-        let wheelCircumferenceVC = WheelCircumferenceView(viewModel: viewModel)
-        
-        if let selectedDevice = viewModel.selectedDevice {
-            wheelCircumferenceVC.selectedCircumference = (selectedDevice.wheelCircumference, selectedDevice.name)
-        }
-        
-        wheelCircumferenceVC.onCircumferenceSelected = { [weak self] (millimeter: Int, tireSize: String) in
-            Task {
-                do {
-                    try await self?.viewModel.updateWheelCircumferenceInFirebase(millimeter)
-                    DispatchQueue.main.async {
-                        self?.wheelCircumferenceTableView.reloadData()
-                    }
-                } catch {
-                    print("Error updating wheel circumference: \(error)")
-                }
-            }
-        }
-        
-        navigationController?.pushViewController(wheelCircumferenceVC, animated: true)
+        coordinator?.showWheelCircumferenceView()
     }
 }
