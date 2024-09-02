@@ -58,8 +58,8 @@ class HomeView: RideThisViewController {
         button.setTitleColor(.primaryColor, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: FontCase.smallTitle.rawValue, weight: .regular)
         button.addAction(UIAction { [weak self] _ in
-            let myPageView = MyPageView()
-            self?.navigationController?.pushViewController(myPageView, animated: true)
+//            let myPageView = MyPageView()
+//            self?.navigationController?.pushViewController(myPageView, animated: true)
         }, for: .touchUpInside)
         return button
     }()
