@@ -94,10 +94,12 @@ extension LoginView: ASAuthorizationControllerDelegate {
                             if case .user(let userData) = try await service.fetchUser(at: userId, userType: true) {
                                 if userData == nil {
                                     // MARK: 추가정보 입력 화면으로 이동
-                                    (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootView(viewController: SignUpInfoView(userId: userId, userEmail: userEmail), animated: true)
+                                    if let scene = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate) {
+                                        scene.appCoordinator?.changeRootView(viewController: SignUpInfoView(userId: userId, userEmail: userEmail))
+                                    }
                                 } else {
                                     self.userService.signedUser = userData
-                                    scene.changeRootView(viewController: scene.getTabbarController(), animated: true)
+                                    scene.appCoordinator?.changeTabBarView(change: true)
                                 }
                             }
                         }

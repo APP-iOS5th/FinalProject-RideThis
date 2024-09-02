@@ -196,8 +196,8 @@ class SignUpInfoView: RideThisViewController {
                 
                 userInfoContainer2.addSubview(mandatoryImgView)
                 mandatoryImgView.snp.makeConstraints {
-                    $0.bottom.equalTo(ui.snp.top).offset(5)
-                    $0.right.equalTo(ui.snp.left).offset(3)
+                    $0.bottom.equalTo(ui.snp.top).offset(4)
+                    $0.right.equalTo(ui.snp.left).offset(1)
                 }
             }
         }
@@ -284,8 +284,9 @@ class SignUpInfoView: RideThisViewController {
             userService.combineUser = createdUser
             
             if let scene = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate) {
-                let tabbarCtr = scene.getTabbarController(selectedIndex: 4)
-                scene.changeRootView(viewController: tabbarCtr, animated: true)
+                scene.appCoordinator?.changeTabBarView(change: true)
+//                let tabbarCtr = scene.getTabbarController(selectedIndex: 4)
+//                scene.changeRootView(viewController: tabbarCtr, animated: true)
             }
         }, for: .touchUpInside)
     }

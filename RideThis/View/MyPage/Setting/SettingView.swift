@@ -3,6 +3,8 @@ import SnapKit
 
 class SettingView: RideThisViewController {
     
+    var settingCoordinator: SettingCoordinator?
+    
     private lazy var settingTableView: UITableView = {
         let table = UITableView()
         table.translatesAutoresizingMaskIntoConstraints = false
@@ -71,8 +73,8 @@ extension SettingView: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
-            let accountSettingView = AccountSettingView()
-            self.navigationController?.pushViewController(accountSettingView, animated: true)
+            let accountSettingCoordinator = AccountSettingCoordinator(navigationController: self.navigationController!)
+            accountSettingCoordinator.start()
         }
     }
 }

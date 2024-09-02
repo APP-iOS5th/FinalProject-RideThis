@@ -7,6 +7,7 @@ class SearchUserView: RideThisViewController {
     // MARK: Data Components
     private let viewModel = SearchUserViewModel()
     private var cancellable = Set<AnyCancellable>()
+    var coordinator: SearchUserCoordinator?
     
     // MARK: UI Components
     // MARK: Search Bar

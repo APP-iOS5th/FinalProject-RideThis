@@ -8,13 +8,14 @@ import Combine
 class MyPageView: RideThisViewController {
     
     var coordinator: MyPageCoordinator?
+    lazy var followCoordinator = FollowManageCoordinator(navigationController: self.navigationController!, user: self.service.combineUser)
     
     // MARK: Data Components
     let service = UserService.shared
+    var viewModel: MyPageViewModel
     private let firebaseService = FireBaseService()
     private var cancellable = Set<AnyCancellable>()
     private var followDelegate: UpdateUserDelegate?
-    private lazy var viewModel = MyPageViewModel(firebaseService: firebaseService, periodCase: .oneWeek)
     private var selectedDataType: RecordDataCase = .cadence
     private var selectedPeriod: RecordPeriodCase {
         get {
@@ -31,6 +32,15 @@ class MyPageView: RideThisViewController {
                 return .oneWeek
             }
         }
+    }
+    
+    init(viewModel: MyPageViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: UIComponents
@@ -165,22 +175,77 @@ class MyPageView: RideThisViewController {
         stack.layoutMargins = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
 
         for i in 0..<graphSectionCount {
-            let dotImage = UIImageView(image: UIImage(systemName: "circle.fill"))
-            dotImage.contentMode = .scaleAspectFit
-            dotImage.translatesAutoresizingMaskIntoConstraints = false
-            dotImage.widthAnchor.constraint(equalToConstant: 12).isActive = true
-            dotImage.heightAnchor.constraint(equalToConstant: 12).isActive = true
-
+            let btn = UIButton()
+            btn.translatesAutoresizingMaskIntoConstraints = false
+            btn.setImage(UIImage(systemName: "circle.fill"), for: .normal)
+            btn.widthAnchor.constraint(equalToConstant: 12).isActive = true
+            btn.heightAnchor.constraint(equalToConstant: 12).isActive = true
+            btn.tag = i
+            
             if i == 0 {
-                dotImage.tintColor = .primaryColor
+                btn.tintColor = .primaryColor
             } else {
-                dotImage.tintColor = .lightGray
+                btn.tintColor = .lightGray
             }
             
-            stack.addArrangedSubview(dotImage)
+            btn.addAction(UIAction { [weak self] _ in
+                guard let self = self else { return }
+                
+                self.graphCollectionView.scrollToItem(at: IndexPath(item: i, section: 0), at: .centeredHorizontally, animated: true)
+                DispatchQueue.main.async {
+                    self.reloadGraphCell(indexInt: i)
+                }
+            }, for: .touchUpInside)
+            
+            stack.addArrangedSubview(btn)
         }
         
         return stack
+    }()
+    private lazy var leftButton: UIButton = {
+        let btn = UIButton()
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.setImage(UIImage(systemName: "chevron.left"), for: .normal)
+        btn.tintColor = .primaryColor
+        btn.setTitleColor(.primaryColor, for: .normal)
+        btn.setTitleColor(.lightGray, for: .disabled)
+        btn.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        btn.isEnabled = self.selectedDataType != .cadence
+        btn.addAction(UIAction { [weak self] _ in
+            guard let self = self else { return }
+            let cellWidth = itemSize.width + itemSpacing
+            let offsetX = graphCollectionView.contentOffset.x + graphCollectionView.contentInset.left
+            let index = Int(round(offsetX / cellWidth))
+            
+            self.graphCollectionView.scrollToItem(at: IndexPath(item: index - 1, section: 0), at: .centeredHorizontally, animated: true)
+            DispatchQueue.main.async {
+                self.reloadGraphCell(indexInt: index - 1)
+            }
+        }, for: .touchUpInside)
+        
+        return btn
+    }()
+    private lazy var rightButton: UIButton = {
+        let btn = UIButton()
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.setImage(UIImage(systemName: "chevron.right"), for: .normal)
+        btn.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        btn.tintColor = .primaryColor
+        btn.setTitleColor(.primaryColor, for: .normal)
+        btn.setTitleColor(.lightGray, for: .disabled)
+        btn.addAction(UIAction { [weak self] _ in
+            guard let self = self else { return }
+            let cellWidth = itemSize.width + itemSpacing
+            let offsetX = graphCollectionView.contentOffset.x + graphCollectionView.contentInset.left
+            let index = Int(round(offsetX / cellWidth))
+            
+            self.graphCollectionView.scrollToItem(at: IndexPath(item: index + 1, section: 0), at: .centeredHorizontally, animated: true)
+            DispatchQueue.main.async {
+                self.reloadGraphCell(indexInt: index + 1)
+            }
+        }, for: .touchUpInside)
+        
+        return btn
     }()
     private let selectedPeriodTotalRecordContainer = RideThisContainer(height: 150)
     private let selectedPeriodTitle = RideThisLabel(fontType: .recordInfoTitle, text: "Cadence")
@@ -385,9 +450,8 @@ class MyPageView: RideThisViewController {
         
         self.profileEditButton.addAction(UIAction { [weak self] _ in
             guard let self = self, let user = service.combineUser else { return }
-            let profileEditView = EditProfileInfoView(user: user)
-            profileEditView.updateImageDelegate = self
-            navigationController?.pushViewController(profileEditView, animated: true)
+            let editCoordinator = EditProfileCoordinator(navigationController: self.navigationController!, user: user)
+            editCoordinator.start()
         }, for: .touchUpInside)
     }
     
@@ -459,7 +523,7 @@ class MyPageView: RideThisViewController {
     }
     
     func setRecordByPeriodView() {
-        [self.recordByPeriodLabel, self.recordByPeriodDetailButton, self.recordByPeriodPicker,
+        [self.recordByPeriodLabel, self.recordByPeriodDetailButton, self.recordByPeriodPicker, self.leftButton, self.rightButton,
          self.dataLabel, self.graphCollectionView, self.pagingIndicator, self.selectedPeriodTotalRecordContainer].forEach{ self.contentView.addSubview($0) }
         
         self.recordByPeriodLabel.snp.makeConstraints {
@@ -488,6 +552,16 @@ class MyPageView: RideThisViewController {
             $0.left.equalTo(self.recordByPeriodPicker.snp.left)
             $0.right.equalTo(self.recordByPeriodPicker.snp.right)
             $0.height.equalTo(400)
+        }
+
+        self.leftButton.snp.makeConstraints {
+            $0.centerY.equalTo(graphCollectionView.snp.centerY)
+            $0.right.equalTo(graphCollectionView.snp.left).offset(-5)
+        }
+        
+        self.rightButton.snp.makeConstraints {
+            $0.centerY.equalTo(graphCollectionView.snp.centerY)
+            $0.left.equalTo(graphCollectionView.snp.right).offset(5)
         }
         
         self.pagingIndicator.snp.makeConstraints {
@@ -561,7 +635,7 @@ class MyPageView: RideThisViewController {
                     self.userWeight.text = "\(combineUser.user_weight)"
                     self.userHeight.text = combineUser.tallStr
                 }
-                followDelegate?.updateUser(user: combineUser)
+                followCoordinator.updateUser(user: combineUser)
             }
             .store(in: &cancellable)
         
@@ -627,8 +701,8 @@ class MyPageView: RideThisViewController {
     }
     
     @objc func settingButtonTapAction() {
-        let settingView = SettingView()
-        self.navigationController?.pushViewController(settingView, animated: true)
+        let settingCoordinator = SettingCoordinator(navigationController: self.navigationController!)
+        settingCoordinator.start()
     }
     
     @objc func segmentChanged(_ sender: UISegmentedControl) {
@@ -662,6 +736,21 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
         targetContentOffset.pointee = CGPoint(x: index * cellWidth - scrollView.contentInset.left, y: scrollView.contentInset.top)
         
         let indexInt = Int(index)
+        self.selectedPeriodDataUnit = selectedDataType.unit
+        
+        DispatchQueue.main.async {
+            self.reloadGraphCell(indexInt: indexInt)
+        }
+    }
+    
+    // MARK: 프로필 Container를 선택했을 때 팔로우 관리 페이지로 이동하는 event등록
+    func setEventToProfileContainer() {
+        let profileContainerTapEvent = UITapGestureRecognizer(target: self, action: #selector(toFollowerView))
+        profileContainer.addGestureRecognizer(profileContainerTapEvent)
+    }
+    
+    // MARK: 그래프 cell이동 후 UI업데이트
+    func reloadGraphCell(indexInt: Int) {
         switch indexInt {
         case 0:
             selectedDataType = .cadence
@@ -674,41 +763,32 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
         default:
             break
         }
-        self.selectedPeriodDataUnit = selectedDataType.unit
+        self.dataLabel.text = self.selectedDataType.rawValue
+        self.selectedPeriodTitle.text = self.selectedDataType.rawValue
+        self.leftButton.isEnabled = self.selectedDataType != .cadence
+        self.rightButton.isEnabled = self.selectedDataType != .calories
         
-        DispatchQueue.main.async {
-            self.dataLabel.text = self.selectedDataType.rawValue
-            self.selectedPeriodTitle.text = self.selectedDataType.rawValue
-            for (index, subView) in self.pagingIndicator.subviews.enumerated() {
-                guard let page = subView as? UIImageView else { continue }
-                if index == indexInt {
-                    page.tintColor = .primaryColor
-                } else {
-                    page.tintColor = .lightGray
-                }
-            }
-            if let graphCell = self.graphCollectionView.cellForItem(at: IndexPath(row: indexInt, section: 0)) as? GraphCollectionViewCell {
-                graphCell.setGraph(type: self.selectedDataType, 
-                                   records: self.viewModel.getRecordsBy(period: self.selectedPeriod, dataCase: self.selectedDataType),
-                                   period: self.selectedPeriod)
-                graphCell.lineChartDataSet?.label = self.selectedDataType.rawValue
-                graphCell.lineChartView.notifyDataSetChanged()
+        for (index, subView) in self.pagingIndicator.subviews.enumerated() {
+            guard let page = subView as? UIButton else { continue }
+            if index == indexInt {
+                page.tintColor = .primaryColor
+            } else {
+                page.tintColor = .lightGray
             }
         }
-    }
-    
-    // MARK: 프로필 Container를 선택했을 때 팔로우 관리 페이지로 이동하는 event등록
-    func setEventToProfileContainer() {
-        let profileContainerTapEvent = UITapGestureRecognizer(target: self, action: #selector(toFollowerView))
-        profileContainer.addGestureRecognizer(profileContainerTapEvent)
+        if let graphCell = self.graphCollectionView.cellForItem(at: IndexPath(row: indexInt, section: 0)) as? GraphCollectionViewCell {
+            graphCell.setGraph(type: self.selectedDataType,
+                               records: self.viewModel.getRecordsBy(period: self.selectedPeriod, dataCase: self.selectedDataType),
+                               period: self.selectedPeriod)
+            graphCell.lineChartDataSet?.label = self.selectedDataType.rawValue
+            graphCell.lineChartView.notifyDataSetChanged()
+        }
     }
     
     // MARK: 프로필 Container를 선택했을 때 팔로우 관리 페이지로 이동
     @objc func toFollowerView() {
-        if service.combineUser != nil {
-            let followView = FollowManageView(user: service.combineUser!)
-            followDelegate = followView
-            self.navigationController?.pushViewController(followView, animated: true)
+        if let _ = service.combineUser {
+            followCoordinator.start()
         } else {
             self.showAlert(alertTitle: "알림", msg: "로그인이 필요한 기능입니다. 로그인 화면으로 이동할까요?", confirm: "예") {
                 self.navigationController?.pushViewController(LoginView(), animated: true)
