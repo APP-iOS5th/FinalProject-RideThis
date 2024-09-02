@@ -1,16 +1,8 @@
-//
-//  RecordContainerView.swift
-//  RideThis
-//
-//  Created by 황승혜 on 8/13/24.
-//  컴포넌트 분리
-
 import UIKit
 import SnapKit
 
 class RecordContainerView: UIView {
     // 5개의 RecordInfoView 생성
-    // TODO: - 시작>측정 시 바뀌게
     let timerView = RecordInfoView(title: "Timer", recordText: "00:00")
     let cadenceView = RecordInfoView(title: "Cadence", recordText: "0 RPM")
     let speedView = RecordInfoView(title: "Speed", recordText: "0 km/h")

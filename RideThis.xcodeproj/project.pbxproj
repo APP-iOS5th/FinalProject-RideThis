@@ -112,11 +112,17 @@
 		EB07B0BB2C6C79F20067BF0F /* RecordContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0B82C6C79F20067BF0F /* RecordContainerView.swift */; };
 		EB07B0BC2C6C79F20067BF0F /* RecordInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0B92C6C79F20067BF0F /* RecordInfoView.swift */; };
 		EB07B0BD2C6C79F20067BF0F /* RecordSumUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0BA2C6C79F20067BF0F /* RecordSumUpView.swift */; };
-		EB3DFA3E2C77218A00FA366C /* RecordDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3DFA3D2C77218A00FA366C /* RecordDetailViewController.swift */; };
+		EB3DFA3E2C77218A00FA366C /* RecordDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3DFA3D2C77218A00FA366C /* RecordDetailView.swift */; };
+		EB6B40852C81847B000DC914 /* RecordSumUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6B40842C81847B000DC914 /* RecordSumUpViewModel.swift */; };
+		EB6B40872C81B125000DC914 /* RecordSumUpCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6B40862C81B125000DC914 /* RecordSumUpCoordinator.swift */; };
+		EB6B40892C81B15E000DC914 /* RecordListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6B40882C81B15E000DC914 /* RecordListCoordinator.swift */; };
+		EB6B408B2C81B6CA000DC914 /* RecordDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6B408A2C81B6CA000DC914 /* RecordDetailCoordinator.swift */; };
 		EBADE05D2C7F16CA0045E03B /* MonthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBADE05C2C7F16CA0045E03B /* MonthView.swift */; };
 		EBADE05F2C7F17010045E03B /* RecordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBADE05E2C7F17010045E03B /* RecordCell.swift */; };
-		EBB1F4182C76CA75007B0E3C /* RecordListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB1F4172C76CA75007B0E3C /* RecordListViewController.swift */; };
+		EBB1F4182C76CA75007B0E3C /* RecordListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB1F4172C76CA75007B0E3C /* RecordListView.swift */; };
 		EBDF95542C7C65940067EA93 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EBDF95532C7C65940067EA93 /* GoogleService-Info.plist */; };
+		EBF2E3F02C84E735003FE16C /* RecordListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF2E3EF2C84E735003FE16C /* RecordListViewModel.swift */; };
+		EBF2E3F22C84E7AD003FE16C /* RecordDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF2E3F12C84E7AD003FE16C /* RecordDetailViewModel.swift */; };
 		EBFE4DAB2C757A7D00A36FCA /* ResultRankingTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFE4DAA2C757A7D00A36FCA /* ResultRankingTVCell.swift */; };
 		EBFE4DAE2C757AA800A36FCA /* ResultRankingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFE4DAC2C757AA800A36FCA /* ResultRankingViewController.swift */; };
 		EBFE4DB12C757AE800A36FCA /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFE4DAF2C757AE800A36FCA /* UserService.swift */; };
@@ -240,11 +246,17 @@
 		EB07B0B82C6C79F20067BF0F /* RecordContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordContainerView.swift; sourceTree = "<group>"; };
 		EB07B0B92C6C79F20067BF0F /* RecordInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordInfoView.swift; sourceTree = "<group>"; };
 		EB07B0BA2C6C79F20067BF0F /* RecordSumUpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordSumUpView.swift; sourceTree = "<group>"; };
-		EB3DFA3D2C77218A00FA366C /* RecordDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetailViewController.swift; sourceTree = "<group>"; };
+		EB3DFA3D2C77218A00FA366C /* RecordDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetailView.swift; sourceTree = "<group>"; };
+		EB6B40842C81847B000DC914 /* RecordSumUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordSumUpViewModel.swift; sourceTree = "<group>"; };
+		EB6B40862C81B125000DC914 /* RecordSumUpCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordSumUpCoordinator.swift; sourceTree = "<group>"; };
+		EB6B40882C81B15E000DC914 /* RecordListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListCoordinator.swift; sourceTree = "<group>"; };
+		EB6B408A2C81B6CA000DC914 /* RecordDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetailCoordinator.swift; sourceTree = "<group>"; };
 		EBADE05C2C7F16CA0045E03B /* MonthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthView.swift; sourceTree = "<group>"; };
 		EBADE05E2C7F17010045E03B /* RecordCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordCell.swift; sourceTree = "<group>"; };
-		EBB1F4172C76CA75007B0E3C /* RecordListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListViewController.swift; sourceTree = "<group>"; };
+		EBB1F4172C76CA75007B0E3C /* RecordListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListView.swift; sourceTree = "<group>"; };
 		EBDF95532C7C65940067EA93 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		EBF2E3EF2C84E735003FE16C /* RecordListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListViewModel.swift; sourceTree = "<group>"; };
+		EBF2E3F12C84E7AD003FE16C /* RecordDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetailViewModel.swift; sourceTree = "<group>"; };
 		EBFE4DAA2C757A7D00A36FCA /* ResultRankingTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultRankingTVCell.swift; sourceTree = "<group>"; };
 		EBFE4DAC2C757AA800A36FCA /* ResultRankingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultRankingViewController.swift; sourceTree = "<group>"; };
 		EBFE4DAF2C757AE800A36FCA /* UserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
@@ -609,6 +621,9 @@
 			isa = PBXGroup;
 			children = (
 				CD4214552C64994F00F7C3AE /* RecordViewModel.swift */,
+				EB6B40842C81847B000DC914 /* RecordSumUpViewModel.swift */,
+				EBF2E3EF2C84E735003FE16C /* RecordListViewModel.swift */,
+				EBF2E3F12C84E7AD003FE16C /* RecordDetailViewModel.swift */,
 			);
 			path = Record;
 			sourceTree = "<group>";
@@ -680,15 +695,10 @@
 		CD4213EB2C64988B00F7C3AE /* Record */ = {
 			isa = PBXGroup;
 			children = (
-				0493F5CD2C7DBDB300290A4C /* Coordinator */,
-				CD4213EA2C64988B00F7C3AE /* RecordView.swift */,
-				EB07B0B82C6C79F20067BF0F /* RecordContainerView.swift */,
-				EB07B0B92C6C79F20067BF0F /* RecordInfoView.swift */,
-				EB07B0BA2C6C79F20067BF0F /* RecordSumUpView.swift */,
-				EBB1F4172C76CA75007B0E3C /* RecordListViewController.swift */,
-				EB3DFA3D2C77218A00FA366C /* RecordDetailViewController.swift */,
-				EBADE05C2C7F16CA0045E03B /* MonthView.swift */,
-				EBADE05E2C7F17010045E03B /* RecordCell.swift */,
+				EB6B408C2C81B704000DC914 /* Record */,
+				EB6B408D2C81B748000DC914 /* RecordSummary */,
+				EB6B408E2C81B772000DC914 /* RecordList */,
+				EB6B408F2C81B783000DC914 /* RecordDetail */,
 			);
 			path = Record;
 			sourceTree = "<group>";
@@ -892,6 +902,70 @@
 			path = MyPage;
 			sourceTree = "<group>";
 		};
+		EB6B408C2C81B704000DC914 /* Record */ = {
+			isa = PBXGroup;
+			children = (
+				0493F5CD2C7DBDB300290A4C /* Coordinator */,
+				CD4213EA2C64988B00F7C3AE /* RecordView.swift */,
+				EB07B0B82C6C79F20067BF0F /* RecordContainerView.swift */,
+				EB07B0B92C6C79F20067BF0F /* RecordInfoView.swift */,
+			);
+			path = Record;
+			sourceTree = "<group>";
+		};
+		EB6B408D2C81B748000DC914 /* RecordSummary */ = {
+			isa = PBXGroup;
+			children = (
+				EB6B40922C81B7D3000DC914 /* Coordinator */,
+				EB07B0BA2C6C79F20067BF0F /* RecordSumUpView.swift */,
+			);
+			path = RecordSummary;
+			sourceTree = "<group>";
+		};
+		EB6B408E2C81B772000DC914 /* RecordList */ = {
+			isa = PBXGroup;
+			children = (
+				EB6B40912C81B7BA000DC914 /* Coordinator */,
+				EBB1F4172C76CA75007B0E3C /* RecordListView.swift */,
+			);
+			path = RecordList;
+			sourceTree = "<group>";
+		};
+		EB6B408F2C81B783000DC914 /* RecordDetail */ = {
+			isa = PBXGroup;
+			children = (
+				EB6B40902C81B79D000DC914 /* Coordinator */,
+				EB3DFA3D2C77218A00FA366C /* RecordDetailView.swift */,
+				EBADE05C2C7F16CA0045E03B /* MonthView.swift */,
+				EBADE05E2C7F17010045E03B /* RecordCell.swift */,
+			);
+			path = RecordDetail;
+			sourceTree = "<group>";
+		};
+		EB6B40902C81B79D000DC914 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				EB6B408A2C81B6CA000DC914 /* RecordDetailCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		EB6B40912C81B7BA000DC914 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				EB6B40882C81B15E000DC914 /* RecordListCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		EB6B40922C81B7D3000DC914 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				EB6B40862C81B125000DC914 /* RecordSumUpCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
 		EBFE4DAD2C757AA800A36FCA /* ResultRanking */ = {
 			isa = PBXGroup;
 			children = (
@@ -1010,6 +1084,7 @@
 				CD4214652C649D0100F7C3AE /* FirebaseService.swift in Sources */,
 				CD4214742C64A35400F7C3AE /* UIImage+Extension.swift in Sources */,
 				CDB71BA02C78A72400DC5D57 /* MyPageProtocol.swift in Sources */,
+				EBF2E3F02C84E735003FE16C /* RecordListViewModel.swift in Sources */,
 				041A672B2C6C400E000BA4C1 /* DistanceCase+Extension.swift in Sources */,
 				CDE28F2A2C84B38C004FE443 /* FollowManageCoordinator.swift in Sources */,
 				CD6662142C678FFD005E2887 /* CompetitionModel.swift in Sources */,
@@ -1019,10 +1094,11 @@
 				78A6BF882C855C0D0076A9A9 /* DeviceDetailCoordinator.swift in Sources */,
 				0493F5C52C7DACCC00290A4C /* Coordinator.swift in Sources */,
 				CD4214522C64990D00F7C3AE /* UILabel+Extension.swift in Sources */,
+				EBF2E3F22C84E7AD003FE16C /* RecordDetailViewModel.swift in Sources */,
 				78A6BF8E2C855F4D0076A9A9 /* DeviceCoordinator.swift in Sources */,
 				EBFE4DAB2C757A7D00A36FCA /* ResultRankingTVCell.swift in Sources */,
 				CD0EC4CD2C71FC4800E70452 /* SearchUserView.swift in Sources */,
-				EB3DFA3E2C77218A00FA366C /* RecordDetailViewController.swift in Sources */,
+				EB3DFA3E2C77218A00FA366C /* RecordDetailView.swift in Sources */,
 				CD42145C2C64998200F7C3AE /* DeviceViewModel.swift in Sources */,
 				CDE28F2C2C84B995004FE443 /* SearchUserCoordinator.swift in Sources */,
 				EBFE4DB22C757AE800A36FCA /* KeyChain.swift in Sources */,
@@ -1030,6 +1106,7 @@
 				CD66F5D42C6C887E00CDBB0B /* AccountSettingView.swift in Sources */,
 				CD4214102C64988C00F7C3AE /* CompetitionView.swift in Sources */,
 				CD76A8C92C6E53FF003490B3 /* SignUpInfoView.swift in Sources */,
+				EB6B40852C81847B000DC914 /* RecordSumUpViewModel.swift in Sources */,
 				CD4213C32C64982000F7C3AE /* AppDelegate.swift in Sources */,
 				CD4214762C64A63D00F7C3AE /* UIViewController+Extension.swift in Sources */,
 				043E0C842C6F378D00F25AF7 /* Double+Extension.swift in Sources */,
@@ -1061,6 +1138,8 @@
 				CD42145A2C64997100F7C3AE /* HomeViewModel.swift in Sources */,
 				CD4214142C64988C00F7C3AE /* RecordView.swift in Sources */,
 				CD4214122C64988C00F7C3AE /* HomeView.swift in Sources */,
+				EB6B40892C81B15E000DC914 /* RecordListCoordinator.swift in Sources */,
+				0493F5D22C7DBE1A00290A4C /* DeviceCoordinator.swift in Sources */,
 				CDE36A082C7DA12900B743B9 /* RecordProtocol.swift in Sources */,
 				04E3C0CF2C6B32B8006B844F /* CompetitionCoordinator.swift in Sources */,
 				0493F5CC2C7DBC0600290A4C /* HomeCoordinator.swift in Sources */,
@@ -1082,6 +1161,7 @@
 				04E3C0D52C6B3818006B844F /* DistanceSelectionCoordinator.swift in Sources */,
 				CD66F5CE2C6C75AA00CDBB0B /* EditProfileInfoViewModel.swift in Sources */,
 				CD6662162C679007005E2887 /* RecordModel.swift in Sources */,
+				EB6B408B2C81B6CA000DC914 /* RecordDetailCoordinator.swift in Sources */,
 				CDC0C1DE2C664E7400349DC4 /* UIView+Extension.swift in Sources */,
 				EB07B0BD2C6C79F20067BF0F /* RecordSumUpView.swift in Sources */,
 				04E3C0C82C6AEE62006B844F /* CompetitionTVCell.swift in Sources */,
@@ -1092,7 +1172,8 @@
 				EBFE4DB12C757AE800A36FCA /* UserService.swift in Sources */,
 				EB07B0BB2C6C79F20067BF0F /* RecordContainerView.swift in Sources */,
 				CDE25C6E2C6913B8008E2A80 /* EditProfileInfoView.swift in Sources */,
-				EBB1F4182C76CA75007B0E3C /* RecordListViewController.swift in Sources */,
+				EB6B40872C81B125000DC914 /* RecordSumUpCoordinator.swift in Sources */,
+				EBB1F4182C76CA75007B0E3C /* RecordListView.swift in Sources */,
 				78254FD82C7C1CF40069B10A /* WheelCircumferenceSelectionCell.swift in Sources */,
 				CDC0C1E02C664FFE00349DC4 /* UIButton+Extension.swift in Sources */,
 			);
