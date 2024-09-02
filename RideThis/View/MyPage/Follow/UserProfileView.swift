@@ -249,6 +249,9 @@ class UserProfileView: RideThisViewController {
         if let user = selectedUser {
             self.title = "\(user.user_nickname)님 프로필"
         }
+        self.sheetPresentationController?.prefersGrabberVisible = true
+        let cancelButton = UIBarButtonItem(title: "취소", style: .done, target: self, action: #selector(dismissUserView))
+        self.navigationController?.navigationItem.leftBarButtonItem = cancelButton
     }
     
     func setScrollView() {
@@ -522,8 +525,11 @@ class UserProfileView: RideThisViewController {
     }
     
     @objc func segmentChanged(_ sender: UISegmentedControl) {
-        // MARK: TODO - picker의 선택된 기간에 따라 그래프 변경 로직 추가
         graphCollectionView.reloadData()
+    }
+    
+    @objc func dismissUserView() {
+        self.dismiss(animated: true)
     }
 }
 

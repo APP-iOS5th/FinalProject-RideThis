@@ -108,6 +108,7 @@
 		CDE36A0C2C7DA13800B743B9 /* HomeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE36A0B2C7DA13800B743B9 /* HomeProtocol.swift */; };
 		CDF7FCDF2C85806900E11D52 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF7FCDE2C85806900E11D52 /* UserProfileView.swift */; };
 		CDF7FCE12C85874A00E11D52 /* UserProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF7FCE02C85874A00E11D52 /* UserProfileViewModel.swift */; };
+		CDF7FCEA2C8601BA00E11D52 /* LoginCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF7FCE92C8601BA00E11D52 /* LoginCoordinator.swift */; };
 		EB07B0BB2C6C79F20067BF0F /* RecordContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0B82C6C79F20067BF0F /* RecordContainerView.swift */; };
 		EB07B0BC2C6C79F20067BF0F /* RecordInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0B92C6C79F20067BF0F /* RecordInfoView.swift */; };
 		EB07B0BD2C6C79F20067BF0F /* RecordSumUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0BA2C6C79F20067BF0F /* RecordSumUpView.swift */; };
@@ -241,6 +242,7 @@
 		CDE36A0B2C7DA13800B743B9 /* HomeProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeProtocol.swift; sourceTree = "<group>"; };
 		CDF7FCDE2C85806900E11D52 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		CDF7FCE02C85874A00E11D52 /* UserProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewModel.swift; sourceTree = "<group>"; };
+		CDF7FCE92C8601BA00E11D52 /* LoginCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCoordinator.swift; sourceTree = "<group>"; };
 		EB07B0B82C6C79F20067BF0F /* RecordContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordContainerView.swift; sourceTree = "<group>"; };
 		EB07B0B92C6C79F20067BF0F /* RecordInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordInfoView.swift; sourceTree = "<group>"; };
 		EB07B0BA2C6C79F20067BF0F /* RecordSumUpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordSumUpView.swift; sourceTree = "<group>"; };
@@ -626,8 +628,7 @@
 				CD4215792C805ADB0033A511 /* EditProfile */,
 				CDE28F1F2C849641004FE443 /* Setting */,
 				CDE28F272C84B372004FE443 /* Follow */,
-				CD76A8C82C6E53FF003490B3 /* SignUpInfoView.swift */,
-				CD0EC4D22C7227AB00E70452 /* LoginView.swift */,
+				CDF7FCE72C8601A100E11D52 /* Login */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -843,6 +844,24 @@
 			path = MyPage;
 			sourceTree = "<group>";
 		};
+		CDF7FCE72C8601A100E11D52 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				CDF7FCE82C8601B100E11D52 /* LoginCoordinator */,
+				CD76A8C82C6E53FF003490B3 /* SignUpInfoView.swift */,
+				CD0EC4D22C7227AB00E70452 /* LoginView.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		CDF7FCE82C8601B100E11D52 /* LoginCoordinator */ = {
+			isa = PBXGroup;
+			children = (
+				CDF7FCE92C8601BA00E11D52 /* LoginCoordinator.swift */,
+			);
+			path = LoginCoordinator;
+			sourceTree = "<group>";
+		};
 		EB6B408C2C81B704000DC914 /* Record */ = {
 			isa = PBXGroup;
 			children = (
@@ -1010,6 +1029,7 @@
 				0493F5C82C7DB39200290A4C /* AppCoordinator.swift in Sources */,
 				78DBD01D2C7882B700B43A62 /* DeviceTableViewCell.swift in Sources */,
 				04E3C0D32C6B37F7006B844F /* DistancSelectionViewController.swift in Sources */,
+				CDF7FCEA2C8601BA00E11D52 /* LoginCoordinator.swift in Sources */,
 				CD42145E2C64998800F7C3AE /* CompetitionViewModel.swift in Sources */,
 				CD70006A2C6AF99F0071D4D2 /* GraphCollectionViewCell.swift in Sources */,
 				EBFE4DB62C757B4300A36FCA /* ResultRankingViewModel.swift in Sources */,

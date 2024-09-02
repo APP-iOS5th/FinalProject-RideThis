@@ -12,6 +12,30 @@ class FireBaseService {
     
     private let db = Firestore.firestore()
     
+    func createUser(userInfo: [String: Any], createComplete: @escaping (User) -> Void) {
+        let usersCollection = db.collection("USERS")
+        
+        usersCollection.document(userInfo["user_id"] as! String).setData(userInfo) { error in
+            if let error = error {
+                print("문서 생성 실패: \(error.localizedDescription)")
+            } else {
+                print("문서 생성 및 필드 추가 성공")
+                
+                let createdUser = User(user_id: userInfo["user_id"] as! String,
+                                       user_image: userInfo["user_image"] as? String,
+                                       user_email: userInfo["user_email"] as! String,
+                                       user_nickname: userInfo["user_nickname"] as! String,
+                                       user_weight: userInfo["user_weight"] as! Int,
+                                       user_tall: userInfo["user_tall"] as! Int,
+                                       user_following: userInfo["user_following"] as! [String],
+                                       user_follower: userInfo["user_follower"] as! [String],
+                                       user_account_public: false)
+                
+                createComplete(createdUser)
+            }
+        }
+    }
+    
     // MARK: UserId로 파이어베이스에 유저 확인
     func fetchUser(at userId: String, userType: Bool) async throws -> ReturnUserType {
         let querySnapshot = try await db.collection("USERS")

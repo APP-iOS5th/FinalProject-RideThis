@@ -8,7 +8,6 @@ class SignUpInfoView: RideThisViewController {
     // MARK: Data Components
     let userId: String
     let userEmail: String?
-    private let userService = UserService.shared
     private let viewModel = SignUpInfoViewModel()
     private lazy var cancellable = Set<AnyCancellable>()
     
@@ -246,12 +245,10 @@ class SignUpInfoView: RideThisViewController {
         nextButton.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
             
-            let db = Firestore.firestore()
-            let usersCollection = db.collection("USERS")
             let enteredEmail: String = userEmailTextField.text ?? ""
             let enteredNickname: String = userNickName.text ?? ""
             
-            let newUser: [String: Any] = [
+            let newUserInfo: [String: Any] = [
                 "user_account_public": false,
                 "user_email": enteredEmail,
                 "user_follower": [],
@@ -263,26 +260,7 @@ class SignUpInfoView: RideThisViewController {
                 "user_weight": Int(userWeight.text ?? "")!
             ]
             
-            usersCollection.document(userId).setData(newUser) { error in
-                if let error = error {
-                    print("문서 생성 실패: \(error.localizedDescription)")
-                } else {
-                    print("문서 생성 및 필드 추가 성공")
-                }
-            }
-            // MARK: TODO - 바로 로그인 시키기
-            let createdUser = User(user_id: userId,
-                                   user_image: "",
-                                   user_email: enteredEmail,
-                                   user_nickname: enteredNickname,
-                                   user_weight: Int(userWeight.text!)!,
-                                   user_tall: userHeight.text!.isEmpty ? -1 : Int(userHeight.text!)!,
-                                   user_following: [],
-                                   user_follower: [],
-                                   user_account_public: false)
-            
-            userService.combineUser = createdUser
-            
+            self.viewModel.createUser(userInfo: newUserInfo)
             if let scene = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate) {
                 scene.appCoordinator?.changeTabBarView(change: true)
             }

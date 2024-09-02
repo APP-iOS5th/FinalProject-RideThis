@@ -3,6 +3,7 @@ import Combine
 
 class SignUpInfoViewModel {
     private let firebaseService = FireBaseService()
+    private let userService = UserService.shared
     private var cancellable = Set<AnyCancellable>()
     
     @Published var emailText: String = ""
@@ -47,5 +48,12 @@ class SignUpInfoViewModel {
         Publishers.CombineLatest4($emailTextIsFilled, $nickNameTextIsFilled, $weightTextIsFilled, $isExistNickName)
             .map { $0 && $1 && $2 && !$3}
             .assign(to: &$allFieldFilled)
+    }
+    
+    func createUser(userInfo: [String: Any]) {
+        firebaseService.createUser(userInfo: userInfo) { [weak self] user in
+            guard let self = self else { return }
+            self.userService.combineUser = user
+        }
     }
 }

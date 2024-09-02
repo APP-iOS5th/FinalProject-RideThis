@@ -301,7 +301,9 @@ class MyPageView: RideThisViewController {
         
         loginButton.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
-            self.navigationController?.pushViewController(LoginView(), animated: true)
+            
+            let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!)
+            loginCoordinator.start()
         }, for: .touchUpInside)
     }
     
@@ -640,6 +642,7 @@ class MyPageView: RideThisViewController {
                 var totalSeconds: Int = 0
                 var totalDistance: Double = 0
 
+                // MARK: TODO - 모든 기록에서 계산을 하는게 아닌 firebase에 총 합산 데이터 관리하는 컬렉션으로 관리하도록 변경
                 for record in records {
                     totalDistance += record.record_distance
                     if let endTime = record.record_end_time, let startTime = record.record_start_time {
@@ -688,7 +691,6 @@ class MyPageView: RideThisViewController {
                 self.selectedPeriodData.text = "\(avg)\(self.selectedPeriodDataUnit)"
             }
             .store(in: &cancellable)
-        
     }
     
     @objc func settingButtonTapAction() {
@@ -697,7 +699,6 @@ class MyPageView: RideThisViewController {
     }
     
     @objc func segmentChanged(_ sender: UISegmentedControl) {
-        // MARK: TODO - picker의 선택된 기간에 따라 그래프 변경 로직 추가
         graphCollectionView.reloadData()
     }
 }

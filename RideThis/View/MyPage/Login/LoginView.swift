@@ -10,6 +10,7 @@ class LoginView: RideThisViewController {
     // MARK: Data Components
     let userService = UserService.shared
     let viewModel = LoginViewModel()
+    var loginCoordinator: LoginCoordinator?
     fileprivate var currentNonce: String?
     
     // MARK: UI Components
