@@ -1,10 +1,3 @@
-//
-//  ResultRankingCoordinator.swift
-//  RideThis
-//
-//  Created by SeongKook on 8/28/24.
-//
-
 import UIKit
 
 class ResultRankingCoordinator: Coordinator {

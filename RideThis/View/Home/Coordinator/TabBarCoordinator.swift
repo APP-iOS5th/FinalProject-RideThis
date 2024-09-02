@@ -1,10 +1,3 @@
-//
-//  TabBarCoordinator.swift
-//  RideThis
-//
-//  Created by SeongKook on 8/27/24.
-//
-
 import UIKit
 
 class TabBarCoordinator: Coordinator {
