@@ -2,7 +2,7 @@ import UIKit
 import SnapKit
 import Combine
 
-class RecordListViewController: RideThisViewController, UIScrollViewDelegate {
+class RecordListView: RideThisViewController, UIScrollViewDelegate {
     weak var coordinator: RecordListCoordinator?
     
     private let viewModel = RecordListViewModel()

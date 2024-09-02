@@ -49,7 +49,7 @@ class RecordView: RideThisViewController {
             // 뷰 모델에서 기록 종료 트리거 처리
             viewModel.delegate = self
         }
-           
+        
         // 기록 뷰 추가
         self.view.addSubview(timerRecord)
         self.view.addSubview(cadenceRecord)
@@ -291,8 +291,22 @@ class RecordView: RideThisViewController {
     }
     
     @objc private func recordListButtonTapped() {
-        coordinator?.showRecordListView()
+        if viewModel?.isUserLoggedIn == true {
+            coordinator?.showRecordListView()
+        } else {
+            showLoginAlert()
+        }
         print("기록 목록 출력")
+    }
+    
+    private func showLoginAlert() {
+        showAlert(
+            alertTitle: "로그인 필요",
+            msg: "기록 목록을 보려면 로그인이 필요합니다. 로그인 하시겠습니까?",
+            confirm: "로그인"
+        ) {
+            self.coordinator?.showLoginView()
+        }
     }
     
     // MARK: - 탭바 활성화

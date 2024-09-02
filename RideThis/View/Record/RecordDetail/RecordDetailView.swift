@@ -1,7 +1,7 @@
 import UIKit
 import SnapKit
 
-class RecordDetailViewController: RideThisViewController {
+class RecordDetailView: RideThisViewController {
     weak var coordinator: RecordDetailCoordinator?
     var viewModel: RecordDetailViewModel!
     

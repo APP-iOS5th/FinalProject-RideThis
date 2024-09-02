@@ -37,6 +37,11 @@ class RecordCoordinator: Coordinator {
         listCoordinator.parentCoordinator = self
         listCoordinator.start()
     }
+    
+    func showLoginView() {
+        let loginVC = LoginView()
+        self.navigationController.pushViewController(loginVC, animated: true)
+    }
 
     func showDeviceConnectionView() {
         tabBarController.selectedIndex = 3

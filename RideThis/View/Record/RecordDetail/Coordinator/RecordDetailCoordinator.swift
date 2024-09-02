@@ -15,7 +15,7 @@ class RecordDetailCoordinator: Coordinator {
 
     func start(with record: RecordModel) {
         let viewModel = RecordDetailViewModel(record: record)
-        let detailVC = RecordDetailViewController()
+        let detailVC = RecordDetailView()
         detailVC.coordinator = self
         detailVC.viewModel = viewModel
         navigationController.pushViewController(detailVC, animated: true)

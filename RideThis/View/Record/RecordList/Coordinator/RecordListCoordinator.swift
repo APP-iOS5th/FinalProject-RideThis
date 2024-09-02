@@ -10,7 +10,7 @@ class RecordListCoordinator: Coordinator {
     }
 
     func start() {
-        let listVC = RecordListViewController()
+        let listVC = RecordListView()
         listVC.coordinator = self
         navigationController.pushViewController(listVC, animated: true)
     }

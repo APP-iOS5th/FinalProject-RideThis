@@ -11,7 +11,9 @@ class RecordViewModel: BluetoothManagerDelegate {
     var bluetoothManager: BluetoothManager!
     var deviceInfo: RecordDeviceModel = RecordDeviceModel(device_firmware_version: "test123", device_name: "test", device_registration_status: false, device_serial_number: "13", device_wheel_circumference: 123)
     @Published var isBluetoothConnected: Bool = true
-    
+    var isUserLoggedIn: Bool {
+        return UserService.shared.loginStatus == .appleLogin
+    }
     func initializeBluetoothManager() {
         fetchDeviceData()
     }
