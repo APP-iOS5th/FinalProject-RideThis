@@ -121,7 +121,6 @@ class EditProfileInfoView: RideThisViewController {
     
     func setNavigationComponents() {
         self.title = "프로필 편집"
-        // MARK: TODO - 필수 입력항목이 입력되지 않으면 비활성화
         let saveButton = UIBarButtonItem(title: "저장", style: .plain, target: self, action: #selector(saveProfileInfo))
         self.navigationItem.rightBarButtonItem = saveButton
     }
@@ -252,6 +251,7 @@ class EditProfileInfoView: RideThisViewController {
         self.firebaseService.updateUserInfo(updated: self.user, update: true)
         if let img = selectedUserImage {
             updateImageDelegate?.imageUpdate(image: img)
+            // MARK: TODO - 만약 저장하던 중 에러가 발생했을 때 처리
             firebaseService.saveImage(image: img, userId: user.user_id) { imgUrl in
                 self.user.user_image = imgUrl.absoluteString
                 self.firebaseService.updateUserInfo(updated: self.user, update: false)

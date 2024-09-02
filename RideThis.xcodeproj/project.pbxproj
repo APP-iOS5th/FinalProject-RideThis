@@ -81,7 +81,6 @@
 		CD66621A2C679010005E2887 /* MyPageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6662192C679010005E2887 /* MyPageModel.swift */; };
 		CD66F5CE2C6C75AA00CDBB0B /* EditProfileInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD66F5CD2C6C75AA00CDBB0B /* EditProfileInfoViewModel.swift */; };
 		CD66F5D02C6C837E00CDBB0B /* SettingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD66F5CF2C6C837E00CDBB0B /* SettingTableViewCell.swift */; };
-		CD66F5D22C6C86EA00CDBB0B /* SettingTableToggleViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD66F5D12C6C86EA00CDBB0B /* SettingTableToggleViewCell.swift */; };
 		CD66F5D42C6C887E00CDBB0B /* AccountSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD66F5D32C6C887E00CDBB0B /* AccountSettingView.swift */; };
 		CD7000632C6AF6D90071D4D2 /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = CD7000622C6AF6D90071D4D2 /* DGCharts */; };
 		CD70006A2C6AF99F0071D4D2 /* GraphCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7000692C6AF99F0071D4D2 /* GraphCollectionViewCell.swift */; };
@@ -218,7 +217,6 @@
 		CD6662192C679010005E2887 /* MyPageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageModel.swift; sourceTree = "<group>"; };
 		CD66F5CD2C6C75AA00CDBB0B /* EditProfileInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileInfoViewModel.swift; sourceTree = "<group>"; };
 		CD66F5CF2C6C837E00CDBB0B /* SettingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingTableViewCell.swift; sourceTree = "<group>"; };
-		CD66F5D12C6C86EA00CDBB0B /* SettingTableToggleViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingTableToggleViewCell.swift; sourceTree = "<group>"; };
 		CD66F5D32C6C887E00CDBB0B /* AccountSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSettingView.swift; sourceTree = "<group>"; };
 		CD7000692C6AF99F0071D4D2 /* GraphCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphCollectionViewCell.swift; sourceTree = "<group>"; };
 		CD76A8C82C6E53FF003490B3 /* SignUpInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpInfoView.swift; sourceTree = "<group>"; };
@@ -744,7 +742,6 @@
 			children = (
 				CD7000692C6AF99F0071D4D2 /* GraphCollectionViewCell.swift */,
 				CD66F5CF2C6C837E00CDBB0B /* SettingTableViewCell.swift */,
-				CD66F5D12C6C86EA00CDBB0B /* SettingTableToggleViewCell.swift */,
 				CD0EC4CA2C71F10500E70452 /* FollowTableViewCell.swift */,
 			);
 			path = Cell;
@@ -1083,7 +1080,6 @@
 				CD4214692C649F3600F7C3AE /* UIFont+Extension.swift in Sources */,
 				04E3C0D72C6B8C30006B844F /* DistanceSelectionViewModel.swift in Sources */,
 				0493F5E32C7E256B00290A4C /* ResultRankingCoordinator.swift in Sources */,
-				CD66F5D22C6C86EA00CDBB0B /* SettingTableToggleViewCell.swift in Sources */,
 				04DEE5012C7C1F0F00338A61 /* RecordDeviceModel.swift in Sources */,
 				0493F5DD2C7E1A2C00290A4C /* StartCompetetionCoordinator.swift in Sources */,
 				CD4214112C64988C00F7C3AE /* DeviceView.swift in Sources */,
