@@ -6,11 +6,13 @@ class FollowManageView: RideThisViewController {
     
     // MARK: Data Components
     var user: User
-    private lazy var followViewModel = FollowManageViewModel()
+    let followViewModel: FollowManageViewModel
+    var followCoordinator: FollowManageCoordinator?
     private var cancellable = Set<AnyCancellable>()
     
-    init(user: User) {
+    init(user: User, followViewModel: FollowManageViewModel) {
         self.user = user
+        self.followViewModel = followViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -165,6 +167,12 @@ extension FollowManageView: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // MARK: TODO - 선택한 유저의 프로필 보여주기
+        //let selectedUser = self.followViewModel.followDatas[indexPath.row]
+        
     }
 }
 

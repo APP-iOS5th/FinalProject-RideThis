@@ -786,10 +786,9 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
     
     // MARK: 프로필 Container를 선택했을 때 팔로우 관리 페이지로 이동
     @objc func toFollowerView() {
-        if service.combineUser != nil {
-            let followView = FollowManageView(user: service.combineUser!)
-            followDelegate = followView
-            self.navigationController?.pushViewController(followView, animated: true)
+        if let user = service.combineUser {
+            let followCoordinator = FollowManageCoordinator(navigationController: self.navigationController!, user: user)
+            followCoordinator.start()
         } else {
             self.showAlert(alertTitle: "알림", msg: "로그인이 필요한 기능입니다. 로그인 화면으로 이동할까요?", confirm: "예") {
                 self.navigationController?.pushViewController(LoginView(), animated: true)
