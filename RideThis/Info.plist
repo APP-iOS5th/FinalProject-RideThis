@@ -4,8 +4,6 @@
 <dict>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<string>NO</string>
-	<key>NSUserNotificationUsageDescription</key>
-	<string>This app needs access to notifications to alert you about important updates.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -25,6 +23,7 @@
 	</dict>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
 </dict>

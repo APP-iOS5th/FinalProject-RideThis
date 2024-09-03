@@ -16,6 +16,15 @@
 		043E0C842C6F378D00F25AF7 /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C832C6F378D00F25AF7 /* Double+Extension.swift */; };
 		043E0C872C6F38F700F25AF7 /* SummaryRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C862C6F38F700F25AF7 /* SummaryRecordViewController.swift */; };
 		043E0C892C70AC2400F25AF7 /* SummaryRecordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C882C70AC2400F25AF7 /* SummaryRecordViewModel.swift */; };
+		048EFDF92C86AC9D00261B21 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 048EFDF82C86AC9D00261B21 /* FirebaseMessaging */; };
+		048EFDFD2C87496600261B21 /* FCMTokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048EFDFC2C87496600261B21 /* FCMTokenManager.swift */; };
+		048EFE022C874C8F00261B21 /* DeviceCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048EFDFF2C874C8E00261B21 /* DeviceCoordinator.swift */; };
+		048EFE072C874C9700261B21 /* DeviceDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048EFE032C874C9700261B21 /* DeviceDetailCoordinator.swift */; };
+		048EFE082C874C9700261B21 /* DeviceDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048EFE052C874C9700261B21 /* DeviceDetailView.swift */; };
+		048EFE0D2C874CA000261B21 /* DeviceSearchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048EFE092C874CA000261B21 /* DeviceSearchCoordinator.swift */; };
+		048EFE0E2C874CA000261B21 /* DeviceSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048EFE0B2C874CA000261B21 /* DeviceSearchView.swift */; };
+		048EFE132C874CA600261B21 /* WheelCircumferenceCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048EFE0F2C874CA600261B21 /* WheelCircumferenceCoordinator.swift */; };
+		048EFE142C874CA600261B21 /* WheelCircumferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048EFE112C874CA600261B21 /* WheelCircumferenceView.swift */; };
 		0493F5C52C7DACCC00290A4C /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5C42C7DACCC00290A4C /* Coordinator.swift */; };
 		0493F5C82C7DB39200290A4C /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5C72C7DB39200290A4C /* AppCoordinator.swift */; };
 		0493F5CA2C7DB5FD00290A4C /* TabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5C92C7DB5FD00290A4C /* TabBarCoordinator.swift */; };
@@ -33,18 +42,12 @@
 		04E3C0D32C6B37F7006B844F /* DistancSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0D22C6B37F7006B844F /* DistancSelectionViewController.swift */; };
 		04E3C0D52C6B3818006B844F /* DistanceSelectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0D42C6B3818006B844F /* DistanceSelectionCoordinator.swift */; };
 		04E3C0D72C6B8C30006B844F /* DistanceSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0D62C6B8C30006B844F /* DistanceSelectionViewModel.swift */; };
+		04F47EE32C819DE500FAEC32 /* Bluetooth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04F47EE22C819DE500FAEC32 /* Bluetooth.swift */; };
 		78254FD42C7C05CB0069B10A /* DeviceSearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78254FD32C7C05CB0069B10A /* DeviceSearchTableViewCell.swift */; };
-		78254FD62C7C1CC90069B10A /* WheelCircumferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78254FD52C7C1CC90069B10A /* WheelCircumferenceView.swift */; };
 		78254FD82C7C1CF40069B10A /* WheelCircumferenceSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78254FD72C7C1CF40069B10A /* WheelCircumferenceSelectionCell.swift */; };
-		784D5DFE2C7B780700D2FE15 /* DeviceSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784D5DFD2C7B780700D2FE15 /* DeviceSearchView.swift */; };
-		78A6BF842C855BE90076A9A9 /* WheelCircumferenceCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A6BF832C855BE90076A9A9 /* WheelCircumferenceCoordinator.swift */; };
-		78A6BF862C855BF70076A9A9 /* DeviceSearchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A6BF852C855BF70076A9A9 /* DeviceSearchCoordinator.swift */; };
-		78A6BF882C855C0D0076A9A9 /* DeviceDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A6BF872C855C0D0076A9A9 /* DeviceDetailCoordinator.swift */; };
-		78A6BF8E2C855F4D0076A9A9 /* DeviceCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A6BF8D2C855F4D0076A9A9 /* DeviceCoordinator.swift */; };
 		78DBD01B2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DBD01A2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift */; };
 		78DBD01D2C7882B700B43A62 /* DeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DBD01C2C7882B700B43A62 /* DeviceTableViewCell.swift */; };
 		78DBD01F2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DBD01E2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift */; };
-		78DBD0212C7882EB00B43A62 /* DeviceDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DBD0202C7882EB00B43A62 /* DeviceDetailView.swift */; };
 		CD0E1E852C6A409F0080CFED /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0E1E842C6A409F0080CFED /* SettingView.swift */; };
 		CD0EC4C92C71EE5400E70452 /* FollowManageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0EC4C82C71EE5400E70452 /* FollowManageView.swift */; };
 		CD0EC4CB2C71F10500E70452 /* FollowTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0EC4CA2C71F10500E70452 /* FollowTableViewCell.swift */; };
@@ -162,6 +165,14 @@
 		043E0C832C6F378D00F25AF7 /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
 		043E0C862C6F38F700F25AF7 /* SummaryRecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryRecordViewController.swift; sourceTree = "<group>"; };
 		043E0C882C70AC2400F25AF7 /* SummaryRecordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryRecordViewModel.swift; sourceTree = "<group>"; };
+		048EFDFC2C87496600261B21 /* FCMTokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FCMTokenManager.swift; sourceTree = "<group>"; };
+		048EFDFF2C874C8E00261B21 /* DeviceCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceCoordinator.swift; sourceTree = "<group>"; };
+		048EFE032C874C9700261B21 /* DeviceDetailCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceDetailCoordinator.swift; sourceTree = "<group>"; };
+		048EFE052C874C9700261B21 /* DeviceDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceDetailView.swift; sourceTree = "<group>"; };
+		048EFE092C874CA000261B21 /* DeviceSearchCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceSearchCoordinator.swift; sourceTree = "<group>"; };
+		048EFE0B2C874CA000261B21 /* DeviceSearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceSearchView.swift; sourceTree = "<group>"; };
+		048EFE0F2C874CA600261B21 /* WheelCircumferenceCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WheelCircumferenceCoordinator.swift; sourceTree = "<group>"; };
+		048EFE112C874CA600261B21 /* WheelCircumferenceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WheelCircumferenceView.swift; sourceTree = "<group>"; };
 		0493F5C42C7DACCC00290A4C /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		0493F5C72C7DB39200290A4C /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		0493F5C92C7DB5FD00290A4C /* TabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCoordinator.swift; sourceTree = "<group>"; };
@@ -179,18 +190,12 @@
 		04E3C0D22C6B37F7006B844F /* DistancSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistancSelectionViewController.swift; sourceTree = "<group>"; };
 		04E3C0D42C6B3818006B844F /* DistanceSelectionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceSelectionCoordinator.swift; sourceTree = "<group>"; };
 		04E3C0D62C6B8C30006B844F /* DistanceSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceSelectionViewModel.swift; sourceTree = "<group>"; };
+		04F47EE22C819DE500FAEC32 /* Bluetooth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bluetooth.swift; sourceTree = "<group>"; };
 		78254FD32C7C05CB0069B10A /* DeviceSearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSearchTableViewCell.swift; sourceTree = "<group>"; };
-		78254FD52C7C1CC90069B10A /* WheelCircumferenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelCircumferenceView.swift; sourceTree = "<group>"; };
 		78254FD72C7C1CF40069B10A /* WheelCircumferenceSelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelCircumferenceSelectionCell.swift; sourceTree = "<group>"; };
-		784D5DFD2C7B780700D2FE15 /* DeviceSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSearchView.swift; sourceTree = "<group>"; };
-		78A6BF832C855BE90076A9A9 /* WheelCircumferenceCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelCircumferenceCoordinator.swift; sourceTree = "<group>"; };
-		78A6BF852C855BF70076A9A9 /* DeviceSearchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSearchCoordinator.swift; sourceTree = "<group>"; };
-		78A6BF872C855C0D0076A9A9 /* DeviceDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDetailCoordinator.swift; sourceTree = "<group>"; };
-		78A6BF8D2C855F4D0076A9A9 /* DeviceCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceCoordinator.swift; sourceTree = "<group>"; };
 		78DBD01A2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoTableViewCell.swift; sourceTree = "<group>"; };
 		78DBD01C2C7882B700B43A62 /* DeviceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceTableViewCell.swift; sourceTree = "<group>"; };
 		78DBD01E2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelCircumferenceTableViewCell.swift; sourceTree = "<group>"; };
-		78DBD0202C7882EB00B43A62 /* DeviceDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDetailView.swift; sourceTree = "<group>"; };
 		CD0E1E842C6A409F0080CFED /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		CD0EC4C82C71EE5400E70452 /* FollowManageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowManageView.swift; sourceTree = "<group>"; };
 		CD0EC4CA2C71F10500E70452 /* FollowTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowTableViewCell.swift; sourceTree = "<group>"; };
@@ -284,7 +289,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CDF7FCEE2C869E9800E11D52 /* FirebaseMessaging in Frameworks */,
+				048EFDF92C86AC9D00261B21 /* FirebaseMessaging in Frameworks */,
 				CD4214722C649FC500F7C3AE /* Kingfisher in Frameworks */,
 				CD42146C2C649F8700F7C3AE /* Alamofire in Frameworks */,
 				CD42146F2C649F9200F7C3AE /* SnapKit in Frameworks */,
@@ -323,6 +328,80 @@
 				043E0C862C6F38F700F25AF7 /* SummaryRecordViewController.swift */,
 			);
 			path = SummaryRecord;
+			sourceTree = "<group>";
+		};
+		048EFDF72C86AC9D00261B21 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		048EFE002C874C8E00261B21 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				048EFDFF2C874C8E00261B21 /* DeviceCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		048EFE012C874C8E00261B21 /* Device */ = {
+			isa = PBXGroup;
+			children = (
+				048EFE002C874C8E00261B21 /* Coordinator */,
+			);
+			path = Device;
+			sourceTree = "<group>";
+		};
+		048EFE042C874C9700261B21 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				048EFE032C874C9700261B21 /* DeviceDetailCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		048EFE062C874C9700261B21 /* DeviceDetail */ = {
+			isa = PBXGroup;
+			children = (
+				048EFE042C874C9700261B21 /* Coordinator */,
+				048EFE052C874C9700261B21 /* DeviceDetailView.swift */,
+			);
+			path = DeviceDetail;
+			sourceTree = "<group>";
+		};
+		048EFE0A2C874CA000261B21 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				048EFE092C874CA000261B21 /* DeviceSearchCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		048EFE0C2C874CA000261B21 /* DeviceSearch */ = {
+			isa = PBXGroup;
+			children = (
+				048EFE0A2C874CA000261B21 /* Coordinator */,
+				048EFE0B2C874CA000261B21 /* DeviceSearchView.swift */,
+			);
+			path = DeviceSearch;
+			sourceTree = "<group>";
+		};
+		048EFE102C874CA600261B21 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				048EFE0F2C874CA600261B21 /* WheelCircumferenceCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		048EFE122C874CA600261B21 /* WheelCircumference */ = {
+			isa = PBXGroup;
+			children = (
+				048EFE102C874CA600261B21 /* Coordinator */,
+				048EFE112C874CA600261B21 /* WheelCircumferenceView.swift */,
+			);
+			path = WheelCircumference;
 			sourceTree = "<group>";
 		};
 		0493F5C32C7DACBE00290A4C /* Coordinator */ = {
@@ -423,71 +502,12 @@
 			path = Coordinator;
 			sourceTree = "<group>";
 		};
-		78A6BF7D2C855AEB0076A9A9 /* DeviceDetail */ = {
+		04F47EE12C819DD100FAEC32 /* Bluetooth */ = {
 			isa = PBXGroup;
 			children = (
-				78A6BF822C855B940076A9A9 /* Coordinator */,
-				78DBD0202C7882EB00B43A62 /* DeviceDetailView.swift */,
+				04F47EE22C819DE500FAEC32 /* Bluetooth.swift */,
 			);
-			path = DeviceDetail;
-			sourceTree = "<group>";
-		};
-		78A6BF7E2C855AFF0076A9A9 /* DeviceSearch */ = {
-			isa = PBXGroup;
-			children = (
-				78A6BF812C855B910076A9A9 /* Coordinator */,
-				784D5DFD2C7B780700D2FE15 /* DeviceSearchView.swift */,
-			);
-			path = DeviceSearch;
-			sourceTree = "<group>";
-		};
-		78A6BF7F2C855B0C0076A9A9 /* WheelCircumference */ = {
-			isa = PBXGroup;
-			children = (
-				78A6BF802C855B8C0076A9A9 /* Coordinator */,
-				78254FD52C7C1CC90069B10A /* WheelCircumferenceView.swift */,
-			);
-			path = WheelCircumference;
-			sourceTree = "<group>";
-		};
-		78A6BF802C855B8C0076A9A9 /* Coordinator */ = {
-			isa = PBXGroup;
-			children = (
-				78A6BF832C855BE90076A9A9 /* WheelCircumferenceCoordinator.swift */,
-			);
-			path = Coordinator;
-			sourceTree = "<group>";
-		};
-		78A6BF812C855B910076A9A9 /* Coordinator */ = {
-			isa = PBXGroup;
-			children = (
-				78A6BF852C855BF70076A9A9 /* DeviceSearchCoordinator.swift */,
-			);
-			path = Coordinator;
-			sourceTree = "<group>";
-		};
-		78A6BF822C855B940076A9A9 /* Coordinator */ = {
-			isa = PBXGroup;
-			children = (
-				78A6BF872C855C0D0076A9A9 /* DeviceDetailCoordinator.swift */,
-			);
-			path = Coordinator;
-			sourceTree = "<group>";
-		};
-		78A6BF892C855EE30076A9A9 /* Device */ = {
-			isa = PBXGroup;
-			children = (
-				78A6BF8A2C855EF40076A9A9 /* Coordinator */,
-			);
-			path = Device;
-			sourceTree = "<group>";
-		};
-		78A6BF8A2C855EF40076A9A9 /* Coordinator */ = {
-			isa = PBXGroup;
-			children = (
-				78A6BF8D2C855F4D0076A9A9 /* DeviceCoordinator.swift */,
-			);
-			path = Coordinator;
+			path = Bluetooth;
 			sourceTree = "<group>";
 		};
 		78DBD0132C78827B00B43A62 /* Cell */ = {
@@ -507,6 +527,7 @@
 			children = (
 				CD4213C12C64982000F7C3AE /* RideThis */,
 				CD4213C02C64982000F7C3AE /* Products */,
+				048EFDF72C86AC9D00261B21 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -675,11 +696,11 @@
 		CD4213E52C64988B00F7C3AE /* Device */ = {
 			isa = PBXGroup;
 			children = (
-				78A6BF892C855EE30076A9A9 /* Device */,
-				78A6BF7D2C855AEB0076A9A9 /* DeviceDetail */,
-				78A6BF7E2C855AFF0076A9A9 /* DeviceSearch */,
-				78A6BF7F2C855B0C0076A9A9 /* WheelCircumference */,
 				78DBD0132C78827B00B43A62 /* Cell */,
+				048EFE012C874C8E00261B21 /* Device */,
+				048EFE062C874C9700261B21 /* DeviceDetail */,
+				048EFE0C2C874CA000261B21 /* DeviceSearch */,
+				048EFE122C874CA600261B21 /* WheelCircumference */,
 				CD4213E42C64988B00F7C3AE /* DeviceView.swift */,
 			);
 			path = Device;
@@ -740,6 +761,7 @@
 				EBFE4DAF2C757AE800A36FCA /* UserService.swift */,
 				CD4214642C649D0100F7C3AE /* FirebaseService.swift */,
 				04DEE5022C7C3FC300338A61 /* BluetoothManager.swift */,
+				048EFDFC2C87496600261B21 /* FCMTokenManager.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -872,6 +894,7 @@
 		CDE369FF2C7DA0E000B743B9 /* Protocol */ = {
 			isa = PBXGroup;
 			children = (
+				04F47EE12C819DD100FAEC32 /* Bluetooth */,
 				0493F5C32C7DACBE00290A4C /* Coordinator */,
 				CDE36A042C7DA11000B743B9 /* MyPage */,
 				CDE36A032C7DA10C00B743B9 /* Device */,
@@ -1045,7 +1068,7 @@
 				CDC0C1D72C65FD6A00349DC4 /* FirebaseFirestore */,
 				CDC0C1D92C65FD6A00349DC4 /* FirebaseStorage */,
 				CD7000622C6AF6D90071D4D2 /* DGCharts */,
-				CDF7FCED2C869E9800E11D52 /* FirebaseMessaging */,
+				048EFDF82C86AC9D00261B21 /* FirebaseMessaging */,
 			);
 			productName = RideThis;
 			productReference = CD4213BF2C64982000F7C3AE /* RideThis.app */;
@@ -1111,6 +1134,7 @@
 			files = (
 				CDE28F262C84B1D4004FE443 /* AccountQuitCoordinator.swift in Sources */,
 				CDE36A0C2C7DA13800B743B9 /* HomeProtocol.swift in Sources */,
+				048EFE132C874CA600261B21 /* WheelCircumferenceCoordinator.swift in Sources */,
 				EB07B0BC2C6C79F20067BF0F /* RecordInfoView.swift in Sources */,
 				0493F5C82C7DB39200290A4C /* AppCoordinator.swift in Sources */,
 				78DBD01D2C7882B700B43A62 /* DeviceTableViewCell.swift in Sources */,
@@ -1119,6 +1143,7 @@
 				CD42145E2C64998800F7C3AE /* CompetitionViewModel.swift in Sources */,
 				CD70006A2C6AF99F0071D4D2 /* GraphCollectionViewCell.swift in Sources */,
 				EBFE4DB62C757B4300A36FCA /* ResultRankingViewModel.swift in Sources */,
+				048EFDFD2C87496600261B21 /* FCMTokenManager.swift in Sources */,
 				CD4214672C649D7800F7C3AE /* SplashView.swift in Sources */,
 				CDB220082C7C19DD00973964 /* SignUpInfoViewModel.swift in Sources */,
 				043E0C872C6F38F700F25AF7 /* SummaryRecordViewController.swift in Sources */,
@@ -1126,27 +1151,28 @@
 				0493F5CA2C7DB5FD00290A4C /* TabBarCoordinator.swift in Sources */,
 				041A673E2C6CF1E0000BA4C1 /* RecordContainer+Extension.swift in Sources */,
 				0493F5E02C7E22F100290A4C /* SummaryRecordCoordinator.swift in Sources */,
+				048EFE082C874C9700261B21 /* DeviceDetailView.swift in Sources */,
 				CD6662122C678FF7005E2887 /* HomeModel.swift in Sources */,
 				CDE28F222C849658004FE443 /* SettingCoordinator.swift in Sources */,
 				CD4214652C649D0100F7C3AE /* FirebaseService.swift in Sources */,
+				048EFE022C874C8F00261B21 /* DeviceCoordinator.swift in Sources */,
 				CD4214742C64A35400F7C3AE /* UIImage+Extension.swift in Sources */,
 				CDB71BA02C78A72400DC5D57 /* MyPageProtocol.swift in Sources */,
 				EBF2E3F02C84E735003FE16C /* RecordListViewModel.swift in Sources */,
 				041A672B2C6C400E000BA4C1 /* DistanceCase+Extension.swift in Sources */,
+				048EFE142C874CA600261B21 /* WheelCircumferenceView.swift in Sources */,
 				CDE28F2A2C84B38C004FE443 /* FollowManageCoordinator.swift in Sources */,
 				CD6662142C678FFD005E2887 /* CompetitionModel.swift in Sources */,
 				CD0EC4C92C71EE5400E70452 /* FollowManageView.swift in Sources */,
 				CD0EC4CB2C71F10500E70452 /* FollowTableViewCell.swift in Sources */,
-				78A6BF842C855BE90076A9A9 /* WheelCircumferenceCoordinator.swift in Sources */,
-				78A6BF882C855C0D0076A9A9 /* DeviceDetailCoordinator.swift in Sources */,
 				0493F5C52C7DACCC00290A4C /* Coordinator.swift in Sources */,
 				CD4214522C64990D00F7C3AE /* UILabel+Extension.swift in Sources */,
 				EBF2E3F22C84E7AD003FE16C /* RecordDetailViewModel.swift in Sources */,
-				78A6BF8E2C855F4D0076A9A9 /* DeviceCoordinator.swift in Sources */,
 				EBFE4DAB2C757A7D00A36FCA /* ResultRankingTVCell.swift in Sources */,
 				CD0EC4CD2C71FC4800E70452 /* SearchUserView.swift in Sources */,
 				EB3DFA3E2C77218A00FA366C /* RecordDetailView.swift in Sources */,
 				CD42145C2C64998200F7C3AE /* DeviceViewModel.swift in Sources */,
+				048EFE0E2C874CA000261B21 /* DeviceSearchView.swift in Sources */,
 				CDE28F2C2C84B995004FE443 /* SearchUserCoordinator.swift in Sources */,
 				EBFE4DB22C757AE800A36FCA /* KeyChain.swift in Sources */,
 				CD3E64692C76F5390018C46E /* FollowManageViewModel.swift in Sources */,
@@ -1157,23 +1183,23 @@
 				CD4213C32C64982000F7C3AE /* AppDelegate.swift in Sources */,
 				CD4214762C64A63D00F7C3AE /* UIViewController+Extension.swift in Sources */,
 				043E0C842C6F378D00F25AF7 /* Double+Extension.swift in Sources */,
-				78254FD62C7C1CC90069B10A /* WheelCircumferenceView.swift in Sources */,
 				CDB2200A2C7C4EF900973964 /* Date+Extension.swift in Sources */,
 				CD4214562C64994F00F7C3AE /* RecordViewModel.swift in Sources */,
 				CDE28F242C8497CC004FE443 /* AccountSettingCoordinator.swift in Sources */,
 				CD76A8CB2C6E5828003490B3 /* UITextField+Extension.swift in Sources */,
 				CD6662182C67900B005E2887 /* DeviceModel.swift in Sources */,
-				784D5DFE2C7B780700D2FE15 /* DeviceSearchView.swift in Sources */,
 				EBADE05D2C7F16CA0045E03B /* MonthView.swift in Sources */,
 				CD4214582C64996700F7C3AE /* MyPageViewModel.swift in Sources */,
 				CD4214542C64991500F7C3AE /* UIColor+Extension.swift in Sources */,
 				043E0C892C70AC2400F25AF7 /* SummaryRecordViewModel.swift in Sources */,
 				04DEE5032C7C3FC300338A61 /* BluetoothManager.swift in Sources */,
+				04F47EE32C819DE500FAEC32 /* Bluetooth.swift in Sources */,
 				CD4214692C649F3600F7C3AE /* UIFont+Extension.swift in Sources */,
 				04E3C0D72C6B8C30006B844F /* DistanceSelectionViewModel.swift in Sources */,
 				0493F5E32C7E256B00290A4C /* ResultRankingCoordinator.swift in Sources */,
 				EB13A1D72C863DD80092F358 /* DailyRecordView.swift in Sources */,
 				04DEE5012C7C1F0F00338A61 /* RecordDeviceModel.swift in Sources */,
+				048EFE072C874C9700261B21 /* DeviceDetailCoordinator.swift in Sources */,
 				0493F5DD2C7E1A2C00290A4C /* StartCompetetionCoordinator.swift in Sources */,
 				CD4214112C64988C00F7C3AE /* DeviceView.swift in Sources */,
 				EBFE4DAE2C757AA800A36FCA /* ResultRankingViewController.swift in Sources */,
@@ -1199,11 +1225,11 @@
 				CDF7FCE12C85874A00E11D52 /* UserProfileViewModel.swift in Sources */,
 				CD42157C2C805B0D0033A511 /* EditProfileCoordinator.swift in Sources */,
 				0493F5DA2C7E0BFA00290A4C /* CountCoordinator.swift in Sources */,
-				78A6BF862C855BF70076A9A9 /* DeviceSearchCoordinator.swift in Sources */,
 				CD66621A2C679010005E2887 /* MyPageModel.swift in Sources */,
 				CD4213C52C64982000F7C3AE /* SceneDelegate.swift in Sources */,
 				043E0C822C6F232A00F25AF7 /* StartCompetitionViewModel.swift in Sources */,
 				EBFE4DB42C757B1200A36FCA /* LoginViewModel.swift in Sources */,
+				048EFE0D2C874CA000261B21 /* DeviceSearchCoordinator.swift in Sources */,
 				041A67342C6C519B000BA4C1 /* CountViewController.swift in Sources */,
 				0493F5D72C7E019C00290A4C /* RecordCoordinator.swift in Sources */,
 				04E3C0D52C6B3818006B844F /* DistanceSelectionCoordinator.swift in Sources */,
@@ -1216,7 +1242,6 @@
 				EB07B0BD2C6C79F20067BF0F /* RecordSumUpView.swift in Sources */,
 				04E3C0C82C6AEE62006B844F /* CompetitionTVCell.swift in Sources */,
 				041A67362C6C6543000BA4C1 /* CountViewModel.swift in Sources */,
-				78DBD0212C7882EB00B43A62 /* DeviceDetailView.swift in Sources */,
 				CD4214132C64988C00F7C3AE /* MyPageView.swift in Sources */,
 				CDF7FD0B2C87383F00E11D52 /* AlarmCoordinator.swift in Sources */,
 				EBFE4DB12C757AE800A36FCA /* UserService.swift in Sources */,
@@ -1504,6 +1529,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		048EFDF82C86AC9D00261B21 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CDC0C1D42C65FD6A00349DC4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
 		CD42146B2C649F8700F7C3AE /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CD42146A2C649F8700F7C3AE /* XCRemoteSwiftPackageReference "Alamofire" */;
