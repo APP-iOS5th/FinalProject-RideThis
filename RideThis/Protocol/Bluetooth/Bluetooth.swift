@@ -13,7 +13,7 @@ protocol BluetoothManagerDelegate: AnyObject {
     func didUpdateSpeed(_ speed: Double)
     func didUpdateDistance(_ distance: Double)
     func didUpdateCalories(_ calories: Double)
-    
+    func bluetoothDidConnect()
 
 }
 

@@ -13,10 +13,10 @@ class WheelCircumferenceTableViewCell: UITableViewCell {
     
     // MARK: - Initialization
     
-    /// WheelCircumferenceTableViewCell 새 인스턴스 초기화.
+    /// WheelCircumferenceTableViewCell 새 인스턴스 초기화
     /// - Parameters:
-    ///   - style: Cell 스타일.
-    ///   - reuseIdentifier: tableView에서 Cell을 재사용하기 위한 식별자.
+    ///   - style: Cell 스타일
+    ///   - reuseIdentifier: tableView에서 Cell을 재사용하기 위한 식별자
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
@@ -34,7 +34,7 @@ class WheelCircumferenceTableViewCell: UITableViewCell {
         setupConstraints()
     }
     
-    /// subviews 속성 설정.
+    /// subviews 속성 설정
     private func configureSubviews() {
         titleLabel.font = UIFont.systemFont(ofSize: 16)
         valueLabel.font = UIFont.systemFont(ofSize: 16)
@@ -43,7 +43,7 @@ class WheelCircumferenceTableViewCell: UITableViewCell {
         arrowImageView.contentMode = .scaleAspectFit
     }
     
-    /// subviews를 contentView에 추가.
+    /// subviews를 contentView에 추가
     private func addSubviews() {
         contentView.addSubview(containerView)
         containerView.addSubview(titleLabel)
@@ -51,7 +51,7 @@ class WheelCircumferenceTableViewCell: UITableViewCell {
         containerView.addSubview(arrowImageView)
     }
     
-    /// SnapKit 사용하여 UI 제약 조건 설정.
+    /// SnapKit 사용하여 UI 제약 조건 설정
     private func setupConstraints() {
         containerView.snp.makeConstraints { containerView in
             containerView.edges.equalToSuperview()
@@ -78,10 +78,10 @@ class WheelCircumferenceTableViewCell: UITableViewCell {
     
     // MARK: - Configuration
     
-    /// 주어진 Title 값으로 Cell 구성.
+    /// 주어진 Title 값으로 Cell 구성
     /// - Parameters:
-    ///   - title: Cell에 표시할 title.
-    ///   - value: Cell에 표시할 value.
+    ///   - title: Cell에 표시할 title
+    ///   - value: Cell에 표시할 value
     func configure(title: String, value: String) {
         titleLabel.text = title
         valueLabel.text = value

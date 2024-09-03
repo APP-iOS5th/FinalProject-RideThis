@@ -1,10 +1,3 @@
-//
-//  BluetoothManager.swift
-//  RideThis
-//
-//  Created by SeongKook on 8/26/24.
-//
-
 import Foundation
 import CoreBluetooth
 
@@ -93,6 +86,7 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
     // MARK: 주변 장치와의 연결이 성공했을 때 호출
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         peripheral.discoverServices([cadenceServiceUUID])
+        delegate?.bluetoothDidConnect()
     }
     
     // MARK: 자동으로 재연결
@@ -243,5 +237,8 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
             return 8
         }
     }
+    
+    public func isConnected() -> Bool {
+        return cadencePeripheral?.state == .connected
+    }
 }
-
