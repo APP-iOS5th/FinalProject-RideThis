@@ -433,7 +433,7 @@ class FireBaseService {
 
     // MARK: 토큰
     func fetchAccessToken(completion: @escaping (String?) -> Void) {
-        let url = URL(string: "http://localhost:8080/token")!
+        let url = URL(string: "https://ffa9-218-156-184-165.ngrok-free.app/token")!
         
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             if let error = error {

@@ -13,7 +13,9 @@ app.use(cors());
 dotenv.config();
 
 // Firebase Admin SDK 초기화
-const serviceAccount = require("../service-account-file.json");
+const serviceAccountKey = process.env.SERVICE_ACCOUNT_KEY || "";
+
+const serviceAccount = JSON.parse(serviceAccountKey);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -25,7 +27,7 @@ const SCOPES = ["https://www.googleapis.com/auth/cloud-platform"];
 // Google OAuth 2.0 토큰 생성 함수
 function getAccessToken() {
   return new Promise<string>((resolve, reject) => {
-    const key = require("../service-account-file.json");
+    const key = JSON.parse(serviceAccountKey);
 
     const clientEmail = key.client_email;
     const privateKey = key.private_key;
