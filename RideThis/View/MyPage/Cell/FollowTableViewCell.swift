@@ -25,11 +25,6 @@ class FollowTableViewCell: UITableViewCell {
         return iv
     }()
     private let userNickName = RideThisLabel()
-    private let userEmail: UILabel = {
-        let label = RideThisLabel(fontColor: .recordTitleColor)
-        label.lineBreakMode = .byTruncatingTail // 줄임표 표시 설정
-        return label
-    }()
     private let followButton: UIButton = {
         let btn = UIButton()
         btn.translatesAutoresizingMaskIntoConstraints = false
@@ -50,7 +45,6 @@ class FollowTableViewCell: UITableViewCell {
     func configureCell() {
         contentView.addSubview(profileImage)
         contentView.addSubview(userNickName)
-        contentView.addSubview(userEmail)
         contentView.addSubview(followButton)
         
         profileImage.snp.makeConstraints {
@@ -65,18 +59,11 @@ class FollowTableViewCell: UITableViewCell {
         }
         
         userNickName.snp.makeConstraints {
-            $0.centerY.equalTo(contentView.snp.centerY).offset(-15)
+            $0.centerY.equalTo(contentView.snp.centerY)
             $0.left.equalTo(profileImage.snp.right).offset(10)
             $0.right.equalTo(followButton.snp.left).offset(-10)
         }
         
-        userEmail.snp.makeConstraints {
-            $0.centerY.equalTo(contentView.snp.centerY).offset(15)
-            $0.left.equalTo(userNickName.snp.left)
-            $0.right.equalTo(followButton.snp.left).offset(-10)  // followButton 왼쪽에 맞추기
-        }
-        
-        userEmail.numberOfLines = 1
         followButton.addAction(UIAction { [weak self] _ in
             guard let self = self, 
                   let btnLabel = self.followButton.titleLabel,
@@ -106,7 +93,6 @@ class FollowTableViewCell: UITableViewCell {
     func configureUserInfo(viewType: FollowViewType, followType: FollowType) {
         guard let user = cellUser, let signedUser = signedUser else { return }
         self.userNickName.text = user.user_nickname
-        self.userEmail.text = user.user_email
         if let imgUrl = user.user_image {
             if imgUrl.isEmpty {
                 self.profileImage.image = UIImage(named: "bokdonge")

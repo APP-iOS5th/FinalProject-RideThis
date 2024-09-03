@@ -116,7 +116,6 @@
 		CDF7FCEA2C8601BA00E11D52 /* LoginCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF7FCE92C8601BA00E11D52 /* LoginCoordinator.swift */; };
 		CDF7FCEC2C860EFA00E11D52 /* UserProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF7FCEB2C860EFA00E11D52 /* UserProfileCoordinator.swift */; };
 		CDF7FCEE2C869E9800E11D52 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = CDF7FCED2C869E9800E11D52 /* FirebaseMessaging */; };
-		EB07B0BB2C6C79F20067BF0F /* RecordContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0B82C6C79F20067BF0F /* RecordContainerView.swift */; };
 		CDF7FD092C8735B800E11D52 /* AlarmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF7FD082C8735B800E11D52 /* AlarmView.swift */; };
 		CDF7FD0B2C87383F00E11D52 /* AlarmCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF7FD0A2C87383F00E11D52 /* AlarmCoordinator.swift */; };
 		CDF7FD0E2C8738D700E11D52 /* AlarmTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF7FD0D2C8738D700E11D52 /* AlarmTableViewCell.swift */; };
