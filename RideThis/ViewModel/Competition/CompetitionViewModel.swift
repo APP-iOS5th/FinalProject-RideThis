@@ -69,7 +69,7 @@ class CompetitionViewModel {
             records = allRecords.filter { record in
                 record.record_competetion_status == true && record.record_target_distance == targetDistance
             }
-
+            
         } else if selectedSegment == .followingRanking {
             if isLogin {
                 records = allRecords.filter { record in
