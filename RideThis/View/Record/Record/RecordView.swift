@@ -71,27 +71,26 @@ class RecordView: RideThisViewController {
         mainStackView.spacing = 20
         mainStackView.alignment = .fill
         mainStackView.distribution = .fill
-        
-        // 기기 크기에 따라 여백 다르게 설정
+
         mainStackView.snp.makeConstraints { make in
-            if isIPhone15Pro() {
-                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
+            if isLargeDevice() {
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40) // 큰 기기에 대한 상단 여백
             } else {
-                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20) // 작은 기기에 대한 상단 여백
             }
             make.left.right.equalToSuperview().inset(20)
-            make.bottom.lessThanOrEqualTo(view.safeAreaLayoutGuide.snp.bottom).offset(-120) // 버튼 스택뷰를 위한 공간 확보
+            make.bottom.lessThanOrEqualTo(view.safeAreaLayoutGuide.snp.bottom).offset(-120)
         }
-        
+
         mainStackView.addArrangedSubview(timerRecord)
         mainStackView.addArrangedSubview(recordsStackView)
-        
+
         timerRecord.snp.makeConstraints { make in
             make.height.equalTo(150)
         }
-        
-        if isIPhone15Pro() {
-            // iPhone 15 Pro에서 추가 여백을 주기 위한 빈 뷰
+
+        if isLargeDevice() {
+            // 큰 기기에서 추가 여백을 주기 위한 빈 뷰
             let topSpacerView = UIView()
             let bottomSpacerView = UIView()
             mainStackView.insertArrangedSubview(topSpacerView, at: 0)
@@ -153,21 +152,20 @@ class RecordView: RideThisViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        let screenHeight = view.bounds.height
-        if screenHeight < 700 { // iPhone SE 크기 대응
-            mainStackView.spacing = 10
-        } else {
+        if isLargeDevice() {
             mainStackView.spacing = 20
+        } else {
+            mainStackView.spacing = 10
         }
     }
     
-    private func isIPhone15Pro() -> Bool {
-        let device = UIDevice.current
-        if device.userInterfaceIdiom == .phone {
-            let screenSize = UIScreen.main.bounds.size
-            return screenSize.height == 852 && screenSize.width == 393
-        }
-        return false
+    private func isLargeDevice() -> Bool {
+        let screenSize = UIScreen.main.bounds.size
+        let minDimension = min(screenSize.width, screenSize.height)
+        let maxDimension = max(screenSize.width, screenSize.height)
+        
+        // iPhone 11, 11 Pro, 11 Pro Max, 12, 12 Pro, 12 Pro Max, 13, 13 Pro, 13 Pro Max, 14, 14 Pro, 14 Pro Max, 15, 15 Pro, 15 Pro Max
+        return minDimension >= 390 && maxDimension >= 844
     }
     
     private func updateTimerDisplay() {
