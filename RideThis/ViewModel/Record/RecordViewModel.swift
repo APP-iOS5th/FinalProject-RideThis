@@ -12,7 +12,7 @@ class RecordViewModel: BluetoothManagerDelegate {
     @Published var elapsedTime: TimeInterval = 0.0
     @Published var startTime: Date?
     @Published var endTime: Date?
-
+    
     // MARK: - Other properties
     private(set) var isRecording: Bool = false {
         didSet {
@@ -25,11 +25,11 @@ class RecordViewModel: BluetoothManagerDelegate {
     weak var delegate: RecordViewModelDelegate?
     
     private var timer: Timer?
-
+    
     var isUserLoggedIn: Bool {
         return UserService.shared.loginStatus == .appleLogin
     }
-
+    
     // MARK: - Summary Data
     struct SummaryData {
         let recordedTime: String
@@ -40,39 +40,46 @@ class RecordViewModel: BluetoothManagerDelegate {
         let startTime: Date
         let endTime: Date
     }
-
+    
+    @Published private(set) var isMeasuring: Bool = false
+    
     // MARK: - BluetoothManagerDelegate Methods
     func didUpdateCadence(_ cadence: Double) {
+        guard isMeasuring else { return }
         DispatchQueue.main.async {
             self.cadence = cadence
             self.isBluetoothConnected = true
         }
     }
-
+    
     func didUpdateSpeed(_ speed: Double) {
+        guard isMeasuring else { return }
         DispatchQueue.main.async {
             self.speed = speed
             self.isBluetoothConnected = true
         }
     }
-
+    
     func didUpdateDistance(_ distance: Double) {
+        guard isMeasuring else { return }
         DispatchQueue.main.async {
             self.distance = distance
             self.isBluetoothConnected = true
         }
     }
-
+    
     func didUpdateCalories(_ calories: Double) {
+        guard isMeasuring else { return }
         DispatchQueue.main.async {
             self.calorie = calories
             self.isBluetoothConnected = true
         }
     }
-
+    
     // MARK: - Recording Methods
     func startRecording() {
         isRecording = true
+        isMeasuring = true
         isPaused = false
         print("start pushed")
         startTime = Date()
@@ -80,9 +87,10 @@ class RecordViewModel: BluetoothManagerDelegate {
         print("start time: \(String(describing: startTime))")
         delegate?.didStartRecording()
     }
-
+    
     func resetRecording() {
         isRecording = false
+        isMeasuring = false
         isPaused = false
         print("record reset")
         stopTimer()
@@ -90,12 +98,17 @@ class RecordViewModel: BluetoothManagerDelegate {
         recordedTime = 0.0
         startTime = nil
         endTime = nil
+        cadence = 0
+        speed = 0
+        distance = 0
+        calorie = 0
         onTimerUpdated?(formatTime(elapsedTime))
         delegate?.didResetRecording()
     }
-
+    
     func finishRecording() {
         isRecording = false
+        isMeasuring = false
         print("finish pushed")
         stopTimer()
         recordedTime = elapsedTime
@@ -103,15 +116,24 @@ class RecordViewModel: BluetoothManagerDelegate {
         print("end time: \(String(describing: endTime))")
         delegate?.didFinishRecording()
     }
-
+    
     func pauseRecording() {
         isRecording = false
+        isMeasuring = false
         isPaused = true
         print("pause pushed")
         stopTimer()
         delegate?.didPauseRecording()
     }
-
+    
+    func resumeRecording() {
+        isRecording = true
+        isMeasuring = true
+        isPaused = false
+        startTimer()
+        delegate?.didStartRecording()
+    }
+    
     // MARK: - Timer Methods
     private func startTimer() {
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
@@ -120,22 +142,22 @@ class RecordViewModel: BluetoothManagerDelegate {
             self.onTimerUpdated?(self.formatTime(self.elapsedTime))
         }
     }
-
+    
     private func stopTimer() {
         timer?.invalidate()
         timer = nil
     }
-
+    
     func formatTime(_ time: TimeInterval) -> String {
         let minutes = Int(time) / 60
         let seconds = Int(time) % 60
         return String(format: "%02d:%02d", minutes, seconds)
     }
-
+    
     func updateTimerDisplay() -> String {
         return formatTime(elapsedTime)
     }
-
+    
     // MARK: - Summary Data Method
     func getSummaryData() -> SummaryData {
         return SummaryData(
@@ -147,6 +169,9 @@ class RecordViewModel: BluetoothManagerDelegate {
             startTime: startTime ?? Date(),
             endTime: endTime ?? Date()
         )
+    }
+    
+    func bluetoothDidConnect() {
     }
 }
 

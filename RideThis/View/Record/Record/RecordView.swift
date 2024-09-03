@@ -26,6 +26,10 @@ class RecordView: RideThisViewController {
     let recordButton = RideThisButton(buttonTitle: "시작")
     let finishButton = RideThisButton(buttonTitle: "기록 종료")
     
+    private let scrollView = UIScrollView()
+    private let contentStackView = UIStackView()
+    private let buttonStackView = UIStackView()
+    
     // MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,11 +45,6 @@ class RecordView: RideThisViewController {
                 guard let self = self else { return }
                 self.updateUI(isRecording: isRecording)
             }
-            
-            // 블루투스 연결 상태 주기적 확인
-                Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { [weak self] _ in
-                    self?.checkBluetoothConnection()
-                }
             
             // 뷰 모델에서 기록 종료 트리거 처리
             viewModel.delegate = self
@@ -83,11 +82,19 @@ class RecordView: RideThisViewController {
         timerRecord.updateRecordText(text: viewModel?.updateTimerDisplay() ?? "00:00")
     }
     
+    private var hasShownBluetoothAlert = false
+    
     private func checkBluetoothConnection() {
+        #if targetEnvironment(simulator)
+        // 시뮬레이터에서는 블루투스 연결 확인을 건너뜁니다.
+        return
+        #endif
+        
         coordinator?.checkBluetoothConnection { [weak self] isConnected in
-            if !isConnected {
+            if !isConnected && !(self?.hasShownBluetoothAlert ?? true) {
                 DispatchQueue.main.async {
                     self?.showBluetoothDisconnectedAlert()
+                    self?.hasShownBluetoothAlert = true
                 }
             }
         }
@@ -154,6 +161,10 @@ class RecordView: RideThisViewController {
         }
     }
     
+    func resetBluetoothAlert() {
+        hasShownBluetoothAlert = false
+    }
+    
     // MARK: - 버튼 설정
     private func setupButtons() {
         resetButton.backgroundColor = .systemGray
@@ -178,10 +189,13 @@ class RecordView: RideThisViewController {
                     if isConnected {
                         if viewModel.isRecording {
                             viewModel.pauseRecording()
+                        } else if viewModel.isPaused {
+                            viewModel.resumeRecording()
                         } else {
                             viewModel.startRecording()
                             self.disableTabBar()
                         }
+                        self.updateUI(isRecording: viewModel.isRecording)
                     } else {
                         self.showBluetoothDisconnectedAlert()
                     }
@@ -201,9 +215,10 @@ class RecordView: RideThisViewController {
     
     private func showBluetoothDisconnectedAlert() {
         showAlert(alertTitle: "장치연결이 필요합니다.", msg: "사용하시려면 장치를 연결해주세요.", confirm: "장치연결") {
-                self.coordinator?.showDeviceConnectionView()
-            }
+            self.coordinator?.showDeviceConnectionView()
         }
+        hasShownBluetoothAlert = true
+    }
     
     // MARK: - 탭바 활성화 / 비활성화
     private func enableTabBar() {
@@ -270,7 +285,7 @@ class RecordView: RideThisViewController {
                 self.finishButton.isEnabled = true
                 self.resetButton.backgroundColor = .black
                 self.finishButton.backgroundColor = .black
-                self.recordButton.setTitle("시작", for: .normal)
+                self.recordButton.setTitle("재시작", for: .normal)
                 self.recordListButton?.isEnabled = false
             } else { // 정지, 리셋, 종료 눌렸을 때
                 self.resetButton.isEnabled = false

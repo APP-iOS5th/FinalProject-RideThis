@@ -30,14 +30,29 @@ class RecordCoordinator: Coordinator, BluetoothViewDelegate, BluetoothManagerDel
         recordVC.coordinator = self
         recordVC.viewModel = recordViewModel
         
-        initializeBluetoothManager()
+        if !isRunningOnSimulator() {
+            initializeBluetoothManager()
+        }
         
         navigationController.pushViewController(recordVC, animated: true)
     }
     
+    private func isRunningOnSimulator() -> Bool {
+#if targetEnvironment(simulator)
+        return true
+#else
+        return false
+#endif
+    }
+    
     // 블루투스
     private func initializeBluetoothManager() {
-        // BluetoothManager 초기화 로직
+        if isRunningOnSimulator() {
+            print("Running on simulator. Skipping Bluetooth initialization.")
+            return
+        }
+        
+        // 기존의 BluetoothManager 초기화 로직
         Task {
             do {
                 let deviceInfo = try await fetchDeviceData()
@@ -63,6 +78,12 @@ class RecordCoordinator: Coordinator, BluetoothViewDelegate, BluetoothManagerDel
             completion(isConnected)
         } else {
             completion(false)
+        }
+    }
+    
+    func bluetoothDidConnect() {
+        if let recordView = navigationController.topViewController as? RecordView {
+            recordView.resetBluetoothAlert()
         }
     }
     
