@@ -7,6 +7,7 @@ import Combine
 class UserProfileView: RideThisViewController {
     
     var selectedUser: User?
+    var profileCoordinator: UserProfileCoordinator?
     private let firebaseService = FireBaseService()
     private lazy var viewModel = UserProfileViewModel(firebaseService: self.firebaseService)
     private var cancellable = Set<AnyCancellable>()
@@ -242,7 +243,6 @@ class UserProfileView: RideThisViewController {
         setProfileView()
         setTotalRecordView()
         setRecordByPeriodView()
-//        setEventToProfileContainer()
     }
     
     func setNavigationComponents() {

@@ -111,8 +111,13 @@
 		CDF7FCDF2C85806900E11D52 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF7FCDE2C85806900E11D52 /* UserProfileView.swift */; };
 		CDF7FCE12C85874A00E11D52 /* UserProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF7FCE02C85874A00E11D52 /* UserProfileViewModel.swift */; };
 		CDF7FCEA2C8601BA00E11D52 /* LoginCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF7FCE92C8601BA00E11D52 /* LoginCoordinator.swift */; };
+		CDF7FCEC2C860EFA00E11D52 /* UserProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF7FCEB2C860EFA00E11D52 /* UserProfileCoordinator.swift */; };
 		CDF7FCEE2C869E9800E11D52 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = CDF7FCED2C869E9800E11D52 /* FirebaseMessaging */; };
 		EB07B0BB2C6C79F20067BF0F /* RecordContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0B82C6C79F20067BF0F /* RecordContainerView.swift */; };
+		CDF7FD092C8735B800E11D52 /* AlarmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF7FD082C8735B800E11D52 /* AlarmView.swift */; };
+		CDF7FD0B2C87383F00E11D52 /* AlarmCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF7FD0A2C87383F00E11D52 /* AlarmCoordinator.swift */; };
+		CDF7FD0E2C8738D700E11D52 /* AlarmTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF7FD0D2C8738D700E11D52 /* AlarmTableViewCell.swift */; };
+		CDF7FD102C873BCD00E11D52 /* AlarmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF7FD0F2C873BCD00E11D52 /* AlarmViewModel.swift */; };
 		EB07B0BC2C6C79F20067BF0F /* RecordInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0B92C6C79F20067BF0F /* RecordInfoView.swift */; };
 		EB07B0BD2C6C79F20067BF0F /* RecordSumUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0BA2C6C79F20067BF0F /* RecordSumUpView.swift */; };
 		EB13A1D72C863DD80092F358 /* DailyRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB13A1D62C863DD80092F358 /* DailyRecordView.swift */; };
@@ -248,7 +253,11 @@
 		CDF7FCDE2C85806900E11D52 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		CDF7FCE02C85874A00E11D52 /* UserProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewModel.swift; sourceTree = "<group>"; };
 		CDF7FCE92C8601BA00E11D52 /* LoginCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCoordinator.swift; sourceTree = "<group>"; };
-		EB07B0B82C6C79F20067BF0F /* RecordContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordContainerView.swift; sourceTree = "<group>"; };
+		CDF7FCEB2C860EFA00E11D52 /* UserProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileCoordinator.swift; sourceTree = "<group>"; };
+		CDF7FD082C8735B800E11D52 /* AlarmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmView.swift; sourceTree = "<group>"; };
+		CDF7FD0A2C87383F00E11D52 /* AlarmCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmCoordinator.swift; sourceTree = "<group>"; };
+		CDF7FD0D2C8738D700E11D52 /* AlarmTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmTableViewCell.swift; sourceTree = "<group>"; };
+		CDF7FD0F2C873BCD00E11D52 /* AlarmViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmViewModel.swift; sourceTree = "<group>"; };
 		EB07B0B92C6C79F20067BF0F /* RecordInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordInfoView.swift; sourceTree = "<group>"; };
 		EB07B0BA2C6C79F20067BF0F /* RecordSumUpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordSumUpView.swift; sourceTree = "<group>"; };
 		EB13A1D62C863DD80092F358 /* DailyRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyRecordView.swift; sourceTree = "<group>"; };
@@ -606,6 +615,7 @@
 			isa = PBXGroup;
 			children = (
 				CD4214592C64997100F7C3AE /* HomeViewModel.swift */,
+				CDF7FD0F2C873BCD00E11D52 /* AlarmViewModel.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -678,9 +688,11 @@
 		CD4213E72C64988B00F7C3AE /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				CDF7FD0C2C8738D000E11D52 /* Cell */,
 				CD4214612C649A1100F7C3AE /* Coordinator */,
 				CD4213E62C64988B00F7C3AE /* HomeView.swift */,
 				CD4214662C649D7800F7C3AE /* SplashView.swift */,
+				CDF7FD082C8735B800E11D52 /* AlarmView.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -766,6 +778,7 @@
 			children = (
 				0493F5C92C7DB5FD00290A4C /* TabBarCoordinator.swift */,
 				0493F5CB2C7DBC0600290A4C /* HomeCoordinator.swift */,
+				CDF7FD0A2C87383F00E11D52 /* AlarmCoordinator.swift */,
 			);
 			path = Coordinator;
 			sourceTree = "<group>";
@@ -851,6 +864,7 @@
 			children = (
 				CDE28F292C84B38C004FE443 /* FollowManageCoordinator.swift */,
 				CDE28F2B2C84B995004FE443 /* SearchUserCoordinator.swift */,
+				CDF7FCEB2C860EFA00E11D52 /* UserProfileCoordinator.swift */,
 			);
 			path = FollowCoordinator;
 			sourceTree = "<group>";
@@ -924,6 +938,14 @@
 				CDF7FCE92C8601BA00E11D52 /* LoginCoordinator.swift */,
 			);
 			path = LoginCoordinator;
+			sourceTree = "<group>";
+		};
+		CDF7FD0C2C8738D000E11D52 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				CDF7FD0D2C8738D700E11D52 /* AlarmTableViewCell.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		EB6B408C2C81B704000DC914 /* Record */ = {
@@ -1151,12 +1173,12 @@
 				04E3C0D72C6B8C30006B844F /* DistanceSelectionViewModel.swift in Sources */,
 				0493F5E32C7E256B00290A4C /* ResultRankingCoordinator.swift in Sources */,
 				EB13A1D72C863DD80092F358 /* DailyRecordView.swift in Sources */,
-				CD66F5D22C6C86EA00CDBB0B /* SettingTableToggleViewCell.swift in Sources */,
 				04DEE5012C7C1F0F00338A61 /* RecordDeviceModel.swift in Sources */,
 				0493F5DD2C7E1A2C00290A4C /* StartCompetetionCoordinator.swift in Sources */,
 				CD4214112C64988C00F7C3AE /* DeviceView.swift in Sources */,
 				EBFE4DAE2C757AA800A36FCA /* ResultRankingViewController.swift in Sources */,
 				041A67392C6C6B0E000BA4C1 /* StartCompetitionViewController.swift in Sources */,
+				CDF7FD0E2C8738D700E11D52 /* AlarmTableViewCell.swift in Sources */,
 				CDE36A062C7DA12100B743B9 /* DeviceProtocol.swift in Sources */,
 				78DBD01B2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift in Sources */,
 				CD0E1E852C6A409F0080CFED /* SettingView.swift in Sources */,
@@ -1165,7 +1187,6 @@
 				CD4214142C64988C00F7C3AE /* RecordView.swift in Sources */,
 				CD4214122C64988C00F7C3AE /* HomeView.swift in Sources */,
 				EB6B40892C81B15E000DC914 /* RecordListCoordinator.swift in Sources */,
-				0493F5D22C7DBE1A00290A4C /* DeviceCoordinator.swift in Sources */,
 				CDE36A082C7DA12900B743B9 /* RecordProtocol.swift in Sources */,
 				04E3C0CF2C6B32B8006B844F /* CompetitionCoordinator.swift in Sources */,
 				0493F5CC2C7DBC0600290A4C /* HomeCoordinator.swift in Sources */,
@@ -1186,6 +1207,7 @@
 				041A67342C6C519B000BA4C1 /* CountViewController.swift in Sources */,
 				0493F5D72C7E019C00290A4C /* RecordCoordinator.swift in Sources */,
 				04E3C0D52C6B3818006B844F /* DistanceSelectionCoordinator.swift in Sources */,
+				CDF7FD102C873BCD00E11D52 /* AlarmViewModel.swift in Sources */,
 				CD66F5CE2C6C75AA00CDBB0B /* EditProfileInfoViewModel.swift in Sources */,
 				CD6662162C679007005E2887 /* RecordModel.swift in Sources */,
 				EB6B408B2C81B6CA000DC914 /* RecordDetailCoordinator.swift in Sources */,
@@ -1196,10 +1218,13 @@
 				041A67362C6C6543000BA4C1 /* CountViewModel.swift in Sources */,
 				78DBD0212C7882EB00B43A62 /* DeviceDetailView.swift in Sources */,
 				CD4214132C64988C00F7C3AE /* MyPageView.swift in Sources */,
+				CDF7FD0B2C87383F00E11D52 /* AlarmCoordinator.swift in Sources */,
 				EBFE4DB12C757AE800A36FCA /* UserService.swift in Sources */,
 				CDE25C6E2C6913B8008E2A80 /* EditProfileInfoView.swift in Sources */,
+				CDF7FD092C8735B800E11D52 /* AlarmView.swift in Sources */,
 				EB6B40872C81B125000DC914 /* RecordSumUpCoordinator.swift in Sources */,
 				EBB1F4182C76CA75007B0E3C /* RecordListView.swift in Sources */,
+				CDF7FCEC2C860EFA00E11D52 /* UserProfileCoordinator.swift in Sources */,
 				78254FD82C7C1CF40069B10A /* WheelCircumferenceSelectionCell.swift in Sources */,
 				CDC0C1E02C664FFE00349DC4 /* UIButton+Extension.swift in Sources */,
 			);

@@ -263,6 +263,14 @@ class HomeView: RideThisViewController {
         
         let leftBarButtonItem = UIBarButtonItem(customView: customTitleLabel)
         navigationItem.leftBarButtonItem = leftBarButtonItem
+        
+        let rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .done, target: self, action: #selector(moveToAlarmView))
+        navigationItem.rightBarButtonItem = rightBarButtonItem
+    }
+    
+    @objc func moveToAlarmView() {
+        let alarmCoordinator = AlarmCoordinator(navigationController: self.navigationController!, childCoordinators: [])
+        alarmCoordinator.start()
     }
     
     /// 주간 기록 섹션 콘텐츠 뷰 설정
