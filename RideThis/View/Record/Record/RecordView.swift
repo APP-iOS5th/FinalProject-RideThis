@@ -26,56 +26,146 @@ class RecordView: RideThisViewController {
     let recordButton = RideThisButton(buttonTitle: "시작")
     let finishButton = RideThisButton(buttonTitle: "기록 종료")
     
-    private let scrollView = UIScrollView()
-    private let contentStackView = UIStackView()
+    private let mainStackView = UIStackView()
+    private let recordsStackView = UIStackView()
     private let buttonStackView = UIStackView()
-    
     // MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupNavigationBar()
+        setupMainStackView()
+        setupRecordsStackView()
+        setupButtonStackView()
         setupButtons()
         
         if let viewModel = viewModel {
             setupBindings()
             
-            // ViewModel의 상태 변경 클로저 설정
             viewModel.onRecordingStatusChanged = { [weak self] isRecording in
                 guard let self = self else { return }
                 self.updateUI(isRecording: isRecording)
             }
             
-            // 뷰 모델에서 기록 종료 트리거 처리
             viewModel.delegate = self
         }
-        
-        // 기록 뷰 추가
-        self.view.addSubview(timerRecord)
-        self.view.addSubview(cadenceRecord)
-        self.view.addSubview(speedRecord)
-        self.view.addSubview(distanceRecord)
-        self.view.addSubview(calorieRecord)
-        
-        // 버튼 추가
-        self.view.addSubview(resetButton)
-        self.view.addSubview(recordButton)
-        self.view.addSubview(finishButton)
-        
-        setupConstraints()
         
         tabBarController?.delegate = self
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        // RecordSumUpView에서 돌아올 때 타이머 초기화
-        if !(viewModel?.isRecording ?? false) {
-            viewModel?.resetRecording()
-            updateTimerDisplay()
-            updateUI(isRecording: false)
+    //    override func viewWillAppear(_ animated: Bool) {
+    //        super.viewWillAppear(animated)
+    //
+    //        // RecordSumUpView에서 돌아올 때 타이머 초기화
+    //        if !(viewModel?.isRecording ?? false) {
+    //            viewModel?.resetRecording()
+    //            updateTimerDisplay()
+    //            updateUI(isRecording: false)
+    //        }
+    //    }
+    
+    private func setupMainStackView() {
+        view.addSubview(mainStackView)
+        mainStackView.axis = .vertical
+        mainStackView.spacing = 20
+        mainStackView.alignment = .fill
+        mainStackView.distribution = .fill
+
+        mainStackView.snp.makeConstraints { make in
+                if isIPhone15Pro() {
+                    make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
+                } else {
+                    make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
+                }
+                make.left.right.equalToSuperview().inset(20)
+                make.bottom.lessThanOrEqualTo(view.safeAreaLayoutGuide.snp.bottom).offset(-120) // 버튼 스택뷰를 위한 공간 확보
+            }
+
+        mainStackView.addArrangedSubview(timerRecord)
+        mainStackView.addArrangedSubview(recordsStackView)
+
+        timerRecord.snp.makeConstraints { make in
+            make.height.equalTo(150)
         }
+
+        if isIPhone15Pro() {
+            // iPhone 15 Pro에서 추가 여백을 주기 위한 빈 뷰
+            let topSpacerView = UIView()
+            let bottomSpacerView = UIView()
+            mainStackView.insertArrangedSubview(topSpacerView, at: 0)
+            mainStackView.addArrangedSubview(bottomSpacerView)
+            
+            topSpacerView.snp.makeConstraints { make in
+                make.height.equalTo(20)
+            }
+            bottomSpacerView.snp.makeConstraints { make in
+                make.height.equalTo(20)
+            }
+        }
+    }
+    
+    private func setupRecordsStackView() {
+        recordsStackView.axis = .vertical
+        recordsStackView.spacing = 15
+        recordsStackView.distribution = .fillEqually
+
+        let topRecordStack = UIStackView(arrangedSubviews: [cadenceRecord, speedRecord])
+        topRecordStack.axis = .horizontal
+        topRecordStack.spacing = 10
+        topRecordStack.distribution = .fillEqually
+
+        let bottomRecordStack = UIStackView(arrangedSubviews: [distanceRecord, calorieRecord])
+        bottomRecordStack.axis = .horizontal
+        bottomRecordStack.spacing = 10
+        bottomRecordStack.distribution = .fillEqually
+
+        recordsStackView.addArrangedSubview(topRecordStack)
+        recordsStackView.addArrangedSubview(bottomRecordStack)
+
+        // 각 RecordContainer의 크기 제한
+        [cadenceRecord, speedRecord, distanceRecord, calorieRecord].forEach { container in
+            container.snp.makeConstraints { make in
+                make.height.equalTo(110)
+            }
+        }
+    }
+    
+    private func setupButtonStackView() {
+        view.addSubview(buttonStackView)
+        buttonStackView.axis = .horizontal
+        buttonStackView.spacing = 10
+        buttonStackView.distribution = .fillEqually
+
+        buttonStackView.addArrangedSubview(resetButton)
+        buttonStackView.addArrangedSubview(recordButton)
+        buttonStackView.addArrangedSubview(finishButton)
+
+        buttonStackView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview().inset(20)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-50)
+            make.height.equalTo(50)
+        }
+    }
+    
+    // MARK: - 레이아웃 조정
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        let screenHeight = view.bounds.height
+        if screenHeight < 700 { // iPhone SE 크기 대응
+            mainStackView.spacing = 10
+        } else {
+            mainStackView.spacing = 20
+        }
+    }
+    
+    private func isIPhone15Pro() -> Bool {
+        let device = UIDevice.current
+        if device.userInterfaceIdiom == .phone {
+            let screenSize = UIScreen.main.bounds.size
+            return screenSize.height == 852 && screenSize.width == 393
+        }
+        return false
     }
     
     private func updateTimerDisplay() {
@@ -97,67 +187,6 @@ class RecordView: RideThisViewController {
                     self?.hasShownBluetoothAlert = true
                 }
             }
-        }
-    }
-    
-    // MARK: - 레이아웃 설정
-    private func setupConstraints() {
-        // 기록 뷰 제약조건
-        timerRecord.snp.makeConstraints { timer in
-            timer.top.equalToSuperview().offset(80)
-            timer.left.equalToSuperview().offset(20)
-            timer.right.equalToSuperview().offset(-20)
-            timer.height.equalTo(150)
-        }
-        
-        cadenceRecord.snp.makeConstraints { cadence in
-            cadence.top.equalTo(timerRecord.snp.bottom).offset(40)
-            cadence.left.equalToSuperview().offset(20)
-            cadence.width.equalToSuperview().multipliedBy(0.5).offset(-25)
-            cadence.height.equalTo(110)
-        }
-        
-        speedRecord.snp.makeConstraints { speed in
-            speed.top.equalTo(timerRecord.snp.bottom).offset(40)
-            speed.left.equalTo(cadenceRecord.snp.right).offset(10)
-            speed.right.equalToSuperview().offset(-20)
-            speed.height.equalTo(110)
-        }
-        
-        distanceRecord.snp.makeConstraints { distance in
-            distance.top.equalTo(cadenceRecord.snp.bottom).offset(15)
-            distance.left.equalToSuperview().offset(20)
-            distance.width.equalToSuperview().multipliedBy(0.5).offset(-25)
-            distance.height.equalTo(110)
-        }
-        
-        calorieRecord.snp.makeConstraints { calory in
-            calory.top.equalTo(speedRecord.snp.bottom).offset(15)
-            calory.left.equalTo(distanceRecord.snp.right).offset(10)
-            calory.right.equalToSuperview().offset(-20)
-            calory.height.equalTo(110)
-        }
-        
-        // 버튼 제약조건
-        recordButton.snp.makeConstraints { [weak self] btn in
-            guard let self = self else { return }
-            btn.top.equalTo(calorieRecord.snp.bottom).offset(67)
-            btn.centerX.equalToSuperview()
-            btn.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing).multipliedBy(0.66)
-        }
-        
-        resetButton.snp.makeConstraints { [weak self] btn in
-            guard let self = self else { return }
-            btn.top.equalTo(calorieRecord.snp.bottom).offset(67)
-            btn.left.equalTo(self.view.safeAreaLayoutGuide.snp.left).offset(20)
-            btn.right.equalTo(recordButton.snp.left).offset(-15)
-        }
-        
-        finishButton.snp.makeConstraints { [weak self] btn in
-            guard let self = self else { return }
-            btn.top.equalTo(calorieRecord.snp.bottom).offset(67)
-            btn.left.equalTo(recordButton.snp.right).offset(15)
-            btn.right.equalTo(self.view.safeAreaLayoutGuide.snp.right).offset(-20)
         }
     }
     
