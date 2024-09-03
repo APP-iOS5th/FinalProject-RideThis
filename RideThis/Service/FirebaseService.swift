@@ -310,10 +310,6 @@ class FireBaseService {
     ///  - Parameters:
     ///   - userId: 사용자 UID
     func deleteUser(userId: String) {
-        // MARK: TODO 1. userId에 맞는 USERS Collection삭제 (기록, 장치 먼저 삭제해야하는지 확인)✅
-        // MARK:      2. 파라미터로 넘어온 userId가 user_follower에 있는 사람들 데이터를 모두 지워야함
-        // MARK:      3. Firebase Auth 기록 삭제✅
-        // MARK:      4. AppleLogin할 때 했던 뭐 Keychain같은 유저 정보들 삭제✅
         db.collection("USERS").document(userId).delete() { error in
             if let error = error {
                 print(error)
@@ -596,5 +592,22 @@ class FireBaseService {
                 print("Notification added to Firestore successfully.")
             }
         }
+    }
+    
+    func fetchAlarms(userId: String) async -> [AlarmModel] {
+        do {
+            if case .userSnapshot(let userSnapshot) = try await self.fetchUser(at: userId, userType: false), let snapShot = userSnapshot {
+                var alarms: [AlarmModel] = []
+                
+                for doc in try await self.fetchCollection(document: snapShot, collectionName: "ALARMS").getDocuments().documents {
+                    alarms.append(try doc.data(as: AlarmModel.self))
+                }
+                
+                return alarms
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+        return []
     }
 }

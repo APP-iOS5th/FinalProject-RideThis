@@ -46,21 +46,26 @@ class AlarmView: RideThisViewController {
             .sink { [weak self] alarm in
                 guard let self = self else { return }
                 
-                print(alarm)
+                self.alarmTableView.reloadData()
             }
             .store(in: &cancellable)
+        
+        viewModel.fetchAlarmDatas()
     }
 }
 
 extension AlarmView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return viewModel.alarams.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "AlarmTableViewCell", for: indexPath) as? AlarmTableViewCell else {
             return UITableViewCell()
         }
+        
+        let alarm = viewModel.alarams[indexPath.row]
+        cell.configureCell(alarmInfo: alarm)
         
         return cell
     }

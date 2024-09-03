@@ -92,6 +92,7 @@
 		CD70006A2C6AF99F0071D4D2 /* GraphCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7000692C6AF99F0071D4D2 /* GraphCollectionViewCell.swift */; };
 		CD76A8C92C6E53FF003490B3 /* SignUpInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD76A8C82C6E53FF003490B3 /* SignUpInfoView.swift */; };
 		CD76A8CB2C6E5828003490B3 /* UITextField+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD76A8CA2C6E5828003490B3 /* UITextField+Extension.swift */; };
+		CD9593B12C7E106500899FD7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CD9593B02C7E106500899FD7 /* GoogleService-Info.plist */; };
 		CDAC668B2C6CF0CF005506FB /* AccountQuitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDAC668A2C6CF0CF005506FB /* AccountQuitView.swift */; };
 		CDB220082C7C19DD00973964 /* SignUpInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB220072C7C19DD00973964 /* SignUpInfoViewModel.swift */; };
 		CDB2200A2C7C4EF900973964 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB220092C7C4EF900973964 /* Date+Extension.swift */; };

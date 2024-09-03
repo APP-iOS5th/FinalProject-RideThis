@@ -3,6 +3,14 @@ import UIKit
 import SnapKit
 
 class AlarmTableViewCell: UITableViewCell {
+    
+    private let bodyLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        return label
+    }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         initialCell()
@@ -15,16 +23,16 @@ class AlarmTableViewCell: UITableViewCell {
     
     func initialCell() {
         self.backgroundColor = .primaryBackgroundColor
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "TEST"
-        label.textColor = .black
         
-        self.contentView.addSubview(label)
+        self.contentView.addSubview(bodyLabel)
         
-        label.snp.makeConstraints {
+        bodyLabel.snp.makeConstraints {
             $0.centerX.equalTo(contentView.snp.centerX)
             $0.centerY.equalTo(contentView.snp.centerY)
         }
+    }
+    
+    func configureCell(alarmInfo: AlarmModel) {
+        self.bodyLabel.text = alarmInfo.alarm_body
     }
 }
