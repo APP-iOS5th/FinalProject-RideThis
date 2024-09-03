@@ -480,11 +480,11 @@ class FireBaseService {
     func fetchFMC(signedUserNickname: String, cellUserId: String) {
         db.collection("USERS").document(cellUserId).getDocument { document, error in
             if let document = document, document.exists {
-                if let userFCMToken = document.data()?["user_fcmtoken"] as? String {
+                if let userFCMToken = document.data()?["user_fmctoken"] as? String {
                     // FCM 메시지 전송
                     self.sendFCM(to: userFCMToken, signedUserNickname: signedUserNickname, cellUserId: cellUserId)
                 } else {
-                    print("user_fcmToken 필드를 찾을 수 없습니다.")
+                    print("user_fmctoken 필드가 없습니다.")
                 }
             } else {
                 print("해당 유저를 찾을 수 없습니다: \(error?.localizedDescription ?? "Unknown error")")
