@@ -11,14 +11,18 @@ class HomeCoordinator: Coordinator {
     }
     
     func start() {
-        let homeVC = HomeView()
+        let homeVC = HomeView(viewModel: HomeViewModel())
         homeVC.coordinator = self
         navigationController.pushViewController(homeVC, animated: false)
     }
     
     func showRecordListView() {
-        tabBarController.selectedIndex = 2 // Assuming RecordView is the third tab
         if let recordNav = tabBarController.viewControllers?[2] as? UINavigationController {
+            tabBarController.selectedIndex = 2
+            if recordNav.topViewController is RecordListView {
+                return
+            }
+            
             let recordCoordinator = RecordCoordinator(navigationController: recordNav, tabBarController: tabBarController)
             childCoordinators.append(recordCoordinator)
             recordCoordinator.showRecordListView()
@@ -26,8 +30,12 @@ class HomeCoordinator: Coordinator {
     }
     
     func showRecordView() {
-        tabBarController.selectedIndex = 2 // Assuming RecordView is the third tab
         if let recordNav = tabBarController.viewControllers?[2] as? UINavigationController {
+            tabBarController.selectedIndex = 2
+            if recordNav.topViewController is RecordView {
+                return
+            }
+            
             let recordCoordinator = RecordCoordinator(navigationController: recordNav, tabBarController: tabBarController)
             childCoordinators.append(recordCoordinator)
             recordCoordinator.start()
