@@ -8,14 +8,14 @@ class MonthView: UIView {
     private let avgTitleLabel = RideThisLabel(fontType: .defaultSize, fontColor: .black, text: "평균")
     
     private let countLabel = RideThisLabel(fontType: .defaultSize, fontColor: .black)
-    private let timeLabel = RideThisLabel(fontType: .defaultSize, fontColor: .black)
-    private let distanceLabel = RideThisLabel(fontType: .defaultSize, fontColor: .black)
+    private let timeLabel = RideThisLabel(fontType: .defaultSize, fontColor: .systemGreen)
+    private let distanceLabel = RideThisLabel(fontType: .defaultSize, fontColor: .systemRed)
     
     private let avgCountLabel = RideThisLabel(fontType: .defaultSize, fontColor: .black)
-    private let avgTimeLabel = RideThisLabel(fontType: .defaultSize, fontColor: .black)
-    private let avgDistanceLabel = RideThisLabel(fontType: .defaultSize, fontColor: .black)
+    private let avgTimeLabel = RideThisLabel(fontType: .defaultSize, fontColor: .systemGreen)
+    private let avgDistanceLabel = RideThisLabel(fontType: .defaultSize, fontColor: .systemRed)
     
-    private let tableView = UITableView()
+    private let recordsStackView = UIStackView()
     private var records: [RecordModel] = []
     var onRecordSelected: ((RecordModel) -> Void)?
     
@@ -33,17 +33,13 @@ class MonthView: UIView {
         layer.masksToBounds = true
         
         [monthLabel, titleLabel, avgTitleLabel, countLabel, timeLabel, distanceLabel,
-         avgCountLabel, avgTimeLabel, avgDistanceLabel, tableView].forEach { addSubview($0) }
+         avgCountLabel, avgTimeLabel, avgDistanceLabel, recordsStackView].forEach { addSubview($0) }
         
-        tableView.register(RecordCell.self, forCellReuseIdentifier: "RecordCell")
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.isScrollEnabled = false
+        recordsStackView.axis = .vertical
+        recordsStackView.spacing = 15
         
         setupConstraints()
     }
-    
-    private var tableViewHeightConstraint: Constraint?
     
     private func setupConstraints() {
         monthLabel.snp.makeConstraints { make in
@@ -90,11 +86,10 @@ class MonthView: UIView {
             make.left.equalTo(avgTitleLabel)
         }
         
-        tableView.snp.makeConstraints { make in
-            make.top.equalTo(distanceLabel.snp.bottom).offset(16)
-            make.left.right.equalToSuperview().inset(28)
-            make.bottom.equalToSuperview().offset(-16)
-            self.tableViewHeightConstraint = make.height.equalTo(0).constraint
+        recordsStackView.snp.makeConstraints { make in
+            make.top.equalTo(distanceLabel.snp.bottom).offset(20)
+            make.left.right.equalToSuperview().inset(19)
+            make.bottom.equalToSuperview().offset(-19)
         }
     }
     
@@ -104,30 +99,26 @@ class MonthView: UIView {
         let stats = calculateStats(records: records)
         updateLabels(month: month, stats: stats)
         
-        tableView.reloadData()
+        recordsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
-        // 테이블 뷰 높이 동적으로 설정
-        let cellHeight: CGFloat = 60
-        let tableHeight = CGFloat(records.count) * cellHeight
+        for record in records {
+            let dailyRecordView = DailyRecordView()
+            dailyRecordView.configure(with: record)
+            dailyRecordView.onTap = { [weak self] in
+                self?.onRecordSelected?(record)
+            }
+            recordsStackView.addArrangedSubview(dailyRecordView)
+        }
         
-        // 안전하게 제약 조건 업데이트
-                if let heightConstraint = self.tableViewHeightConstraint {
-                    heightConstraint.update(offset: tableHeight)
-                } else {
-                    tableView.snp.makeConstraints { make in
-                        self.tableViewHeightConstraint = make.height.equalTo(tableHeight).constraint
-                    }
-                }
-
-        // 전체 뷰의 높이 계산
+        // 전체 뷰의 높이 계산 및 업데이트
         let labelsHeight: CGFloat = 150 // 대략적인 라벨들의 총 높이
-        let totalHeight = labelsHeight + tableHeight + 50 // 50은 여유 공간
-
+        let recordsHeight = CGFloat(records.count) * 80 // DailyRecordView의 높이 증가
+        let totalHeight = labelsHeight + recordsHeight + CGFloat(records.count - 1) * 15 + 36 // 스택 뷰의 spacing과 상하 여백 포함
+        
         self.snp.updateConstraints { make in
             make.height.equalTo(totalHeight)
         }
-
-        // 레이아웃 업데이트
+        
         setNeedsLayout()
         layoutIfNeeded()
     }
@@ -168,28 +159,5 @@ class MonthView: UIView {
         let hours = minutes / 60
         let mins = minutes % 60
         return "\(hours)h \(mins)m"
-    }
-}
-
-extension MonthView: UITableViewDataSource, UITableViewDelegate {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return records.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "RecordCell", for: indexPath) as! RecordCell
-        let record = records[indexPath.row]
-        cell.configure(with: record)
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedRecord = records[indexPath.row]
-        onRecordSelected?(selectedRecord)
-        tableView.deselectRow(at: indexPath, animated: true)
     }
 }

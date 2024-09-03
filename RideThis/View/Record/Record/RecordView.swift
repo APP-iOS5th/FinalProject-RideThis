@@ -26,43 +26,30 @@ class RecordView: RideThisViewController {
     let recordButton = RideThisButton(buttonTitle: "시작")
     let finishButton = RideThisButton(buttonTitle: "기록 종료")
     
+    private let mainStackView = UIStackView()
+    private let recordsStackView = UIStackView()
+    private let buttonStackView = UIStackView()
+    
     // MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if viewModel == nil {
-            viewModel = RecordViewModel()
-        }
-        
         setupNavigationBar()
+        setupMainStackView()
+        setupRecordsStackView()
+        setupButtonStackView()
         setupButtons()
         
         if let viewModel = viewModel {
             setupBindings()
             
-            // ViewModel의 상태 변경 클로저 설정
             viewModel.onRecordingStatusChanged = { [weak self] isRecording in
                 guard let self = self else { return }
                 self.updateUI(isRecording: isRecording)
             }
             
-            // 뷰 모델에서 기록 종료 트리거 처리
             viewModel.delegate = self
         }
-        
-        // 기록 뷰 추가
-        self.view.addSubview(timerRecord)
-        self.view.addSubview(cadenceRecord)
-        self.view.addSubview(speedRecord)
-        self.view.addSubview(distanceRecord)
-        self.view.addSubview(calorieRecord)
-        
-        // 버튼 추가
-        self.view.addSubview(resetButton)
-        self.view.addSubview(recordButton)
-        self.view.addSubview(finishButton)
-        
-        setupConstraints()
         
         tabBarController?.delegate = self
     }
@@ -78,69 +65,133 @@ class RecordView: RideThisViewController {
         }
     }
     
+    private func setupMainStackView() {
+        view.addSubview(mainStackView)
+        mainStackView.axis = .vertical
+        mainStackView.spacing = 20
+        mainStackView.alignment = .fill
+        mainStackView.distribution = .fill
+
+        mainStackView.snp.makeConstraints { make in
+            if isLargeDevice() {
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40) // 큰 기기에 대한 상단 여백
+            } else {
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20) // 작은 기기에 대한 상단 여백
+            }
+            make.left.right.equalToSuperview().inset(20)
+            make.bottom.lessThanOrEqualTo(view.safeAreaLayoutGuide.snp.bottom).offset(-120)
+        }
+
+        mainStackView.addArrangedSubview(timerRecord)
+        mainStackView.addArrangedSubview(recordsStackView)
+
+        timerRecord.snp.makeConstraints { make in
+            make.height.equalTo(150)
+        }
+
+        if isLargeDevice() {
+            // 큰 기기에서 추가 여백을 주기 위한 빈 뷰
+            let topSpacerView = UIView()
+            let bottomSpacerView = UIView()
+            mainStackView.insertArrangedSubview(topSpacerView, at: 0)
+            mainStackView.addArrangedSubview(bottomSpacerView)
+            
+            topSpacerView.snp.makeConstraints { make in
+                make.height.equalTo(20)
+            }
+            bottomSpacerView.snp.makeConstraints { make in
+                make.height.equalTo(20)
+            }
+        }
+    }
+    
+    private func setupRecordsStackView() {
+        recordsStackView.axis = .vertical
+        recordsStackView.spacing = 15
+        recordsStackView.distribution = .fillEqually
+        
+        let topRecordStack = UIStackView(arrangedSubviews: [cadenceRecord, speedRecord])
+        topRecordStack.axis = .horizontal
+        topRecordStack.spacing = 10
+        topRecordStack.distribution = .fillEqually
+        
+        let bottomRecordStack = UIStackView(arrangedSubviews: [distanceRecord, calorieRecord])
+        bottomRecordStack.axis = .horizontal
+        bottomRecordStack.spacing = 10
+        bottomRecordStack.distribution = .fillEqually
+        
+        recordsStackView.addArrangedSubview(topRecordStack)
+        recordsStackView.addArrangedSubview(bottomRecordStack)
+        
+        // 각 RecordContainer의 크기 제한
+        [cadenceRecord, speedRecord, distanceRecord, calorieRecord].forEach { container in
+            container.snp.makeConstraints { make in
+                make.height.equalTo(110)
+            }
+        }
+    }
+    
+    private func setupButtonStackView() {
+        view.addSubview(buttonStackView)
+        buttonStackView.axis = .horizontal
+        buttonStackView.spacing = 10
+        buttonStackView.distribution = .fillEqually
+        
+        buttonStackView.addArrangedSubview(resetButton)
+        buttonStackView.addArrangedSubview(recordButton)
+        buttonStackView.addArrangedSubview(finishButton)
+        
+        buttonStackView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview().inset(20)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-50)
+            make.height.equalTo(50)
+        }
+    }
+    
+    // MARK: - 레이아웃 조정
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        if isLargeDevice() {
+            mainStackView.spacing = 20
+        } else {
+            mainStackView.spacing = 10
+        }
+    }
+    
+    private func isLargeDevice() -> Bool {
+        let screenSize = UIScreen.main.bounds.size
+        let minDimension = min(screenSize.width, screenSize.height)
+        let maxDimension = max(screenSize.width, screenSize.height)
+        
+        // iPhone 11, 11 Pro, 11 Pro Max, 12, 12 Pro, 12 Pro Max, 13, 13 Pro, 13 Pro Max, 14, 14 Pro, 14 Pro Max, 15, 15 Pro, 15 Pro Max
+        return minDimension >= 390 && maxDimension >= 844
+    }
+    
     private func updateTimerDisplay() {
         timerRecord.updateRecordText(text: viewModel?.updateTimerDisplay() ?? "00:00")
     }
     
-    // MARK: - 레이아웃 설정
-    private func setupConstraints() {
-        // 기록 뷰 제약조건
-        timerRecord.snp.makeConstraints { timer in
-            timer.top.equalToSuperview().offset(80)
-            timer.left.equalToSuperview().offset(20)
-            timer.right.equalToSuperview().offset(-20)
-            timer.height.equalTo(150)
-        }
+    private var hasShownBluetoothAlert = false
+    
+    private func checkBluetoothConnection() {
+#if targetEnvironment(simulator)
+        // 시뮬레이터에서는 블루투스 연결 확인 생략
+        return
+#endif
         
-        cadenceRecord.snp.makeConstraints { cadence in
-            cadence.top.equalTo(timerRecord.snp.bottom).offset(40)
-            cadence.left.equalToSuperview().offset(20)
-            cadence.width.equalToSuperview().multipliedBy(0.5).offset(-25)
-            cadence.height.equalTo(110)
+        coordinator?.checkBluetoothConnection { [weak self] isConnected in
+            if !isConnected && !(self?.hasShownBluetoothAlert ?? true) {
+                DispatchQueue.main.async {
+                    self?.showBluetoothDisconnectedAlert()
+                    self?.hasShownBluetoothAlert = true
+                }
+            }
         }
-        
-        speedRecord.snp.makeConstraints { speed in
-            speed.top.equalTo(timerRecord.snp.bottom).offset(40)
-            speed.left.equalTo(cadenceRecord.snp.right).offset(10)
-            speed.right.equalToSuperview().offset(-20)
-            speed.height.equalTo(110)
-        }
-        
-        distanceRecord.snp.makeConstraints { distance in
-            distance.top.equalTo(cadenceRecord.snp.bottom).offset(15)
-            distance.left.equalToSuperview().offset(20)
-            distance.width.equalToSuperview().multipliedBy(0.5).offset(-25)
-            distance.height.equalTo(110)
-        }
-        
-        calorieRecord.snp.makeConstraints { calory in
-            calory.top.equalTo(speedRecord.snp.bottom).offset(15)
-            calory.left.equalTo(distanceRecord.snp.right).offset(10)
-            calory.right.equalToSuperview().offset(-20)
-            calory.height.equalTo(110)
-        }
-        
-        // 버튼 제약조건
-        recordButton.snp.makeConstraints { [weak self] btn in
-            guard let self = self else { return }
-            btn.top.equalTo(calorieRecord.snp.bottom).offset(67)
-            btn.centerX.equalToSuperview()
-            btn.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing).multipliedBy(0.66)
-        }
-        
-        resetButton.snp.makeConstraints { [weak self] btn in
-            guard let self = self else { return }
-            btn.top.equalTo(calorieRecord.snp.bottom).offset(67)
-            btn.left.equalTo(self.view.safeAreaLayoutGuide.snp.left).offset(20)
-            btn.right.equalTo(recordButton.snp.left).offset(-15)
-        }
-        
-        finishButton.snp.makeConstraints { [weak self] btn in
-            guard let self = self else { return }
-            btn.top.equalTo(calorieRecord.snp.bottom).offset(67)
-            btn.left.equalTo(recordButton.snp.right).offset(15)
-            btn.right.equalTo(self.view.safeAreaLayoutGuide.snp.right).offset(-20)
-        }
+    }
+    
+    func resetBluetoothAlert() {
+        hasShownBluetoothAlert = false
     }
     
     // MARK: - 버튼 설정
@@ -160,22 +211,38 @@ class RecordView: RideThisViewController {
         }, for: .touchUpInside)
         
         recordButton.addAction(UIAction { [weak self] _ in
-            guard let self = self else { return }
-            // TODO: - 최초 기록 시작일 때 카운트다운 추가
-            // 블루투스 연결 상태 확인
-            if self.viewModel?.isBluetoothConnected == true {
-                if self.viewModel?.isRecording == true {
-                    self.viewModel?.pauseRecording()
-                } else {
-                    self.viewModel?.startRecording()
-                    self.disableTabBar() // 탭바 비활성화
-                }
+            guard let self = self, let viewModel = self.viewModel else { return }
+            
+#if targetEnvironment(simulator)
+            // 시뮬레이터에서는 블루투스 연결 확인을 건너뛰고 바로 기록을 시작합니다.
+            if viewModel.isRecording {
+                viewModel.pauseRecording()
+            } else if viewModel.isPaused {
+                viewModel.resumeRecording()
             } else {
-                showAlert(alertTitle: "장치연결이 필요합니다.", msg: "사용하시려면 장치를 연결해주세요.", confirm: "장치연결") {
-                    print("connect Bluetooth")
-                    self.coordinator?.showDeviceConnectionView()
+                viewModel.startRecording()
+                self.disableTabBar()
+            }
+            self.updateUI(isRecording: viewModel.isRecording)
+#else
+            self.coordinator?.checkBluetoothConnection { isConnected in
+                DispatchQueue.main.async {
+                    if isConnected {
+                        if viewModel.isRecording {
+                            viewModel.pauseRecording()
+                        } else if viewModel.isPaused {
+                            viewModel.resumeRecording()
+                        } else {
+                            viewModel.startRecording()
+                            self.disableTabBar()
+                        }
+                        self.updateUI(isRecording: viewModel.isRecording)
+                    } else {
+                        self.showBluetoothDisconnectedAlert()
+                    }
                 }
             }
+#endif
         }, for: .touchUpInside)
         
         finishButton.addAction(UIAction { [weak self] _ in
@@ -186,6 +253,13 @@ class RecordView: RideThisViewController {
                 self.enableTabBar() // 탭바 활성화
             }
         }, for: .touchUpInside)
+    }
+    
+    private func showBluetoothDisconnectedAlert() {
+        showAlert(alertTitle: "장치연결이 필요합니다.", msg: "사용하시려면 장치를 연결해주세요.", confirm: "장치연결") {
+            self.coordinator?.showDeviceConnectionView()
+        }
+        hasShownBluetoothAlert = true
     }
     
     // MARK: - 탭바 활성화 / 비활성화
@@ -253,7 +327,7 @@ class RecordView: RideThisViewController {
                 self.finishButton.isEnabled = true
                 self.resetButton.backgroundColor = .black
                 self.finishButton.backgroundColor = .black
-                self.recordButton.setTitle("시작", for: .normal)
+                self.recordButton.setTitle("재시작", for: .normal)
                 self.recordListButton?.isEnabled = false
             } else { // 정지, 리셋, 종료 눌렸을 때
                 self.resetButton.isEnabled = false
@@ -353,16 +427,5 @@ extension RecordView: UITabBarControllerDelegate {
         }
         
         return true
-    }
-}
-
-// 블루투스가 꺼졌을 때
-extension RecordView: BluetoothViewDelegate {
-    func bluetoothDidTurnOff() {
-        DispatchQueue.main.async {
-            self.showAlert(alertTitle: "블루투스 꺼짐", msg: "블루투스가 꺼졌습니다. 다시 켜주세요.", confirm: "확인") {
-                print("블루투스 꺼짐")
-            }
-        }
     }
 }

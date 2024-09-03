@@ -2,10 +2,10 @@ import UIKit
 import Combine
 
 class DeviceView: RideThisViewController {
+    // MARK: - Properties
     
     var coordinator: DeviceCoordinator?
     
-    // 커스텀 타이틀
     private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "장치연결")
     private let tableView = UITableView(frame: .zero, style: .plain)
     private let findDeviceButton = RideThisButton(buttonTitle: "장치찾기")
@@ -14,8 +14,8 @@ class DeviceView: RideThisViewController {
     private let viewModel = DeviceViewModel()
     private var cancellables = Set<AnyCancellable>()
     
+    // MARK: - Lifecycle Methods
     
-    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -25,15 +25,16 @@ class DeviceView: RideThisViewController {
         viewModel.loadRegisteredDevices()
     }
     
+    // MARK: - UI Setup
     
-    // MARK: - Setup UI
+    /// UI 요소들을 설정
     private func setupUI() {
         setupNavigationBar()
         setupLayout()
         configureEmptyLabel()
     }
     
-    // MARK: - Setup NavigationBar
+    /// NavigationBar 설정
     private func setupNavigationBar() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
@@ -50,8 +51,7 @@ class DeviceView: RideThisViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: customTitleLabel)
     }
     
-    
-    // MARK: - Setup Layout
+    /// UI 요소들의 레이아웃 설정
     private func setupLayout() {
         let safeArea = view.safeAreaLayoutGuide
         let screenHeight = UIScreen.main.bounds.height
@@ -73,7 +73,7 @@ class DeviceView: RideThisViewController {
         }
     }
     
-    // MARK: - Configure EmptyLabel
+    /// 빈 라벨 구성
     private func configureEmptyLabel() {
         emptyLabel.isHidden = true
         view.addSubview(emptyLabel)
@@ -83,8 +83,7 @@ class DeviceView: RideThisViewController {
         }
     }
     
-    
-    // MARK: - Setup TableView
+    /// TableView 설정
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
@@ -93,17 +92,16 @@ class DeviceView: RideThisViewController {
         tableView.clipsToBounds = true
     }
     
-    
-    // MARK: - Setup Actions
+    /// 버튼 액션을 설정합니다.
     private func setupActions() {
         findDeviceButton.addAction(UIAction { [weak self] _ in
             self?.presentDeviceSearchBottomSheet()
         }, for: .touchUpInside)
     }
     
-    
     // MARK: - ViewModel Binding
-    /// 데이터 변경 시 UI 업데이트
+    
+    /// ViewModel과 View를 바인딩
     private func bindViewModel() {
         viewModel.$devices // viewModel의 Device 목록 구독
             .receive(on: DispatchQueue.main) // Main Thread에서 처리
@@ -111,11 +109,12 @@ class DeviceView: RideThisViewController {
                 self?.tableView.reloadData() // 데이터 변경 시 tableView reload
                 self?.updateEmptyLabelVisibility(isEmpty: devices.isEmpty) // Device 목록이 비었을 때 lable을 업데이트
             }
-            .store(in: &cancellables) // 구독 취소 가능하도록 저장
+            .store(in: &cancellables)
     }
     
+    // MARK: - Device Search
     
-    // MARK: - Present Device Search BottomSheet
+    /// 장치 검색 BottomSheet 표시
     private func presentDeviceSearchBottomSheet() {
         if viewModel.devices.count == 1 {
             showAlert(
@@ -130,7 +129,7 @@ class DeviceView: RideThisViewController {
                         try await self.viewModel.deleteDeviceFromFirebase(deviceToDelete.name)
                         DispatchQueue.main.async {
                             self.viewModel.deleteDevice(deviceToDelete.name)
-                            self.presentDeviceSearchVC()
+                            self.coordinator?.showDeviceSearchView()
                         }
                     } catch {
                         print("Error deleting device: \(error)")
@@ -138,22 +137,7 @@ class DeviceView: RideThisViewController {
                 }
             }
         } else {
-            presentDeviceSearchVC()
-        }
-    }
-    
-    /// DeviceSearchViewController를 페이지 시트로 표시하고 기기 검색을 시작하는 함수
-    private func presentDeviceSearchVC() {
-        let deviceSearchVC = DeviceSearchViewController(viewModel: viewModel)
-        deviceSearchVC.modalPresentationStyle = .pageSheet
-        
-        if let sheet = deviceSearchVC.sheetPresentationController {
-            sheet.detents = [.large()]
-            sheet.prefersGrabberVisible = true
-        }
-        
-        present(deviceSearchVC, animated: true) {
-            self.viewModel.startDeviceSearch()
+            coordinator?.showDeviceSearchView()
         }
     }
     
@@ -165,15 +149,13 @@ class DeviceView: RideThisViewController {
     }
 }
 
-
 // MARK: - UITableViewDelegate, UITableViewDataSource
+
 extension DeviceView: UITableViewDelegate, UITableViewDataSource {
-    /// numberOfRowsInSection
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.devices.count
     }
     
-    /// cellForRowAt
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: DeviceTableViewCell.identifier, for: indexPath) as? DeviceTableViewCell else {
             return UITableViewCell()
@@ -183,23 +165,13 @@ extension DeviceView: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
-    /// heightForRowAt
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
     
-    /// didSelectRowAt
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
         let selectedDeviceName = viewModel.devices[indexPath.row].name
-        let deviceDetailVC = DeviceDetailViewController(viewModel: viewModel, deviceName: selectedDeviceName)
-        
-        deviceDetailVC.onDeviceDeleted = { [weak self] in
-            self?.viewModel.deleteDevice(selectedDeviceName)
-            self?.tableView.reloadData()
-        }
-        
-        navigationController?.pushViewController(deviceDetailVC, animated: true)
+        coordinator?.showDeviceDetailView(for: selectedDeviceName, viewModel: viewModel)
     }
 }

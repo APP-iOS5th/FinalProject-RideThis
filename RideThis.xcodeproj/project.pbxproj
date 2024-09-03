@@ -20,7 +20,6 @@
 		0493F5C82C7DB39200290A4C /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5C72C7DB39200290A4C /* AppCoordinator.swift */; };
 		0493F5CA2C7DB5FD00290A4C /* TabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5C92C7DB5FD00290A4C /* TabBarCoordinator.swift */; };
 		0493F5CC2C7DBC0600290A4C /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5CB2C7DBC0600290A4C /* HomeCoordinator.swift */; };
-		0493F5D22C7DBE1A00290A4C /* DeviceCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5D12C7DBE1A00290A4C /* DeviceCoordinator.swift */; };
 		0493F5D52C7DBEA800290A4C /* MyPageCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5D42C7DBEA800290A4C /* MyPageCoordinator.swift */; };
 		0493F5D72C7E019C00290A4C /* RecordCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5D62C7E019C00290A4C /* RecordCoordinator.swift */; };
 		0493F5DA2C7E0BFA00290A4C /* CountCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5D92C7E0BFA00290A4C /* CountCoordinator.swift */; };
@@ -35,13 +34,17 @@
 		04E3C0D52C6B3818006B844F /* DistanceSelectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0D42C6B3818006B844F /* DistanceSelectionCoordinator.swift */; };
 		04E3C0D72C6B8C30006B844F /* DistanceSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E3C0D62C6B8C30006B844F /* DistanceSelectionViewModel.swift */; };
 		78254FD42C7C05CB0069B10A /* DeviceSearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78254FD32C7C05CB0069B10A /* DeviceSearchTableViewCell.swift */; };
-		78254FD62C7C1CC90069B10A /* WheelCircumferenceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78254FD52C7C1CC90069B10A /* WheelCircumferenceViewController.swift */; };
+		78254FD62C7C1CC90069B10A /* WheelCircumferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78254FD52C7C1CC90069B10A /* WheelCircumferenceView.swift */; };
 		78254FD82C7C1CF40069B10A /* WheelCircumferenceSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78254FD72C7C1CF40069B10A /* WheelCircumferenceSelectionCell.swift */; };
-		784D5DFE2C7B780700D2FE15 /* DeviceSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784D5DFD2C7B780700D2FE15 /* DeviceSearchViewController.swift */; };
+		784D5DFE2C7B780700D2FE15 /* DeviceSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784D5DFD2C7B780700D2FE15 /* DeviceSearchView.swift */; };
+		78A6BF842C855BE90076A9A9 /* WheelCircumferenceCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A6BF832C855BE90076A9A9 /* WheelCircumferenceCoordinator.swift */; };
+		78A6BF862C855BF70076A9A9 /* DeviceSearchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A6BF852C855BF70076A9A9 /* DeviceSearchCoordinator.swift */; };
+		78A6BF882C855C0D0076A9A9 /* DeviceDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A6BF872C855C0D0076A9A9 /* DeviceDetailCoordinator.swift */; };
+		78A6BF8E2C855F4D0076A9A9 /* DeviceCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A6BF8D2C855F4D0076A9A9 /* DeviceCoordinator.swift */; };
 		78DBD01B2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DBD01A2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift */; };
 		78DBD01D2C7882B700B43A62 /* DeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DBD01C2C7882B700B43A62 /* DeviceTableViewCell.swift */; };
 		78DBD01F2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DBD01E2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift */; };
-		78DBD0212C7882EB00B43A62 /* DeviceDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DBD0202C7882EB00B43A62 /* DeviceDetailViewController.swift */; };
+		78DBD0212C7882EB00B43A62 /* DeviceDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DBD0202C7882EB00B43A62 /* DeviceDetailView.swift */; };
 		CD0E1E852C6A409F0080CFED /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0E1E842C6A409F0080CFED /* SettingView.swift */; };
 		CD0EC4C92C71EE5400E70452 /* FollowManageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0EC4C82C71EE5400E70452 /* FollowManageView.swift */; };
 		CD0EC4CB2C71F10500E70452 /* FollowTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0EC4CA2C71F10500E70452 /* FollowTableViewCell.swift */; };
@@ -112,13 +115,13 @@
 		EB07B0BB2C6C79F20067BF0F /* RecordContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0B82C6C79F20067BF0F /* RecordContainerView.swift */; };
 		EB07B0BC2C6C79F20067BF0F /* RecordInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0B92C6C79F20067BF0F /* RecordInfoView.swift */; };
 		EB07B0BD2C6C79F20067BF0F /* RecordSumUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07B0BA2C6C79F20067BF0F /* RecordSumUpView.swift */; };
+		EB13A1D72C863DD80092F358 /* DailyRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB13A1D62C863DD80092F358 /* DailyRecordView.swift */; };
 		EB3DFA3E2C77218A00FA366C /* RecordDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3DFA3D2C77218A00FA366C /* RecordDetailView.swift */; };
 		EB6B40852C81847B000DC914 /* RecordSumUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6B40842C81847B000DC914 /* RecordSumUpViewModel.swift */; };
 		EB6B40872C81B125000DC914 /* RecordSumUpCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6B40862C81B125000DC914 /* RecordSumUpCoordinator.swift */; };
 		EB6B40892C81B15E000DC914 /* RecordListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6B40882C81B15E000DC914 /* RecordListCoordinator.swift */; };
 		EB6B408B2C81B6CA000DC914 /* RecordDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6B408A2C81B6CA000DC914 /* RecordDetailCoordinator.swift */; };
 		EBADE05D2C7F16CA0045E03B /* MonthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBADE05C2C7F16CA0045E03B /* MonthView.swift */; };
-		EBADE05F2C7F17010045E03B /* RecordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBADE05E2C7F17010045E03B /* RecordCell.swift */; };
 		EBB1F4182C76CA75007B0E3C /* RecordListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB1F4172C76CA75007B0E3C /* RecordListView.swift */; };
 		EBDF95542C7C65940067EA93 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EBDF95532C7C65940067EA93 /* GoogleService-Info.plist */; };
 		EBF2E3F02C84E735003FE16C /* RecordListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF2E3EF2C84E735003FE16C /* RecordListViewModel.swift */; };
@@ -158,7 +161,6 @@
 		0493F5C72C7DB39200290A4C /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		0493F5C92C7DB5FD00290A4C /* TabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCoordinator.swift; sourceTree = "<group>"; };
 		0493F5CB2C7DBC0600290A4C /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
-		0493F5D12C7DBE1A00290A4C /* DeviceCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceCoordinator.swift; sourceTree = "<group>"; };
 		0493F5D42C7DBEA800290A4C /* MyPageCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageCoordinator.swift; sourceTree = "<group>"; };
 		0493F5D62C7E019C00290A4C /* RecordCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordCoordinator.swift; sourceTree = "<group>"; };
 		0493F5D92C7E0BFA00290A4C /* CountCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountCoordinator.swift; sourceTree = "<group>"; };
@@ -173,13 +175,17 @@
 		04E3C0D42C6B3818006B844F /* DistanceSelectionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceSelectionCoordinator.swift; sourceTree = "<group>"; };
 		04E3C0D62C6B8C30006B844F /* DistanceSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceSelectionViewModel.swift; sourceTree = "<group>"; };
 		78254FD32C7C05CB0069B10A /* DeviceSearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSearchTableViewCell.swift; sourceTree = "<group>"; };
-		78254FD52C7C1CC90069B10A /* WheelCircumferenceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelCircumferenceViewController.swift; sourceTree = "<group>"; };
+		78254FD52C7C1CC90069B10A /* WheelCircumferenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelCircumferenceView.swift; sourceTree = "<group>"; };
 		78254FD72C7C1CF40069B10A /* WheelCircumferenceSelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelCircumferenceSelectionCell.swift; sourceTree = "<group>"; };
-		784D5DFD2C7B780700D2FE15 /* DeviceSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSearchViewController.swift; sourceTree = "<group>"; };
+		784D5DFD2C7B780700D2FE15 /* DeviceSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSearchView.swift; sourceTree = "<group>"; };
+		78A6BF832C855BE90076A9A9 /* WheelCircumferenceCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelCircumferenceCoordinator.swift; sourceTree = "<group>"; };
+		78A6BF852C855BF70076A9A9 /* DeviceSearchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSearchCoordinator.swift; sourceTree = "<group>"; };
+		78A6BF872C855C0D0076A9A9 /* DeviceDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDetailCoordinator.swift; sourceTree = "<group>"; };
+		78A6BF8D2C855F4D0076A9A9 /* DeviceCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceCoordinator.swift; sourceTree = "<group>"; };
 		78DBD01A2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoTableViewCell.swift; sourceTree = "<group>"; };
 		78DBD01C2C7882B700B43A62 /* DeviceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceTableViewCell.swift; sourceTree = "<group>"; };
 		78DBD01E2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelCircumferenceTableViewCell.swift; sourceTree = "<group>"; };
-		78DBD0202C7882EB00B43A62 /* DeviceDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDetailViewController.swift; sourceTree = "<group>"; };
+		78DBD0202C7882EB00B43A62 /* DeviceDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDetailView.swift; sourceTree = "<group>"; };
 		CD0E1E842C6A409F0080CFED /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		CD0EC4C82C71EE5400E70452 /* FollowManageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowManageView.swift; sourceTree = "<group>"; };
 		CD0EC4CA2C71F10500E70452 /* FollowTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowTableViewCell.swift; sourceTree = "<group>"; };
@@ -245,13 +251,13 @@
 		EB07B0B82C6C79F20067BF0F /* RecordContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordContainerView.swift; sourceTree = "<group>"; };
 		EB07B0B92C6C79F20067BF0F /* RecordInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordInfoView.swift; sourceTree = "<group>"; };
 		EB07B0BA2C6C79F20067BF0F /* RecordSumUpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordSumUpView.swift; sourceTree = "<group>"; };
+		EB13A1D62C863DD80092F358 /* DailyRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyRecordView.swift; sourceTree = "<group>"; };
 		EB3DFA3D2C77218A00FA366C /* RecordDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetailView.swift; sourceTree = "<group>"; };
 		EB6B40842C81847B000DC914 /* RecordSumUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordSumUpViewModel.swift; sourceTree = "<group>"; };
 		EB6B40862C81B125000DC914 /* RecordSumUpCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordSumUpCoordinator.swift; sourceTree = "<group>"; };
 		EB6B40882C81B15E000DC914 /* RecordListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListCoordinator.swift; sourceTree = "<group>"; };
 		EB6B408A2C81B6CA000DC914 /* RecordDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetailCoordinator.swift; sourceTree = "<group>"; };
 		EBADE05C2C7F16CA0045E03B /* MonthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthView.swift; sourceTree = "<group>"; };
-		EBADE05E2C7F17010045E03B /* RecordCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordCell.swift; sourceTree = "<group>"; };
 		EBB1F4172C76CA75007B0E3C /* RecordListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListView.swift; sourceTree = "<group>"; };
 		EBDF95532C7C65940067EA93 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EBF2E3EF2C84E735003FE16C /* RecordListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListViewModel.swift; sourceTree = "<group>"; };
@@ -334,14 +340,6 @@
 			path = Coordinator;
 			sourceTree = "<group>";
 		};
-		0493F5D02C7DBE0D00290A4C /* Coordinator */ = {
-			isa = PBXGroup;
-			children = (
-				0493F5D12C7DBE1A00290A4C /* DeviceCoordinator.swift */,
-			);
-			path = Coordinator;
-			sourceTree = "<group>";
-		};
 		0493F5D82C7E0BE800290A4C /* Coordinator */ = {
 			isa = PBXGroup;
 			children = (
@@ -412,6 +410,73 @@
 			isa = PBXGroup;
 			children = (
 				04E3C0D42C6B3818006B844F /* DistanceSelectionCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		78A6BF7D2C855AEB0076A9A9 /* DeviceDetail */ = {
+			isa = PBXGroup;
+			children = (
+				78A6BF822C855B940076A9A9 /* Coordinator */,
+				78DBD0202C7882EB00B43A62 /* DeviceDetailView.swift */,
+			);
+			path = DeviceDetail;
+			sourceTree = "<group>";
+		};
+		78A6BF7E2C855AFF0076A9A9 /* DeviceSearch */ = {
+			isa = PBXGroup;
+			children = (
+				78A6BF812C855B910076A9A9 /* Coordinator */,
+				784D5DFD2C7B780700D2FE15 /* DeviceSearchView.swift */,
+			);
+			path = DeviceSearch;
+			sourceTree = "<group>";
+		};
+		78A6BF7F2C855B0C0076A9A9 /* WheelCircumference */ = {
+			isa = PBXGroup;
+			children = (
+				78A6BF802C855B8C0076A9A9 /* Coordinator */,
+				78254FD52C7C1CC90069B10A /* WheelCircumferenceView.swift */,
+			);
+			path = WheelCircumference;
+			sourceTree = "<group>";
+		};
+		78A6BF802C855B8C0076A9A9 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				78A6BF832C855BE90076A9A9 /* WheelCircumferenceCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		78A6BF812C855B910076A9A9 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				78A6BF852C855BF70076A9A9 /* DeviceSearchCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		78A6BF822C855B940076A9A9 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				78A6BF872C855C0D0076A9A9 /* DeviceDetailCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		78A6BF892C855EE30076A9A9 /* Device */ = {
+			isa = PBXGroup;
+			children = (
+				78A6BF8A2C855EF40076A9A9 /* Coordinator */,
+			);
+			path = Device;
+			sourceTree = "<group>";
+		};
+		78A6BF8A2C855EF40076A9A9 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				78A6BF8D2C855F4D0076A9A9 /* DeviceCoordinator.swift */,
 			);
 			path = Coordinator;
 			sourceTree = "<group>";
@@ -600,12 +665,12 @@
 		CD4213E52C64988B00F7C3AE /* Device */ = {
 			isa = PBXGroup;
 			children = (
-				0493F5D02C7DBE0D00290A4C /* Coordinator */,
+				78A6BF892C855EE30076A9A9 /* Device */,
+				78A6BF7D2C855AEB0076A9A9 /* DeviceDetail */,
+				78A6BF7E2C855AFF0076A9A9 /* DeviceSearch */,
+				78A6BF7F2C855B0C0076A9A9 /* WheelCircumference */,
 				78DBD0132C78827B00B43A62 /* Cell */,
 				CD4213E42C64988B00F7C3AE /* DeviceView.swift */,
-				78DBD0202C7882EB00B43A62 /* DeviceDetailViewController.swift */,
-				784D5DFD2C7B780700D2FE15 /* DeviceSearchViewController.swift */,
-				78254FD52C7C1CC90069B10A /* WheelCircumferenceViewController.swift */,
 			);
 			path = Device;
 			sourceTree = "<group>";
@@ -866,7 +931,6 @@
 			children = (
 				0493F5CD2C7DBDB300290A4C /* Coordinator */,
 				CD4213EA2C64988B00F7C3AE /* RecordView.swift */,
-				EB07B0B82C6C79F20067BF0F /* RecordContainerView.swift */,
 				EB07B0B92C6C79F20067BF0F /* RecordInfoView.swift */,
 			);
 			path = Record;
@@ -886,6 +950,8 @@
 			children = (
 				EB6B40912C81B7BA000DC914 /* Coordinator */,
 				EBB1F4172C76CA75007B0E3C /* RecordListView.swift */,
+				EBADE05C2C7F16CA0045E03B /* MonthView.swift */,
+				EB13A1D62C863DD80092F358 /* DailyRecordView.swift */,
 			);
 			path = RecordList;
 			sourceTree = "<group>";
@@ -895,8 +961,6 @@
 			children = (
 				EB6B40902C81B79D000DC914 /* Coordinator */,
 				EB3DFA3D2C77218A00FA366C /* RecordDetailView.swift */,
-				EBADE05C2C7F16CA0045E03B /* MonthView.swift */,
-				EBADE05E2C7F17010045E03B /* RecordCell.swift */,
 			);
 			path = RecordDetail;
 			sourceTree = "<group>";
@@ -1051,9 +1115,12 @@
 				CD6662142C678FFD005E2887 /* CompetitionModel.swift in Sources */,
 				CD0EC4C92C71EE5400E70452 /* FollowManageView.swift in Sources */,
 				CD0EC4CB2C71F10500E70452 /* FollowTableViewCell.swift in Sources */,
+				78A6BF842C855BE90076A9A9 /* WheelCircumferenceCoordinator.swift in Sources */,
+				78A6BF882C855C0D0076A9A9 /* DeviceDetailCoordinator.swift in Sources */,
 				0493F5C52C7DACCC00290A4C /* Coordinator.swift in Sources */,
 				CD4214522C64990D00F7C3AE /* UILabel+Extension.swift in Sources */,
 				EBF2E3F22C84E7AD003FE16C /* RecordDetailViewModel.swift in Sources */,
+				78A6BF8E2C855F4D0076A9A9 /* DeviceCoordinator.swift in Sources */,
 				EBFE4DAB2C757A7D00A36FCA /* ResultRankingTVCell.swift in Sources */,
 				CD0EC4CD2C71FC4800E70452 /* SearchUserView.swift in Sources */,
 				EB3DFA3E2C77218A00FA366C /* RecordDetailView.swift in Sources */,
@@ -1068,13 +1135,13 @@
 				CD4213C32C64982000F7C3AE /* AppDelegate.swift in Sources */,
 				CD4214762C64A63D00F7C3AE /* UIViewController+Extension.swift in Sources */,
 				043E0C842C6F378D00F25AF7 /* Double+Extension.swift in Sources */,
-				78254FD62C7C1CC90069B10A /* WheelCircumferenceViewController.swift in Sources */,
+				78254FD62C7C1CC90069B10A /* WheelCircumferenceView.swift in Sources */,
 				CDB2200A2C7C4EF900973964 /* Date+Extension.swift in Sources */,
 				CD4214562C64994F00F7C3AE /* RecordViewModel.swift in Sources */,
 				CDE28F242C8497CC004FE443 /* AccountSettingCoordinator.swift in Sources */,
 				CD76A8CB2C6E5828003490B3 /* UITextField+Extension.swift in Sources */,
 				CD6662182C67900B005E2887 /* DeviceModel.swift in Sources */,
-				784D5DFE2C7B780700D2FE15 /* DeviceSearchViewController.swift in Sources */,
+				784D5DFE2C7B780700D2FE15 /* DeviceSearchView.swift in Sources */,
 				EBADE05D2C7F16CA0045E03B /* MonthView.swift in Sources */,
 				CD4214582C64996700F7C3AE /* MyPageViewModel.swift in Sources */,
 				CD4214542C64991500F7C3AE /* UIColor+Extension.swift in Sources */,
@@ -1083,6 +1150,8 @@
 				CD4214692C649F3600F7C3AE /* UIFont+Extension.swift in Sources */,
 				04E3C0D72C6B8C30006B844F /* DistanceSelectionViewModel.swift in Sources */,
 				0493F5E32C7E256B00290A4C /* ResultRankingCoordinator.swift in Sources */,
+				EB13A1D72C863DD80092F358 /* DailyRecordView.swift in Sources */,
+				CD66F5D22C6C86EA00CDBB0B /* SettingTableToggleViewCell.swift in Sources */,
 				04DEE5012C7C1F0F00338A61 /* RecordDeviceModel.swift in Sources */,
 				0493F5DD2C7E1A2C00290A4C /* StartCompetetionCoordinator.swift in Sources */,
 				CD4214112C64988C00F7C3AE /* DeviceView.swift in Sources */,
@@ -1109,6 +1178,7 @@
 				CDF7FCE12C85874A00E11D52 /* UserProfileViewModel.swift in Sources */,
 				CD42157C2C805B0D0033A511 /* EditProfileCoordinator.swift in Sources */,
 				0493F5DA2C7E0BFA00290A4C /* CountCoordinator.swift in Sources */,
+				78A6BF862C855BF70076A9A9 /* DeviceSearchCoordinator.swift in Sources */,
 				CD66621A2C679010005E2887 /* MyPageModel.swift in Sources */,
 				CD4213C52C64982000F7C3AE /* SceneDelegate.swift in Sources */,
 				043E0C822C6F232A00F25AF7 /* StartCompetitionViewModel.swift in Sources */,
@@ -1124,11 +1194,9 @@
 				EB07B0BD2C6C79F20067BF0F /* RecordSumUpView.swift in Sources */,
 				04E3C0C82C6AEE62006B844F /* CompetitionTVCell.swift in Sources */,
 				041A67362C6C6543000BA4C1 /* CountViewModel.swift in Sources */,
-				78DBD0212C7882EB00B43A62 /* DeviceDetailViewController.swift in Sources */,
+				78DBD0212C7882EB00B43A62 /* DeviceDetailView.swift in Sources */,
 				CD4214132C64988C00F7C3AE /* MyPageView.swift in Sources */,
-				EBADE05F2C7F17010045E03B /* RecordCell.swift in Sources */,
 				EBFE4DB12C757AE800A36FCA /* UserService.swift in Sources */,
-				EB07B0BB2C6C79F20067BF0F /* RecordContainerView.swift in Sources */,
 				CDE25C6E2C6913B8008E2A80 /* EditProfileInfoView.swift in Sources */,
 				EB6B40872C81B125000DC914 /* RecordSumUpCoordinator.swift in Sources */,
 				EBB1F4182C76CA75007B0E3C /* RecordListView.swift in Sources */,
