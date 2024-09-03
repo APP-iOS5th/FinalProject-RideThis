@@ -17,6 +17,7 @@
 		043E0C872C6F38F700F25AF7 /* SummaryRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C862C6F38F700F25AF7 /* SummaryRecordViewController.swift */; };
 		043E0C892C70AC2400F25AF7 /* SummaryRecordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C882C70AC2400F25AF7 /* SummaryRecordViewModel.swift */; };
 		048EFDF92C86AC9D00261B21 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 048EFDF82C86AC9D00261B21 /* FirebaseMessaging */; };
+		048EFDFD2C87496600261B21 /* FCMTokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048EFDFC2C87496600261B21 /* FCMTokenManager.swift */; };
 		0493F5C52C7DACCC00290A4C /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5C42C7DACCC00290A4C /* Coordinator.swift */; };
 		0493F5C82C7DB39200290A4C /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5C72C7DB39200290A4C /* AppCoordinator.swift */; };
 		0493F5CA2C7DB5FD00290A4C /* TabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5C92C7DB5FD00290A4C /* TabBarCoordinator.swift */; };
@@ -153,6 +154,7 @@
 		043E0C832C6F378D00F25AF7 /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
 		043E0C862C6F38F700F25AF7 /* SummaryRecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryRecordViewController.swift; sourceTree = "<group>"; };
 		043E0C882C70AC2400F25AF7 /* SummaryRecordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryRecordViewModel.swift; sourceTree = "<group>"; };
+		048EFDFC2C87496600261B21 /* FCMTokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FCMTokenManager.swift; sourceTree = "<group>"; };
 		0493F5C42C7DACCC00290A4C /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		0493F5C72C7DB39200290A4C /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		0493F5C92C7DB5FD00290A4C /* TabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCoordinator.swift; sourceTree = "<group>"; };
@@ -677,6 +679,7 @@
 				EBFE4DAF2C757AE800A36FCA /* UserService.swift */,
 				CD4214642C649D0100F7C3AE /* FirebaseService.swift */,
 				04DEE5022C7C3FC300338A61 /* BluetoothManager.swift */,
+				048EFDFC2C87496600261B21 /* FCMTokenManager.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -1029,6 +1032,7 @@
 				CD42145E2C64998800F7C3AE /* CompetitionViewModel.swift in Sources */,
 				CD70006A2C6AF99F0071D4D2 /* GraphCollectionViewCell.swift in Sources */,
 				EBFE4DB62C757B4300A36FCA /* ResultRankingViewModel.swift in Sources */,
+				048EFDFD2C87496600261B21 /* FCMTokenManager.swift in Sources */,
 				CD4214672C649D7800F7C3AE /* SplashView.swift in Sources */,
 				CDB220082C7C19DD00973964 /* SignUpInfoViewModel.swift in Sources */,
 				043E0C872C6F38F700F25AF7 /* SummaryRecordViewController.swift in Sources */,

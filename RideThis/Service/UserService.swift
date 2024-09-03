@@ -50,6 +50,7 @@ class UserService {
                     print("authorized")
                     Task {
                         await self.getUserInfo()
+                        NotificationCenter.default.post(name: Notification.Name("UserDidLogin"), object: nil)
                     }
                 case .revoked:
                     print("revoked")
@@ -94,5 +95,6 @@ class UserService {
     
     func appleSignIn(userId: String) {
         keyChain.save(key: "appleUserId", value: userId)
+        NotificationCenter.default.post(name: Notification.Name("UserDidLogin"), object: nil)
     }
 }

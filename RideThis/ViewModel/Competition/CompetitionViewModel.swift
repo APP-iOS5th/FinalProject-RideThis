@@ -1,5 +1,4 @@
 import Foundation
-import FirebaseCore
 import Combine
 
 enum RankingSegment: String, CaseIterable {
@@ -157,64 +156,5 @@ class CompetitionViewModel {
         }
         
         return false
-    }
-    
-    // TEst
-    func test() {
-        firebaseService.fetchAccessToken { accessToken in
-            guard let accessToken = accessToken else {
-                print("Failed to obtain access token")
-                return
-            }
-            
-            guard let projectID = FirebaseApp.app()?.options.projectID else {
-                print("Failed to get Firebase project ID")
-                return
-            }
-
-            let urlString = "https://fcm.googleapis.com/v1/projects/\(projectID)/messages:send"
-            guard let url = URL(string: urlString) else { return }
-            
-            print("Token: \(accessToken)")
-            
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST"
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-            
-            let message: [String: Any] = [
-                "message": [
-                    "token":"c1rlhENG6krus714T0Y5lN:APA91bHRkCWIKSGwhUBw6osc_ZSvk3Tt-Nei_w3uW1FNUkMeBsKx3gxNaIm6UMQmpTPFrBE9wzuMap59zSfRdYYqGETFhKbQ7F8KP-RTI2tolW0Nl7cA3yRTOx_Jc7nG3LFanRa6EUo5",
-                    "notification": [
-                        "title": "테스트알림",
-                        "body": "Test123"
-                    ]
-                ]
-            ]
-            
-            do {
-                let jsonData = try JSONSerialization.data(withJSONObject: message, options: [])
-                request.httpBody = jsonData
-            } catch {
-                print("Error serializing JSON: \(error)")
-                return
-            }
-            
-            let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                if let error = error {
-                    print("Error sending FCM notification: \(error)")
-                } else if let response = response as? HTTPURLResponse, response.statusCode != 200 {
-                    if let data = data, let responseBody = String(data: data, encoding: .utf8) {
-                        print("FCM notification failed with status code: \(response.statusCode)")
-                        print("Response body: \(responseBody)")
-                    } else {
-                        print("FCM notification failed with status code: \(response.statusCode), but no response body was returned.")
-                    }
-                } else {
-                    print("FCM notification sent successfully.")
-                }
-            }
-            task.resume()
-        }
     }
 }

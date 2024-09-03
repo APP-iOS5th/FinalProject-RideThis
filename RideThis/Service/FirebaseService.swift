@@ -1,4 +1,5 @@
 import Foundation
+import FirebaseCore
 import FirebaseFirestore
 import FirebaseStorage
 import FirebaseAuth
@@ -431,9 +432,20 @@ class FireBaseService {
         try await deviceRef.delete()
     }
 
-    // MARK: 토큰
+    // MARK: FCM 토큰 업데이트
+    func updateUserFCMToken(userId: String, fcmToken: String) async throws {
+        // 유저의 문서를 가져옴
+        let userRef = db.collection("USERS").document(userId)
+        
+        // FCM 토큰 업데이트
+        try await userRef.updateData([
+            "user_fcmToken": fcmToken
+        ])
+    }
+    
+    // MARK: Message Token
     func fetchAccessToken(completion: @escaping (String?) -> Void) {
-        let url = URL(string: "https://ffa9-218-156-184-165.ngrok-free.app/token")!
+        let url = URL(string: "https://ride-this-server.vercel.app/token")!
         
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             if let error = error {
@@ -463,5 +475,102 @@ class FireBaseService {
         }
         
         task.resume()
+    }
+    
+    func fetchFMC(signedUserNickname: String, cellUserId: String) {
+        db.collection("USERS").document(cellUserId).getDocument { document, error in
+            if let document = document, document.exists {
+                if let userFCMToken = document.data()?["user_fcmtoken"] as? String {
+                    // FCM 메시지 전송
+                    self.sendFCM(to: userFCMToken, signedUserNickname: signedUserNickname, cellUserId: cellUserId)
+                } else {
+                    print("user_fcmToken 필드를 찾을 수 없습니다.")
+                }
+            } else {
+                print("해당 유저를 찾을 수 없습니다: \(error?.localizedDescription ?? "Unknown error")")
+            }
+        }
+    }
+
+    func sendFCM(to userFCMToken: String, signedUserNickname: String, cellUserId: String) {
+        fetchAccessToken { accessToken in
+            guard let accessToken = accessToken else {
+                print("Failed to obtain access token")
+                return
+            }
+            
+            guard let projectID = FirebaseApp.app()?.options.projectID else {
+                print("Failed to get Firebase project ID")
+                return
+            }
+
+            let urlString = "https://fcm.googleapis.com/v1/projects/\(projectID)/messages:send"
+            guard let url = URL(string: urlString) else { return }
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+            
+            let messageTitle = "Follow 알림"
+            let messageBody = "\(signedUserNickname)이(가) 당신을 팔로우했습니다"
+
+            let message: [String: Any] = [
+                "message": [
+                    "token": userFCMToken,
+                    "notification": [
+                        "title": messageTitle,
+                        "body": messageBody
+                    ]
+                ]
+            ]
+            
+            do {
+                let jsonData = try JSONSerialization.data(withJSONObject: message, options: [])
+                request.httpBody = jsonData
+            } catch {
+                print("Error serializing JSON: \(error)")
+                return
+            }
+            
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                if let error = error {
+                    print("Error sending FCM notification: \(error)")
+                } else if let response = response as? HTTPURLResponse, response.statusCode != 200 {
+                    if let data = data, let responseBody = String(data: data, encoding: .utf8) {
+                        print("FCM notification failed with status code: \(response.statusCode)")
+                        print("Response body: \(responseBody)")
+                    } else {
+                        print("FCM notification failed with status code: \(response.statusCode), but no response body was returned.")
+                    }
+                } else {
+                    print("FCM notification sent successfully.")
+                    
+                    // Firestore에 ALAMS 컬렉션에 데이터 추가
+                    self.addAlarms(cellUserId: cellUserId, title: messageTitle, body: messageBody)
+                }
+            }
+            task.resume()
+        }
+    }
+
+    func addAlarms(cellUserId: String, title: String, body: String) {
+        let db = Firestore.firestore()
+        let alamsCollection = db.collection("USERS").document(cellUserId).collection("ALARMS")
+        
+        let alamData: [String: Any] = [
+            "alarm_category": title,
+            "alarm_date": Timestamp(date: Date()),
+            "alarm_body": body,
+            "alarm_status": false
+        ]
+        
+        alamsCollection.addDocument(data: alamData) { error in
+            if let error = error {
+                print("Error adding notification to Firestore: \(error)")
+            } else {
+                print("Notification added to Firestore successfully.")
+            }
+        }
     }
 }
