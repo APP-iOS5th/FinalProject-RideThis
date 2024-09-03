@@ -431,4 +431,37 @@ class FireBaseService {
         try await deviceRef.delete()
     }
 
+    // MARK: 토큰
+    func fetchAccessToken(completion: @escaping (String?) -> Void) {
+        let url = URL(string: "http://localhost:8080/token")!
+        
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                print("Error fetching access token: \(error)")
+                completion(nil)
+                return
+            }
+            
+            guard let data = data else {
+                print("No data received")
+                completion(nil)
+                return
+            }
+            
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                   let accessToken = json["accessToken"] as? String {
+                    completion(accessToken)
+                } else {
+                    print("Invalid response data")
+                    completion(nil)
+                }
+            } catch {
+                print("Error parsing JSON: \(error)")
+                completion(nil)
+            }
+        }
+        
+        task.resume()
+    }
 }

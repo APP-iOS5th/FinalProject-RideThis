@@ -16,6 +16,7 @@
 		043E0C842C6F378D00F25AF7 /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C832C6F378D00F25AF7 /* Double+Extension.swift */; };
 		043E0C872C6F38F700F25AF7 /* SummaryRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C862C6F38F700F25AF7 /* SummaryRecordViewController.swift */; };
 		043E0C892C70AC2400F25AF7 /* SummaryRecordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043E0C882C70AC2400F25AF7 /* SummaryRecordViewModel.swift */; };
+		048EFDF92C86AC9D00261B21 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 048EFDF82C86AC9D00261B21 /* FirebaseMessaging */; };
 		0493F5C52C7DACCC00290A4C /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5C42C7DACCC00290A4C /* Coordinator.swift */; };
 		0493F5C82C7DB39200290A4C /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5C72C7DB39200290A4C /* AppCoordinator.swift */; };
 		0493F5CA2C7DB5FD00290A4C /* TabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5C92C7DB5FD00290A4C /* TabBarCoordinator.swift */; };
@@ -266,6 +267,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				048EFDF92C86AC9D00261B21 /* FirebaseMessaging in Frameworks */,
 				CD4214722C649FC500F7C3AE /* Kingfisher in Frameworks */,
 				CD42146C2C649F8700F7C3AE /* Alamofire in Frameworks */,
 				CD42146F2C649F9200F7C3AE /* SnapKit in Frameworks */,
@@ -304,6 +306,13 @@
 				043E0C862C6F38F700F25AF7 /* SummaryRecordViewController.swift */,
 			);
 			path = SummaryRecord;
+			sourceTree = "<group>";
+		};
+		048EFDF72C86AC9D00261B21 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		0493F5C32C7DACBE00290A4C /* Coordinator */ = {
@@ -437,6 +446,7 @@
 			children = (
 				CD4213C12C64982000F7C3AE /* RideThis */,
 				CD4213C02C64982000F7C3AE /* Products */,
+				048EFDF72C86AC9D00261B21 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -946,6 +956,7 @@
 				CDC0C1D72C65FD6A00349DC4 /* FirebaseFirestore */,
 				CDC0C1D92C65FD6A00349DC4 /* FirebaseStorage */,
 				CD7000622C6AF6D90071D4D2 /* DGCharts */,
+				048EFDF82C86AC9D00261B21 /* FirebaseMessaging */,
 			);
 			productName = RideThis;
 			productReference = CD4213BF2C64982000F7C3AE /* RideThis.app */;
@@ -1396,6 +1407,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		048EFDF82C86AC9D00261B21 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CDC0C1D42C65FD6A00349DC4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
 		CD42146B2C649F8700F7C3AE /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CD42146A2C649F8700F7C3AE /* XCRemoteSwiftPackageReference "Alamofire" */;

@@ -304,6 +304,7 @@ class CompetitionView: RideThisViewController {
     @objc private func segmentChanged(_ sender: UISegmentedControl) {
         if let selectedStatus = RankingSegment(rawValue: sender.titleForSegment(at: sender.selectedSegmentIndex) ?? "") {
             self.viewModel.selectedSegment(selected: selectedStatus)
+            self.viewModel.test()
         }
     }
     
