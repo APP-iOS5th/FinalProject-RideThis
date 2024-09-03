@@ -85,10 +85,10 @@ class RecordView: RideThisViewController {
     private var hasShownBluetoothAlert = false
     
     private func checkBluetoothConnection() {
-        #if targetEnvironment(simulator)
+#if targetEnvironment(simulator)
         // 시뮬레이터에서는 블루투스 연결 확인을 건너뜁니다.
         return
-        #endif
+#endif
         
         coordinator?.checkBluetoothConnection { [weak self] isConnected in
             if !isConnected && !(self?.hasShownBluetoothAlert ?? true) {
@@ -184,6 +184,18 @@ class RecordView: RideThisViewController {
         recordButton.addAction(UIAction { [weak self] _ in
             guard let self = self, let viewModel = self.viewModel else { return }
             
+#if targetEnvironment(simulator)
+            // 시뮬레이터에서는 블루투스 연결 확인을 건너뛰고 바로 기록을 시작합니다.
+            if viewModel.isRecording {
+                viewModel.pauseRecording()
+            } else if viewModel.isPaused {
+                viewModel.resumeRecording()
+            } else {
+                viewModel.startRecording()
+                self.disableTabBar()
+            }
+            self.updateUI(isRecording: viewModel.isRecording)
+#else
             self.coordinator?.checkBluetoothConnection { isConnected in
                 DispatchQueue.main.async {
                     if isConnected {
@@ -201,6 +213,7 @@ class RecordView: RideThisViewController {
                     }
                 }
             }
+#endif
         }, for: .touchUpInside)
         
         finishButton.addAction(UIAction { [weak self] _ in
