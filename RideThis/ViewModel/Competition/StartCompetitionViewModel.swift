@@ -206,4 +206,7 @@ class StartCometitionViewModel: BluetoothManagerDelegate {
         // 새로운 타이머가 더 빠르거나 같으면 true 반환
         return totalSeconds2 <= totalSeconds1
     }
+    
+    func bluetoothDidConnect() {
+    }
 }

@@ -11,8 +11,6 @@ class RecordSumUpViewModel {
     
     weak var delegate: RecordSumUpViewModelDelegate?
     
-    //let isLogin = false
-    
     func updateSummaryData(cadence: Double, speed: Double, distance: Double, calorie: Double) {
         summaryData = RecordViewModel.SummaryData(
             recordedTime: summaryData.recordedTime,

@@ -4,24 +4,24 @@ class RecordListCoordinator: Coordinator {
     var navigationController: UINavigationController
     var childCoordinators: [Coordinator] = []
     weak var parentCoordinator: RecordCoordinator?
-
+    
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
-
+    
     func start() {
         let listVC = RecordListView()
         listVC.coordinator = self
         navigationController.pushViewController(listVC, animated: true)
     }
-
+    
     func moveToRecordDetailView(with record: RecordModel) {
         let detailCoordinator = RecordDetailCoordinator(navigationController: navigationController)
         childCoordinators.append(detailCoordinator)
         detailCoordinator.parentCoordinator = self
         detailCoordinator.start(with: record)
     }
-
+    
     func didFinishList() {
         parentCoordinator?.childDidFinish(self)
     }

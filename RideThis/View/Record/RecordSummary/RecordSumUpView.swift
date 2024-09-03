@@ -5,14 +5,8 @@ class RecordSumUpView: RideThisViewController {
     let viewModel: RecordSumUpViewModel
     weak var coordinator: RecordSumUpCoordinator?
     
-    init(viewModel: RecordSumUpViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
     
     // 커스텀 타이틀
     private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "운동기록 요약")
@@ -30,25 +24,101 @@ class RecordSumUpView: RideThisViewController {
     let cancelButton = RideThisButton(buttonTitle: "취소")
     let saveButton = RideThisButton(buttonTitle: "저장")
     
+    init(viewModel: RecordSumUpViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupScrollView()
         setupNavigationBar()
+        setupViews()
+        setupConstraints()
+        setupButtons()
         
         timerRecord.updateRecordText(text: recordedTime)
-        
         updateUI(with: viewModel.summaryData)
+    }
+    
+    private func setupScrollView() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
         
-        // 기록 뷰 추가
-        self.view.addSubview(timerRecord)
-        self.view.addSubview(cadenceRecord)
-        self.view.addSubview(speedRecord)
-        self.view.addSubview(distanceRecord)
-        self.view.addSubview(calorieRecord)
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalTo(view.safeAreaLayoutGuide)
+        }
         
-        // 버튼 추가
-        self.view.addSubview(cancelButton)
-        self.view.addSubview(saveButton)
+        contentView.snp.makeConstraints { make in
+            make.edges.equalTo(scrollView)
+            make.width.equalTo(scrollView)
+        }
+    }
+    
+    private func setupViews() {
+        [timerRecord, cadenceRecord, speedRecord, distanceRecord, calorieRecord, cancelButton, saveButton].forEach {
+            contentView.addSubview($0)
+        }
+    }
+    
+    private func setupConstraints() {
+        timerRecord.snp.makeConstraints { timer in
+            timer.top.equalTo(contentView).offset(20)
+            timer.left.equalTo(contentView).offset(20)
+            timer.right.equalTo(contentView).offset(-20)
+            timer.height.equalTo(100)
+        }
+        
+        cadenceRecord.snp.makeConstraints { cadence in
+            cadence.top.equalTo(timerRecord.snp.bottom).offset(20)
+            cadence.left.equalTo(contentView).offset(20)
+            cadence.right.equalTo(contentView).offset(-20)
+            cadence.height.equalTo(100)
+        }
+        
+        speedRecord.snp.makeConstraints { speed in
+            speed.top.equalTo(cadenceRecord.snp.bottom).offset(20)
+            speed.left.equalTo(contentView).offset(20)
+            speed.right.equalTo(contentView).offset(-20)
+            speed.height.equalTo(100)
+        }
+        
+        distanceRecord.snp.makeConstraints { distance in
+            distance.top.equalTo(speedRecord.snp.bottom).offset(20)
+            distance.left.equalTo(contentView).offset(20)
+            distance.right.equalTo(contentView).offset(-20)
+            distance.height.equalTo(100)
+        }
+        
+        calorieRecord.snp.makeConstraints { calorie in
+            calorie.top.equalTo(distanceRecord.snp.bottom).offset(20)
+            calorie.left.equalTo(contentView).offset(20)
+            calorie.right.equalTo(contentView).offset(-20)
+            calorie.height.equalTo(100)
+        }
+        
+        cancelButton.snp.makeConstraints { btn in
+            btn.top.equalTo(calorieRecord.snp.bottom).offset(30)
+            btn.left.equalTo(contentView).offset(20)
+            btn.right.equalTo(contentView.snp.centerX).offset(-10)
+            btn.height.equalTo(50)
+        }
+        
+        saveButton.snp.makeConstraints { btn in
+            btn.top.equalTo(calorieRecord.snp.bottom).offset(30)
+            btn.left.equalTo(contentView.snp.centerX).offset(10)
+            btn.right.equalTo(contentView).offset(-20)
+            btn.height.equalTo(50)
+            btn.bottom.equalTo(contentView).offset(-20) // 마지막 요소의 하단에 여백 추가
+        }
+    }
+    
+    private func setupButtons() {
         cancelButton.backgroundColor = .black
         
         cancelButton.addAction(UIAction { [weak self] _ in
@@ -58,10 +128,9 @@ class RecordSumUpView: RideThisViewController {
         saveButton.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
             
-            if UserService.shared.loginStatus == .appleLogin { // 로그인 상태일 때
+            if UserService.shared.loginStatus == .appleLogin {
                 print("로그인 유저")
-                showAlert(alertTitle: "기록 저장", msg: "기록을 저장하시겠습니까?", confirm: "저장"
-                ) {
+                self.showAlert(alertTitle: "기록 저장", msg: "기록을 저장하시겠습니까?", confirm: "저장") {
                     self.updateViewModelWithRecordData()
                     
                     Task {
@@ -69,69 +138,16 @@ class RecordSumUpView: RideThisViewController {
                         self.coordinator?.didSaveRecording()
                     }
                 }
-            } else { // 미로그인 상태일 때
+            } else {
                 print("Not logined")
-                showAlert(alertTitle: "로그인이 필요합니다.", msg: "기록 저장은 로그인이 필요한 서비스입니다.", confirm: "로그인") {
+                self.showAlert(alertTitle: "로그인이 필요합니다.", msg: "기록 저장은 로그인이 필요한 서비스입니다.", confirm: "로그인") {
                     print("go to login")
                     
                     let loginVC = LoginView()
                     self.navigationController?.pushViewController(loginVC, animated: true)
-                    
-                    // MARK: - 설정한 '로그인'이 아니라 '확인'이 확인 버튼으로 출력
                 }
             }
         }, for: .touchUpInside)
-        
-        // 기록 뷰 제약조건
-        timerRecord.snp.makeConstraints { timer in
-            timer.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(10)
-            timer.left.equalToSuperview().offset(20)
-            timer.right.equalToSuperview().offset(-20)
-            timer.height.equalTo(100)
-        }
-        
-        cadenceRecord.snp.makeConstraints { cadence in
-            cadence.top.equalTo(timerRecord.snp.bottom).offset(20)
-            cadence.left.equalToSuperview().offset(20)
-            cadence.right.equalToSuperview().offset(-20)
-            cadence.height.equalTo(100)
-        }
-        
-        speedRecord.snp.makeConstraints { speed in
-            speed.top.equalTo(cadenceRecord.snp.bottom).offset(20)
-            speed.left.equalToSuperview().offset(20)
-            speed.right.equalToSuperview().offset(-20)
-            speed.height.equalTo(100)
-        }
-        
-        distanceRecord.snp.makeConstraints { distance in
-            distance.top.equalTo(speedRecord.snp.bottom).offset(20)
-            distance.left.equalToSuperview().offset(20)
-            distance.right.equalToSuperview().offset(-20)
-            distance.height.equalTo(100)
-        }
-        
-        calorieRecord.snp.makeConstraints { calorie in
-            calorie.top.equalTo(distanceRecord.snp.bottom).offset(20)
-            calorie.left.equalToSuperview().offset(20)
-            calorie.right.equalToSuperview().offset(-20)
-            calorie.height.equalTo(100)
-        }
-        
-        // 버튼 제약조건
-        cancelButton.snp.makeConstraints { [weak self] btn in
-            guard let self = self else { return }
-            btn.top.equalTo(calorieRecord.snp.bottom).offset(15)
-            btn.left.equalTo(self.view.safeAreaLayoutGuide.snp.left).offset(20)
-            btn.right.equalTo(self.view.snp.centerX).offset(-10)
-        }
-        
-        saveButton.snp.makeConstraints { [weak self] btn in
-            guard let self = self else { return }
-            btn.top.equalTo(calorieRecord.snp.bottom).offset(15)
-            btn.left.equalTo(self.view.snp.centerX).offset(10)
-            btn.right.equalTo(self.view.safeAreaLayoutGuide.snp.right).offset(-20)
-        }
     }
     
     private func updateViewModelWithRecordData() {
@@ -149,11 +165,6 @@ class RecordSumUpView: RideThisViewController {
         speedRecord.updateRecordText(text: "\(data.speed) km/h")
         distanceRecord.updateRecordText(text: "\(data.distance) km")
         calorieRecord.updateRecordText(text: "\(data.calorie) kcal")
-    }
-    
-    @MainActor
-    private func navigateToRecordView() {
-        self.navigationController?.popToRootViewController(animated: true) // 기록 화면으로 이동
     }
     
     // MARK: Navigation Bar
@@ -175,4 +186,3 @@ class RecordSumUpView: RideThisViewController {
         navigationItem.leftBarButtonItem = leftBarButtonItem
     }
 }
-
