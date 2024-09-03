@@ -1,10 +1,3 @@
-//
-//  CountViewModle.swift
-//  RideThis
-//
-//  Created by SeongKook on 8/14/24.
-//
-
 import Foundation
 import Combine
 

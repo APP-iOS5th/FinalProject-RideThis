@@ -1,10 +1,3 @@
-//
-//  DistanceCase+Extension.swift
-//  RideThis
-//
-//  Created by SeongKook on 8/14/24.
-//
-
 import Foundation
 
 enum DistanceCase: String, CaseIterable {

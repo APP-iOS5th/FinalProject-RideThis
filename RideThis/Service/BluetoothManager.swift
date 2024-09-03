@@ -1,10 +1,3 @@
-//
-//  BluetoothManager.swift
-//  RideThis
-//
-//  Created by SeongKook on 8/26/24.
-//
-
 import Foundation
 import CoreBluetooth
 

@@ -1,13 +1,6 @@
-//
-//  DeviceCoordinator.swift
-//  RideThis
-//
-//  Created by SeongKook on 8/27/24.
-//
-
 import UIKit
 
-class DeviceCoordinator: Coordinator {
+class RecordCoordinator: Coordinator {
     var navigationController: UINavigationController
     var childCoordinators: [Coordinator] = []
     
@@ -17,9 +10,9 @@ class DeviceCoordinator: Coordinator {
     }
     
     func start() {
-        let deviceVC = DeviceView()
-        deviceVC.coordinator = self
+        let recordVC = RecordView()
+        recordVC.coordinator = self
 
-        navigationController.pushViewController(deviceVC, animated: true)
+        navigationController.pushViewController(recordVC, animated: true)
     }
 }

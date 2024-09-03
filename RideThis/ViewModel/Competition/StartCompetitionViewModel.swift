@@ -1,10 +1,3 @@
-//
-//  StartConpetitionViewModel.swift
-//  RideThis
-//
-//  Created by SeongKook on 8/16/24.
-//
-
 import Foundation
 import UIKit
 import Combine

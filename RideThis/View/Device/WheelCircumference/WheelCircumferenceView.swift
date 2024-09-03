@@ -2,8 +2,10 @@ import UIKit
 import SnapKit
 import Combine
 
-class WheelCircumferenceViewController: UIViewController {
+class WheelCircumferenceView: UIViewController {
     // MARK: - Properties
+    var coordinator: WheelCircumferenceCoordinator?
+    
     private let viewModel: DeviceViewModel
     private let wheelSearchLabel = RideThisLabel(fontType: .sectionTitle,
                                                  fontColor: .black,
@@ -12,8 +14,7 @@ class WheelCircumferenceViewController: UIViewController {
     private let infoLabel = RideThisLabel(fontType: .infoMessage,
                                           fontColor: .recordTitleColor,
                                           text: "*일반적인 표준 로드 자전거 타이어 크기는 2110(700c X 25)mm이며, 이는 표준 로드 타이어로 직경 약 700mm, 폭 25mm를 나타냅니다.")
-    private let tableView = UITableView(frame: .zero,
-                                        style: .plain)
+    private let tableView = UITableView(frame: .zero, style: .plain)
     
     private let headerView = UIView()
     private let millimeterHeaderLabel = UILabel()
@@ -26,8 +27,9 @@ class WheelCircumferenceViewController: UIViewController {
     private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Initialization
-    /// WheelCircumferenceViewController를 주어진 ViewModel로 초기화
-    /// - Parameter viewModel: WheelCircumferenceViewController에서 사용할 ViewModel
+    
+    /// WheelCircumferenceView의 새 인스턴스 초기화
+    /// - Parameter viewModel: WheelCircumferenceView에서 사용할 ViewModel
     init(viewModel: DeviceViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -37,7 +39,8 @@ class WheelCircumferenceViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - viewDidLoad
+    // MARK: - Lifecycle Methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
@@ -47,13 +50,15 @@ class WheelCircumferenceViewController: UIViewController {
         setupKeyboardDismiss()
     }
 
-    // MARK: - Setup NavigationBar
+    // MARK: - UI Setup
+    
+    /// NavigationBar 설정
     private func setupNavigationBar() {
         title = "휠 둘레"
         navigationItem.backButtonTitle = "Back"
     }
 
-    // MARK: - Setup UI
+    /// UI 요소들 설정
     private func setupUI() {
         view.backgroundColor = .primaryBackgroundColor
 
@@ -65,7 +70,7 @@ class WheelCircumferenceViewController: UIViewController {
         setupConstraints()
     }
 
-    // MARK: - Configure SearchTextField
+    /// 검색 텍스트 필드 구성
     private func configureSearchTextField() {
         searchTextField.placeholder = "휠 크기를 검색해주세요.(ex: 1020)"
         searchTextField.borderStyle = .roundedRect
@@ -74,12 +79,12 @@ class WheelCircumferenceViewController: UIViewController {
         searchTextField.keyboardType = .numberPad
     }
 
-    // MARK: - Configure InfoLabel
+    /// 정보 레이블 구성
     private func configureInfoLabel() {
         infoLabel.numberOfLines = 0
     }
 
-    // MARK: - Configure HeaderView
+    /// HeaderView 구성
     private func configureHeaderView() {
         headerView.backgroundColor = .primaryBackgroundColor
         headerView.clipsToBounds = true
@@ -94,26 +99,31 @@ class WheelCircumferenceViewController: UIViewController {
         tireSizeHeaderLabel.text = "Tire Size"
         inchHeaderLabel.text = "Inch"
 
-        millimeterHeaderLabel.snp.makeConstraints { millimeterHeaderLabel in
-            millimeterHeaderLabel.left.equalToSuperview().offset(13)
-            millimeterHeaderLabel.centerY.equalToSuperview()
-            millimeterHeaderLabel.width.equalTo(90)
+        setupHeaderLabelsConstraints()
+    }
+
+    /// HeaderLabel들의 제약 조건 설정
+    private func setupHeaderLabelsConstraints() {
+        millimeterHeaderLabel.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(13)
+            make.centerY.equalToSuperview()
+            make.width.equalTo(90)
         }
 
-        tireSizeHeaderLabel.snp.makeConstraints { tireSizeHeaderLabel in
-            tireSizeHeaderLabel.left.equalTo(millimeterHeaderLabel.snp.right).offset(16)
-            tireSizeHeaderLabel.centerY.equalToSuperview()
-            tireSizeHeaderLabel.width.equalTo(100)
+        tireSizeHeaderLabel.snp.makeConstraints { make in
+            make.left.equalTo(millimeterHeaderLabel.snp.right).offset(16)
+            make.centerY.equalToSuperview()
+            make.width.equalTo(100)
         }
 
-        inchHeaderLabel.snp.makeConstraints { inchHeaderLabel in
-            inchHeaderLabel.left.equalTo(tireSizeHeaderLabel.snp.right).offset(16)
-            inchHeaderLabel.centerY.equalToSuperview()
-            inchHeaderLabel.width.equalTo(50)
+        inchHeaderLabel.snp.makeConstraints { make in
+            make.left.equalTo(tireSizeHeaderLabel.snp.right).offset(16)
+            make.centerY.equalToSuperview()
+            make.width.equalTo(50)
         }
     }
 
-    // MARK: - Configure TableView
+    /// TableView 구성
     private func configureTableView() {
         tableView.register(WheelCircumferenceSelectionCell.self, forCellReuseIdentifier: "WheelCircumferenceSelectionCell")
         tableView.separatorStyle = .none
@@ -124,7 +134,7 @@ class WheelCircumferenceViewController: UIViewController {
         tableView.clipsToBounds = true
     }
 
-    // MARK: - Setup Constraints
+    /// UI 요소들의 제약 조건 설정
     private func setupConstraints() {
         wheelSearchLabel.snp.makeConstraints { wheelSearchLabel in
             wheelSearchLabel.top.equalTo(view.safeAreaLayoutGuide).offset(20)
@@ -156,7 +166,7 @@ class WheelCircumferenceViewController: UIViewController {
         }
     }
 
-    // MARK: - Add Subviews
+    /// Subview들을 메인 뷰에 추가
     private func addSubviews() {
         view.addSubview(wheelSearchLabel)
         view.addSubview(searchTextField)
@@ -165,13 +175,13 @@ class WheelCircumferenceViewController: UIViewController {
         view.addSubview(tableView)
     }
 
-    // MARK: - Setup TableView
+    /// TableView의 delegate와 dataSource를 설정
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
     }
 
-    // MARK: - Setup Bindings
+    /// ViewModel과 View를 바인딩
     private func setupBindings() {
         searchTextField.textPublisher
             .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
@@ -189,7 +199,7 @@ class WheelCircumferenceViewController: UIViewController {
             .store(in: &cancellables)
     }
     
-    // MARK: - Setup Keyboard Dismiss
+    /// Keyboard dismiss 설정
     private func setupKeyboardDismiss() {
         tableView.keyboardDismissMode = .onDrag
         
@@ -198,19 +208,18 @@ class WheelCircumferenceViewController: UIViewController {
         view.addGestureRecognizer(tapGesture)
     }
     
+    /// Keyboard dismiss
     @objc private func dismissKeyboard() {
         view.endEditing(true)
     }
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
-extension WheelCircumferenceViewController: UITableViewDelegate, UITableViewDataSource {
-    /// numberOfRowsInSection
+extension WheelCircumferenceView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.filteredWheelCircumferences.count
     }
 
-    /// cellForRowAt
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "WheelCircumferenceSelectionCell", for: indexPath) as? WheelCircumferenceSelectionCell else {
             return UITableViewCell()
@@ -228,7 +237,6 @@ extension WheelCircumferenceViewController: UITableViewDelegate, UITableViewData
         return cell
     }
     
-    /// didSelectRowAt
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let wheelCircumference = viewModel.filteredWheelCircumferences[indexPath.row]
         self.selectedCircumference = (wheelCircumference.millimeter, wheelCircumference.tireSize)
@@ -247,7 +255,6 @@ extension WheelCircumferenceViewController: UITableViewDelegate, UITableViewData
         }
     }
 
-    /// heightForRowAt
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 44
     }
