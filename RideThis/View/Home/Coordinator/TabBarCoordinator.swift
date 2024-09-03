@@ -14,7 +14,7 @@ class TabBarCoordinator: Coordinator {
     func start() {
         // Home
         let homeNavigationController = UINavigationController()
-        let homeCoordinator = HomeCoordinator(navigationController: homeNavigationController)
+        let homeCoordinator = HomeCoordinator(navigationController: homeNavigationController, tabBarController: tabBarController)
         homeCoordinator.start()
         homeNavigationController.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house.fill"), selectedImage: nil)
         childCoordinators.append(homeCoordinator)

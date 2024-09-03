@@ -7,7 +7,7 @@ class HomeView: RideThisViewController {
     // MARK: - Properties
     var coordinator: HomeCoordinator?
     
-    private let viewModel: HomeViewModel
+    let viewModel: HomeViewModel
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - UI Components
@@ -48,7 +48,7 @@ class HomeView: RideThisViewController {
         button.setTitleColor(.primaryColor, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: FontCase.smallTitle.rawValue, weight: .regular)
         button.addAction(UIAction { [weak self] _ in
-            // TODO: Implement navigation to MyPageView
+            self?.coordinator?.showRecordListView()
         }, for: .touchUpInside)
         return button
     }()
@@ -102,8 +102,7 @@ class HomeView: RideThisViewController {
     private lazy var letsRideButton: RideThisButton = {
         let button = RideThisButton(buttonTitle: "라이딩 고고씽", height: 50)
         button.addAction(UIAction { [weak self] _ in
-            let recordView = RecordView()
-            self?.navigationController?.pushViewController(recordView, animated: true)
+            self?.coordinator?.showRecordView()
         }, for: .touchUpInside)
         return button
     }()
@@ -207,6 +206,8 @@ class HomeView: RideThisViewController {
         setupScrollView()
         setupContentView()
         setupBindings()
+        
+        viewModel.fetchUserData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
