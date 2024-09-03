@@ -65,7 +65,7 @@ fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
 
-*.json
+*service-account-file.json
 */node_modules
 node_modules
 /.pnp
