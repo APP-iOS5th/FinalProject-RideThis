@@ -20,7 +20,7 @@ class RecordInfoView: RideThisContainer {
         }
         
         super.init(frame: .zero)
-            
+        
         // 서브뷰 추가
         self.addSubview(titleLabel)
         self.addSubview(separator)

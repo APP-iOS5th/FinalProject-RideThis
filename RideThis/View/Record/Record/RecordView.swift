@@ -29,6 +29,7 @@ class RecordView: RideThisViewController {
     private let mainStackView = UIStackView()
     private let recordsStackView = UIStackView()
     private let buttonStackView = UIStackView()
+    
     // MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,16 +54,16 @@ class RecordView: RideThisViewController {
         tabBarController?.delegate = self
     }
     
-    //    override func viewWillAppear(_ animated: Bool) {
-    //        super.viewWillAppear(animated)
-    //
-    //        // RecordSumUpView에서 돌아올 때 타이머 초기화
-    //        if !(viewModel?.isRecording ?? false) {
-    //            viewModel?.resetRecording()
-    //            updateTimerDisplay()
-    //            updateUI(isRecording: false)
-    //        }
-    //    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // RecordSumUpView에서 돌아올 때 타이머 초기화
+        if !(viewModel?.isRecording ?? false) {
+            viewModel?.resetRecording()
+            updateTimerDisplay()
+            updateUI(isRecording: false)
+        }
+    }
     
     private func setupMainStackView() {
         view.addSubview(mainStackView)
@@ -70,24 +71,25 @@ class RecordView: RideThisViewController {
         mainStackView.spacing = 20
         mainStackView.alignment = .fill
         mainStackView.distribution = .fill
-
+        
+        // 기기 크기에 따라 여백 다르게 설정
         mainStackView.snp.makeConstraints { make in
-                if isIPhone15Pro() {
-                    make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
-                } else {
-                    make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
-                }
-                make.left.right.equalToSuperview().inset(20)
-                make.bottom.lessThanOrEqualTo(view.safeAreaLayoutGuide.snp.bottom).offset(-120) // 버튼 스택뷰를 위한 공간 확보
+            if isIPhone15Pro() {
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
+            } else {
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
             }
-
+            make.left.right.equalToSuperview().inset(20)
+            make.bottom.lessThanOrEqualTo(view.safeAreaLayoutGuide.snp.bottom).offset(-120) // 버튼 스택뷰를 위한 공간 확보
+        }
+        
         mainStackView.addArrangedSubview(timerRecord)
         mainStackView.addArrangedSubview(recordsStackView)
-
+        
         timerRecord.snp.makeConstraints { make in
             make.height.equalTo(150)
         }
-
+        
         if isIPhone15Pro() {
             // iPhone 15 Pro에서 추가 여백을 주기 위한 빈 뷰
             let topSpacerView = UIView()
@@ -108,20 +110,20 @@ class RecordView: RideThisViewController {
         recordsStackView.axis = .vertical
         recordsStackView.spacing = 15
         recordsStackView.distribution = .fillEqually
-
+        
         let topRecordStack = UIStackView(arrangedSubviews: [cadenceRecord, speedRecord])
         topRecordStack.axis = .horizontal
         topRecordStack.spacing = 10
         topRecordStack.distribution = .fillEqually
-
+        
         let bottomRecordStack = UIStackView(arrangedSubviews: [distanceRecord, calorieRecord])
         bottomRecordStack.axis = .horizontal
         bottomRecordStack.spacing = 10
         bottomRecordStack.distribution = .fillEqually
-
+        
         recordsStackView.addArrangedSubview(topRecordStack)
         recordsStackView.addArrangedSubview(bottomRecordStack)
-
+        
         // 각 RecordContainer의 크기 제한
         [cadenceRecord, speedRecord, distanceRecord, calorieRecord].forEach { container in
             container.snp.makeConstraints { make in
@@ -135,11 +137,11 @@ class RecordView: RideThisViewController {
         buttonStackView.axis = .horizontal
         buttonStackView.spacing = 10
         buttonStackView.distribution = .fillEqually
-
+        
         buttonStackView.addArrangedSubview(resetButton)
         buttonStackView.addArrangedSubview(recordButton)
         buttonStackView.addArrangedSubview(finishButton)
-
+        
         buttonStackView.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(20)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-50)
@@ -176,7 +178,7 @@ class RecordView: RideThisViewController {
     
     private func checkBluetoothConnection() {
 #if targetEnvironment(simulator)
-        // 시뮬레이터에서는 블루투스 연결 확인을 건너뜁니다.
+        // 시뮬레이터에서는 블루투스 연결 확인 생략
         return
 #endif
         

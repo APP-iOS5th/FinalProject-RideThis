@@ -28,8 +28,8 @@ class DailyRecordView: UIView {
         
         containerView.backgroundColor = .white
         containerView.layer.cornerRadius = 10
-        // 그림자 제거
         
+        // TODO: - 프로필 이미지로 수정
         iconImageView.image = UIImage(named: "bokdonge")
         iconImageView.contentMode = .scaleAspectFit
         arrowImageView.image = UIImage(systemName: "chevron.right")

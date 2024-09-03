@@ -8,7 +8,7 @@ class RecordDetailView: RideThisViewController {
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
-    // 로고
+    // 로고 -> 프로필사진?
     private let logoImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "logoTransparent"))
         imageView.contentMode = .scaleAspectFit

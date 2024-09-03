@@ -6,7 +6,7 @@ class RecordCoordinator: Coordinator, BluetoothViewDelegate, BluetoothManagerDel
     var tabBarController: UITabBarController
     var childCoordinators: [Coordinator] = []
     
-    private var bluetoothManager: BluetoothManager?
+    private var bluetoothManager: BluetoothManager? // 블루투스 연결을 코디네이터에서 관리
     private var recordViewModel: RecordViewModel?
     
     private let bluetoothConnectionSubject = CurrentValueSubject<Bool, Never>(false)
@@ -15,7 +15,6 @@ class RecordCoordinator: Coordinator, BluetoothViewDelegate, BluetoothManagerDel
     }
     
     private var lastDataUpdateTime: Date?
-    private let connectionTimeout: TimeInterval = 10 // 10초 동안 데이터 업데이트가 없으면 연결 끊김으로 간주
     
     init(navigationController: UINavigationController, tabBarController: UITabBarController) {
         self.navigationController = navigationController
@@ -38,6 +37,7 @@ class RecordCoordinator: Coordinator, BluetoothViewDelegate, BluetoothManagerDel
     }
     
     private func isRunningOnSimulator() -> Bool {
+        // 시뮬레이터에서는 블루투스 연결 생략
 #if targetEnvironment(simulator)
         return true
 #else
@@ -52,7 +52,7 @@ class RecordCoordinator: Coordinator, BluetoothViewDelegate, BluetoothManagerDel
             return
         }
         
-        // 기존의 BluetoothManager 초기화 로직
+        // BluetoothManager 초기화 로직
         Task {
             do {
                 let deviceInfo = try await fetchDeviceData()
@@ -145,6 +145,7 @@ class RecordCoordinator: Coordinator, BluetoothViewDelegate, BluetoothManagerDel
         tabBarController.tabBar.items?.forEach{ $0.isEnabled = true }
         tabBarController.selectedIndex = 3    }
     
+    // MARK: - 뷰 이동
     func showSummaryView(viewModel: RecordViewModel) {
         let sumUpCoordinator = RecordSumUpCoordinator(navigationController: navigationController)
         childCoordinators.append(sumUpCoordinator)
