@@ -3,6 +3,7 @@ import SnapKit
 
 class AccountSettingView: RideThisViewController {
     
+    var coordinator: AccountSettingCoordinator?
     private let service = UserService.shared
     private lazy var logoImage: UIImageView = {
         let image = UIImageView()
@@ -66,7 +67,6 @@ class AccountSettingView: RideThisViewController {
     func setAccountLabel() {
         [self.loginAccountLabel, self.loginAccount, self.accountSeparator].forEach{ self.view.addSubview($0) }
         
-        //
         self.loginAccountLabel.snp.makeConstraints {
             $0.top.equalTo(self.logoImage.snp.bottom).offset(30)
             $0.left.equalTo(self.view.snp.left).offset(80)
@@ -107,8 +107,9 @@ class AccountSettingView: RideThisViewController {
         
         self.quitAccountButton.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
-            let quitView = AccountQuitView()
-            self.navigationController?.pushViewController(quitView, animated: true)
+            
+            let quitCoordinator = AccountQuitCoordinator(navigationController: self.navigationController!)
+            quitCoordinator.start()
         }, for: .touchUpInside)
     }
     

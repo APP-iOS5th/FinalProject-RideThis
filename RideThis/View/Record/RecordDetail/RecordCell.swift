@@ -1,10 +1,3 @@
-//
-//  RecordCell.swift
-//  RideThis
-//
-//  Created by 황승혜 on 8/28/24.
-//  기록 테이블 뷰 셀
-
 import UIKit
 import SnapKit
 
