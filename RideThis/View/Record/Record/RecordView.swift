@@ -30,10 +30,6 @@ class RecordView: RideThisViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if viewModel == nil {
-            viewModel = RecordViewModel()
-        }
-        
         setupNavigationBar()
         setupButtons()
         
@@ -45,6 +41,11 @@ class RecordView: RideThisViewController {
                 guard let self = self else { return }
                 self.updateUI(isRecording: isRecording)
             }
+            
+            // 블루투스 연결 상태 주기적 확인
+                Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { [weak self] _ in
+                    self?.checkBluetoothConnection()
+                }
             
             // 뷰 모델에서 기록 종료 트리거 처리
             viewModel.delegate = self
@@ -80,6 +81,16 @@ class RecordView: RideThisViewController {
     
     private func updateTimerDisplay() {
         timerRecord.updateRecordText(text: viewModel?.updateTimerDisplay() ?? "00:00")
+    }
+    
+    private func checkBluetoothConnection() {
+        coordinator?.checkBluetoothConnection { [weak self] isConnected in
+            if !isConnected {
+                DispatchQueue.main.async {
+                    self?.showBluetoothDisconnectedAlert()
+                }
+            }
+        }
     }
     
     // MARK: - 레이아웃 설정
@@ -160,20 +171,20 @@ class RecordView: RideThisViewController {
         }, for: .touchUpInside)
         
         recordButton.addAction(UIAction { [weak self] _ in
-            guard let self = self else { return }
-            // TODO: - 최초 기록 시작일 때 카운트다운 추가
-            // 블루투스 연결 상태 확인
-            if self.viewModel?.isBluetoothConnected == true {
-                if self.viewModel?.isRecording == true {
-                    self.viewModel?.pauseRecording()
-                } else {
-                    self.viewModel?.startRecording()
-                    self.disableTabBar() // 탭바 비활성화
-                }
-            } else {
-                showAlert(alertTitle: "장치연결이 필요합니다.", msg: "사용하시려면 장치를 연결해주세요.", confirm: "장치연결") {
-                    print("connect Bluetooth")
-                    self.coordinator?.showDeviceConnectionView()
+            guard let self = self, let viewModel = self.viewModel else { return }
+            
+            self.coordinator?.checkBluetoothConnection { isConnected in
+                DispatchQueue.main.async {
+                    if isConnected {
+                        if viewModel.isRecording {
+                            viewModel.pauseRecording()
+                        } else {
+                            viewModel.startRecording()
+                            self.disableTabBar()
+                        }
+                    } else {
+                        self.showBluetoothDisconnectedAlert()
+                    }
                 }
             }
         }, for: .touchUpInside)
@@ -187,6 +198,12 @@ class RecordView: RideThisViewController {
             }
         }, for: .touchUpInside)
     }
+    
+    private func showBluetoothDisconnectedAlert() {
+        showAlert(alertTitle: "장치연결이 필요합니다.", msg: "사용하시려면 장치를 연결해주세요.", confirm: "장치연결") {
+                self.coordinator?.showDeviceConnectionView()
+            }
+        }
     
     // MARK: - 탭바 활성화 / 비활성화
     private func enableTabBar() {
@@ -353,16 +370,5 @@ extension RecordView: UITabBarControllerDelegate {
         }
         
         return true
-    }
-}
-
-// 블루투스가 꺼졌을 때
-extension RecordView: BluetoothViewDelegate {
-    func bluetoothDidTurnOff() {
-        DispatchQueue.main.async {
-            self.showAlert(alertTitle: "블루투스 꺼짐", msg: "블루투스가 꺼졌습니다. 다시 켜주세요.", confirm: "확인") {
-                print("블루투스 꺼짐")
-            }
-        }
     }
 }

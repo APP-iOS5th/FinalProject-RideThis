@@ -256,5 +256,9 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
             return 8
         }
     }
+    
+    public func isConnected() -> Bool {
+        return cadencePeripheral?.state == .connected
+    }
 }
 
