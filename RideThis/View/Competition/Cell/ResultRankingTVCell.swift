@@ -1,10 +1,3 @@
-//
-//  ResultRankingTVCell.swift
-//  RideThis
-//
-//  Created by SeongKook on 8/19/24.
-//
-
 import UIKit
 
 class ResultRankingTVCell: UITableViewCell {

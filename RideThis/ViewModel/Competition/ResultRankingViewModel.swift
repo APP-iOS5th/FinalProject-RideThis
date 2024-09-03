@@ -1,10 +1,3 @@
-//
-//  ResultRankingViewModel.swift
-//  RideThis
-//
-//  Created by SeongKook on 8/19/24.
-//
-
 import Foundation
 import Combine
 
