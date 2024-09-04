@@ -22,7 +22,11 @@ class RideThisLabel: UILabel {
     ) {
         self.init()
         
-        self.font = UIFont.systemFont(ofSize: fontType.rawValue, weight: fontType.fontWeight)
+        if fontType == .timerText {
+            self.font = UIFont.monospacedDigitSystemFont(ofSize: fontType.rawValue, weight: fontType.fontWeight)
+        } else {
+            self.font = UIFont.systemFont(ofSize: fontType.rawValue, weight: fontType.fontWeight)
+        }
         self.textColor = fontColor
         self.text = text
     }
