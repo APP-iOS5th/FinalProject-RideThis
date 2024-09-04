@@ -3,6 +3,7 @@ import FirebaseCore
 import FirebaseFirestore
 import FirebaseStorage
 import FirebaseAuth
+import Alamofire
 
 class FireBaseService {
     
@@ -454,12 +455,10 @@ class FireBaseService {
 
     // MARK: FCM 토큰 업데이트
     func updateUserFCMToken(userId: String, fcmToken: String) async throws {
-        // 유저의 문서를 가져옴
         let userRef = db.collection("USERS").document(userId)
         
-        // FCM 토큰 업데이트
         try await userRef.updateData([
-            "user_fcmToken": fcmToken
+            "user_fcmtoken": fcmToken
         ])
     }
     
@@ -500,11 +499,11 @@ class FireBaseService {
     func fetchFMC(signedUserNickname: String, cellUser: User, alarmCase: AlarmCase) {
         db.collection("USERS").document(cellUser.user_id).getDocument { document, error in
             if let document = document, document.exists {
-                if let userFCMToken = document.data()?["user_fmctoken"] as? String {
+                if let userFCMToken = document.data()?["user_fcmtoken"] as? String {
                     // FCM 메시지 전송
                     self.sendFCM(to: userFCMToken, signedUserNickname: signedUserNickname, cellUser: cellUser, alarmCase: alarmCase)
                 } else {
-                    print("user_fmctoken 필드가 없습니다.")
+                    print("user_fcmtoken 필드가 없습니다.")
                 }
             } else {
                 print("해당 유저를 찾을 수 없습니다: \(error?.localizedDescription ?? "Unknown error")")
@@ -525,12 +524,6 @@ class FireBaseService {
             }
 
             let urlString = "https://fcm.googleapis.com/v1/projects/\(projectID)/messages:send"
-            guard let url = URL(string: urlString) else { return }
-            
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST"
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
             
             let messageTitle = alarmCase.rawValue
             let messageBody = "\(signedUserNickname)님이 팔로우했습니다."
@@ -544,33 +537,26 @@ class FireBaseService {
                     ]
                 ]
             ]
-            
-            do {
-                let jsonData = try JSONSerialization.data(withJSONObject: message, options: [])
-                request.httpBody = jsonData
-            } catch {
-                print("Error serializing JSON: \(error)")
-                return
-            }
-            
-            let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                if let error = error {
-                    print("Error sending FCM notification: \(error)")
-                } else if let response = response as? HTTPURLResponse, response.statusCode != 200 {
-                    if let data = data, let responseBody = String(data: data, encoding: .utf8) {
-                        print("FCM notification failed with status code: \(response.statusCode)")
-                        print("Response body: \(responseBody)")
+
+            AF.request(urlString, method: .post, parameters: message, encoding: JSONEncoding.default, headers: [
+                "Content-Type": "application/json",
+                "Authorization": "Bearer \(accessToken)"
+            ]).response { response in
+                if let error = response.error {
+                    print("FCM 통신 오류: \(error)")
+                } else if let httpResponse = response.response, httpResponse.statusCode != 200 {
+                    if let data = response.data, let responseBody = String(data: data, encoding: .utf8) {
+                        print("FCM Status Error: \(httpResponse.statusCode)")
                     } else {
-                        print("FCM notification failed with status code: \(response.statusCode), but no response body was returned.")
+                        print("FCM notification failed with status code: \(httpResponse.statusCode), but no response body was returned.")
                     }
                 } else {
-                    print("FCM notification sent successfully.")
+                    print("FCM 알람 성공")
                     
                     // Firestore에 ALAMS 컬렉션에 데이터 추가
                     self.addAlarms(cellUser: cellUser, title: messageTitle, body: messageBody)
                 }
             }
-            task.resume()
         }
     }
 

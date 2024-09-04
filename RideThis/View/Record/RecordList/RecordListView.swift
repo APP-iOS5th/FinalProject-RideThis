@@ -38,10 +38,16 @@ class RecordListView: RideThisViewController, UIScrollViewDelegate {
     func setupScrollView() {
         scrollView = UIScrollView()
         scrollView.delegate = self
-        scrollView.transfersVerticalScrollingToParent = false
         view.addSubview(scrollView)
-        scrollView.snp.makeConstraints { scrol in
-            scrol.edges.equalToSuperview()
+        scrollView.snp.makeConstraints { scrollView in
+            scrollView.edges.equalToSuperview()
+        }
+        
+        // iOS 16.6 이하 버전에서 스크롤 뷰가 부모 뷰의 스크롤을 방해하지 않도록 설정
+        if #available(iOS 17.4, *) {
+            scrollView.transfersVerticalScrollingToParent = false
+        } else {
+            scrollView.alwaysBounceVertical = false
         }
     }
     

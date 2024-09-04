@@ -151,20 +151,25 @@ class RecordSumUpView: RideThisViewController {
     }
     
     private func updateViewModelWithRecordData() {
-        let cadence = Double(cadenceRecord.recordLabel.text!.replacingOccurrences(of: " RPM", with: "")) ?? 0
-        let speed = Double(speedRecord.recordLabel.text!.replacingOccurrences(of: " km/h", with: "")) ?? 0
-        let distance = Double(distanceRecord.recordLabel.text!.replacingOccurrences(of: " km", with: "")) ?? 0
-        let calorie = Double(calorieRecord.recordLabel.text!.replacingOccurrences(of: " kcal", with: "")) ?? 0
-        
-        viewModel.updateSummaryData(cadence: cadence, speed: speed, distance: distance, calorie: calorie)
+        let cadence = Double(cadenceRecord.recordLabel.text!.replacingOccurrences(of: " RPM", with: "").replacingOccurrences(of: ",", with: "")) ?? 0
+        let speed = Double(speedRecord.recordLabel.text!.replacingOccurrences(of: " km/h", with: "").replacingOccurrences(of: ",", with: "")) ?? 0
+        let distance = Double(distanceRecord.recordLabel.text!.replacingOccurrences(of: " km", with: "").replacingOccurrences(of: ",", with: "")) ?? 0
+        let calorie = Double(calorieRecord.recordLabel.text!.replacingOccurrences(of: " kcal", with: "").replacingOccurrences(of: ",", with: "")) ?? 0
+
+        viewModel.updateSummaryData(
+            cadence: cadence.getTwoDecimal,
+            speed: speed.getTwoDecimal,
+            distance: distance.getTwoDecimal,
+            calorie: calorie.getTwoDecimal
+        )
     }
     
     private func updateUI(with data: RecordViewModel.SummaryData) {
         timerRecord.updateRecordText(text: data.recordedTime)
-        cadenceRecord.updateRecordText(text: "\(data.cadence) RPM")
-        speedRecord.updateRecordText(text: "\(data.speed) km/h")
-        distanceRecord.updateRecordText(text: "\(data.distance) km")
-        calorieRecord.updateRecordText(text: "\(data.calorie) kcal")
+        cadenceRecord.updateRecordText(text: "\(data.cadence.getTwoDecimal.formattedWithThousandsSeparator()) RPM")
+        speedRecord.updateRecordText(text: "\(data.speed.getTwoDecimal.formattedWithThousandsSeparator()) km/h")
+        distanceRecord.updateRecordText(text: "\(data.distance.getTwoDecimal.formattedWithThousandsSeparator()) km")
+        calorieRecord.updateRecordText(text: "\(data.calorie.getTwoDecimal.formattedWithThousandsSeparator()) kcal")
     }
     
     // MARK: Navigation Bar
