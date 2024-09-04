@@ -151,4 +151,23 @@ class HomeViewModel: NSObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Location Error: \(error)")
     }
+    
+    // MARK: 로그인 시 User에 FCM토큰
+    func fetchAddFCM() {
+        if let fcmToken = TokenManager.shared.fcmToken {
+            print("FCMToken Check: \(fcmToken)")
+            
+            Task {
+                do {
+                    let userId = self.userService.combineUser?.user_id
+                    try await self.firebaseService.updateUserFCMToken(userId: userId ?? "", fcmToken: fcmToken)
+                    print("FCM 토큰 업데이트")
+                } catch {
+                    print("FCM 토큰 업데이트 실패: \(error)")
+                }
+            }
+        } else {
+            print("FCM token is not available")
+        }
+    }
 }

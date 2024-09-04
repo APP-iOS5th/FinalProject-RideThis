@@ -503,7 +503,13 @@ class HomeView: RideThisViewController {
         viewModel.$model
             .receive(on: DispatchQueue.main)
             .sink { [weak self] model in
-                self?.updateUI(with: model)
+                guard let self = self else { return }
+                
+                if !model.userName.isEmpty {
+                    viewModel.fetchAddFCM()
+                }
+                
+                self.updateUI(with: model)
             }
             .store(in: &cancellables)
     }
