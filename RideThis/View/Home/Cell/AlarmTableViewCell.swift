@@ -45,7 +45,7 @@ class AlarmTableViewCell: UITableViewCell {
     private let categoryLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
+        label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
         label.textColor = .primaryColor
         
         return label
@@ -53,7 +53,8 @@ class AlarmTableViewCell: UITableViewCell {
     private let bodyLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 13)
+        label.font = UIFont.systemFont(ofSize: 15)
+        label.numberOfLines = 0
         
         return label
     }()
@@ -75,6 +76,8 @@ class AlarmTableViewCell: UITableViewCell {
         super.init(coder: coder)
         initialCell()
     }
+    
+    
     
     func initialCell() {
         self.backgroundColor = .primaryBackgroundColor
@@ -99,9 +102,10 @@ class AlarmTableViewCell: UITableViewCell {
         }
         
         bodyLabel.snp.makeConstraints {
-//            $0.centerY.equalTo(container.snp.centerY).offset(5)
+            $0.top.equalTo(categoryLabel.snp.bottom).offset(5)
             $0.left.equalTo(categoryLabel.snp.left)
-            $0.bottom.equalTo(alarmImage.snp.bottom).offset(-5)
+            $0.right.equalTo(container.snp.right).offset(-10)
+            $0.bottom.equalTo(alarmImage.snp.bottom)
         }
         
         dateLabel.snp.makeConstraints {
@@ -118,16 +122,27 @@ class AlarmTableViewCell: UITableViewCell {
         }
     }
     
-    func configureCell(alarmInfo: AlarmModel) {
+    func configureCell(alarmInfo: AlarmModel, firebaseService: FireBaseService) {
         self.categoryLabel.text = alarmInfo.alarm_category
-        self.bodyLabel.text = alarmInfo.alarm_body
+        switch alarmInfo.alarm_category {
+        case "Follow":
+            Task {
+                if case .user(let fetchedUser) = try await firebaseService.fetchUser(at: alarmInfo.alarm_user, userType: true), let user = fetchedUser {
+                    self.bodyLabel.text = "\(user.user_nickname)님이 팔로우 했습니다."
+                    if let imgStr = user.user_image {
+                        DispatchQueue.main.async {
+                            self.alarmImage.kf.setImage(with: URL(string: imgStr))
+                        }
+                    } else {
+                        self.alarmImage.image = UIImage(named: "bokdonge")
+                    }
+                }
+            }
+        default:
+            break
+        }
         self.dateLabel.text = alarmInfo.alarm_date.convertedDate
         
-        if let imgStr = alarmInfo.alarm_image {
-            DispatchQueue.main.async {
-                self.alarmImage.kf.setImage(with: URL(string: imgStr))
-            }
-        }
         if alarmInfo.alarm_status {
             unReadMark.isHidden = true
         } else {

@@ -533,7 +533,7 @@ class FireBaseService {
             request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
             
             let messageTitle = alarmCase.rawValue
-            let messageBody = "\(signedUserNickname)님이 당신을 팔로우했습니다."
+            let messageBody = "\(signedUserNickname)님이 팔로우했습니다."
 
             let message: [String: Any] = [
                 "message": [
@@ -583,7 +583,7 @@ class FireBaseService {
             "alarm_date": Timestamp(date: Date()),
             "alarm_body": body,
             "alarm_status": false,
-            "alarm_image": cellUser.user_image ?? ""
+            "alarm_user": cellUser.user_id
         ]
         
         alamsCollection.addDocument(data: alamData) { error in

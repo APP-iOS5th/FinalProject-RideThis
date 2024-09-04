@@ -22,8 +22,9 @@ enum AlarmCase: String, CaseIterable {
 
 class AlarmView: RideThisViewController {
     
-    private let viewModel = AlarmViewModel()
+    private let firebaseService = FireBaseService()
     private var cancellable = Set<AnyCancellable>()
+    private lazy var viewModel = AlarmViewModel(firebaseService: self.firebaseService)
     
     private lazy var alarmTableView: UITableView = {
         let table = UITableView()
@@ -85,13 +86,13 @@ extension AlarmView: UITableViewDelegate, UITableViewDataSource {
         
         cell.selectionStyle = .none
         let alarm = viewModel.alarams[indexPath.row]
-        cell.configureCell(alarmInfo: alarm)
+        cell.configureCell(alarmInfo: alarm, firebaseService: firebaseService)
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 66
+        return 80
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
