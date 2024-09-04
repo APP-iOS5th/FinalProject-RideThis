@@ -3,6 +3,23 @@ import UIKit
 import SnapKit
 import Combine
 
+enum AlarmCase: String, CaseIterable {
+    case follow = "Follow"
+    
+    var followForLabel: String {
+        get {
+            switch self {
+            case .follow:
+                return "팔로우"
+            }
+        }
+    }
+    
+    func findCase(str: String) -> Self {
+        return AlarmCase.allCases.filter{ $0.rawValue == str }.first!
+    }
+}
+
 class AlarmView: RideThisViewController {
     
     private let viewModel = AlarmViewModel()
@@ -14,6 +31,8 @@ class AlarmView: RideThisViewController {
         table.delegate = self
         table.dataSource = self
         table.register(AlarmTableViewCell.self, forCellReuseIdentifier: "AlarmTableViewCell")
+        table.backgroundColor = .primaryBackgroundColor
+        table.separatorStyle = .none
         
         return table
     }()
@@ -64,9 +83,24 @@ extension AlarmView: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         
+        cell.selectionStyle = .none
         let alarm = viewModel.alarams[indexPath.row]
         cell.configureCell(alarmInfo: alarm)
         
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 66
+    }
+    
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        
+//        let alarm = viewModel.alarams[indexPath.row]
+//        alarm.alarm_status = true
+//        if !alarm.alarm_status {
+////            cell.configureCell(alarmInfo: alarm)
+//            viewModel.updateAlarm(user: UserService.shared.combineUser!, alarm: alarm)
+//        }
+//    }
 }

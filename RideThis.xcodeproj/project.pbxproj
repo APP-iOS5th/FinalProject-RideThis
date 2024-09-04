@@ -48,6 +48,7 @@
 		78DBD01B2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DBD01A2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift */; };
 		78DBD01D2C7882B700B43A62 /* DeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DBD01C2C7882B700B43A62 /* DeviceTableViewCell.swift */; };
 		78DBD01F2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DBD01E2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift */; };
+		CD0D58B82C875EF800642069 /* AlarmModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0D58B72C875EF800642069 /* AlarmModel.swift */; };
 		CD0E1E852C6A409F0080CFED /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0E1E842C6A409F0080CFED /* SettingView.swift */; };
 		CD0EC4C92C71EE5400E70452 /* FollowManageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0EC4C82C71EE5400E70452 /* FollowManageView.swift */; };
 		CD0EC4CB2C71F10500E70452 /* FollowTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0EC4CA2C71F10500E70452 /* FollowTableViewCell.swift */; };
@@ -116,7 +117,6 @@
 		CDF7FCE12C85874A00E11D52 /* UserProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF7FCE02C85874A00E11D52 /* UserProfileViewModel.swift */; };
 		CDF7FCEA2C8601BA00E11D52 /* LoginCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF7FCE92C8601BA00E11D52 /* LoginCoordinator.swift */; };
 		CDF7FCEC2C860EFA00E11D52 /* UserProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF7FCEB2C860EFA00E11D52 /* UserProfileCoordinator.swift */; };
-		CDF7FCEE2C869E9800E11D52 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = CDF7FCED2C869E9800E11D52 /* FirebaseMessaging */; };
 		CDF7FD092C8735B800E11D52 /* AlarmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF7FD082C8735B800E11D52 /* AlarmView.swift */; };
 		CDF7FD0B2C87383F00E11D52 /* AlarmCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF7FD0A2C87383F00E11D52 /* AlarmCoordinator.swift */; };
 		CDF7FD0E2C8738D700E11D52 /* AlarmTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF7FD0D2C8738D700E11D52 /* AlarmTableViewCell.swift */; };
@@ -196,6 +196,7 @@
 		78DBD01A2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoTableViewCell.swift; sourceTree = "<group>"; };
 		78DBD01C2C7882B700B43A62 /* DeviceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceTableViewCell.swift; sourceTree = "<group>"; };
 		78DBD01E2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelCircumferenceTableViewCell.swift; sourceTree = "<group>"; };
+		CD0D58B72C875EF800642069 /* AlarmModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmModel.swift; sourceTree = "<group>"; };
 		CD0E1E842C6A409F0080CFED /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		CD0EC4C82C71EE5400E70452 /* FollowManageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowManageView.swift; sourceTree = "<group>"; };
 		CD0EC4CA2C71F10500E70452 /* FollowTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowTableViewCell.swift; sourceTree = "<group>"; };
@@ -522,6 +523,14 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
+		CD0D58B62C875EF100642069 /* Alarm */ = {
+			isa = PBXGroup;
+			children = (
+				CD0D58B72C875EF800642069 /* AlarmModel.swift */,
+			);
+			path = Alarm;
+			sourceTree = "<group>";
+		};
 		CD4213B62C64982000F7C3AE = {
 			isa = PBXGroup;
 			children = (
@@ -602,6 +611,7 @@
 		CD4213DB2C64988B00F7C3AE /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				CD0D58B62C875EF100642069 /* Alarm */,
 				CD4213D82C64988B00F7C3AE /* Home */,
 				CD4213D62C64988B00F7C3AE /* Competition */,
 				CD4213DA2C64988B00F7C3AE /* Record */,
@@ -1222,6 +1232,7 @@
 				0493F5D52C7DBEA800290A4C /* MyPageCoordinator.swift in Sources */,
 				78254FD42C7C05CB0069B10A /* DeviceSearchTableViewCell.swift in Sources */,
 				CD3E646B2C777A180018C46E /* SearchUserViewModel.swift in Sources */,
+				CD0D58B82C875EF800642069 /* AlarmModel.swift in Sources */,
 				CDF7FCE12C85874A00E11D52 /* UserProfileViewModel.swift in Sources */,
 				CD42157C2C805B0D0033A511 /* EditProfileCoordinator.swift in Sources */,
 				0493F5DA2C7E0BFA00290A4C /* CountCoordinator.swift in Sources */,
@@ -1568,11 +1579,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = CDC0C1D42C65FD6A00349DC4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
-		};
-		CDF7FCED2C869E9800E11D52 /* FirebaseMessaging */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = CDC0C1D42C65FD6A00349DC4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseMessaging;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

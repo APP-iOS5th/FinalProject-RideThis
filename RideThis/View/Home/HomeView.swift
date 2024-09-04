@@ -264,8 +264,11 @@ class HomeView: RideThisViewController {
         let leftBarButtonItem = UIBarButtonItem(customView: customTitleLabel)
         navigationItem.leftBarButtonItem = leftBarButtonItem
         
-        let rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .done, target: self, action: #selector(moveToAlarmView))
-        navigationItem.rightBarButtonItem = rightBarButtonItem
+        if UserService.shared.combineUser != nil {
+            let rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .done, target: self, action: #selector(moveToAlarmView))
+            rightBarButtonItem.tintColor = .primaryColor
+            navigationItem.rightBarButtonItem = rightBarButtonItem
+        }
     }
     
     @objc func moveToAlarmView() {

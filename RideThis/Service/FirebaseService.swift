@@ -497,12 +497,12 @@ class FireBaseService {
         task.resume()
     }
     
-    func fetchFMC(signedUserNickname: String, cellUserId: String) {
-        db.collection("USERS").document(cellUserId).getDocument { document, error in
+    func fetchFMC(signedUserNickname: String, cellUser: User, alarmCase: AlarmCase) {
+        db.collection("USERS").document(cellUser.user_id).getDocument { document, error in
             if let document = document, document.exists {
                 if let userFCMToken = document.data()?["user_fmctoken"] as? String {
                     // FCM 메시지 전송
-                    self.sendFCM(to: userFCMToken, signedUserNickname: signedUserNickname, cellUserId: cellUserId)
+                    self.sendFCM(to: userFCMToken, signedUserNickname: signedUserNickname, cellUser: cellUser, alarmCase: alarmCase)
                 } else {
                     print("user_fmctoken 필드가 없습니다.")
                 }
@@ -511,8 +511,8 @@ class FireBaseService {
             }
         }
     }
-
-    func sendFCM(to userFCMToken: String, signedUserNickname: String, cellUserId: String) {
+    
+    func sendFCM(to userFCMToken: String, signedUserNickname: String, cellUser: User, alarmCase: AlarmCase) {
         fetchAccessToken { accessToken in
             guard let accessToken = accessToken else {
                 print("Failed to obtain access token")
@@ -532,8 +532,8 @@ class FireBaseService {
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
             
-            let messageTitle = "Follow 알림"
-            let messageBody = "\(signedUserNickname)이(가) 당신을 팔로우했습니다"
+            let messageTitle = alarmCase.rawValue
+            let messageBody = "\(signedUserNickname)님이 당신을 팔로우했습니다."
 
             let message: [String: Any] = [
                 "message": [
@@ -567,22 +567,23 @@ class FireBaseService {
                     print("FCM notification sent successfully.")
                     
                     // Firestore에 ALAMS 컬렉션에 데이터 추가
-                    self.addAlarms(cellUserId: cellUserId, title: messageTitle, body: messageBody)
+                    self.addAlarms(cellUser: cellUser, title: messageTitle, body: messageBody)
                 }
             }
             task.resume()
         }
     }
 
-    func addAlarms(cellUserId: String, title: String, body: String) {
+    func addAlarms(cellUser: User, title: String, body: String) {
         let db = Firestore.firestore()
-        let alamsCollection = db.collection("USERS").document(cellUserId).collection("ALARMS")
+        let alamsCollection = db.collection("USERS").document(cellUser.user_id).collection("ALARMS")
         
         let alamData: [String: Any] = [
             "alarm_category": title,
             "alarm_date": Timestamp(date: Date()),
             "alarm_body": body,
-            "alarm_status": false
+            "alarm_status": false,
+            "alarm_image": cellUser.user_image ?? ""
         ]
         
         alamsCollection.addDocument(data: alamData) { error in
@@ -591,6 +592,26 @@ class FireBaseService {
             } else {
                 print("Notification added to Firestore successfully.")
             }
+        }
+    }
+    
+    func updateAlarm(user: User, alarm: AlarmModel) async {
+        do {
+            let alarmDocs = try await db.collection("USERS").document(user.user_id)
+                .collection("ALARMS")
+                .whereField("alarm_body", isEqualTo: alarm.alarm_body)
+                .whereField("alarm_category", isEqualTo: alarm.alarm_category)
+                .whereField("alarm_status", isEqualTo: false)
+                .getDocuments()
+                .documents
+            
+            if let searchedAlarm = alarmDocs.first {
+                try await searchedAlarm.reference.updateData([
+                    "alarm_status": true
+                ])
+            }
+        } catch {
+            print(error)
         }
     }
     
@@ -603,7 +624,7 @@ class FireBaseService {
                     alarms.append(try doc.data(as: AlarmModel.self))
                 }
                 
-                return alarms
+                return alarms.sorted(by: { $0.alarm_date > $1.alarm_date })
             }
         } catch {
             print(error.localizedDescription)

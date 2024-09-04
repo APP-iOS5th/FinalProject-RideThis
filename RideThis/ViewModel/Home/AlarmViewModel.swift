@@ -13,4 +13,11 @@ class AlarmViewModel {
             self.alarams = await firebaseService.fetchAlarms(userId: signedUser.user_id)
         }
     }
+    
+    func updateAlarm(user: User, alarm: AlarmModel) {
+        Task {
+            await firebaseService.updateAlarm(user: user, alarm: alarm)
+//            self.fetchAlarmDatas()
+        }
+    }
 }
