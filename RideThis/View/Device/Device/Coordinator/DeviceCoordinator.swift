@@ -4,6 +4,7 @@ class DeviceCoordinator: Coordinator {
     // MARK: - Properties
     var navigationController: UINavigationController
     var childCoordinators: [Coordinator] = []
+    let sharedViewModel = DeviceViewModel()
     
     
     // MARK: - Initialization
@@ -19,14 +20,14 @@ class DeviceCoordinator: Coordinator {
     
     /// 코디네이터 시작: DeviceView를 네비게이션 스택에 푸시
     func start() {
-        let deviceVC = DeviceView()
+        let deviceVC = DeviceView(viewModel: sharedViewModel)
         deviceVC.coordinator = self
         navigationController.pushViewController(deviceVC, animated: true)
     }
     
     /// 장치 검색 화면 표시
     func showDeviceSearchView() {
-        let deviceSearchCoordinator = DeviceSearchCoordinator(navigationController: navigationController)
+        let deviceSearchCoordinator = DeviceSearchCoordinator(navigationController: navigationController, viewModel: sharedViewModel)
         childCoordinators.append(deviceSearchCoordinator)
         deviceSearchCoordinator.start()
     }
