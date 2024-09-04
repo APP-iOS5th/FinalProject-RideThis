@@ -30,7 +30,7 @@ class EditProfileInfoView: RideThisViewController {
         imageView.widthAnchor.constraint(equalToConstant: 120).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: 120).isActive = true
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 60
+        imageView.layer.cornerRadius = 40
         imageView.clipsToBounds = true
         if let imageURL = self.user.user_image {
             if imageURL.isEmpty {
@@ -47,12 +47,28 @@ class EditProfileInfoView: RideThisViewController {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
-        imageView.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: 25).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 25).isActive = true
         imageView.image = UIImage(systemName: "camera")
         imageView.tintColor = .primaryColor
         
         return imageView
+    }()
+    private lazy var cameraContainerView: UIView = {
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        container.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        container.layer.cornerRadius = 15
+        container.clipsToBounds = true
+        container.backgroundColor = .white
+        container.addSubview(self.cameraImageView)
+        cameraImageView.snp.makeConstraints {
+            $0.centerX.equalTo(container.snp.centerX)
+            $0.centerY.equalTo(container.snp.centerY)
+        }
+        
+        return container
     }()
     private let profileInfoContainer = RideThisContainer(height: 150)
     private let firstSeparator = CustomSeparator()
@@ -105,7 +121,6 @@ class EditProfileInfoView: RideThisViewController {
     
     func setNavigationComponents() {
         self.title = "프로필 편집"
-        // MARK: TODO - 필수 입력항목이 입력되지 않으면 비활성화
         let saveButton = UIBarButtonItem(title: "저장", style: .plain, target: self, action: #selector(saveProfileInfo))
         self.navigationItem.rightBarButtonItem = saveButton
     }
@@ -117,16 +132,16 @@ class EditProfileInfoView: RideThisViewController {
     }
     
     func setProfileImage() {
-        [self.profileImageView, self.cameraImageView].forEach{ self.view.addSubview($0) }
+        [self.profileImageView, self.cameraContainerView].forEach{ self.view.addSubview($0) }
         
         self.profileImageView.snp.makeConstraints {
             $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(20)
             $0.centerX.equalTo(self.view.snp.centerX)
         }
         
-        self.cameraImageView.snp.makeConstraints {
+        self.cameraContainerView.snp.makeConstraints {
             $0.bottom.equalTo(self.profileImageView.snp.bottom)
-            $0.right.equalTo(self.profileImageView.snp.right).offset(-15)
+            $0.right.equalTo(self.profileImageView.snp.right).offset(10)
         }
     }
     
@@ -148,8 +163,8 @@ class EditProfileInfoView: RideThisViewController {
                 
                 profileInfoContainer.addSubview(mandatoryImgView)
                 mandatoryImgView.snp.makeConstraints {
-                    $0.bottom.equalTo(ui.snp.top).offset(4)
-                    $0.right.equalTo(ui.snp.left).offset(1)
+                    $0.top.equalTo(ui.snp.top).offset(1.5)
+                    $0.left.equalTo(ui.snp.right)
                 }
             }
         }
@@ -236,6 +251,7 @@ class EditProfileInfoView: RideThisViewController {
         self.firebaseService.updateUserInfo(updated: self.user, update: true)
         if let img = selectedUserImage {
             updateImageDelegate?.imageUpdate(image: img)
+            // MARK: TODO - 만약 저장하던 중 에러가 발생했을 때 처리
             firebaseService.saveImage(image: img, userId: user.user_id) { imgUrl in
                 self.user.user_image = imgUrl.absoluteString
                 self.firebaseService.updateUserInfo(updated: self.user, update: false)

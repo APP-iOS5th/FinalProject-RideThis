@@ -18,6 +18,16 @@ class AppCoordinator: Coordinator {
     
     func changeTabBarView(change immediately: Bool = false) {
         let tabBarController = UITabBarController()
+        tabBarController.tabBar.clipsToBounds = false
+        let separatorView = UIView(frame: CGRect(x: 0, y: 0, width: tabBarController.tabBar.frame.width, height: 0.5))
+        separatorView.backgroundColor = .lightGray
+        tabBarController.tabBar.addSubview(separatorView)
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .primaryBackgroundColor // 원하는 배경색 설정
+        
+        tabBarController.tabBar.standardAppearance = appearance
+        tabBarController.tabBar.scrollEdgeAppearance = appearance
         let tabBarCoordinator = TabBarCoordinator(tabBarController: tabBarController)
         childCoordinators.append(tabBarCoordinator)
         tabBarCoordinator.start()

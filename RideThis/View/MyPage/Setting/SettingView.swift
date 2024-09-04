@@ -11,7 +11,6 @@ class SettingView: RideThisViewController {
         table.delegate = self
         table.dataSource = self
         table.register(SettingTableViewCell.self, forCellReuseIdentifier: "SettingTableViewCell")
-        table.register(SettingTableToggleViewCell.self, forCellReuseIdentifier: "SettingTableToggleViewCell")
         table.backgroundColor = .primaryBackgroundColor
         
         return table
@@ -45,26 +44,19 @@ extension SettingView: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item = items[indexPath.item]
-        switch indexPath.row {
-        case 0:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SettingTableViewCell", for: indexPath) as? SettingTableViewCell else {
-                return UITableViewCell()
-            }
-            
-            cell.configureCell(text: item)
-            
-            return cell
-        case 1:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SettingTableToggleViewCell", for: indexPath) as? SettingTableToggleViewCell else {
-                return UITableViewCell()
-            }
-            
-            cell.configureCell(text: item)
-            
-            return cell
-        default:
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "SettingTableViewCell", for: indexPath) as? SettingTableViewCell else {
             return UITableViewCell()
         }
+        
+        switch indexPath.row {
+        case 0:
+            cell.configureCell(text: item, cellCase: .navigationLink)
+        case 1:
+            cell.configureCell(text: item, cellCase: .toggleButton)
+        default:
+            break
+        }
+        return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
