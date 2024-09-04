@@ -1137,7 +1137,6 @@
 				CD4214142C64988C00F7C3AE /* RecordView.swift in Sources */,
 				CD4214122C64988C00F7C3AE /* HomeView.swift in Sources */,
 				EB6B40892C81B15E000DC914 /* RecordListCoordinator.swift in Sources */,
-				0493F5D22C7DBE1A00290A4C /* DeviceCoordinator.swift in Sources */,
 				CDE36A082C7DA12900B743B9 /* RecordProtocol.swift in Sources */,
 				04E3C0CF2C6B32B8006B844F /* CompetitionCoordinator.swift in Sources */,
 				0493F5CC2C7DBC0600290A4C /* HomeCoordinator.swift in Sources */,
