@@ -17,6 +17,16 @@ class AlarmTableViewCell: UITableViewCell {
         return uv
     }()
     
+    private lazy var unReadMark: UIImageView = {
+        let iv = UIImageView()
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.contentMode = .scaleAspectFit
+        iv.image = UIImage(systemName: "circle.fill")
+        iv.tintColor = .primaryColor
+        
+        return iv
+    }()
+    
     private lazy var alarmImage: UIImageView = {
         let img = UIImageView()
         img.translatesAutoresizingMaskIntoConstraints = false
@@ -35,7 +45,7 @@ class AlarmTableViewCell: UITableViewCell {
     private let categoryLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 12)
+        label.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
         label.textColor = .primaryColor
         
         return label
@@ -98,6 +108,14 @@ class AlarmTableViewCell: UITableViewCell {
             $0.top.equalTo(categoryLabel.snp.top)
             $0.right.equalTo(container.snp.right).offset(-10)
         }
+        
+        self.container.addSubview(unReadMark)
+        unReadMark.snp.makeConstraints {
+            $0.width.equalTo(8)
+            $0.height.equalTo(8)
+            $0.top.equalTo(self.container.snp.top).offset(-5)
+            $0.left.equalTo(self.container.snp.left).offset(-5)
+        }
     }
     
     func configureCell(alarmInfo: AlarmModel) {
@@ -110,10 +128,14 @@ class AlarmTableViewCell: UITableViewCell {
                 self.alarmImage.kf.setImage(with: URL(string: imgStr))
             }
         }
-//        if alarmInfo.alarm_status {
-//            self.container.backgroundColor = .white
-//        } else {
-//            self.container.backgroundColor = .primaryBackgroundColor
-//        }
+        if alarmInfo.alarm_status {
+            unReadMark.isHidden = true
+        } else {
+            unReadMark.isHidden = false
+        }
+    }
+    
+    func hideUnreadMark() {
+        self.unReadMark.isHidden = true
     }
 }

@@ -94,13 +94,15 @@ extension AlarmView: UITableViewDelegate, UITableViewDataSource {
         return 66
     }
     
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        
-//        let alarm = viewModel.alarams[indexPath.row]
-//        alarm.alarm_status = true
-//        if !alarm.alarm_status {
-////            cell.configureCell(alarmInfo: alarm)
-//            viewModel.updateAlarm(user: UserService.shared.combineUser!, alarm: alarm)
-//        }
-//    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let alarm = viewModel.alarams[indexPath.row]
+        if !alarm.alarm_status {
+            alarm.alarm_status = true
+            if let cell = tableView.cellForRow(at: indexPath) as? AlarmTableViewCell {
+                cell.hideUnreadMark()
+            }
+            viewModel.updateAlarm(user: UserService.shared.combineUser!, alarm: alarm)
+        }
+    }
 }
