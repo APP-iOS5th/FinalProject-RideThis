@@ -93,7 +93,6 @@ class RecordViewModel: BluetoothManagerDelegate {
         isMeasuring = false
         isPaused = false
         print("record reset")
-        stopTimer()
         elapsedTime = 0.0
         recordedTime = 0.0
         startTime = nil
@@ -110,7 +109,6 @@ class RecordViewModel: BluetoothManagerDelegate {
         isRecording = false
         isMeasuring = false
         print("finish pushed")
-        stopTimer()
         recordedTime = elapsedTime
         endTime = Date()
         print("end time: \(String(describing: endTime))")
@@ -135,7 +133,7 @@ class RecordViewModel: BluetoothManagerDelegate {
     }
     
     // MARK: - Timer Methods
-    private func startTimer() {
+    func startTimer() {
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             guard let self = self else { return }
             self.elapsedTime += 1
@@ -143,7 +141,7 @@ class RecordViewModel: BluetoothManagerDelegate {
         }
     }
     
-    private func stopTimer() {
+    func stopTimer() {
         timer?.invalidate()
         timer = nil
     }

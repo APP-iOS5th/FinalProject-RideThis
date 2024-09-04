@@ -203,8 +203,12 @@ class RecordView: RideThisViewController {
         
         // 버튼 액션
         resetButton.addAction(UIAction { [weak self] _ in
-            self?.showAlert(alertTitle: "기록을 리셋할까요?", msg: "지금까지의 기록이 초기화됩니다.", confirm: "리셋"
-            ) {
+            self?.viewModel?.stopTimer()
+            self?.showAlert(alertTitle: "기록을 리셋할까요?", msg: "지금까지의 기록이 초기화됩니다.", confirm: "리셋",
+            cancelHandler: {
+                // 취소 버튼을 눌렀을 때 타이머 재시작
+                self?.viewModel?.startTimer()
+            }) {
                 self?.viewModel?.resetRecording()
                 self?.enableTabBar()
             }
@@ -213,7 +217,7 @@ class RecordView: RideThisViewController {
         recordButton.addAction(UIAction { [weak self] _ in
             guard let self = self, let viewModel = self.viewModel else { return }
             
-#if targetEnvironment(simulator)
+    #if targetEnvironment(simulator)
             // 시뮬레이터에서는 블루투스 연결 확인을 건너뛰고 바로 기록을 시작합니다.
             if viewModel.isRecording {
                 viewModel.pauseRecording()
@@ -224,7 +228,7 @@ class RecordView: RideThisViewController {
                 self.disableTabBar()
             }
             self.updateUI(isRecording: viewModel.isRecording)
-#else
+    #else
             self.coordinator?.checkBluetoothConnection { isConnected in
                 DispatchQueue.main.async {
                     if isConnected {
@@ -242,17 +246,34 @@ class RecordView: RideThisViewController {
                     }
                 }
             }
-#endif
+    #endif
         }, for: .touchUpInside)
         
         finishButton.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
-            self.showAlert(alertTitle: "기록을 종료할까요?", msg: "요약 화면으로 이동합니다.", confirm: "기록 종료"
-            ) {
+            self.viewModel?.stopTimer()
+            self.showAlert(alertTitle: "기록을 종료할까요?", msg: "요약 화면으로 이동합니다.", confirm: "기록 종료",
+            cancelHandler: {
+                // 취소 버튼을 눌렀을 때 타이머 재시작
+                self.viewModel?.startTimer()
+            }) {
                 self.viewModel?.finishRecording()
                 self.enableTabBar() // 탭바 활성화
             }
         }, for: .touchUpInside)
+    }
+    
+    private func showAlert(alertTitle: String, msg: String, confirm: String, cancelHandler: (() -> Void)? = nil, confirmHandler: @escaping () -> Void) {
+        let alert = UIAlertController(title: alertTitle, message: msg, preferredStyle: .alert)
+        let confirmAction = UIAlertAction(title: confirm, style: .destructive) { _ in
+            confirmHandler()
+        }
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel) { _ in
+            cancelHandler?()
+        }
+        alert.addAction(cancelAction)
+        alert.addAction(confirmAction)
+        present(alert, animated: true, completion: nil)
     }
     
     private func showBluetoothDisconnectedAlert() {
