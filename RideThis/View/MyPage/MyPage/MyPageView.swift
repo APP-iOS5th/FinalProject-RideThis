@@ -481,7 +481,8 @@ class MyPageView: RideThisViewController {
         self.totalRunCountSeparator.snp.makeConstraints {
             $0.top.equalTo(self.totalRunCount.snp.bottom).offset(8)
             $0.centerX.equalTo(self.totalRunCount.snp.centerX)
-            $0.width.equalTo(20)
+            $0.width.equalTo(35)
+            $0.height.equalTo(3)
         }
         
         self.totalRunCountData.snp.makeConstraints {
@@ -513,7 +514,8 @@ class MyPageView: RideThisViewController {
         self.totalRunDistanceSeparator.snp.makeConstraints {
             $0.top.equalTo(self.totalRunCountSeparator.snp.top)
             $0.centerX.equalTo(self.totalRunDistance.snp.centerX)
-            $0.width.equalTo(20)
+            $0.width.equalTo(35)
+            $0.height.equalTo(3)
         }
         
         self.totalRunDistanceData.snp.makeConstraints {
@@ -586,7 +588,8 @@ class MyPageView: RideThisViewController {
         self.selectedPeriodSeparator.snp.makeConstraints {
             $0.top.equalTo(self.selectedPeriodTitle.snp.bottom).offset(12)
             $0.centerX.equalTo(self.selectedPeriodTitle.snp.centerX)
-            $0.width.equalTo(20)
+            $0.width.equalTo(60)
+            $0.height.equalTo(5)
         }
         
         self.selectedPeriodData.snp.makeConstraints {
