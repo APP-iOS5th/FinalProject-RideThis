@@ -152,8 +152,8 @@ class HomeViewModel: NSObject, CLLocationManagerDelegate {
         print("Location Error: \(error)")
     }
     
-    // MARK: 로그인 시 User에 FMC토큰
-    func fetchAddFMC() {
+    // MARK: 로그인 시 User에 FCM토큰
+    func fetchAddFCM() {
         if let fcmToken = TokenManager.shared.fcmToken {
             print("FCMToken Check: \(fcmToken)")
             
