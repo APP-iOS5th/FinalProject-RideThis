@@ -661,7 +661,7 @@ class MyPageView: RideThisViewController {
             .sink { [weak self] avg in
                 guard let self = self else { return }
                 
-                self.selectedPeriodData.text = "\(avg)\(self.selectedPeriodDataUnit)"
+                self.selectedPeriodData.text = "\(avg)RPM"
             }
             .store(in: &cancellable)
         
@@ -670,7 +670,7 @@ class MyPageView: RideThisViewController {
             .sink { [weak self] avg in
                 guard let self = self else { return }
                 
-                self.selectedPeriodData.text = "\(avg)\(self.selectedPeriodDataUnit)"
+                self.selectedPeriodData.text = "\(avg)km"
             }
             .store(in: &cancellable)
         
@@ -679,7 +679,7 @@ class MyPageView: RideThisViewController {
             .sink { [weak self] avg in
                 guard let self = self else { return }
                 
-                self.selectedPeriodData.text = "\(avg)\(self.selectedPeriodDataUnit)"
+                self.selectedPeriodData.text = "\(avg)km/h"
             }
             .store(in: &cancellable)
         
@@ -688,7 +688,7 @@ class MyPageView: RideThisViewController {
             .sink { [weak self] avg in
                 guard let self = self else { return }
                 
-                self.selectedPeriodData.text = "\(avg)\(self.selectedPeriodDataUnit)"
+                self.selectedPeriodData.text = "\(avg)Kcal"
             }
             .store(in: &cancellable)
     }
@@ -728,9 +728,9 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
         targetContentOffset.pointee = CGPoint(x: index * cellWidth - scrollView.contentInset.left, y: scrollView.contentInset.top)
         
         let indexInt = Int(index)
-        self.selectedPeriodDataUnit = selectedDataType.unit
         
         DispatchQueue.main.async {
+            self.selectedPeriodDataUnit = self.selectedDataType.unit
             self.reloadGraphCell(indexInt: indexInt)
         }
     }

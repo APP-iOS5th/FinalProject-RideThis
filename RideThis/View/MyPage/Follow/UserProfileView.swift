@@ -557,9 +557,9 @@ extension UserProfileView: UICollectionViewDataSource, UICollectionViewDelegate,
         targetContentOffset.pointee = CGPoint(x: index * cellWidth - scrollView.contentInset.left, y: scrollView.contentInset.top)
         
         let indexInt = Int(index)
-        self.selectedPeriodDataUnit = selectedDataType.unit
         
         DispatchQueue.main.async {
+            self.selectedPeriodDataUnit = self.selectedDataType.unit
             self.reloadGraphCell(indexInt: indexInt)
         }
     }
