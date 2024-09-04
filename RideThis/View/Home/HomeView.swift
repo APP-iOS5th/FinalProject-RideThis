@@ -506,7 +506,7 @@ class HomeView: RideThisViewController {
                 guard let self = self else { return }
                 
                 if !model.userName.isEmpty {
-                    viewModel.fetchAddFMC()
+                    viewModel.fetchAddFCM()
                 }
                 
                 self.updateUI(with: model)
