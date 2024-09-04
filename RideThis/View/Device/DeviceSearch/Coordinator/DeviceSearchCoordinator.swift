@@ -4,14 +4,18 @@ class DeviceSearchCoordinator: Coordinator {
     // MARK: - Properties
     var navigationController: UINavigationController
     var childCoordinators: [Coordinator] = []
+    let viewModel: DeviceViewModel
     
     
     // MARK: - Initialization
     
     /// DeviceSearchCoordinator 초기화
-    /// - Parameter navigationController: 네비게이션 컨트롤러
-    init(navigationController: UINavigationController) {
+    /// - Parameters:
+    ///   - navigationController: 네비게이션 컨트롤러
+    ///   - viewModel: 공유할 DeviceViewModel 인스턴스
+    init(navigationController: UINavigationController, viewModel: DeviceViewModel) {
         self.navigationController = navigationController
+        self.viewModel = viewModel
     }
     
     
@@ -19,7 +23,7 @@ class DeviceSearchCoordinator: Coordinator {
     
     /// 코디네이터 시작: DeviceSearchView를 모달로 표시
     func start() {
-        let deviceSearchVC = DeviceSearchView(viewModel: DeviceViewModel())
+        let deviceSearchVC = DeviceSearchView(viewModel: viewModel)
         deviceSearchVC.coordinator = self
         deviceSearchVC.modalPresentationStyle = .pageSheet
         
