@@ -4,18 +4,13 @@ import SnapKit
 import FirebaseFirestore
 import Combine
 
-// 마이페이지 초기 화면
-class MyPageView: RideThisViewController {
+class UserProfileView: RideThisViewController {
     
-    var coordinator: MyPageCoordinator?
-    lazy var followCoordinator = FollowManageCoordinator(navigationController: self.navigationController!, user: self.service.combineUser)
-    
-    // MARK: Data Components
-    let service = UserService.shared
-    var viewModel: MyPageViewModel
+    var selectedUser: User?
+    var profileCoordinator: UserProfileCoordinator?
     private let firebaseService = FireBaseService()
+    private lazy var viewModel = UserProfileViewModel(firebaseService: self.firebaseService)
     private var cancellable = Set<AnyCancellable>()
-    private var followDelegate: UpdateUserDelegate?
     private var selectedDataType: RecordDataCase = .cadence
     private var selectedPeriod: RecordPeriodCase {
         get {
@@ -32,15 +27,6 @@ class MyPageView: RideThisViewController {
                 return .oneWeek
             }
         }
-    }
-    
-    init(viewModel: MyPageViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: UIComponents
@@ -74,35 +60,11 @@ class MyPageView: RideThisViewController {
         return imageView
     }()
     
-    // MARK: TODO - 팔로워 / 팔로잉 숫자가 커질 때 잘 대비 해야함.
+    // MARK: TODO - 팔로워 / 팔로잉
     private let followerLabel = RideThisLabel(fontType: .profileFont, text: "팔로워")
     private let followerCountLabel = RideThisLabel(fontType: .profileFont)
     private let followingLabel = RideThisLabel(fontType: .profileFont, text: "팔로잉")
     private let followingCountLabel = RideThisLabel(fontType: .profileFont)
-    private let notLoginLabel = RideThisLabel(fontType: .recordInfoTitle, text: "로그인이 필요한 화면입니다.")
-    private let loginButton = RideThisButton(buttonTitle: "로그인", height: 50)
-    
-    // MARK: 접속한 사용자 정보
-    private let userInfoLabel = RideThisLabel(fontType: .profileFont, text: "정보")
-    private lazy var profileEditButton: UIButton = {
-        let btn = UIButton()
-        btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.setTitle("편집", for: .normal)
-        btn.setTitleColor(.systemBlue, for: .normal)
-        btn.titleLabel?.font = UIFont.systemFont(ofSize: 18)
-        btn.contentVerticalAlignment = .top
-        
-        return btn
-    }()
-    private let userInfoContainer = RideThisContainer(height: 150)
-    private let firstSeparator = CustomSeparator()
-    private let secondSeparator = CustomSeparator()
-    private let userNickNameLabel = RideThisLabel(text: "닉네임")
-    private let userHeightLabel = RideThisLabel(text: "키(cm)")
-    private let userWeightLabel = RideThisLabel(text: "몸무게(kg)")
-    private let userNickName = RideThisLabel()
-    private let userHeight = RideThisLabel()
-    private let userWeight = RideThisLabel()
     
     // MARK: Total Record
     private let totalRecordLabel = RideThisLabel(fontType: .profileFont, text: "With. RideThis")
@@ -119,16 +81,16 @@ class MyPageView: RideThisViewController {
     
     // MARK: Record By Period
     private let recordByPeriodLabel = RideThisLabel(fontType: .profileFont, text: "기간별 기록")
-    private lazy var recordByPeriodDetailButton: UIButton = {
-        let btn = UIButton()
-        btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.setTitle("자세히 보기", for: .normal)
-        btn.setTitleColor(.systemBlue, for: .normal)
-        btn.titleLabel?.font = UIFont.systemFont(ofSize: 18)
-        btn.contentVerticalAlignment = .top
-        
-        return btn
-    }()
+//    private lazy var recordByPeriodDetailButton: UIButton = {
+//        let btn = UIButton()
+//        btn.translatesAutoresizingMaskIntoConstraints = false
+//        btn.setTitle("자세히 보기", for: .normal)
+//        btn.setTitleColor(.systemBlue, for: .normal)
+//        btn.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+//        btn.contentVerticalAlignment = .top
+//        
+//        return btn
+//    }()
     private let periodOptions: [RecordPeriodCase] = RecordPeriodCase.allCases
     private lazy var recordByPeriodPicker: UISegmentedControl = {
         let picker = UISegmentedControl(items: self.periodOptions.map{ $0.rawValue })
@@ -258,59 +220,38 @@ class MyPageView: RideThisViewController {
     let graphSectionCount = 4
     let itemSpacing = 15.0
     
+    init(selectedUser: User? = nil) {
+        self.selectedUser = selectedUser
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "마이페이지"
-        setUIComponents()
-        setUserData()
+        configureUI()
         setCombineData()
+        setUserData()
     }
     
-    func setUIComponents() {
-        for subview in view.subviews {
-            subview.removeFromSuperview()
-        }
-        if service.combineUser == nil {
-            setLoginComponents()
-        } else {
-            setNavigationComponents()
-            setScrollView()
-            setProfileView()
-            setUserInfoView()
-            setTotalRecordView()
-            setRecordByPeriodView()
-            setEventToProfileContainer()
-        }
-    }
-    
-    func setLoginComponents() {
-        view.addSubview(notLoginLabel)
-        view.addSubview(loginButton)
-        
-        notLoginLabel.snp.makeConstraints {
-            $0.centerY.equalTo(view.snp.centerY).offset(-25)
-            $0.centerX.equalTo(view.snp.centerX)
-        }
-        
-        loginButton.snp.makeConstraints {
-            $0.top.equalTo(notLoginLabel.snp.bottom).offset(25)
-            $0.left.equalTo(notLoginLabel.snp.left)
-            $0.right.equalTo(notLoginLabel.snp.right)
-        }
-        
-        loginButton.addAction(UIAction { [weak self] _ in
-            guard let self = self else { return }
-            
-            let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!)
-            loginCoordinator.start()
-        }, for: .touchUpInside)
+    func configureUI() {
+        setNavigationComponents()
+        setScrollView()
+        setProfileView()
+        setTotalRecordView()
+        setRecordByPeriodView()
     }
     
     func setNavigationComponents() {
-        let settingButton = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: #selector(settingButtonTapAction))
-        settingButton.tintColor = .label
-        self.navigationItem.rightBarButtonItem = settingButton
+        if let user = selectedUser {
+            self.title = "\(user.user_nickname)님 프로필"
+        }
+        self.sheetPresentationController?.prefersGrabberVisible = true
+        let cancelButton = UIBarButtonItem(title: "취소", style: .done, target: self, action: #selector(dismissUserView))
+        self.navigationController?.navigationItem.leftBarButtonItem = cancelButton
     }
     
     func setScrollView() {
@@ -340,12 +281,6 @@ class MyPageView: RideThisViewController {
             $0.left.equalTo(self.contentView.snp.left).offset(25)
             $0.right.equalTo(self.contentView.snp.right).offset(-25)
         }
-        
-        // MARK: TODO - 로그인의 여부에 따라서 프로필사진, 팔로워, 팔로잉 / "로그인이 필요합니다" 다르게 보이도록 분기처리
-        setLoginProfileView()
-    }
-    
-    func setLoginProfileView() {
         [self.profileImageView, self.followerLabel, self.followerCountLabel,
          self.followingLabel, self.followingCountLabel].forEach{ self.profileContainer.addSubview($0) }
         
@@ -376,90 +311,18 @@ class MyPageView: RideThisViewController {
         }
     }
     
-    func setUserInfoView() {
-        [self.userInfoLabel, self.profileEditButton, self.userInfoContainer].forEach{ self.contentView.addSubview($0) }
-        
-        self.userInfoLabel.snp.makeConstraints {
-            $0.top.equalTo(self.profileContainer.snp.bottom).offset(30)
-            $0.left.equalTo(self.profileContainer.snp.left).offset(5)
-        }
-        
-        self.profileEditButton.snp.makeConstraints {
-            $0.centerY.equalTo(self.userInfoLabel.snp.centerY)
-            $0.right.equalTo(self.profileContainer.snp.right).offset(-5)
-        }
-        
-        self.userInfoContainer.snp.makeConstraints {
-            $0.top.equalTo(self.userInfoLabel.snp.bottom).offset(8)
-            $0.left.equalTo(self.userInfoLabel.snp.left)
-            $0.right.equalTo(self.profileEditButton.snp.right)
-        }
-        
-        [self.firstSeparator, self.secondSeparator, self.userNickNameLabel,
-         self.userHeightLabel, self.userWeightLabel, self.userNickName,
-         self.userHeight, self.userWeight].forEach{ self.userInfoContainer.addSubview($0) }
-        
-        self.firstSeparator.snp.makeConstraints {
-            $0.top.equalTo(self.userInfoContainer.snp.top).offset(50)
-            $0.left.equalTo(self.userInfoContainer.snp.left).offset(15)
-            $0.right.equalTo(self.userInfoContainer.snp.right).offset(-15)
-        }
-        
-        self.secondSeparator.snp.makeConstraints {
-            $0.top.equalTo(self.firstSeparator.snp.top).offset(50)
-            $0.left.equalTo(self.userInfoContainer.snp.left).offset(15)
-            $0.right.equalTo(self.userInfoContainer.snp.right).offset(-15)
-        }
-        
-        self.userNickNameLabel.snp.makeConstraints {
-            $0.top.equalTo(self.userInfoContainer.snp.top).offset(15)
-            $0.left.equalTo(self.userInfoContainer.snp.left).offset(10)
-        }
-        
-        self.userHeightLabel.snp.makeConstraints {
-            $0.centerY.equalTo(self.userInfoContainer.snp.centerY)
-            $0.left.equalTo(self.userNickNameLabel.snp.left)
-        }
-        
-        self.userWeightLabel.snp.makeConstraints {
-            $0.top.equalTo(self.secondSeparator.snp.bottom).offset(15)
-            $0.left.equalTo(self.userNickNameLabel.snp.left)
-        }
-        
-        self.userNickName.snp.makeConstraints {
-            $0.top.equalTo(self.userNickNameLabel.snp.top)
-            $0.left.equalTo(self.userNickNameLabel.snp.right).offset(60)
-        }
-        
-        self.userHeight.snp.makeConstraints {
-            $0.top.equalTo(self.userHeightLabel.snp.top)
-            $0.left.equalTo(self.userNickName.snp.left)
-        }
-        
-        self.userWeight.snp.makeConstraints {
-            $0.top.equalTo(self.userWeightLabel.snp.top)
-            $0.left.equalTo(self.userNickName.snp.left)
-        }
-        
-        self.profileEditButton.addAction(UIAction { [weak self] _ in
-            guard let self = self, let user = service.combineUser else { return }
-            let editCoordinator = EditProfileCoordinator(navigationController: self.navigationController!, user: user)
-            editCoordinator.start()
-        }, for: .touchUpInside)
-    }
-    
     func setTotalRecordView() {
         [self.totalRecordLabel, self.totalRecordContainer].forEach{ self.contentView.addSubview($0) }
         
         totalRecordLabel.snp.makeConstraints {
-            $0.top.equalTo(self.userInfoContainer.snp.bottom).offset(30)
-            $0.left.equalTo(self.userInfoLabel.snp.left)
+            $0.top.equalTo(self.profileContainer.snp.bottom).offset(20)
+            $0.left.equalTo(self.profileContainer.snp.left)
         }
         
         totalRecordContainer.snp.makeConstraints {
             $0.top.equalTo(self.totalRecordLabel.snp.bottom).offset(8)
-            $0.left.equalTo(self.userInfoContainer.snp.left)
-            $0.right.equalTo(self.userInfoContainer.snp.right)
+            $0.left.equalTo(self.profileContainer.snp.left)
+            $0.right.equalTo(self.profileContainer.snp.right)
         }
         
         [self.totalRunCount, self.totalRunCountSeparator, self.totalRunCountData,
@@ -474,8 +337,7 @@ class MyPageView: RideThisViewController {
         self.totalRunCountSeparator.snp.makeConstraints {
             $0.top.equalTo(self.totalRunCount.snp.bottom).offset(8)
             $0.centerX.equalTo(self.totalRunCount.snp.centerX)
-            $0.width.equalTo(35)
-            $0.height.equalTo(3)
+            $0.width.equalTo(20)
         }
         
         self.totalRunCountData.snp.makeConstraints {
@@ -507,8 +369,7 @@ class MyPageView: RideThisViewController {
         self.totalRunDistanceSeparator.snp.makeConstraints {
             $0.top.equalTo(self.totalRunCountSeparator.snp.top)
             $0.centerX.equalTo(self.totalRunDistance.snp.centerX)
-            $0.width.equalTo(35)
-            $0.height.equalTo(3)
+            $0.width.equalTo(20)
         }
         
         self.totalRunDistanceData.snp.makeConstraints {
@@ -518,17 +379,12 @@ class MyPageView: RideThisViewController {
     }
     
     func setRecordByPeriodView() {
-        [self.recordByPeriodLabel, self.recordByPeriodDetailButton, self.recordByPeriodPicker, self.leftButton, self.rightButton,
+        [self.recordByPeriodLabel, self.recordByPeriodPicker, self.leftButton, self.rightButton,
          self.dataLabel, self.graphCollectionView, self.pagingIndicator, self.selectedPeriodTotalRecordContainer].forEach{ self.contentView.addSubview($0) }
         
         self.recordByPeriodLabel.snp.makeConstraints {
-            $0.top.equalTo(self.totalRecordContainer.snp.bottom).offset(30)
+            $0.top.equalTo(self.totalRecordContainer.snp.bottom).offset(20)
             $0.left.equalTo(self.totalRecordContainer.snp.left)
-        }
-        
-        self.recordByPeriodDetailButton.snp.makeConstraints {
-            $0.centerY.equalTo(self.recordByPeriodLabel.snp.centerY)
-            $0.right.equalTo(self.profileEditButton.snp.right)
         }
         
         self.recordByPeriodPicker.snp.makeConstraints {
@@ -538,7 +394,7 @@ class MyPageView: RideThisViewController {
         }
         
         self.dataLabel.snp.makeConstraints {
-            $0.top.equalTo(self.recordByPeriodPicker.snp.bottom).offset(30)
+            $0.top.equalTo(self.recordByPeriodPicker.snp.bottom).offset(8)
             $0.left.equalTo(self.recordByPeriodPicker.snp.left)
         }
         
@@ -560,12 +416,12 @@ class MyPageView: RideThisViewController {
         }
         
         self.pagingIndicator.snp.makeConstraints {
-            $0.top.equalTo(self.graphCollectionView.snp.bottom).offset(20)
+            $0.top.equalTo(self.graphCollectionView.snp.bottom).offset(8)
             $0.centerX.equalTo(self.graphCollectionView.snp.centerX)
         }
         
         self.selectedPeriodTotalRecordContainer.snp.makeConstraints {
-            $0.top.equalTo(self.pagingIndicator.snp.bottom).offset(20)
+            $0.top.equalTo(self.pagingIndicator.snp.bottom).offset(8)
             $0.left.equalTo(self.graphCollectionView.snp.left)
             $0.right.equalTo(self.graphCollectionView.snp.right)
             $0.bottom.equalTo(self.contentView.snp.bottom).offset(-20)
@@ -581,8 +437,7 @@ class MyPageView: RideThisViewController {
         self.selectedPeriodSeparator.snp.makeConstraints {
             $0.top.equalTo(self.selectedPeriodTitle.snp.bottom).offset(12)
             $0.centerX.equalTo(self.selectedPeriodTitle.snp.centerX)
-            $0.width.equalTo(60)
-            $0.height.equalTo(5)
+            $0.width.equalTo(20)
         }
         
         self.selectedPeriodData.snp.makeConstraints {
@@ -591,9 +446,8 @@ class MyPageView: RideThisViewController {
         }
     }
     
-    // MARK: 애플로그인으로 접속한 회원을 Firebase에서 조회해 각 Label에 뿌려줌
     func setUserData() {
-        guard let user = service.combineUser else { return }
+        guard let user = self.selectedUser else { return }
         if let imageUrl = user.user_image {
             if imageUrl.isEmpty {
                 self.profileImageView.image = UIImage(named: "bokdonge")
@@ -603,38 +457,13 @@ class MyPageView: RideThisViewController {
         }
         followerCountLabel.text = "\(user.user_follower.count)"
         followingCountLabel.text = "\(user.user_following.count)"
-        userNickName.text = user.user_nickname
-        userWeight.text = "\(user.user_weight)"
-        userHeight.text = user.tallStr
         
         Task {
             await viewModel.getRecords(userId: user.user_id)
         }
     }
     
-    // MARK: 회원정보 수정 및 팔로우 등의 이벤트를 처리 후 접속한 사용자의 정보가 업데이트 되었을 때 UI동적으로 처리
     func setCombineData() {
-        service.$signedUser
-            .sink { [weak self] receivedUser in
-                guard let self = self, let combineUser = receivedUser else { return }
-                DispatchQueue.main.async {
-                    if let imageUrl = combineUser.user_image {
-                        if imageUrl.isEmpty {
-                            self.profileImageView.image = UIImage(named: "bokdonge")
-                        } else {
-                            self.profileImageView.kf.setImage(with: URL(string: imageUrl))
-                        }
-                    }
-                    self.followerCountLabel.text = "\(combineUser.user_follower.count)"
-                    self.followingCountLabel.text = "\(combineUser.user_following.count)"
-                    self.userNickName.text = combineUser.user_nickname
-                    self.userWeight.text = "\(combineUser.user_weight)"
-                    self.userHeight.text = combineUser.tallStr
-                }
-                followCoordinator.updateUser(user: combineUser)
-            }
-            .store(in: &cancellable)
-        
         viewModel.$recordsData
             .receive(on: DispatchQueue.main)
             .sink { [weak self] records in
@@ -645,7 +474,6 @@ class MyPageView: RideThisViewController {
                 var totalSeconds: Int = 0
                 var totalDistance: Double = 0
 
-                // MARK: TODO - 모든 기록에서 계산을 하는게 아닌 firebase에 총 합산 데이터 관리하는 컬렉션으로 관리하도록 변경
                 for record in records {
                     totalDistance += record.record_distance
                     if let endTime = record.record_end_time, let startTime = record.record_start_time {
@@ -664,7 +492,7 @@ class MyPageView: RideThisViewController {
             .sink { [weak self] avg in
                 guard let self = self else { return }
                 
-                self.selectedPeriodData.text = "\(avg)RPM"
+                self.selectedPeriodData.text = "\(avg)\(self.selectedPeriodDataUnit)"
             }
             .store(in: &cancellable)
         
@@ -673,7 +501,7 @@ class MyPageView: RideThisViewController {
             .sink { [weak self] avg in
                 guard let self = self else { return }
                 
-                self.selectedPeriodData.text = "\(avg)km"
+                self.selectedPeriodData.text = "\(avg)\(self.selectedPeriodDataUnit)"
             }
             .store(in: &cancellable)
         
@@ -682,7 +510,7 @@ class MyPageView: RideThisViewController {
             .sink { [weak self] avg in
                 guard let self = self else { return }
                 
-                self.selectedPeriodData.text = "\(avg)km/h"
+                self.selectedPeriodData.text = "\(avg)\(self.selectedPeriodDataUnit)"
             }
             .store(in: &cancellable)
         
@@ -691,23 +519,21 @@ class MyPageView: RideThisViewController {
             .sink { [weak self] avg in
                 guard let self = self else { return }
                 
-                self.selectedPeriodData.text = "\(avg)Kcal"
+                self.selectedPeriodData.text = "\(avg)\(self.selectedPeriodDataUnit)"
             }
             .store(in: &cancellable)
-    }
-    
-    @objc func settingButtonTapAction() {
-        let settingCoordinator = SettingCoordinator(navigationController: self.navigationController!)
-        settingCoordinator.start()
     }
     
     @objc func segmentChanged(_ sender: UISegmentedControl) {
         graphCollectionView.reloadData()
     }
+    
+    @objc func dismissUserView() {
+        self.dismiss(animated: true)
+    }
 }
 
-// MARK: 케이던스, 거리, 속도, 칼로리 그래프를 페이징으로 보여주기 위한 UICollectionView delegate들
-extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension UserProfileView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return graphSectionCount
     }
@@ -716,7 +542,7 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GraphCollectionViewCell", for: indexPath) as? GraphCollectionViewCell else {
             return UICollectionViewCell()
         }
-       
+        
         let periodRecords = viewModel.getRecordsBy(period: self.selectedPeriod, dataCase: self.selectedDataType)
         cell.setGraph(type: selectedDataType, records: periodRecords, period: self.selectedPeriod)
         
@@ -736,12 +562,6 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
             self.selectedPeriodDataUnit = self.selectedDataType.unit
             self.reloadGraphCell(indexInt: indexInt)
         }
-    }
-    
-    // MARK: 프로필 Container를 선택했을 때 팔로우 관리 페이지로 이동하는 event등록
-    func setEventToProfileContainer() {
-        let profileContainerTapEvent = UITapGestureRecognizer(target: self, action: #selector(toFollowerView))
-        profileContainer.addGestureRecognizer(profileContainerTapEvent)
     }
     
     // MARK: 그래프 cell이동 후 UI업데이트
@@ -781,23 +601,13 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
     }
     
     // MARK: 프로필 Container를 선택했을 때 팔로우 관리 페이지로 이동
-    @objc func toFollowerView() {
-        if let _ = service.combineUser {
-            followCoordinator.start()
-        } else {
-            self.showAlert(alertTitle: "알림", msg: "로그인이 필요한 기능입니다. 로그인 화면으로 이동할까요?", confirm: "예") {
-                let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!)
-                loginCoordinator.start()
-            }
-        }
-    }
-}
-
-// MARK: 프로필 사진을 편집했을 때 서버에서 저장 후 프로필의 이미지를 갱신할 때 시간이 걸려서 UI를 먼저 업데이트하고 서버작업은 뒤에서 하도록 하기 위한 delegate
-extension MyPageView: ProfileImageUpdateDelegate {
-    func imageUpdate(image: UIImage) {
-        DispatchQueue.main.async {
-            self.profileImageView.image = image
-        }
-    }
+//    @objc func toFollowerView() {
+//        if let _ = service.combineUser {
+//            followCoordinator.start()
+//        } else {
+//            self.showAlert(alertTitle: "알림", msg: "로그인이 필요한 기능입니다. 로그인 화면으로 이동할까요?", confirm: "예") {
+//                self.navigationController?.pushViewController(LoginView(), animated: true)
+//            }
+//        }
+//    }
 }

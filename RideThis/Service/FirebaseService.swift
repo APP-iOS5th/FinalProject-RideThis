@@ -14,6 +14,30 @@ class FireBaseService {
     
     private let db = Firestore.firestore()
     
+    func createUser(userInfo: [String: Any], createComplete: @escaping (User) -> Void) {
+        let usersCollection = db.collection("USERS")
+        
+        usersCollection.document(userInfo["user_id"] as! String).setData(userInfo) { error in
+            if let error = error {
+                print("문서 생성 실패: \(error.localizedDescription)")
+            } else {
+                print("문서 생성 및 필드 추가 성공")
+                
+                let createdUser = User(user_id: userInfo["user_id"] as! String,
+                                       user_image: userInfo["user_image"] as? String,
+                                       user_email: userInfo["user_email"] as! String,
+                                       user_nickname: userInfo["user_nickname"] as! String,
+                                       user_weight: userInfo["user_weight"] as! Int,
+                                       user_tall: userInfo["user_tall"] as! Int,
+                                       user_following: userInfo["user_following"] as! [String],
+                                       user_follower: userInfo["user_follower"] as! [String],
+                                       user_account_public: false)
+                
+                createComplete(createdUser)
+            }
+        }
+    }
+    
     // MARK: UserId로 파이어베이스에 유저 확인
     func fetchUser(at userId: String, userType: Bool) async throws -> ReturnUserType {
         let querySnapshot = try await db.collection("USERS")
@@ -287,10 +311,6 @@ class FireBaseService {
     ///  - Parameters:
     ///   - userId: 사용자 UID
     func deleteUser(userId: String) {
-        // MARK: TODO 1. userId에 맞는 USERS Collection삭제 (기록, 장치 먼저 삭제해야하는지 확인)✅
-        // MARK:      2. 파라미터로 넘어온 userId가 user_follower에 있는 사람들 데이터를 모두 지워야함
-        // MARK:      3. Firebase Auth 기록 삭제✅
-        // MARK:      4. AppleLogin할 때 했던 뭐 Keychain같은 유저 정보들 삭제✅
         db.collection("USERS").document(userId).delete() { error in
             if let error = error {
                 print(error)
@@ -298,7 +318,6 @@ class FireBaseService {
                 print("사용자 삭제 완료!")
             }
         }
-        UserService.shared.logout()
         
         let storage = Storage.storage()
         let imagePath = "userProfileImage/\(userId).jpg"
@@ -348,6 +367,7 @@ class FireBaseService {
                 }
             }
         }
+        UserService.shared.logout()
     }
     
     // MARK: - 디바이스 관리
@@ -476,12 +496,12 @@ class FireBaseService {
         task.resume()
     }
     
-    func fetchFCM(signedUserNickname: String, cellUserId: String) {
-        db.collection("USERS").document(cellUserId).getDocument { document, error in
+    func fetchFMC(signedUserNickname: String, cellUser: User, alarmCase: AlarmCase) {
+        db.collection("USERS").document(cellUser.user_id).getDocument { document, error in
             if let document = document, document.exists {
                 if let userFCMToken = document.data()?["user_fcmtoken"] as? String {
                     // FCM 메시지 전송
-                    self.sendFCM(to: userFCMToken, signedUserNickname: signedUserNickname, cellUserId: cellUserId)
+                    self.sendFCM(to: userFCMToken, signedUserNickname: signedUserNickname, cellUser: cellUser, alarmCase: alarmCase)
                 } else {
                     print("user_fcmtoken 필드가 없습니다.")
                 }
@@ -490,8 +510,8 @@ class FireBaseService {
             }
         }
     }
-
-    func sendFCM(to userFCMToken: String, signedUserNickname: String, cellUserId: String) {
+    
+    func sendFCM(to userFCMToken: String, signedUserNickname: String, cellUser: User, alarmCase: AlarmCase) {
         fetchAccessToken { accessToken in
             guard let accessToken = accessToken else {
                 print("Failed to obtain access token")
@@ -505,8 +525,8 @@ class FireBaseService {
 
             let urlString = "https://fcm.googleapis.com/v1/projects/\(projectID)/messages:send"
             
-            let messageTitle = "Follow 알림"
-            let messageBody = "\(signedUserNickname)이(가) 당신을 팔로우했습니다"
+            let messageTitle = alarmCase.rawValue
+            let messageBody = "\(signedUserNickname)님이 팔로우했습니다."
 
             let message: [String: Any] = [
                 "message": [
@@ -534,20 +554,22 @@ class FireBaseService {
                     print("FCM 알람 성공")
                     
                     // Firestore에 ALAMS 컬렉션에 데이터 추가
-                    self.addAlarms(cellUserId: cellUserId, title: messageTitle, body: messageBody)
+                    self.addAlarms(cellUser: cellUser, title: messageTitle, body: messageBody)
                 }
             }
         }
     }
 
-    func addAlarms(cellUserId: String, title: String, body: String) {
-        let alamsCollection = db.collection("USERS").document(cellUserId).collection("ALARMS")
+    func addAlarms(cellUser: User, title: String, body: String) {
+        let db = Firestore.firestore()
+        let alamsCollection = db.collection("USERS").document(cellUser.user_id).collection("ALARMS")
         
         let alamData: [String: Any] = [
             "alarm_category": title,
             "alarm_date": Timestamp(date: Date()),
             "alarm_body": body,
-            "alarm_status": false
+            "alarm_status": false,
+            "alarm_user": cellUser.user_id
         ]
         
         alamsCollection.addDocument(data: alamData) { error in
@@ -557,5 +579,42 @@ class FireBaseService {
                 print("Notification added to Firestore successfully.")
             }
         }
+    }
+    
+    func updateAlarm(user: User, alarm: AlarmModel) async {
+        do {
+            let alarmDocs = try await db.collection("USERS").document(user.user_id)
+                .collection("ALARMS")
+                .whereField("alarm_body", isEqualTo: alarm.alarm_body)
+                .whereField("alarm_category", isEqualTo: alarm.alarm_category)
+                .whereField("alarm_status", isEqualTo: false)
+                .getDocuments()
+                .documents
+            
+            if let searchedAlarm = alarmDocs.first {
+                try await searchedAlarm.reference.updateData([
+                    "alarm_status": true
+                ])
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
+    func fetchAlarms(userId: String) async -> [AlarmModel] {
+        do {
+            if case .userSnapshot(let userSnapshot) = try await self.fetchUser(at: userId, userType: false), let snapShot = userSnapshot {
+                var alarms: [AlarmModel] = []
+                
+                for doc in try await self.fetchCollection(document: snapShot, collectionName: "ALARMS").getDocuments().documents {
+                    alarms.append(try doc.data(as: AlarmModel.self))
+                }
+                
+                return alarms.sorted(by: { $0.alarm_date > $1.alarm_date })
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+        return []
     }
 }
