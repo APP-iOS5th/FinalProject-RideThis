@@ -23,16 +23,16 @@ class SummaryRecordViewController: RideThisViewController {
         self.viewModel = SummaryRecordViewModel(timer: timer, cadence: cadence, speed: speed, distance: distance, calorie: calorie, startTime: startTime, endTime: endTime)
         super.init(nibName: nil, bundle: nil)
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     // MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         DeviceManager.shared.isCompetetionUse = false
-
+        
         setupUI()
         setupBinding()
         setupAction()
@@ -128,8 +128,6 @@ class SummaryRecordViewController: RideThisViewController {
             guard let self = self else { return }
             
             self.coordinator?.moveToResultView(distance: self.viewModel.distance)
-//            let ResultRankingVC = ResultRankingViewController(distance: self.viewModel.distance)
-//            self.navigationController?.pushViewController(ResultRankingVC, animated: true)
         }, for: .touchUpInside)
     }
 }

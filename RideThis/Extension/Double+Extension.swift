@@ -5,6 +5,8 @@ extension Double {
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .decimal
         numberFormatter.groupingSeparator = ","
+        numberFormatter.minimumFractionDigits = 0 
+        numberFormatter.maximumFractionDigits = 2
         return numberFormatter.string(from: NSNumber(value: self)) ?? ""
     }
     
