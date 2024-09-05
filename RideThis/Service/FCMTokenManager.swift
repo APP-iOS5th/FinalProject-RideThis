@@ -1,10 +1,3 @@
-//
-//  FCMTokenManager.swift
-//  RideThis
-//
-//  Created by SeongKook on 9/3/24.
-//
-
 import Foundation
 
 
