@@ -73,14 +73,14 @@ class FireBaseService {
         return returnUserData
     }
     
-    // MARK: 검색한 text로 이메일, 닉네임이 포함되는 유저 검색
+    // MARK: 검색한 text로 닉네임이 포함되는 유저 검색
     func findUser(text: String) async -> [User] {
         var allUsers: [User] = []
         do {
             let allUsersSnapshot = try await self.fetchAllUsers()
             for snapshot in allUsersSnapshot {
                 let userData = try snapshot.data(as: User.self)
-                if !userData.user_email.contains(text) && !userData.user_nickname.contains(text) {
+                if  !userData.user_nickname.contains(text) {
                     continue
                 }
                 allUsers.append(userData)
@@ -518,7 +518,7 @@ class FireBaseService {
         task.resume()
     }
     
-    func fetchFMC(signedUser: User, cellUser: User, alarmCase: AlarmCase) {
+    func fetchFCM(signedUser: User, cellUser: User, alarmCase: AlarmCase) {
         db.collection("USERS").document(cellUser.user_id).getDocument { document, error in
             if let document = document, document.exists {
                 if let userFCMToken = document.data()?["user_fcmtoken"] as? String {

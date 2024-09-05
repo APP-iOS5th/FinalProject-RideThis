@@ -285,15 +285,25 @@ extension WheelCircumferenceView: UITableViewDelegate, UITableViewDataSource {
         // 선택된 셀을 중앙으로 스크롤
         scrollToSelectedRow()
         
-        Task {
-            do {
-                try await viewModel.updateWheelCircumferenceInFirebase(wheelCircumference.millimeter)
-                DispatchQueue.main.async {
-                    self.onCircumferenceSelected?(wheelCircumference.millimeter, wheelCircumference.tireSize)
-                    tableView.reloadData()
+        if UserService.shared.loginStatus == .appleLogin {
+            // Firebase 업데이트
+            Task {
+                do {
+                    try await viewModel.updateWheelCircumferenceInFirebase(wheelCircumference.millimeter)
+                    DispatchQueue.main.async {
+                        self.onCircumferenceSelected?(wheelCircumference.millimeter, wheelCircumference.tireSize)
+                        tableView.reloadData()
+                    }
+                } catch {
+                    print("Error updating wheel circumference: \(error)")
                 }
-            } catch {
-                print("Error updating wheel circumference: \(error)")
+            }
+        } else {
+            viewModel.updateWheelCircumferenceForUnownedUser(newCircumference: wheelCircumference.millimeter)
+
+            DispatchQueue.main.async {
+                self.onCircumferenceSelected?(wheelCircumference.millimeter, wheelCircumference.tireSize)
+                tableView.reloadData()
             }
         }
     }

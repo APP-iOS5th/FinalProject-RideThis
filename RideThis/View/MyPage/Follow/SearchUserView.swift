@@ -49,8 +49,8 @@ class SearchUserView: RideThisViewController {
     func setSearchBar() {
         searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "닉네임을 검색해주세요."
         searchController.searchBar.overrideUserInterfaceStyle = .light
-        searchController.searchBar.placeholder = "이메일 또는 닉네임을 검색해주세요."
         searchController.searchBar.sizeToFit()
         searchController.searchBar.autocapitalizationType = .none
         navigationItem.hidesSearchBarWhenScrolling = false

@@ -24,14 +24,11 @@ class RecordSumUpViewModel {
     }
     
     func cancelSaveRecording() {
-        print("save cancel pushed")
         // 기록 요약 화면에서 취소 버튼 누르면 이전 화면(기록 화면)으로 이동
         delegate?.didCancelSaveRecording()
     }
     
     func saveRecording() async {
-        print("save pushed")
-        
         do {
             // 유저아이디가 존재하는지 확인
             let userDocument = try await firebaseService.fetchUser(at: UserService.shared.signedUser?.user_id ?? "", userType: false)
@@ -45,8 +42,6 @@ class RecordSumUpViewModel {
                 let recordsCollection = firebaseService.fetchCollection(document: doc, collectionName: "RECORDS")
                 
                 try await firebaseService.fetchRecord(collection: recordsCollection, timer: summaryData.recordedTime, cadence: summaryData.cadence, speed: summaryData.speed, distance: summaryData.distance, calorie: summaryData.calorie, startTime: summaryData.startTime, endTime: summaryData.endTime, date: Date(), competetionStatus: false, tagetDistance: nil)
-                
-                print("기록 추가")
                 
                 await MainActor.run {
                     self.delegate?.didSaveRecording()

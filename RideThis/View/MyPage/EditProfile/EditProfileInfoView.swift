@@ -3,7 +3,7 @@ import Combine
 import SnapKit
 import Kingfisher
 
-class EditProfileInfoView: RideThisViewController {
+class EditProfileInfoView: RideThisViewController, UITextFieldDelegate {
     
     // MARK: Data Components
     private let firebaseService = FireBaseService()
@@ -32,6 +32,7 @@ class EditProfileInfoView: RideThisViewController {
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 40
         imageView.clipsToBounds = true
+        imageView.backgroundColor = .white
         if let imageURL = self.user.user_image {
             if imageURL.isEmpty {
                 imageView.image = UIImage(named: "bokdonge")
@@ -82,6 +83,7 @@ class EditProfileInfoView: RideThisViewController {
         field.placeholder = self.user.user_nickname
         field.text = self.user.user_nickname
         field.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
+        field.delegate = self
         
         return field
     }()
@@ -92,6 +94,7 @@ class EditProfileInfoView: RideThisViewController {
         field.text = self.user.tallStr
         field.keyboardType = .numberPad
         field.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
+        field.delegate = self
         
         return field
     }()
@@ -117,6 +120,8 @@ class EditProfileInfoView: RideThisViewController {
         setNavigationComponents()
         setUIComponents()
         setBindingData()
+        setTextFields()
+        setTapGesture()
     }
     
     func setNavigationComponents() {
@@ -309,6 +314,56 @@ class EditProfileInfoView: RideThisViewController {
         imagePickerController.allowsEditing = false
         present(imagePickerController, animated: true, completion: nil)
     }
+    
+    func setTextFields() {
+        [userNickNameTextField, userHeightTextField, userWeightTextField].forEach {
+            $0.autocorrectionType = .no
+            $0.inputAccessoryView = createToolbar()
+        }
+    }
+    
+    func setTapGesture() {
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+            view.addGestureRecognizer(tapGesture)
+        }
+
+        @objc func dismissKeyboard() {
+            view.endEditing(true)
+        }
+
+        func createToolbar() -> UIToolbar {
+            let toolbar = UIToolbar()
+            toolbar.sizeToFit()
+            
+            toolbar.barTintColor = .systemGray5  // 연한 회색 배경
+                    toolbar.isTranslucent = false  // 불투명하게 설정
+            
+            let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+            let doneButton = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(dismissKeyboard))
+            toolbar.setItems([flexibleSpace, doneButton], animated: false)
+            return toolbar
+        }
+    
+    // MARK: - UITextFieldDelegate Methods
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        // 현재 텍스트필드의 텍스트
+        guard let currentText = textField.text else { return true }
+        
+        // 변경될 텍스트
+        let updatedText = (currentText as NSString).replacingCharacters(in: range, with: string)
+        
+        // 텍스트가 비어있고 새로 입력되는 문자가 공백인 경우 거부
+        if currentText.isEmpty && string.trimmingCharacters(in: .whitespaces).isEmpty {
+            return false
+        }
+        
+        return true
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            textField.resignFirstResponder()
+            return true
+        }
 }
 
 extension EditProfileInfoView: UIImagePickerControllerDelegate, UINavigationControllerDelegate {

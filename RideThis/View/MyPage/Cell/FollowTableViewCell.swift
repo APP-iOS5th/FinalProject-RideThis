@@ -79,7 +79,7 @@ class FollowTableViewCell: UITableViewCell {
                     signedUser.user_following.append(cellUser.user_id)
                     
                     if cellUser.user_alarm_status {
-                        self.firebaseService.fetchFMC(signedUser: signedUser, cellUser: cellUser, alarmCase: .follow)
+                        self.firebaseService.fetchFCM(signedUser: signedUser, cellUser: cellUser, alarmCase: .follow)
                     }
                     firebaseService.updateUserInfo(updated: cellUser, update: false)
                     firebaseService.updateUserInfo(updated: signedUser, update: true)
