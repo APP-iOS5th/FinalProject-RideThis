@@ -100,7 +100,7 @@ class HomeView: RideThisViewController {
     }()
     
     private lazy var letsRideButton: RideThisButton = {
-        let button = RideThisButton(buttonTitle: "라이딩 고고씽", height: 50)
+        let button = RideThisButton(buttonTitle: "Let's RideThis", height: 50)
         button.addAction(UIAction { [weak self] _ in
             self?.coordinator?.showRecordView()
         }, for: .touchUpInside)
@@ -115,7 +115,7 @@ class HomeView: RideThisViewController {
     }()
     
     private lazy var weatherTitleLabel: UILabel = {
-        let label = RideThisLabel(fontType: .sectionTitle, fontColor: .black, text: "라이딩하기 따악 좋은 날이고만!")
+        let label = RideThisLabel(fontType: .sectionTitle, fontColor: .black, text: "날씨 정보")
         label.font = UIFont.boldSystemFont(ofSize: label.font.pointSize)
         
         return label
@@ -543,7 +543,8 @@ class HomeView: RideThisViewController {
         weeklyRecordDataView.addArrangedSubview(createRecordItemView(title: "달린 시간", value: model.weeklyRecord.runTime))
         weeklyRecordDataView.addArrangedSubview(createRecordItemView(title: "달린 거리", value: String(format: "%.2f Km", model.weeklyRecord.runDistance)))
         
-        letsRideTitleLabel.text = "\(model.userName)님, 라이딩 고고씽?"
+        let userNickName = model.userName.isEmpty ? "비회원" : model.userName
+        letsRideTitleLabel.text = "\(userNickName)님, Let's RideThis?"
     }
     
     /// 날씨 컨테이너 뷰에 그라디언트 적용
