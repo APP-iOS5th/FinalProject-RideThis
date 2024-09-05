@@ -207,7 +207,7 @@ class HomeView: RideThisViewController {
         setupContentView()
         setupBindings()
         
-        viewModel.fetchUserData()
+//        viewModel.fetchUserData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -525,14 +525,23 @@ class HomeView: RideThisViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] model in
                 guard let self = self else { return }
-                
-                if !model.userName.isEmpty {
-                    viewModel.fetchAddFCM()
-                }
-                
                 self.updateUI(with: model)
             }
             .store(in: &cancellables)
+        
+        UserService.shared.$signedUser
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] user in
+                guard let self = self, let user = user else { return }
+                
+                viewModel.fetchAddFCM()
+                Task {
+                    await self.viewModel.fetchUserRecords(user: user)
+                }
+            }
+            .store(in: &cancellables)
+        
+        UserService.shared.checkPrevAppleLogin()
     }
     
     /// 전달받은 모델 데이터를 사용하여 UI 업데이트
