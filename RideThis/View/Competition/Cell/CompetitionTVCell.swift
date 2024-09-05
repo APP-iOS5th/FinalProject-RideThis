@@ -41,7 +41,6 @@ class CompetitionTVCell: UITableViewCell {
             image.left.equalTo(self.contentView.snp.left).offset(10)
             image.bottom.equalTo(self.contentView.snp.bottom).offset(-10)
             image.width.equalTo(20)
-            image.height.equalTo(20)
         }
         
         userNameLabel.snp.makeConstraints { name in
