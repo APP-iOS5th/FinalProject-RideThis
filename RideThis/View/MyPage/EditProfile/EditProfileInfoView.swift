@@ -120,6 +120,7 @@ class EditProfileInfoView: RideThisViewController, UITextFieldDelegate {
         setUIComponents()
         setBindingData()
         setTextFields()
+        setTapGesture()
     }
     
     func setNavigationComponents() {
@@ -316,8 +317,31 @@ class EditProfileInfoView: RideThisViewController, UITextFieldDelegate {
     func setTextFields() {
         [userNickNameTextField, userHeightTextField, userWeightTextField].forEach {
             $0.autocorrectionType = .no
+            $0.inputAccessoryView = createToolbar()
         }
     }
+    
+    func setTapGesture() {
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+            view.addGestureRecognizer(tapGesture)
+        }
+
+        @objc func dismissKeyboard() {
+            view.endEditing(true)
+        }
+
+        func createToolbar() -> UIToolbar {
+            let toolbar = UIToolbar()
+            toolbar.sizeToFit()
+            
+            toolbar.barTintColor = .systemGray5  // 연한 회색 배경
+                    toolbar.isTranslucent = false  // 불투명하게 설정
+            
+            let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+            let doneButton = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(dismissKeyboard))
+            toolbar.setItems([flexibleSpace, doneButton], animated: false)
+            return toolbar
+        }
     
     // MARK: - UITextFieldDelegate Methods
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -334,6 +358,11 @@ class EditProfileInfoView: RideThisViewController, UITextFieldDelegate {
         
         return true
     }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            textField.resignFirstResponder()
+            return true
+        }
 }
 
 extension EditProfileInfoView: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
