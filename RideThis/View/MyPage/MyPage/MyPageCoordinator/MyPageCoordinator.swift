@@ -2,10 +2,12 @@ import UIKit
 
 class MyPageCoordinator: Coordinator {
     var navigationController: UINavigationController
+    var tabBarController: UITabBarController
     var childCoordinators: [Coordinator] = []
     
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController, tabBarController: UITabBarController) {
         self.navigationController = navigationController
+        self.tabBarController = tabBarController
     }
     
     func start() {
@@ -13,5 +15,18 @@ class MyPageCoordinator: Coordinator {
         myPageVC.coordinator = self
 
         navigationController.pushViewController(myPageVC, animated: true)
+    }
+    
+    func showRecordListView() {
+        if let recordNav = tabBarController.viewControllers?[2] as? UINavigationController {
+            tabBarController.selectedIndex = 2
+            if recordNav.topViewController is RecordListView {
+                return
+            }
+            
+            let recordCoordinator = RecordCoordinator(navigationController: recordNav, tabBarController: tabBarController)
+            childCoordinators.append(recordCoordinator)
+            recordCoordinator.showRecordListView()
+        }
     }
 }

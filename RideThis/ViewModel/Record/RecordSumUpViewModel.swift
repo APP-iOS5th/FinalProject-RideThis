@@ -3,16 +3,16 @@ import Foundation
 class RecordSumUpViewModel {
     private let firebaseService = FireBaseService()
     
-    var summaryData: RecordViewModel.SummaryData
+    var summaryData: SummaryData
     
-    init(summaryData: RecordViewModel.SummaryData) {
+    init(summaryData: SummaryData) {
         self.summaryData = summaryData
     }
     
     weak var delegate: RecordSumUpViewModelDelegate?
     
     func updateSummaryData(cadence: Double, speed: Double, distance: Double, calorie: Double) {
-        summaryData = RecordViewModel.SummaryData(
+        summaryData = SummaryData(
             recordedTime: summaryData.recordedTime,
             cadence: cadence,
             speed: speed,
