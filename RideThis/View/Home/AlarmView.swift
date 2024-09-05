@@ -46,7 +46,7 @@ class AlarmView: RideThisViewController {
     }()
     
     private let noAlarmLabel: RideThisLabel = {
-        let label = RideThisLabel(fontType: .defaultSize, fontColor: .gray, text: "알람이 없습니다")
+        let label = RideThisLabel(fontType: .defaultSize, fontColor: .gray, text: "알림이 없습니다")
         label.textAlignment = .center
         label.isHidden = true
         return label
@@ -72,7 +72,7 @@ class AlarmView: RideThisViewController {
     
     /// NavigationBar 설정
     private func setupNavigationBar() {
-        title = "알람 목록"
+        title = "알림 목록"
     }
     
     /// TableView뷰 설정
@@ -87,7 +87,7 @@ class AlarmView: RideThisViewController {
         }
     }
     
-    /// '알람 없음' 라벨 설정
+    /// '알림 없음' 라벨 설정
     private func setupNoAlarmLabel() {
         view.addSubview(noAlarmLabel)
         noAlarmLabel.snp.makeConstraints {
@@ -112,7 +112,7 @@ class AlarmView: RideThisViewController {
         viewModel.fetchAlarmDatas()
     }
     
-    /// 알람 유무에 따라 '알람 없음' 라벨과 테이블 뷰의 가시성 업데이트
+    /// 알림 유무에 따라 '알림 없음' 라벨과 테이블 뷰의 가시성 업데이트
     private func updateNoAlarmLabelVisibility() {
         noAlarmLabel.isHidden = !viewModel.alarams.isEmpty
         alarmTableView.isHidden = viewModel.alarams.isEmpty
