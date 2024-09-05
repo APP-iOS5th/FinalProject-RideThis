@@ -364,7 +364,7 @@ class SignUpInfoView: RideThisViewController {
     }
     
 
-    
+    // MARK: KeyboardDelegate
     @objc func keyboardWillHide(_ notification: NSNotification) {
         if view.frame.origin.y != 0 {
             view.frame.origin.y = 0
@@ -385,17 +385,14 @@ extension SignUpInfoView: UITextFieldDelegate {
         if textField == userNickName {
             let currentText = textField.text ?? ""
             guard let stringRange = Range(range, in: currentText) else { return false }
-            let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+            _ = currentText.replacingCharacters(in: stringRange, with: string)
             
-            // 공백 입력 방지
             if string.contains(" ") {
                 return false
             }
             
-            // 한글 입력을 고려한 글자 수 계산
             let text = (textField.text! as NSString).replacingCharacters(in: range, with: string)
             if text.count > 7 {
-                // 7글자를 초과하는 경우, 7글자까지만 허용
                 textField.text = String(text.prefix(7))
                 return false
             }

@@ -37,6 +37,8 @@ class DeviceView: RideThisViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.viewModel.loadUnkownedDevices()
+        
         tableView.reloadData()
     }
     
@@ -125,34 +127,61 @@ class DeviceView: RideThisViewController {
                 self?.updateEmptyLabelVisibility(isEmpty: devices.isEmpty) // Device 목록이 비었을 때 lable을 업데이트
             }
             .store(in: &cancellables)
+        
+        viewModel.$unownedDevices
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] unownedDevices in
+                self?.tableView.reloadData()
+                self?.updateEmptyLabelVisibility(isEmpty: unownedDevices.isEmpty)
+            }
+            .store(in: &cancellables)
+
     }
     
     // MARK: - Device Search
     
     /// 장치 검색 BottomSheet 표시
     private func presentDeviceSearchBottomSheet() {
-        if viewModel.devices.count == 1 {
-            showAlert(
-                alertTitle: "블루투스 기기는 1대만 등록이 가능합니다.",
-                msg: "등록되어있던 블루투스 기기를 삭제하시겠습니까?",
-                confirm: "삭제"
-            ) { [weak self] in
-                guard let self = self, let deviceToDelete = self.viewModel.devices.first else { return }
-                
-                Task {
-                    do {
-                        try await self.viewModel.deleteDeviceFromFirebase(deviceToDelete.name)
-                        DispatchQueue.main.async {
-                            self.viewModel.deleteDevice(deviceToDelete.name)
-                            self.coordinator?.showDeviceSearchView()
+        if UserService.shared.loginStatus == .appleLogin {
+            // 회원일 경우
+            if viewModel.devices.count == 1 {
+                showAlert(
+                    alertTitle: "블루투스 기기는 1대만 등록이 가능합니다.",
+                    msg: "등록되어있던 블루투스 기기를 삭제하시겠습니까?",
+                    confirm: "삭제"
+                ) { [weak self] in
+                    guard let self = self, let deviceToDelete = self.viewModel.devices.first else { return }
+                    
+                    Task {
+                        do {
+                            try await self.viewModel.deleteDeviceFromFirebase(deviceToDelete.name)
+                            DispatchQueue.main.async {
+                                self.viewModel.deleteDevice(deviceToDelete.name)
+                                self.coordinator?.showDeviceSearchView()
+                            }
+                        } catch {
+                            print("Error deleting device: \(error)")
                         }
-                    } catch {
-                        print("Error deleting device: \(error)")
                     }
                 }
             }
         } else {
-            coordinator?.showDeviceSearchView()
+            // 비회원일 경우
+            if viewModel.unownedDevices.count == 1 {
+                showAlert(
+                    alertTitle: "블루투스 기기는 1대만 등록이 가능합니다.",
+                    msg: "등록되어있던 블루투스 기기를 삭제하시겠습니까?",
+                    confirm: "삭제"
+                ) { [weak self] in
+                    guard let self = self, let deviceToDelete = self.viewModel.unownedDevices.first else { return }
+                    
+                    // 비회원 장치 삭제
+                    self.viewModel.deleteDeviceUnkownedUser(deviceToDelete.name)
+                    self.coordinator?.showDeviceSearchView()
+                }
+            } else {
+                coordinator?.showDeviceSearchView()
+            }
         }
     }
     
@@ -168,25 +197,38 @@ class DeviceView: RideThisViewController {
 
 extension DeviceView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.devices.count
+        if UserService.shared.loginStatus == .appleLogin {
+            return viewModel.devices.count
+        } else {
+            return viewModel.unownedDevices.count
+        }
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: DeviceTableViewCell.identifier, for: indexPath) as? DeviceTableViewCell else {
             return UITableViewCell()
         }
-        
-        cell.configure(with: viewModel.devices[indexPath.row])
+
+        if UserService.shared.loginStatus == .appleLogin {
+            let device = viewModel.devices[indexPath.row]
+            cell.configure(with: device)
+        } else {
+            let device = viewModel.unownedDevices[indexPath.row]
+            cell.configure(with: device)
+        }
+
         return cell
     }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
-    }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let selectedDeviceName = viewModel.devices[indexPath.row].name
-        coordinator?.showDeviceDetailView(for: selectedDeviceName, viewModel: viewModel)
+        
+        if UserService.shared.loginStatus == .appleLogin {
+            let selectedDeviceName = viewModel.devices[indexPath.row].name
+            coordinator?.showDeviceDetailView(for: selectedDeviceName, viewModel: viewModel)
+        } else {
+            let selectedDeviceName = viewModel.unownedDevices[indexPath.row].name
+            coordinator?.showDeviceDetailView(for: selectedDeviceName, viewModel: viewModel)
+        }
     }
 }
