@@ -77,7 +77,7 @@ class FollowTableViewCell: UITableViewCell {
                     cellUser.user_follower.append(signedUser.user_id)
                     signedUser.user_following.append(cellUser.user_id)
                     
-                    self.firebaseService.fetchFMC(signedUserNickname: signedUser.user_nickname, cellUser: cellUser, alarmCase: .follow)
+                    self.firebaseService.fetchFMC(signedUser: signedUser, cellUser: cellUser, alarmCase: .follow)
                 } else {
                     self.followButton.setTitle("Follow", for: .normal)
                     self.followButton.setTitleColor(.systemBlue, for: .normal)

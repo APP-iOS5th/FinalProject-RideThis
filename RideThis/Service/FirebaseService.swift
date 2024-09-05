@@ -496,12 +496,12 @@ class FireBaseService {
         task.resume()
     }
     
-    func fetchFMC(signedUserNickname: String, cellUser: User, alarmCase: AlarmCase) {
+    func fetchFMC(signedUser: User, cellUser: User, alarmCase: AlarmCase) {
         db.collection("USERS").document(cellUser.user_id).getDocument { document, error in
             if let document = document, document.exists {
                 if let userFCMToken = document.data()?["user_fcmtoken"] as? String {
                     // FCM 메시지 전송
-                    self.sendFCM(to: userFCMToken, signedUserNickname: signedUserNickname, cellUser: cellUser, alarmCase: alarmCase)
+                    self.sendFCM(to: userFCMToken, signedUser: signedUser, cellUser: cellUser, alarmCase: alarmCase)
                 } else {
                     print("user_fcmtoken 필드가 없습니다.")
                 }
@@ -511,7 +511,7 @@ class FireBaseService {
         }
     }
     
-    func sendFCM(to userFCMToken: String, signedUserNickname: String, cellUser: User, alarmCase: AlarmCase) {
+    func sendFCM(to userFCMToken: String, signedUser: User, cellUser: User, alarmCase: AlarmCase) {
         fetchAccessToken { accessToken in
             guard let accessToken = accessToken else {
                 print("Failed to obtain access token")
@@ -526,7 +526,7 @@ class FireBaseService {
             let urlString = "https://fcm.googleapis.com/v1/projects/\(projectID)/messages:send"
             
             let messageTitle = alarmCase.rawValue
-            let messageBody = "\(signedUserNickname)님이 팔로우했습니다."
+            let messageBody = "\(signedUser.user_nickname)님이 팔로우했습니다."
 
             let message: [String: Any] = [
                 "message": [
@@ -554,13 +554,13 @@ class FireBaseService {
                     print("FCM 알람 성공")
                     
                     // Firestore에 ALAMS 컬렉션에 데이터 추가
-                    self.addAlarms(cellUser: cellUser, title: messageTitle, body: messageBody)
+                    self.addAlarms(signedUser: signedUser, cellUser: cellUser, title: messageTitle, body: messageBody)
                 }
             }
         }
     }
 
-    func addAlarms(cellUser: User, title: String, body: String) {
+    func addAlarms(signedUser: User, cellUser: User, title: String, body: String) {
         let db = Firestore.firestore()
         let alamsCollection = db.collection("USERS").document(cellUser.user_id).collection("ALARMS")
         
@@ -569,7 +569,7 @@ class FireBaseService {
             "alarm_date": Timestamp(date: Date()),
             "alarm_body": body,
             "alarm_status": false,
-            "alarm_user": cellUser.user_id
+            "alarm_user": signedUser.user_id
         ]
         
         alamsCollection.addDocument(data: alamData) { error in
