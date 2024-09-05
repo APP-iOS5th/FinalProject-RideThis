@@ -192,7 +192,7 @@ class DeviceDetailView: RideThisViewController {
 // MARK: - UITableViewDelegate, UITableViewDataSource
 extension DeviceDetailView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableView == deviceInfoTableView ? 4 : 1
+        return tableView == deviceInfoTableView ? 3 : 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -221,7 +221,6 @@ extension DeviceDetailView: UITableViewDelegate, UITableViewDataSource {
         let infoData: [(String, String)] = [
             ("이름", device.name),
             ("일련번호", device.serialNumber),
-            ("펌웨어 버전", device.firmwareVersion),
             ("등록 상태", device.registrationStatus ? "등록" : "미등록")
         ]
         
