@@ -126,6 +126,11 @@ class MyPageView: RideThisViewController {
         btn.setTitleColor(.systemBlue, for: .normal)
         btn.titleLabel?.font = UIFont.systemFont(ofSize: 18)
         btn.contentVerticalAlignment = .top
+        btn.addAction(UIAction { [weak self] _ in
+            guard let self = self else { return }
+            
+            self.coordinator?.showRecordListView()
+        }, for: .touchUpInside)
         
         return btn
     }()
