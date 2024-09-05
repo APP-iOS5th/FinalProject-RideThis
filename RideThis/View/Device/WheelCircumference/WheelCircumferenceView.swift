@@ -7,13 +7,9 @@ class WheelCircumferenceView: UIViewController {
     var coordinator: WheelCircumferenceCoordinator?
     
     private let viewModel: DeviceViewModel
-    private let wheelSearchLabel = RideThisLabel(fontType: .sectionTitle,
-                                                 fontColor: .black,
-                                                 text: "휠 찾기")
+    private let wheelSearchLabel = RideThisLabel(fontType: .sectionTitle, fontColor: .black, text: "휠 찾기")
     private let searchTextField = UITextField()
-    private let infoLabel = RideThisLabel(fontType: .infoMessage,
-                                          fontColor: .recordTitleColor,
-                                          text: "*일반적인 표준 로드 자전거 타이어 크기는 2110(700c X 25)mm이며, 이는 표준 로드 타이어로 직경 약 700mm, 폭 25mm를 나타냅니다.")
+    private let infoLabel = RideThisLabel(fontType: .infoMessage, fontColor: .recordTitleColor, text: "*일반적인 표준 로드 자전거 타이어 크기는 2110(700c X 25)mm이며, 이는 표준 로드 타이어로 직경 약 700mm, 폭 25mm를 나타냅니다.")
     private let tableView = UITableView(frame: .zero, style: .plain)
     
     private let headerView = UIView()
@@ -25,13 +21,20 @@ class WheelCircumferenceView: UIViewController {
     var onCircumferenceSelected: ((Int, String) -> Void)?
 
     private var cancellables = Set<AnyCancellable>()
-
+    
+    var currentWheelCircumference: Int?
+    
+    private var isInitialLayout = true
+    
     // MARK: - Initialization
     
-    /// WheelCircumferenceView의 새 인스턴스 초기화
-    /// - Parameter viewModel: WheelCircumferenceView에서 사용할 ViewModel
-    init(viewModel: DeviceViewModel) {
+    /// WheelCircumferenceView의 새 인스턴스를 초기화합니다.
+    /// - Parameters:
+    ///   - viewModel: WheelCircumferenceView에서 사용할 DeviceViewModel 인스턴스
+    ///   - currentWheelCircumference: 현재 선택된 휠 둘레 값 (밀리미터 단위). nil일 경우 선택된 값이 없음을 의미합니다.
+    init(viewModel: DeviceViewModel, currentWheelCircumference: Int?) {
         self.viewModel = viewModel
+        self.currentWheelCircumference = currentWheelCircumference
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -50,6 +53,15 @@ class WheelCircumferenceView: UIViewController {
         setupKeyboardDismiss()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        if isInitialLayout {
+            isInitialLayout = false
+            scrollToSelectedRow(animated: false)
+        }
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -63,13 +75,13 @@ class WheelCircumferenceView: UIViewController {
 
     // MARK: - UI Setup
     
-    /// NavigationBar 설정
+    /// 네비게이션 바를 설정합니다.
     private func setupNavigationBar() {
         title = "휠 둘레"
         navigationItem.backButtonTitle = "Back"
     }
 
-    /// UI 요소들 설정
+    /// UI 요소들을 설정합니다.
     private func setupUI() {
         view.backgroundColor = .primaryBackgroundColor
 
@@ -81,7 +93,7 @@ class WheelCircumferenceView: UIViewController {
         setupConstraints()
     }
 
-    /// 검색 텍스트 필드 구성
+    /// 검색 텍스트 필드를 구성합니다.
     private func configureSearchTextField() {
         searchTextField.placeholder = "휠 크기를 검색해주세요.(ex: 1020)"
         searchTextField.borderStyle = .roundedRect
@@ -90,12 +102,12 @@ class WheelCircumferenceView: UIViewController {
         searchTextField.keyboardType = .numberPad
     }
 
-    /// 정보 레이블 구성
+    /// 정보 레이블을 구성합니다.
     private func configureInfoLabel() {
         infoLabel.numberOfLines = 0
     }
 
-    /// HeaderView 구성
+    /// 헤더 뷰를 구성합니다.
     private func configureHeaderView() {
         headerView.backgroundColor = .primaryBackgroundColor
         headerView.clipsToBounds = true
@@ -113,7 +125,7 @@ class WheelCircumferenceView: UIViewController {
         setupHeaderLabelsConstraints()
     }
 
-    /// HeaderLabel들의 제약 조건 설정
+    /// 헤더 레이블들의 제약 조건을 설정합니다.
     private func setupHeaderLabelsConstraints() {
         millimeterHeaderLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(13)
@@ -134,7 +146,7 @@ class WheelCircumferenceView: UIViewController {
         }
     }
 
-    /// TableView 구성
+    /// 테이블 뷰를 구성합니다.
     private func configureTableView() {
         tableView.register(WheelCircumferenceSelectionCell.self, forCellReuseIdentifier: "WheelCircumferenceSelectionCell")
         tableView.separatorStyle = .none
@@ -145,7 +157,7 @@ class WheelCircumferenceView: UIViewController {
         tableView.clipsToBounds = true
     }
 
-    /// UI 요소들의 제약 조건 설정
+    /// UI 요소들의 제약 조건을 설정합니다.
     private func setupConstraints() {
         wheelSearchLabel.snp.makeConstraints { wheelSearchLabel in
             wheelSearchLabel.top.equalTo(view.safeAreaLayoutGuide).offset(20)
@@ -177,7 +189,7 @@ class WheelCircumferenceView: UIViewController {
         }
     }
 
-    /// Subview들을 메인 뷰에 추가
+    /// 서브뷰들을 메인 뷰에 추가합니다.
     private func addSubviews() {
         view.addSubview(wheelSearchLabel)
         view.addSubview(searchTextField)
@@ -186,13 +198,13 @@ class WheelCircumferenceView: UIViewController {
         view.addSubview(tableView)
     }
 
-    /// TableView의 delegate와 dataSource를 설정
+    /// 테이블 뷰의 delegate와 dataSource를 설정합니다.
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
     }
 
-    /// ViewModel과 View를 바인딩
+    /// ViewModel과 View를 바인딩합니다.
     private func setupBindings() {
         searchTextField.textPublisher
             .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
@@ -210,7 +222,7 @@ class WheelCircumferenceView: UIViewController {
             .store(in: &cancellables)
     }
     
-    /// Keyboard dismiss 설정
+    /// 키보드 dismiss를 설정합니다.
     private func setupKeyboardDismiss() {
         tableView.keyboardDismissMode = .onDrag
         
@@ -219,9 +231,30 @@ class WheelCircumferenceView: UIViewController {
         view.addGestureRecognizer(tapGesture)
     }
     
-    /// Keyboard dismiss
+    /// 키보드를 dismiss합니다.
     @objc private func dismissKeyboard() {
         view.endEditing(true)
+    }
+    
+    /// 주어진 둘레에 해당하는 행을 선택합니다.
+    /// - Parameter circumference: 선택할 휠 둘레 값
+    private func selectRow(for circumference: Int) {
+        if let index = viewModel.filteredWheelCircumferences.firstIndex(where: { $0.millimeter == circumference }) {
+            let indexPath = IndexPath(row: index, section: 0)
+            tableView.selectRow(at: indexPath, animated: false, scrollPosition: .middle)
+        }
+    }
+    
+    /// 선택된 행으로 스크롤합니다.
+    /// - Parameter animated: 애니메이션 여부
+    private func scrollToSelectedRow(animated: Bool = true) {
+        guard let currentWheelCircumference = currentWheelCircumference,
+              let index = viewModel.filteredWheelCircumferences.firstIndex(where: { $0.millimeter == currentWheelCircumference }) else {
+            return
+        }
+        
+        let indexPath = IndexPath(row: index, section: 0)
+        tableView.scrollToRow(at: indexPath, at: .middle, animated: animated)
     }
 }
 
@@ -239,20 +272,19 @@ extension WheelCircumferenceView: UITableViewDelegate, UITableViewDataSource {
         let wheelCircumference = viewModel.filteredWheelCircumferences[indexPath.row]
         cell.configure(with: wheelCircumference)
         
-        if let selectedCircumference = selectedCircumference {
-            cell.isSelected = selectedCircumference == (wheelCircumference.millimeter, wheelCircumference.tireSize)
-        } else {
-            cell.isSelected = false
-        }
+        // 현재 휠 둘레와 일치하는 경우 선택 상태로 설정
+        cell.setSelected(wheelCircumference.millimeter == currentWheelCircumference, animated: false)
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let wheelCircumference = viewModel.filteredWheelCircumferences[indexPath.row]
-        self.selectedCircumference = (wheelCircumference.millimeter, wheelCircumference.tireSize)
+        currentWheelCircumference = wheelCircumference.millimeter
         
-        // Firebase 업데이트
+        // 선택된 셀을 중앙으로 스크롤
+        scrollToSelectedRow()
+        
         Task {
             do {
                 try await viewModel.updateWheelCircumferenceInFirebase(wheelCircumference.millimeter)

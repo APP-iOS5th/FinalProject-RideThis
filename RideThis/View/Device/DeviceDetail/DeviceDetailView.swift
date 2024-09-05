@@ -131,6 +131,18 @@ class DeviceDetailView: RideThisViewController {
         tableView.estimatedRowHeight = 44
     }
     
+    /// 휠 둘레 선택 화면 표시
+    // 중복된 메서드를 제거하고, 하나의 메서드만 남깁니다.
+    private func presentWheelCircumferenceViewController() {
+        let currentWheelCircumference = viewModel.selectedDevice?.wheelCircumference
+        coordinator?.showWheelCircumferenceView(currentWheelCircumference: currentWheelCircumference)
+    }
+    
+    func updateWheelCircumference(_ circumference: Int) {
+        viewModel.updateWheelCircumference(circumference)
+        wheelCircumferenceTableView.reloadData()
+    }
+    
     // MARK: - ViewModel Binding
     
     private func bindViewModel() {
@@ -250,10 +262,5 @@ extension DeviceDetailView: UITableViewDelegate, UITableViewDataSource {
         }
 
         return cell
-    }
-    
-    /// 휠 둘레 선택 화면 표시
-    private func presentWheelCircumferenceViewController() {
-        coordinator?.showWheelCircumferenceView()
     }
 }

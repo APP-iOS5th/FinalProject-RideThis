@@ -1,6 +1,6 @@
 import UIKit
 
-class DeviceDetailCoordinator: Coordinator {
+class DeviceDetailCoordinator: Coordinator, WheelCircumferenceCoordinator.WheelCircumferenceCoordinatorDelegate {
     // MARK: - Properties
     var navigationController: UINavigationController
     var childCoordinators: [Coordinator] = []
@@ -41,5 +41,21 @@ class DeviceDetailCoordinator: Coordinator {
     /// 루트 뷰로 돌아가기
     func popToRootView() {
         navigationController.popToRootViewController(animated: true)
+    }
+    
+    /// 휠 둘레 설정 화면 표시
+    func showWheelCircumferenceView(currentWheelCircumference: Int? = nil) {
+        let wheelCircumferenceCoordinator = WheelCircumferenceCoordinator(navigationController: navigationController, viewModel: viewModel, currentWheelCircumference: currentWheelCircumference)
+        wheelCircumferenceCoordinator.delegate = self
+        childCoordinators.append(wheelCircumferenceCoordinator)
+        wheelCircumferenceCoordinator.start()
+    }
+    
+    // MARK: - WheelCircumferenceCoordinatorDelegate Methods
+    
+    func wheelCircumferenceUpdated(_ circumference: Int) {
+        if let deviceDetailVC = navigationController.viewControllers.last as? DeviceDetailView {
+            deviceDetailVC.updateWheelCircumference(circumference)
+        }
     }
 }
