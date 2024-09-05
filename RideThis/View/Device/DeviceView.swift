@@ -142,6 +142,8 @@ class DeviceView: RideThisViewController {
     
     /// 장치 검색 BottomSheet 표시
     private func presentDeviceSearchBottomSheet() {
+        print(UserService.shared.loginStatus)
+        print(UserService.shared.loginStatus == .appleLogin)
         if UserService.shared.loginStatus == .appleLogin {
             // 회원일 경우
             if viewModel.devices.count == 1 {
@@ -164,6 +166,8 @@ class DeviceView: RideThisViewController {
                         }
                     }
                 }
+            } else {
+                coordinator?.showDeviceSearchView()
             }
         } else {
             // 비회원일 경우
