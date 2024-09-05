@@ -42,7 +42,7 @@ class TabBarCoordinator: Coordinator {
         
         // MyPage
         let myPageNavigationController = UINavigationController()
-        let myPageCoordinator = MyPageCoordinator(navigationController: myPageNavigationController)
+        let myPageCoordinator = MyPageCoordinator(navigationController: myPageNavigationController, tabBarController: tabBarController)
         myPageCoordinator.start()
         myPageNavigationController.tabBarItem = UITabBarItem(title: "마이페이지", image: UIImage(systemName: "person.circle.fill"), selectedImage: nil)
         childCoordinators.append(myPageCoordinator)

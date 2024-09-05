@@ -6,8 +6,18 @@ import Combine
 class RecordView: RideThisViewController {
     
     var coordinator: RecordCoordinator?
-    var viewModel: RecordViewModel?
+    var viewModel: RecordViewModel
     
+    init(viewModel: RecordViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private var lastDataUpdateTime: Date?
     private var cancellables = Set<AnyCancellable>()
     
     // 커스텀 타이틀
@@ -39,18 +49,13 @@ class RecordView: RideThisViewController {
         setupRecordsStackView()
         setupButtonStackView()
         setupButtons()
-        
-        if let viewModel = viewModel {
-            setupBindings()
-            
-            viewModel.onRecordingStatusChanged = { [weak self] isRecording in
-                guard let self = self else { return }
-                self.updateUI(isRecording: isRecording)
-            }
-            
-            viewModel.delegate = self
+        setupBindings()
+        viewModel.onRecordingStatusChanged = { [weak self] isRecording in
+            guard let self = self else { return }
+            self.updateUI(isRecording: isRecording)
         }
         
+        viewModel.delegate = self
         tabBarController?.delegate = self
     }
     
@@ -58,11 +63,23 @@ class RecordView: RideThisViewController {
         super.viewWillAppear(animated)
         
         // RecordSumUpView에서 돌아올 때 타이머 초기화
-        if !(viewModel?.isRecording ?? false) {
-            viewModel?.resetRecording()
+        if !(viewModel.isRecording) {
+            viewModel.resetRecording()
             updateTimerDisplay()
             updateUI(isRecording: false)
         }
+        Task {
+            viewModel.deviceModel = try await viewModel.fetchDeviceData()
+            viewModel.updateBTManager()
+            viewModel.btManager?.delegate = self
+            viewModel.btManager?.viewDelegate = self
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        viewModel.disConnectBT()
     }
     
     private func setupMainStackView() {
@@ -169,26 +186,10 @@ class RecordView: RideThisViewController {
     }
     
     private func updateTimerDisplay() {
-        timerRecord.updateRecordText(text: viewModel?.updateTimerDisplay() ?? "00:00")
+        timerRecord.updateRecordText(text: viewModel.updateTimerDisplay())
     }
     
     private var hasShownBluetoothAlert = false
-    
-    private func checkBluetoothConnection() {
-#if targetEnvironment(simulator)
-        // 시뮬레이터에서는 블루투스 연결 확인 생략
-        return
-#endif
-        
-        coordinator?.checkBluetoothConnection { [weak self] isConnected in
-            if !isConnected && !(self?.hasShownBluetoothAlert ?? true) {
-                DispatchQueue.main.async {
-                    self?.showBluetoothDisconnectedAlert()
-                    self?.hasShownBluetoothAlert = true
-                }
-            }
-        }
-    }
     
     func resetBluetoothAlert() {
         hasShownBluetoothAlert = false
@@ -203,19 +204,27 @@ class RecordView: RideThisViewController {
         
         // 버튼 액션
         resetButton.addAction(UIAction { [weak self] _ in
-            self?.viewModel?.stopTimer()
-            self?.showAlert(alertTitle: "기록을 리셋할까요?", msg: "지금까지의 기록이 초기화됩니다.", confirm: "리셋",
-            cancelHandler: {
-                // 취소 버튼을 눌렀을 때 타이머 재시작
-                self?.viewModel?.startTimer()
-            }) {
-                self?.viewModel?.resetRecording()
+            self?.showAlert(alertTitle: "기록을 리셋할까요?", msg: "지금까지의 기록이 초기화됩니다.", confirm: "리셋"
+            ) {
+                self?.viewModel.resetRecording()
                 self?.enableTabBar()
             }
         }, for: .touchUpInside)
         
         recordButton.addAction(UIAction { [weak self] _ in
-            guard let self = self, let viewModel = self.viewModel else { return }
+            guard let self = self else { return }
+            // MARK: 카운트다운 modal 뷰 present -> 5초 후 dismiss -> 타이머 시작
+            
+            let isConnected = self.viewModel.checkBluetoothConnection()
+            if !isConnected {
+                self.showBluetoothDisconnectedAlert()
+                return
+            }
+            
+            if !viewModel.isRecording {
+                let countDownCoordinator = RecordCountCoordinator(navigationController: self.coordinator!.navigationController)
+                countDownCoordinator.start()
+            }
             
     #if targetEnvironment(simulator)
             // 시뮬레이터에서는 블루투스 연결 확인을 건너뛰고 바로 기록을 시작합니다.
@@ -228,22 +237,12 @@ class RecordView: RideThisViewController {
                 self.disableTabBar()
             }
             self.updateUI(isRecording: viewModel.isRecording)
-    #else
-            self.coordinator?.checkBluetoothConnection { isConnected in
-                DispatchQueue.main.async {
-                    if isConnected {
-                        if viewModel.isRecording {
-                            viewModel.pauseRecording()
-                        } else if viewModel.isPaused {
-                            viewModel.resumeRecording()
-                        } else {
-                            viewModel.startRecording()
-                            self.disableTabBar()
-                        }
-                        self.updateUI(isRecording: viewModel.isRecording)
-                    } else {
-                        self.showBluetoothDisconnectedAlert()
-                    }
+#else
+            if viewModel.isRecording {
+                startRecordProcess()
+            } else {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                    self.startRecordProcess()
                 }
             }
     #endif
@@ -251,29 +250,29 @@ class RecordView: RideThisViewController {
         
         finishButton.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
-            self.viewModel?.stopTimer()
-            self.showAlert(alertTitle: "기록을 종료할까요?", msg: "요약 화면으로 이동합니다.", confirm: "기록 종료",
-            cancelHandler: {
-                // 취소 버튼을 눌렀을 때 타이머 재시작
-                self.viewModel?.startTimer()
-            }) {
-                self.viewModel?.finishRecording()
+            self.showAlert(alertTitle: "기록을 종료할까요?", msg: "요약 화면으로 이동합니다.", confirm: "기록 종료"
+            ) {
+                self.viewModel.finishRecording()
                 self.enableTabBar() // 탭바 활성화
             }
         }, for: .touchUpInside)
     }
     
-    private func showAlert(alertTitle: String, msg: String, confirm: String, cancelHandler: (() -> Void)? = nil, confirmHandler: @escaping () -> Void) {
-        let alert = UIAlertController(title: alertTitle, message: msg, preferredStyle: .alert)
-        let confirmAction = UIAlertAction(title: confirm, style: .destructive) { _ in
-            confirmHandler()
+    func startRecordProcess() {
+        let isConnected = self.viewModel.checkBluetoothConnection()
+        if isConnected {
+            if self.viewModel.isRecording {
+                self.viewModel.pauseRecording()
+            } else if self.viewModel.isPaused {
+                self.viewModel.resumeRecording()
+            } else {
+                self.viewModel.startRecording()
+                self.disableTabBar()
+            }
+            self.updateUI(isRecording: self.viewModel.isRecording)
+        } else {
+            self.showBluetoothDisconnectedAlert()
         }
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel) { _ in
-            cancelHandler?()
-        }
-        alert.addAction(cancelAction)
-        alert.addAction(confirmAction)
-        present(alert, animated: true, completion: nil)
     }
     
     private func showBluetoothDisconnectedAlert() {
@@ -295,7 +294,7 @@ class RecordView: RideThisViewController {
     // 바인딩 설정
     private func setupBindings() {
         // elapsedTime이 변경될 때마다 timerRecord의 recordText 업데이트
-        viewModel?.$elapsedTime
+        viewModel.$elapsedTime
             .map { elapsedTime -> String in
                 let minutes = Int(elapsedTime) / 60
                 let seconds = Int(elapsedTime) % 60
@@ -304,28 +303,28 @@ class RecordView: RideThisViewController {
             .assign(to: \.recordLabel.text, on: timerRecord)
             .store(in: &cancellables)
         
-        self.viewModel?.$cadence
+        self.viewModel.$cadence
             .receive(on: DispatchQueue.main)
             .sink { [weak self] cadence in
                 self?.cadenceRecord.updateRecordText(text: "\(cadence.formattedWithThousandsSeparator()) RPM")
             }
             .store(in: &cancellables)
         
-        self.viewModel?.$speed
+        self.viewModel.$speed
             .receive(on: DispatchQueue.main)
             .sink { [weak self] speed in
                 self?.speedRecord.updateRecordText(text: "\(speed.formattedWithThousandsSeparator()) Km/h")
             }
             .store(in: &cancellables)
         
-        self.viewModel?.$distance
+        self.viewModel.$distance
             .receive(on: DispatchQueue.main)
             .sink { [weak self] distance in
                 self?.distanceRecord.updateRecordText(text: "\(distance.formattedWithThousandsSeparator()) Km")
             }
             .store(in: &cancellables)
         
-        self.viewModel?.$calorie
+        self.viewModel.$calorie
             .receive(on: DispatchQueue.main)
             .sink { [weak self] calorie in
                 self?.calorieRecord.updateRecordText(text: "\(calorie.formattedWithThousandsSeparator()) Kcal")
@@ -343,7 +342,7 @@ class RecordView: RideThisViewController {
                 self.finishButton.backgroundColor = .black
                 self.recordButton.setTitle("정지", for: .normal)
                 self.recordListButton?.isEnabled = false
-            } else if self.viewModel?.isPaused == true { // 일시정지일 때
+            } else if self.viewModel.isPaused == true { // 일시정지일 때
                 self.resetButton.isEnabled = true
                 self.finishButton.isEnabled = true
                 self.resetButton.backgroundColor = .black
@@ -386,7 +385,7 @@ class RecordView: RideThisViewController {
     }
     
     @objc private func recordListButtonTapped() {
-        if viewModel?.isUserLoggedIn == true {
+        if viewModel.isUserLoggedIn == true {
             coordinator?.showRecordListView()
         } else {
             showLoginAlert()
@@ -415,7 +414,7 @@ class RecordView: RideThisViewController {
 // MARK: - extension
 extension RecordView: RecordViewModelDelegate {
     func didFinishRecording() {
-        coordinator?.showSummaryView(viewModel: viewModel ?? RecordViewModel())
+        coordinator?.showSummaryView(viewModel: viewModel)
         enableTabBar()
     }
     
@@ -443,10 +442,50 @@ extension RecordView: UITabBarControllerDelegate {
         }
         
         // 기록 중이거나 일시정지 상태일 때 탭 전환 막기
-        if viewModel?.isRecording == true || viewModel?.isPaused == true {
+        if viewModel.isRecording == true || viewModel.isPaused == true {
             return false
         }
         
         return true
+    }
+}
+
+extension RecordView: BluetoothViewDelegate {
+    func bluetoothDidTurnOff() {
+        guard let tabBarController = self.navigationController?.tabBarController else {
+            print("TabBarController not found")
+            return
+        }
+        self.navigationController?.popToRootViewController(animated: true)
+        tabBarController.tabBar.items?.forEach{ $0.isEnabled = true }
+        tabBarController.selectedIndex = 3
+    }
+}
+
+extension RecordView: BluetoothManagerDelegate {
+    func bluetoothDidConnect() {
+        if let recordView = navigationController?.topViewController as? RecordView {
+            recordView.resetBluetoothAlert()
+        }
+    }
+
+    func didUpdateCadence(_ cadence: Double) {
+        lastDataUpdateTime = Date()
+        viewModel.didUpdateCadence(cadence)
+    }
+
+    func didUpdateSpeed(_ speed: Double) {
+        lastDataUpdateTime = Date()
+        viewModel.didUpdateSpeed(speed)
+    }
+
+    func didUpdateDistance(_ distance: Double) {
+        lastDataUpdateTime = Date()
+        viewModel.didUpdateDistance(distance)
+    }
+
+    func didUpdateCalories(_ calories: Double) {
+        lastDataUpdateTime = Date()
+        viewModel.didUpdateCalories(calories)
     }
 }
