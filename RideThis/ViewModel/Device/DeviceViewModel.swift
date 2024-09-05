@@ -163,7 +163,6 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
         let defaults = UserDefaults.standard
         if let savedDevicesData = defaults.data(forKey: "unkownedDevices"),
            let savedDevices = try? JSONDecoder().decode([Device].self, from: savedDevicesData) {
-            print("유저ㅏ디폴트 디바이스: \(savedDevices)")
             DispatchQueue.main.async {
                 self.unownedDevices = savedDevices
             }
@@ -185,6 +184,33 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
             // ViewModel의 unownedDevices 배열 업데이트
             DispatchQueue.main.async {
                 self.unownedDevices = savedDevices
+            }
+        }
+    }
+    
+    func updateWheelCircumferenceForUnownedUser(newCircumference: Int) {
+        let defaults = UserDefaults.standard
+
+        if let savedDeviceData = defaults.data(forKey: "unkownedDevices"),
+           var savedDevices = try? JSONDecoder().decode([Device].self, from: savedDeviceData) {
+            
+            // 첫 번째 디바이스의 wheelCircumference 업데이트
+            if !savedDevices.isEmpty {
+                savedDevices[0].wheelCircumference = newCircumference
+                
+                // selectedDevice 업데이트
+                if selectedDevice?.name == savedDevices[0].name {
+                    selectedDevice?.wheelCircumference = newCircumference
+                }
+
+                // 유저디폴트에 업데이트된 데이터 저장
+                if let updatedData = try? JSONEncoder().encode(savedDevices) {
+                    defaults.set(updatedData, forKey: "unkownedDevices")
+                }
+
+                DispatchQueue.main.async {
+                    self.unownedDevices = savedDevices
+                }
             }
         }
     }
