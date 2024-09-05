@@ -19,7 +19,7 @@ class HomeViewModel: NSObject, CLLocationManagerDelegate {
     
     // MARK: - Initialization
     override init() {
-        let initialWeeklyRecord = HomeModel.WeeklyRecord(runCount: 0, runTime: "0시간 0분", runDistance: 0.0)
+        let initialWeeklyRecord = WeeklyRecord(runCount: 0, runTime: "0시간 0분", runDistance: 0.0)
         self.model = HomeModel(weeklyRecord: initialWeeklyRecord, userName: "")
         super.init()
         
@@ -47,29 +47,34 @@ class HomeViewModel: NSObject, CLLocationManagerDelegate {
     // MARK: - User Data Methods
     /// 사용자 데이터 가져오기
     func fetchUserData() {
-        guard let userId = userService.combineUser?.user_id else { return }
+//        guard let combineUser = userService.combineUser else { return }
         
-        Task {
-            do {
-                if case .user(let userData) = try await firebaseService.fetchUser(at: userId, userType: true) {
-                    guard let user = userData else { return }
-                    
-                    await MainActor.run {
-                        self.model.userName = user.user_nickname
-                    }
-                    
-                    await fetchUserRecords(userId: userId)
-                }
-            } catch {
-                print("사용자 데이터 가져오기 실패: \(error)")
-            }
-        }
+//        DispatchQueue.main.async {
+//            self.model.userName = combineUser.user_nickname
+//        }
+//        Task {
+//            await fetchUserRecords(userId: combineUser.user_id)
+//        }
+//        Task {
+//            do {
+//                if case .user(let userData) = try await firebaseService.fetchUser(at: combineUser.user_id, userType: true) {
+//                    guard let user = userData else { return }
+//                    
+//                    await MainActor.run {
+//                        self.model.userName = combineUser.user_nickname
+//                    }
+//                    
+//                }
+//            } catch {
+//                print("사용자 데이터 가져오기 실패: \(error)")
+//            }
+//        }
     }
     
     /// 사용자 기록 가져오기
-    private func fetchUserRecords(userId: String) async {
+    func fetchUserRecords(user: User) async {
         do {
-            let allRecords = await firebaseService.findRecordsBy(userId: userId)
+            let allRecords = await firebaseService.findRecordsBy(userId: user.user_id)
             let records = allRecords.filter{ !$0.record_competetion_status }
             
             let sortedRecords = records.sorted { $0.record_start_time ?? Date() > $1.record_start_time ?? Date() }
@@ -79,12 +84,9 @@ class HomeViewModel: NSObject, CLLocationManagerDelegate {
             let runTime = calculateTotalRunTime(records: recentRecords)
             let runDistance = recentRecords.reduce(0.0) { $0 + $1.record_distance }
             
-            await MainActor.run {
-                self.model.weeklyRecord = HomeModel.WeeklyRecord(
-                    runCount: runCount,
-                    runTime: formatRunTime(seconds: runTime),
-                    runDistance: runDistance
-                )
+            DispatchQueue.main.async {
+                let weeklyRecord = WeeklyRecord(runCount: runCount, runTime: self.formatRunTime(seconds: runTime), runDistance: runDistance)
+                self.model = HomeModel(weeklyRecord: weeklyRecord, userName: user.user_nickname)
             }
         }
     }
@@ -141,7 +143,6 @@ class HomeViewModel: NSObject, CLLocationManagerDelegate {
     // MARK: - CLLocationManagerDelegate Methods
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.first {
-            print("Location: \(location)")
             Task {
                 await fetchWeather(for: location)
             }
@@ -155,19 +156,17 @@ class HomeViewModel: NSObject, CLLocationManagerDelegate {
     // MARK: 로그인 시 User에 FCM토큰
     func fetchAddFCM() {
         if let fcmToken = TokenManager.shared.fcmToken {
-            print("FCMToken Check: \(fcmToken)")
-            
             Task {
                 do {
-                    let userId = self.userService.combineUser?.user_id
-                    try await self.firebaseService.updateUserFCMToken(userId: userId ?? "", fcmToken: fcmToken)
+                    guard let user = self.userService.combineUser else { return }
+                    try await self.firebaseService.updateUserFCMToken(userId: user.user_id, fcmToken: fcmToken)
                     print("FCM 토큰 업데이트")
                 } catch {
                     print("FCM 토큰 업데이트 실패: \(error)")
                 }
             }
         } else {
-            print("FCM token is not available")
+            print("FCM token을 찾을 수 없습니다.")
         }
     }
     

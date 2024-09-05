@@ -33,6 +33,7 @@ class SearchUserView: RideThisViewController {
     }
     
     func configureUI() {
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         setNavigationComponents()
         setSearchBar()
         setSearchUserTable()
@@ -49,6 +50,7 @@ class SearchUserView: RideThisViewController {
         searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "닉네임을 검색해주세요."
+        searchController.searchBar.overrideUserInterfaceStyle = .light
         searchController.searchBar.sizeToFit()
         searchController.searchBar.autocapitalizationType = .none
         navigationItem.hidesSearchBarWhenScrolling = false

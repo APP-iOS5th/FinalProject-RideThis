@@ -7,7 +7,13 @@ class SignUpInfoViewModel {
     private var cancellable = Set<AnyCancellable>()
     
     @Published var emailText: String = ""
-    @Published var nickNameText: String = ""
+    @Published var nickNameText: String = "" {
+        didSet {
+            if nickNameText.count > 7 {
+                nickNameText = String(nickNameText.prefix(7))
+            }
+        }
+    }
     @Published var weightText: String = ""
     
     @Published var allFieldFilled: Bool = false
@@ -16,12 +22,9 @@ class SignUpInfoViewModel {
     @Published var weightTextIsFilled: Bool = false
     
     @Published var isExistNickName: Bool = false
+    @Published var weightWarningText: String? = nil
     
     init() {
-        self.$emailText
-            .removeDuplicates()
-            .map{ !$0.isEmpty }
-            .assign(to: &$emailTextIsFilled)
         
         self.$nickNameText
             .removeDuplicates()
@@ -30,8 +33,18 @@ class SignUpInfoViewModel {
         
         self.$weightText
             .removeDuplicates()
-            .map{ !$0.isEmpty }
+            .map { !$0.isEmpty && (Int($0) ?? 0) > 10 }
             .assign(to: &$weightTextIsFilled)
+        
+        self.$weightText
+            .map { weightText -> String? in
+                if let weight = Int(weightText), weight <= 10 {
+                    return "몸무게는 10kg 초과여야 합니다."
+                } else {
+                    return nil
+                }
+            }
+            .assign(to: &$weightWarningText)
         
         self.$nickNameText
             .debounce(for: 0.3, scheduler: RunLoop.main)
@@ -45,15 +58,15 @@ class SignUpInfoViewModel {
             }
             .store(in: &cancellable)
         
-        Publishers.CombineLatest4($emailTextIsFilled, $nickNameTextIsFilled, $weightTextIsFilled, $isExistNickName)
-            .map { $0 && $1 && $2 && !$3}
+        Publishers.CombineLatest3($nickNameTextIsFilled, $weightTextIsFilled, $isExistNickName)
+            .map { $0 && $1 && !$2}
             .assign(to: &$allFieldFilled)
     }
     
     func createUser(userInfo: [String: Any]) {
         firebaseService.createUser(userInfo: userInfo) { [weak self] user in
             guard let self = self else { return }
-            self.userService.combineUser = user
+            UserService.shared.signedUser = user
         }
     }
 }

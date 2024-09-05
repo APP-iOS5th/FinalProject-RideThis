@@ -252,9 +252,9 @@ class MyPageView: RideThisViewController {
         
         return btn
     }()
-    private let selectedPeriodTotalRecordContainer = RideThisContainer(height: 150)
-    private let selectedPeriodTitle = RideThisLabel(fontType: .recordInfoTitle, text: "Cadence")
-    private let selectedPeriodSeparator = RideThisSeparator()
+    private let selectedPeriodTotalRecordContainer = RideThisContainer(height: 75)
+//    private let selectedPeriodTitle = RideThisLabel(fontType: .recordInfoTitle, text: "Cadence")
+//    private let selectedPeriodSeparator = RideThisSeparator()
     private let selectedPeriodData = RideThisLabel(fontType: .title)
     private var selectedPeriodDataUnit = RecordDataCase.cadence.unit
     
@@ -576,23 +576,25 @@ class MyPageView: RideThisViewController {
             $0.bottom.equalTo(self.contentView.snp.bottom).offset(-20)
         }
         
-        [self.selectedPeriodTitle, self.selectedPeriodSeparator, self.selectedPeriodData].forEach{ self.selectedPeriodTotalRecordContainer.addSubview($0) }
+        [/*self.selectedPeriodTitle, self.selectedPeriodSeparator, */self.selectedPeriodData].forEach{ self.selectedPeriodTotalRecordContainer.addSubview($0) }
         
-        self.selectedPeriodTitle.snp.makeConstraints {
-            $0.top.equalTo(self.selectedPeriodTotalRecordContainer.snp.top).offset(15)
-            $0.centerX.equalTo(self.selectedPeriodTotalRecordContainer.snp.centerX)
-        }
+//        self.selectedPeriodTitle.snp.makeConstraints {
+//            $0.top.equalTo(self.selectedPeriodTotalRecordContainer.snp.top).offset(15)
+//            $0.centerX.equalTo(self.selectedPeriodTotalRecordContainer.snp.centerX)
+//        }
         
-        self.selectedPeriodSeparator.snp.makeConstraints {
-            $0.top.equalTo(self.selectedPeriodTitle.snp.bottom).offset(12)
-            $0.centerX.equalTo(self.selectedPeriodTitle.snp.centerX)
-            $0.width.equalTo(60)
-            $0.height.equalTo(5)
-        }
+//        self.selectedPeriodSeparator.snp.makeConstraints {
+//            $0.top.equalTo(self.selectedPeriodTitle.snp.bottom).offset(12)
+//            $0.centerX.equalTo(self.selectedPeriodTitle.snp.centerX)
+//            $0.width.equalTo(60)
+//            $0.height.equalTo(5)
+//        }
         
         self.selectedPeriodData.snp.makeConstraints {
-            $0.top.equalTo(self.selectedPeriodSeparator.snp.bottom).offset(15)
-            $0.centerX.equalTo(self.selectedPeriodTitle.snp.centerX)
+//            $0.top.equalTo(self.selectedPeriodSeparator.snp.bottom).offset(15)
+//            $0.centerX.equalTo(self.selectedPeriodTitle.snp.centerX)
+            $0.centerX.equalTo(self.selectedPeriodTotalRecordContainer.snp.centerX)
+            $0.centerY.equalTo(self.selectedPeriodTotalRecordContainer.snp.centerY)
         }
     }
     
@@ -764,7 +766,7 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
             break
         }
         self.dataLabel.text = self.selectedDataType.rawValue
-        self.selectedPeriodTitle.text = self.selectedDataType.rawValue
+//        self.selectedPeriodTitle.text = self.selectedDataType.rawValue
         self.leftButton.isEnabled = self.selectedDataType != .cadence
         self.rightButton.isEnabled = self.selectedDataType != .calories
         
@@ -780,7 +782,7 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
             graphCell.setGraph(type: self.selectedDataType,
                                records: self.viewModel.getRecordsBy(period: self.selectedPeriod, dataCase: self.selectedDataType),
                                period: self.selectedPeriod)
-            graphCell.lineChartDataSet?.label = self.selectedDataType.rawValue
+            graphCell.lineChartDataSet?.label = nil//self.selectedDataType.rawValue
             graphCell.lineChartView.notifyDataSetChanged()
         }
     }

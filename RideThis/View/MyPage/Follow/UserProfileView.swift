@@ -209,7 +209,7 @@ class UserProfileView: RideThisViewController {
         
         return btn
     }()
-    private let selectedPeriodTotalRecordContainer = RideThisContainer(height: 150)
+    private let selectedPeriodTotalRecordContainer = RideThisContainer(height: 75)
     private let selectedPeriodTitle = RideThisLabel(fontType: .recordInfoTitle, text: "Cadence")
     private let selectedPeriodSeparator = RideThisSeparator()
     private let selectedPeriodData = RideThisLabel(fontType: .title)
@@ -281,6 +281,7 @@ class UserProfileView: RideThisViewController {
             $0.left.equalTo(self.contentView.snp.left).offset(25)
             $0.right.equalTo(self.contentView.snp.right).offset(-25)
         }
+        
         [self.profileImageView, self.followerLabel, self.followerCountLabel,
          self.followingLabel, self.followingCountLabel].forEach{ self.profileContainer.addSubview($0) }
         
@@ -315,7 +316,7 @@ class UserProfileView: RideThisViewController {
         [self.totalRecordLabel, self.totalRecordContainer].forEach{ self.contentView.addSubview($0) }
         
         totalRecordLabel.snp.makeConstraints {
-            $0.top.equalTo(self.profileContainer.snp.bottom).offset(20)
+            $0.top.equalTo(self.profileContainer.snp.bottom).offset(30)
             $0.left.equalTo(self.profileContainer.snp.left)
         }
         
@@ -383,7 +384,7 @@ class UserProfileView: RideThisViewController {
          self.dataLabel, self.graphCollectionView, self.pagingIndicator, self.selectedPeriodTotalRecordContainer].forEach{ self.contentView.addSubview($0) }
         
         self.recordByPeriodLabel.snp.makeConstraints {
-            $0.top.equalTo(self.totalRecordContainer.snp.bottom).offset(20)
+            $0.top.equalTo(self.totalRecordContainer.snp.bottom).offset(30)
             $0.left.equalTo(self.totalRecordContainer.snp.left)
         }
         
@@ -394,7 +395,7 @@ class UserProfileView: RideThisViewController {
         }
         
         self.dataLabel.snp.makeConstraints {
-            $0.top.equalTo(self.recordByPeriodPicker.snp.bottom).offset(8)
+            $0.top.equalTo(self.recordByPeriodPicker.snp.bottom).offset(30)
             $0.left.equalTo(self.recordByPeriodPicker.snp.left)
         }
         
@@ -416,33 +417,36 @@ class UserProfileView: RideThisViewController {
         }
         
         self.pagingIndicator.snp.makeConstraints {
-            $0.top.equalTo(self.graphCollectionView.snp.bottom).offset(8)
+            $0.top.equalTo(self.graphCollectionView.snp.bottom).offset(20)
             $0.centerX.equalTo(self.graphCollectionView.snp.centerX)
         }
         
         self.selectedPeriodTotalRecordContainer.snp.makeConstraints {
-            $0.top.equalTo(self.pagingIndicator.snp.bottom).offset(8)
+            $0.top.equalTo(self.pagingIndicator.snp.bottom).offset(20)
             $0.left.equalTo(self.graphCollectionView.snp.left)
             $0.right.equalTo(self.graphCollectionView.snp.right)
             $0.bottom.equalTo(self.contentView.snp.bottom).offset(-20)
         }
         
-        [self.selectedPeriodTitle, self.selectedPeriodSeparator, self.selectedPeriodData].forEach{ self.selectedPeriodTotalRecordContainer.addSubview($0) }
+        [/*self.selectedPeriodTitle, self.selectedPeriodSeparator, */self.selectedPeriodData].forEach{ self.selectedPeriodTotalRecordContainer.addSubview($0) }
         
-        self.selectedPeriodTitle.snp.makeConstraints {
-            $0.top.equalTo(self.selectedPeriodTotalRecordContainer.snp.top).offset(15)
-            $0.centerX.equalTo(self.selectedPeriodTotalRecordContainer.snp.centerX)
-        }
+//        self.selectedPeriodTitle.snp.makeConstraints {
+//            $0.top.equalTo(self.selectedPeriodTotalRecordContainer.snp.top).offset(15)
+//            $0.centerX.equalTo(self.selectedPeriodTotalRecordContainer.snp.centerX)
+//        }
         
-        self.selectedPeriodSeparator.snp.makeConstraints {
-            $0.top.equalTo(self.selectedPeriodTitle.snp.bottom).offset(12)
-            $0.centerX.equalTo(self.selectedPeriodTitle.snp.centerX)
-            $0.width.equalTo(20)
-        }
+//        self.selectedPeriodSeparator.snp.makeConstraints {
+//            $0.top.equalTo(self.selectedPeriodTitle.snp.bottom).offset(12)
+//            $0.centerX.equalTo(self.selectedPeriodTitle.snp.centerX)
+//            $0.width.equalTo(60)
+//            $0.height.equalTo(5)
+//        }
         
         self.selectedPeriodData.snp.makeConstraints {
-            $0.top.equalTo(self.selectedPeriodSeparator.snp.bottom).offset(15)
-            $0.centerX.equalTo(self.selectedPeriodTitle.snp.centerX)
+//            $0.top.equalTo(self.selectedPeriodSeparator.snp.bottom).offset(15)
+//            $0.centerX.equalTo(self.selectedPeriodTitle.snp.centerX)
+            $0.centerX.equalTo(self.selectedPeriodTotalRecordContainer.snp.centerX)
+            $0.centerY.equalTo(self.selectedPeriodTotalRecordContainer.snp.centerY)
         }
     }
     
