@@ -518,7 +518,7 @@ class FireBaseService {
         task.resume()
     }
     
-    func fetchFMC(signedUser: User, cellUser: User, alarmCase: AlarmCase) {
+    func fetchFCM(signedUser: User, cellUser: User, alarmCase: AlarmCase) {
         db.collection("USERS").document(cellUser.user_id).getDocument { document, error in
             if let document = document, document.exists {
                 if let userFCMToken = document.data()?["user_fcmtoken"] as? String {

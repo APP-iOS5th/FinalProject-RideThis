@@ -241,16 +241,25 @@ extension WheelCircumferenceView: UITableViewDelegate, UITableViewDataSource {
         let wheelCircumference = viewModel.filteredWheelCircumferences[indexPath.row]
         self.selectedCircumference = (wheelCircumference.millimeter, wheelCircumference.tireSize)
         
-        // Firebase 업데이트
-        Task {
-            do {
-                try await viewModel.updateWheelCircumferenceInFirebase(wheelCircumference.millimeter)
-                DispatchQueue.main.async {
-                    self.onCircumferenceSelected?(wheelCircumference.millimeter, wheelCircumference.tireSize)
-                    tableView.reloadData()
+        if UserService.shared.loginStatus == .appleLogin {
+            // Firebase 업데이트
+            Task {
+                do {
+                    try await viewModel.updateWheelCircumferenceInFirebase(wheelCircumference.millimeter)
+                    DispatchQueue.main.async {
+                        self.onCircumferenceSelected?(wheelCircumference.millimeter, wheelCircumference.tireSize)
+                        tableView.reloadData()
+                    }
+                } catch {
+                    print("Error updating wheel circumference: \(error)")
                 }
-            } catch {
-                print("Error updating wheel circumference: \(error)")
+            }
+        } else {
+            viewModel.updateWheelCircumferenceForUnownedUser(newCircumference: wheelCircumference.millimeter)
+
+            DispatchQueue.main.async {
+                self.onCircumferenceSelected?(wheelCircumference.millimeter, wheelCircumference.tireSize)
+                tableView.reloadData()
             }
         }
     }
