@@ -33,12 +33,21 @@ class CompetitionView: RideThisViewController {
         config.baseForegroundColor = .black
         config.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 0)
         
-        var titleAttr = AttributedString("5Km")
+        var titleAttr = AttributedString("선택한 거리: 5Km")
         titleAttr.font = .systemFont(ofSize: 17, weight: .semibold)
         config.attributedTitle = titleAttr
         
+        let image = UIImage(systemName: "chevron.down")?
+            .withConfiguration(UIImage.SymbolConfiguration(pointSize: 12))
+        config.image = image
+        config.imagePlacement = .leading
+        config.imagePadding = 8
+        
         button.configuration = config
         button.contentHorizontalAlignment = .left
+        button.layer.borderColor = UIColor.gray.cgColor
+        button.layer.borderWidth = 1.0
+        
         button.translatesAutoresizingMaskIntoConstraints = false
         
         return button
@@ -50,6 +59,7 @@ class CompetitionView: RideThisViewController {
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(CompetitionTVCell.self, forCellReuseIdentifier: "CompetitionTVCell")
+        tableView.rowHeight = 41
         
         return tableView
     }()
@@ -101,6 +111,8 @@ class CompetitionView: RideThisViewController {
         
         self.viewModel = CompetitionViewModel(isLogin: UserService.shared.combineUser != nil, nickName: UserService.shared.combineUser?.user_nickname ?? "")
         
+        DeviceManager.shared.isCompetetionUse = false
+        
         setupUI()
         setupDropdownMenu()
         setupBinding()
@@ -117,8 +129,10 @@ class CompetitionView: RideThisViewController {
           self.viewModel.fetchAllRecords()
           self.viewModel.checkBluetoothStatus()
           
-          self.dropdownButton.setTitle("5Km", for: .normal)
+          self.dropdownButton.setTitle("선택한 거리: 5Km", for: .normal)
           self.segmentedControl.selectedSegmentIndex = 0
+          
+          DeviceManager.shared.isCompetetionUse = false
 
            setupBinding()
       }
@@ -289,7 +303,7 @@ class CompetitionView: RideThisViewController {
         
         for distance in DistanceCase.allCases {
             let action = UIAction(title: "\(distance.rawValue)Km") { [weak self] action in
-                self?.dropdownButton.setTitle("\(distance.rawValue)Km", for: .normal)
+                self?.dropdownButton.setTitle("선택한 거리: \(distance.rawValue)Km", for: .normal)
                 self?.viewModel.selectedDistance(selected: distance)
             }
             menuItems.append(action)
