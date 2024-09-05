@@ -29,6 +29,7 @@ class ResultRankingViewController: RideThisViewController {
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(ResultRankingTVCell.self, forCellReuseIdentifier: "ResultRankingTVCell")
+        tableView.rowHeight = 41
         
         return tableView
     }()
@@ -151,6 +152,7 @@ class ResultRankingViewController: RideThisViewController {
         
         retryBtn.addAction(UIAction { [weak self] _ in
             self?.coordinator?.moveToRetry()
+            DeviceManager.shared.isCompetetionUse = true
         }, for: .touchUpInside)
     }
 }

@@ -40,6 +40,8 @@ class DistanceSelectionViewController: RideThisViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        DeviceManager.shared.isCompetetionUse = true
+        
         setupUI()
         makeDistanceButtons()
     }

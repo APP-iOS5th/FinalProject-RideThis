@@ -25,6 +25,7 @@
 		048EFE0E2C874CA000261B21 /* DeviceSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048EFE0B2C874CA000261B21 /* DeviceSearchView.swift */; };
 		048EFE132C874CA600261B21 /* WheelCircumferenceCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048EFE0F2C874CA600261B21 /* WheelCircumferenceCoordinator.swift */; };
 		048EFE142C874CA600261B21 /* WheelCircumferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048EFE112C874CA600261B21 /* WheelCircumferenceView.swift */; };
+		048EFE1C2C897BE200261B21 /* DeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048EFE1B2C897BE200261B21 /* DeviceManager.swift */; };
 		0493F5C52C7DACCC00290A4C /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5C42C7DACCC00290A4C /* Coordinator.swift */; };
 		0493F5C82C7DB39200290A4C /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5C72C7DB39200290A4C /* AppCoordinator.swift */; };
 		0493F5CA2C7DB5FD00290A4C /* TabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5C92C7DB5FD00290A4C /* TabBarCoordinator.swift */; };
@@ -97,7 +98,6 @@
 		CD70006A2C6AF99F0071D4D2 /* GraphCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7000692C6AF99F0071D4D2 /* GraphCollectionViewCell.swift */; };
 		CD76A8C92C6E53FF003490B3 /* SignUpInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD76A8C82C6E53FF003490B3 /* SignUpInfoView.swift */; };
 		CD76A8CB2C6E5828003490B3 /* UITextField+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD76A8CA2C6E5828003490B3 /* UITextField+Extension.swift */; };
-		CD9593B12C7E106500899FD7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CD9593B02C7E106500899FD7 /* GoogleService-Info.plist */; };
 		CDAC668B2C6CF0CF005506FB /* AccountQuitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDAC668A2C6CF0CF005506FB /* AccountQuitView.swift */; };
 		CDB220082C7C19DD00973964 /* SignUpInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB220072C7C19DD00973964 /* SignUpInfoViewModel.swift */; };
 		CDB2200A2C7C4EF900973964 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB220092C7C4EF900973964 /* Date+Extension.swift */; };
@@ -178,6 +178,7 @@
 		048EFE0B2C874CA000261B21 /* DeviceSearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceSearchView.swift; sourceTree = "<group>"; };
 		048EFE0F2C874CA600261B21 /* WheelCircumferenceCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WheelCircumferenceCoordinator.swift; sourceTree = "<group>"; };
 		048EFE112C874CA600261B21 /* WheelCircumferenceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WheelCircumferenceView.swift; sourceTree = "<group>"; };
+		048EFE1B2C897BE200261B21 /* DeviceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceManager.swift; sourceTree = "<group>"; };
 		0493F5C42C7DACCC00290A4C /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		0493F5C72C7DB39200290A4C /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		0493F5C92C7DB5FD00290A4C /* TabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCoordinator.swift; sourceTree = "<group>"; };
@@ -784,6 +785,7 @@
 				CD4214642C649D0100F7C3AE /* FirebaseService.swift */,
 				04DEE5022C7C3FC300338A61 /* BluetoothManager.swift */,
 				048EFDFC2C87496600261B21 /* FCMTokenManager.swift */,
+				048EFE1B2C897BE200261B21 /* DeviceManager.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -1227,6 +1229,7 @@
 				CD4213C32C64982000F7C3AE /* AppDelegate.swift in Sources */,
 				CD4214762C64A63D00F7C3AE /* UIViewController+Extension.swift in Sources */,
 				043E0C842C6F378D00F25AF7 /* Double+Extension.swift in Sources */,
+				048EFE1C2C897BE200261B21 /* DeviceManager.swift in Sources */,
 				CDB2200A2C7C4EF900973964 /* Date+Extension.swift in Sources */,
 				CD4214562C64994F00F7C3AE /* RecordViewModel.swift in Sources */,
 				CDE28F242C8497CC004FE443 /* AccountSettingCoordinator.swift in Sources */,

@@ -208,6 +208,7 @@ class RecordView: RideThisViewController {
             ) {
                 self?.viewModel.resetRecording()
                 self?.enableTabBar()
+                DeviceManager.shared.isRecordUse = false
             }
         }, for: .touchUpInside)
         
@@ -222,8 +223,13 @@ class RecordView: RideThisViewController {
             }
             
             if !viewModel.isRecording {
+                if self.recordButton.title(for: .normal) == "시작" {
+                    DeviceManager.shared.isRecordUse = true
+                }
+                
                 let countDownCoordinator = RecordCountCoordinator(navigationController: self.coordinator!.navigationController)
                 countDownCoordinator.start()
+                
             }
             
 #if targetEnvironment(simulator)
@@ -254,6 +260,7 @@ class RecordView: RideThisViewController {
             ) {
                 self.viewModel.finishRecording()
                 self.enableTabBar() // 탭바 활성화
+                DeviceManager.shared.isRecordUse = false
             }
         }, for: .touchUpInside)
     }

@@ -31,6 +31,7 @@ class SummaryRecordViewController: RideThisViewController {
     // MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        DeviceManager.shared.isCompetetionUse = false
 
         setupUI()
         setupBinding()
@@ -76,7 +77,6 @@ class SummaryRecordViewController: RideThisViewController {
         contentView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
             make.width.equalToSuperview()
-            make.top.equalTo(timerRecord.snp.top)
             make.bottom.equalTo(calorieRecord.snp.bottom)
         }
         
