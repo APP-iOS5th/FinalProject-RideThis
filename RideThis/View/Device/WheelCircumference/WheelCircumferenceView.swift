@@ -49,6 +49,17 @@ class WheelCircumferenceView: UIViewController {
         setupBindings()
         setupKeyboardDismiss()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // 검색 텍스트 필드를 비우고 검색 결과 초기화
+        searchTextField.text = ""
+        viewModel.filterWheelCircumferences(with: "")
+        
+        // 테이블 뷰 리로드
+        tableView.reloadData()
+    }
 
     // MARK: - UI Setup
     
