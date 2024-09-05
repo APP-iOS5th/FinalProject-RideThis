@@ -159,6 +159,7 @@ extension FollowManageView: UITableViewDelegate, UITableViewDataSource {
         let followUser = followViewModel.followDatas[indexPath.row]
         cell.cellUser = followUser
         cell.signedUser = user
+        cell.unfollowDelegate = self
         
         cell.configureUserInfo(viewType: .followView, followType: self.followPicker.selectedSegmentIndex == 0 ? .follower : .following)
         
@@ -182,6 +183,19 @@ extension FollowManageView: UpdateUserDelegate {
         self.user = user
         Task {
             await followViewModel.fetchFollowData(user: user, type: self.followPicker.selectedSegmentIndex == 0 ? .follower : .following)
+        }
+    }
+}
+
+extension FollowManageView: UserUnfollowDelegate {
+    func unfollowUser(cellUser: User, signedUser: User, completion: @escaping ((User, User) -> Void)) {
+        self.showAlert(alertTitle: "알림", msg: "\(cellUser.user_nickname)님을 언팔로우 하시겠습니까?", confirm: "예") {
+            cellUser.user_follower.remove(at: cellUser.user_follower.firstIndex(of: signedUser.user_id)!)
+            signedUser.user_following.remove(at: signedUser.user_following.firstIndex(of: cellUser.user_id)!)
+            
+            completion(cellUser, signedUser)
+        } cancelAction: {
+            return
         }
     }
 }

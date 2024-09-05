@@ -8,3 +8,7 @@ protocol UpdateUserDelegate {
 protocol ProfileImageUpdateDelegate {
     func imageUpdate(image: UIImage)
 }
+
+protocol UserUnfollowDelegate {
+    func unfollowUser(cellUser: User, signedUser: User, completion: @escaping ((User, User) -> Void))
+}

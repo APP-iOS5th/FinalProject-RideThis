@@ -11,6 +11,7 @@ class FollowTableViewCell: UITableViewCell {
     
     var cellUser: User?
     var signedUser: User?
+    var unfollowDelegate: UserUnfollowDelegate?
     private let firebaseService = FireBaseService()
     
     private let profileImage: UIImageView = {
@@ -78,14 +79,17 @@ class FollowTableViewCell: UITableViewCell {
                     signedUser.user_following.append(cellUser.user_id)
                     
                     self.firebaseService.fetchFMC(signedUser: signedUser, cellUser: cellUser, alarmCase: .follow)
+                    firebaseService.updateUserInfo(updated: cellUser, update: false)
+                    firebaseService.updateUserInfo(updated: signedUser, update: true)
                 } else {
-                    self.followButton.setTitle("Follow", for: .normal)
-                    self.followButton.setTitleColor(.systemBlue, for: .normal)
-                    cellUser.user_follower.remove(at: cellUser.user_follower.firstIndex(of: signedUser.user_id)!)
-                    signedUser.user_following.remove(at: signedUser.user_following.firstIndex(of: cellUser.user_id)!)
+                    unfollowDelegate?.unfollowUser(cellUser: cellUser, signedUser: signedUser) { (updatedCellUser, updatedSignUser) in
+                        self.followButton.setTitle("Follow", for: .normal)
+                        self.followButton.setTitleColor(.systemBlue, for: .normal)
+                        
+                        self.firebaseService.updateUserInfo(updated: updatedCellUser, update: false)
+                        self.firebaseService.updateUserInfo(updated: updatedSignUser, update: true)
+                    }
                 }
-                firebaseService.updateUserInfo(updated: cellUser, update: false)
-                firebaseService.updateUserInfo(updated: signedUser, update: true)
             }
         }, for: .touchUpInside)
     }
