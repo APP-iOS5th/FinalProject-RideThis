@@ -62,6 +62,8 @@ class SignUpInfoView: RideThisViewController {
         tf.addTarget(self, action: #selector(textFieldValueChanged(_:)), for: .editingChanged)
         tf.setKeyboardHider()
         
+        tf.delegate = self
+        
         return tf
     }()
     private let userInfoLabel = RideThisLabel(fontType: .smallTitle, text: "닉네임은 설정에서 언제든 수정 가능합니다.")
@@ -96,11 +98,42 @@ class SignUpInfoView: RideThisViewController {
     // MARK: Next Button
     private let nextButton = RideThisButton(buttonTitle: "시작하기", height: 50)
     
+    // 몸무게 Warning 문구
+    private let weightWarningLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .red
+        label.font = .systemFont(ofSize: 12)
+        label.isHidden = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        return label
+    }()
+    
+    // tap 제스처
+    private lazy var tapGesture = UITapGestureRecognizer(target: self, action: #selector(hanlderTapGeture))
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureUI()
         setBindingData()
+    }
+    
+    // Memory TapGestures
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
+        self.view.addGestureRecognizer(tapGesture)
+        
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow),
+//                                               name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide),
+                                               name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.view.removeGestureRecognizer(tapGesture)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
     }
     
     func configureUI() {
@@ -129,7 +162,7 @@ class SignUpInfoView: RideThisViewController {
         [userEmailLabel, userEmailTextField, userInfoSeparator,
          userNickNameLabel, userNickName].enumerated().forEach { (idx, ui) in
             userInfoContainer.addSubview(ui)
-            if [0, 3].contains(idx) {
+            if [3].contains(idx) {
                 let mandatoryImgView = MandatoryMark(frame: .zero)
                 
                 userInfoContainer.addSubview(mandatoryImgView)
@@ -265,6 +298,15 @@ class SignUpInfoView: RideThisViewController {
                 scene.appCoordinator?.changeTabBarView(change: true)
             }
         }, for: .touchUpInside)
+        
+        
+        // 몸무게 Warning
+        self.view.addSubview(weightWarningLabel)
+        
+        weightWarningLabel.snp.makeConstraints {
+            $0.bottom.equalTo(nextButton.snp.top).offset(-10)
+            $0.centerX.equalTo(self.view.snp.centerX)
+        }
     }
     
     func setBindingData() {
@@ -289,6 +331,15 @@ class SignUpInfoView: RideThisViewController {
                 }
             }
             .store(in: &cancellable)
+        
+        self.viewModel.$weightWarningText
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] warningText in
+                guard let self = self else { return }
+                self.weightWarningLabel.text = warningText
+                self.weightWarningLabel.isHidden = warningText == nil
+            }
+            .store(in: &cancellable)
     }
     
     @objc func textFieldValueChanged(_ sender: UITextField) {
@@ -310,5 +361,47 @@ class SignUpInfoView: RideThisViewController {
             print("default")
             break
         }
+    }
+    
+
+    
+    @objc func keyboardWillHide(_ notification: NSNotification) {
+        if view.frame.origin.y != 0 {
+            view.frame.origin.y = 0
+        }
+    }
+    
+    @objc func hanlderTapGeture(_ sender: UIView) {
+        userEmailTextField.resignFirstResponder()
+        userNickName.resignFirstResponder()
+        userWeight.resignFirstResponder()
+        userHeight.resignFirstResponder()
+    }
+}
+
+// MARK: UITextFieldDelegate
+extension SignUpInfoView: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if textField == userNickName {
+            let currentText = textField.text ?? ""
+            guard let stringRange = Range(range, in: currentText) else { return false }
+            let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+            
+            // 공백 입력 방지
+            if string.contains(" ") {
+                return false
+            }
+            
+            // 한글 입력을 고려한 글자 수 계산
+            let text = (textField.text! as NSString).replacingCharacters(in: range, with: string)
+            if text.count > 7 {
+                // 7글자를 초과하는 경우, 7글자까지만 허용
+                textField.text = String(text.prefix(7))
+                return false
+            }
+            
+            return true
+        }
+        return true
     }
 }
