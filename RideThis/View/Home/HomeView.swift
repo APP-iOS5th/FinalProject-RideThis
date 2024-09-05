@@ -548,7 +548,7 @@ class HomeView: RideThisViewController {
         weeklyRecordDataView.addArrangedSubview(createRecordItemView(title: "달린 시간", value: model.weeklyRecord.runTime))
         weeklyRecordDataView.addArrangedSubview(createRecordItemView(title: "달린 거리", value: String(format: "%.2f Km", model.weeklyRecord.runDistance)))
         
-        let userNickName = model.userName.isEmpty ? "비회원" : model.userName
+        let userNickName = viewModel.isUserLoggedIn ? model.userName : "비회원"
         letsRideTitleLabel.text = "\(userNickName)님, Let's RideThis?"
     }
     
