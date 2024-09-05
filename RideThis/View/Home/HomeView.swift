@@ -507,7 +507,7 @@ class HomeView: RideThisViewController {
         let separator = RideThisSeparator()
         separator.snp.makeConstraints { separator in
             separator.width.equalTo(35)
-            separator.height.equalTo(3)
+            separator.height.equalTo(1)
         }
         
         let weeklyRecordDataSetView = UIStackView(arrangedSubviews: [titleLabel, separator, valueLabel])
