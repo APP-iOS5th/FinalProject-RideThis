@@ -46,8 +46,8 @@ class RecordContainer: RideThisContainer {
         
         separator.snp.makeConstraints { seperator in
             seperator.top.equalTo(self.titleLabel.snp.bottom).offset(7)
-            seperator.left.equalTo(self.titleLabel.snp.left).offset(10)
-            seperator.right.equalTo(self.titleLabel.snp.right).offset(-10)
+            seperator.centerX.equalTo(self.snp.centerX)
+            seperator.width.equalTo(30)
         }
         
         recordLabel.snp.makeConstraints { label in
