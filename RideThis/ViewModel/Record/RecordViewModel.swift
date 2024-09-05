@@ -60,15 +60,61 @@ class RecordViewModel: BluetoothManagerDelegate {
     }
     
     func updateBTManager() {
-        self.btManager = BluetoothManager(targetDeviceName: deviceModel.device_name,
-                                          userWeight: Double(UserService.shared.combineUser?.user_weight ?? -1),
-                                          wheelCircumference: deviceModel.device_wheel_circumference)
-        self.btManager?.connect()
+            if UserService.shared.loginStatus == .appleLogin {
+                // Firebase에서 가져온 deviceModel 사용
+                self.btManager = BluetoothManager(targetDeviceName: deviceModel.device_name,
+                                                  userWeight: Double(UserService.shared.combineUser?.user_weight ?? -1),
+                                                  wheelCircumference: deviceModel.device_wheel_circumference)
+                self.btManager?.connect()
+            } else {
+                // 로그인하지 않은 유저의 경우 UserDefaults에서 장치 정보 가져오기
+                let defaults = UserDefaults.standard
+                if let savedDevicesData = defaults.data(forKey: "unkownedDevices"),
+                   let savedDevices = try? JSONDecoder().decode([Device].self, from: savedDevicesData),
+                   let firstDevice = savedDevices.first {
+                    self.btManager = BluetoothManager(targetDeviceName: firstDevice.name,
+                                                      userWeight: 70.0, // 기본 무게 설정
+                                                      wheelCircumference: Double(firstDevice.wheelCircumference))
+                    self.btManager?.connect()
+                }
+            }
+        }
+    
+    func checkBluetoothConnection() async -> Bool {
+        if UserService.shared.loginStatus == .appleLogin {
+            // 로그인된 사용자의 경우 Firebase에서 장치 정보 확인
+            return await checkFirebaseDeviceConnection()
+        } else {
+            // 로그인하지 않은 유저의 경우 UserDefaults에서 장치 확인
+            let defaults = UserDefaults.standard
+            if let savedDevicesData = defaults.data(forKey: "unkownedDevices"),
+               let savedDevices = try? JSONDecoder().decode([Device].self, from: savedDevicesData),
+               !savedDevices.isEmpty {
+                return true // UserDefaults에 저장된 장치가 있으면 연결된 것으로 간주
+            }
+            return false
+        }
     }
     
-    func checkBluetoothConnection() -> Bool {
-        guard let btManager = self.btManager else { return false }
-        return btManager.isConnected()
+    private func checkFirebaseDeviceConnection() async -> Bool {
+        // Firebase에서 장치 정보 확인
+        guard let userId = UserService.shared.combineUser?.user_id else { return false }
+        
+        do {
+            if let registeredDevice = try await FireBaseService().getRegisteredDevice(for: userId) {
+                self.deviceModel = RecordDeviceModel(
+                    device_firmware_version: registeredDevice.firmwareVersion,
+                    device_name: registeredDevice.name,
+                    device_registration_status: registeredDevice.registrationStatus,
+                    device_serial_number: registeredDevice.serialNumber,
+                    device_wheel_circumference: Double(registeredDevice.wheelCircumference)
+                )
+                return true
+            }
+        } catch {
+            print("Firebase에서 장치 정보를 가져오는 중 오류 발생: \(error)")
+        }
+        return false
     }
     
     func disConnectBT() {
