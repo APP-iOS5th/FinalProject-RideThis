@@ -40,6 +40,8 @@ class StartCompetetionCoordinator: Coordinator, BluetoothViewDelegate {
             print("TabBarController not found")
             return
         }
+        DeviceManager.shared.isCompetetionUse = false
+        
         self.navigationController.popToRootViewController(animated: true)
         tabBarController.tabBar.items?.forEach{ $0.isEnabled = true }
         tabBarController.selectedIndex = 3

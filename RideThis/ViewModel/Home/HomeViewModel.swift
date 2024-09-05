@@ -143,7 +143,6 @@ class HomeViewModel: NSObject, CLLocationManagerDelegate {
     // MARK: - CLLocationManagerDelegate Methods
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.first {
-            print("Location: \(location)")
             Task {
                 await fetchWeather(for: location)
             }
@@ -157,8 +156,6 @@ class HomeViewModel: NSObject, CLLocationManagerDelegate {
     // MARK: 로그인 시 User에 FCM토큰
     func fetchAddFCM() {
         if let fcmToken = TokenManager.shared.fcmToken {
-            print("FCMToken Check: \(fcmToken)")
-            
             Task {
                 do {
                     guard let user = self.userService.combineUser else { return }
@@ -169,7 +166,7 @@ class HomeViewModel: NSObject, CLLocationManagerDelegate {
                 }
             }
         } else {
-            print("FCM token is not available")
+            print("FCM token을 찾을 수 없습니다.")
         }
     }
     

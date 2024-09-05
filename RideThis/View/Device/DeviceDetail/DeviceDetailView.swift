@@ -171,18 +171,33 @@ class DeviceDetailView: RideThisViewController {
     
     /// deleteDeviceButton을 눌렀을 때 실행
     private func deleteDeviceTapped() {
-        showAlert(alertTitle: "장치 삭제", msg: "정말로 이 장치를 삭제하시겠습니까?", confirm: "삭제") { [weak self] in
-            guard let self = self else { return }
-            Task {
-                do {
-                    try await self.viewModel.deleteDeviceFromFirebase(self.deviceName)
-                    DispatchQueue.main.async {
-                        self.viewModel.deleteDevice(self.deviceName)
-                        self.onDeviceDeleted?()
-                        self.coordinator?.popToRootView()
+        if DeviceManager.shared.isCompetetionUse == true || DeviceManager.shared.isRecordUse == true {
+            showAlert(alertTitle: "기록 알림", msg: "기록 중에는 장치를 삭제하실 수 없습니다.", confirm: "확인") {
+                // 기록 중 삭제 불가
+            }
+        } else {
+            showAlert(alertTitle: "장치 삭제", msg: "정말로 이 장치를 삭제하시겠습니까?", confirm: "삭제") { [weak self] in
+                guard let self = self else { return }
+                
+                if UserService.shared.loginStatus == .appleLogin {
+                    // 회원일 경우 Firebase에서 삭제
+                    Task {
+                        do {
+                            try await self.viewModel.deleteDeviceFromFirebase(self.deviceName)
+                            DispatchQueue.main.async {
+                                self.viewModel.deleteDevice(self.deviceName)
+                                self.onDeviceDeleted?()
+                                self.coordinator?.popToRootView()
+                            }
+                        } catch {
+                            print("Error deleting device: \(error)")
+                        }
                     }
-                } catch {
-                    print("Error deleting device: \(error)")
+                } else {
+                    // 비회원일 경우 UserDefaults에서 삭제
+                    self.viewModel.deleteDeviceUnkownedUser(self.deviceName)
+                    self.onDeviceDeleted?()
+                    self.coordinator?.popToRootView()
                 }
             }
         }

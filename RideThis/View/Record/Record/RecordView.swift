@@ -228,7 +228,7 @@ class RecordView: RideThisViewController {
                 self.showBluetoothDisconnectedAlert()
                 return
             }
-            
+                                         
             if !viewModel.isRecording && !viewModel.isPaused {
                 stopButtonTabbed = false
                 let countDownCoordinator = RecordCountCoordinator(navigationController: self.navigationController!)
