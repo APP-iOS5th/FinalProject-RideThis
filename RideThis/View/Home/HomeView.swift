@@ -48,7 +48,12 @@ class HomeView: RideThisViewController {
         button.setTitleColor(.primaryColor, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: FontCase.smallTitle.rawValue, weight: .regular)
         button.addAction(UIAction { [weak self] _ in
-            self?.coordinator?.showRecordListView()
+            if self?.viewModel.isUserLoggedIn == true {
+                self?.coordinator?.showRecordListView()
+            } else {
+                self?.showLoginAlert()
+            }
+            
         }, for: .touchUpInside)
         return button
     }()
@@ -551,5 +556,16 @@ class HomeView: RideThisViewController {
     private func applyGradientToWeatherContainer() {
         weatherContainer.setGradient(color1: UIColor(red: 12/255, green: 79/255, blue: 146/255, alpha: 1),
                                      color2: UIColor(red: 77/255, green: 143/255, blue: 209/255, alpha: 1))
+    }
+    
+    /// 로그인 필요 알림을 보여주고, 확인 시 로그인 화면으로 이동
+    private func showLoginAlert() {
+        showAlert(
+            alertTitle: "로그인 필요",
+            msg: "기록 목록을 보려면 로그인이 필요합니다. 로그인 하시겠습니까?",
+            confirm: "로그인"
+        ) {
+            self.coordinator?.showLoginView()
+        }
     }
 }

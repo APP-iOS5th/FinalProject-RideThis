@@ -41,4 +41,9 @@ class HomeCoordinator: Coordinator {
             recordCoordinator.start()
         }
     }
+    
+    func showLoginView() {
+        let loginVC = LoginView()
+        self.navigationController.pushViewController(loginVC, animated: true)
+    }
 }
