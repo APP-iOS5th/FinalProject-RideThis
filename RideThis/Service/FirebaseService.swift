@@ -311,6 +311,26 @@ class FireBaseService {
     ///  - Parameters:
     ///   - userId: 사용자 UID
     func deleteUser(userId: String) {
+        
+        DispatchQueue.global().async {
+            ["ALARMS", "DEVICES", "RECORDS"].forEach { collection in
+                self.db.collection("USERS").document(userId).collection(collection).getDocuments { snapshot, err in
+                    guard let snapshot = snapshot else { return }
+                    if snapshot.documents.count > 0 {
+                        snapshot.documents.forEach{
+                            $0.reference.delete() { error in
+                                if let error = error {
+                                    print(error)
+                                } else {
+                                    print("\(collection) 삭제 완료!")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
         db.collection("USERS").document(userId).delete() { error in
             if let error = error {
                 print(error)
