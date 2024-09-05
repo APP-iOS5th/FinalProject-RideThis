@@ -125,10 +125,8 @@ class RecordViewModel: BluetoothManagerDelegate {
         isRecording = true
         isMeasuring = true
         isPaused = false
-        print("start pushed")
         startTime = Date()
         startTimer()
-        print("start time: \(String(describing: startTime))")
         delegate?.didStartRecording()
     }
     
@@ -136,7 +134,6 @@ class RecordViewModel: BluetoothManagerDelegate {
         isRecording = false
         isMeasuring = false
         isPaused = false
-        print("record reset")
         elapsedTime = 0.0
         recordedTime = 0.0
         startTime = nil
@@ -152,10 +149,8 @@ class RecordViewModel: BluetoothManagerDelegate {
     func finishRecording() {
         isRecording = false
         isMeasuring = false
-        print("finish pushed")
         recordedTime = elapsedTime
         endTime = Date()
-        print("end time: \(String(describing: endTime))")
         self.btManager?.disConnect()
         delegate?.didFinishRecording()
     }
@@ -164,7 +159,6 @@ class RecordViewModel: BluetoothManagerDelegate {
         isRecording = false
         isMeasuring = false
         isPaused = true
-        print("pause pushed")
         stopTimer()
         delegate?.didPauseRecording()
     }

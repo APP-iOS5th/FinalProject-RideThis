@@ -129,7 +129,6 @@ class RecordSumUpView: RideThisViewController {
             guard let self = self else { return }
             
             if UserService.shared.loginStatus == .appleLogin {
-                print("로그인 유저")
                 self.showAlert(alertTitle: "기록 저장", msg: "기록을 저장하시겠습니까?", confirm: "저장") {
                     self.updateViewModelWithRecordData()
                     
@@ -139,9 +138,7 @@ class RecordSumUpView: RideThisViewController {
                     }
                 }
             } else {
-                print("Not logined")
                 self.showAlert(alertTitle: "로그인이 필요합니다.", msg: "기록 저장은 로그인이 필요한 서비스입니다.", confirm: "로그인") {
-                    print("go to login")
                     
                     let loginVC = LoginView()
                     self.navigationController?.pushViewController(loginVC, animated: true)

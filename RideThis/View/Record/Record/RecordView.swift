@@ -390,7 +390,6 @@ class RecordView: RideThisViewController {
         } else {
             showLoginAlert()
         }
-        print("기록 목록 출력")
     }
     
     private func showLoginAlert() {
