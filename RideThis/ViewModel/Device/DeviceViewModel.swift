@@ -8,6 +8,7 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
     @Published private(set) var searchedDevices: [Device] = []
     @Published private(set) var selectedDevice: Device?
     @Published private(set) var filteredWheelCircumferences: [WheelCircumference]
+    @Published private(set) var isEmptyState: CurrentValueSubject<Bool, Never> = CurrentValueSubject(true)
     // 비회원
     @Published var unownedDevices: [Device] = []
     
@@ -48,6 +49,7 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
         if selectedDevice?.name == deviceName {
             selectedDevice = nil
         }
+        updateEmptyState()
     }
     
     /// 새 디바이스를 목록에 추가
@@ -122,6 +124,7 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
         // UI 업데이트는 메인 스레드에서 수행
         await MainActor.run {
             self.devices.append(newDevice)
+            self.updateEmptyState()
         }
     }
     
@@ -148,6 +151,7 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
                 
                 DispatchQueue.main.async {
                     self.unownedDevices = updatedDevices
+                    self.updateEmptyState()
                 }
             } else {
                 let newDeviceArray = [newDevice]
@@ -167,6 +171,12 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
            let savedDevices = try? JSONDecoder().decode([Device].self, from: savedDevicesData) {
             DispatchQueue.main.async {
                 self.unownedDevices = savedDevices
+                self.updateEmptyState()
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.unownedDevices = []
+                self.updateEmptyState()
             }
         }
     }
@@ -186,6 +196,7 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
             // ViewModel의 unownedDevices 배열 업데이트
             DispatchQueue.main.async {
                 self.unownedDevices = savedDevices
+                self.updateEmptyState()
             }
         }
     }
@@ -219,17 +230,30 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
     
     /// Firebase에서 등록된 디바이스 로드
     func loadRegisteredDevices() {
-        guard let userId = UserService.shared.combineUser?.user_id else { return }
+        guard let userId = UserService.shared.combineUser?.user_id else {
+            print("사용자 ID를 찾을 수 없습니다.")
+            return
+        }
         
         Task {
             do {
                 if let registeredDevice = try await FireBaseService().getRegisteredDevice(for: userId) {
                     DispatchQueue.main.async {
                         self.devices = [registeredDevice]
+                        self.updateEmptyState()
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self.devices = []
+                        self.updateEmptyState()
                     }
                 }
             } catch {
-                print("Error loading registered devices: \(error)")
+                print("디바이스 로딩 중 오류 발생: \(error)")
+                DispatchQueue.main.async {
+                    self.devices = []
+                    self.updateEmptyState()
+                }
             }
         }
     }
@@ -318,6 +342,19 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
         }
     }
     
+    /// 현재 기기 데이터를 기반 View의 빈 상태를 업데이트
+    /// - `devices`와 `unownedDevices` 배열이 모두 비어 있으면 뷰는 빈 상태로 간주됩니다.
+    /// - 현재 상태에 대한 정보를 뷰에 알리기 위해 `isEmptyState` 속성에 boolean 값(`true` 또는 `false`)을 전송합니다.
+    private func updateEmptyState() {
+        let isEmpty: Bool
+        if UserService.shared.loginStatus == .appleLogin {
+            isEmpty = self.devices.isEmpty
+        } else {
+            isEmpty = self.unownedDevices.isEmpty
+        }
+        self.isEmptyState.send(isEmpty)
+    }
+
     // MARK: - Private Methods
     
     /// 휠 둘레 목록 생성

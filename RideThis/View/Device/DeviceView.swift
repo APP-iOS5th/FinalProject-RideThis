@@ -37,8 +37,11 @@ class DeviceView: RideThisViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.viewModel.loadUnkownedDevices()
-        
+        if UserService.shared.loginStatus == .appleLogin {
+            viewModel.loadRegisteredDevices()
+        } else {
+            viewModel.loadUnkownedDevices()
+        }
         tableView.reloadData()
     }
     
@@ -124,7 +127,6 @@ class DeviceView: RideThisViewController {
             .receive(on: DispatchQueue.main) // Main Thread에서 처리
             .sink { [weak self] devices in
                 self?.tableView.reloadData() // 데이터 변경 시 tableView reload
-                self?.updateEmptyLabelVisibility(isEmpty: devices.isEmpty) // Device 목록이 비었을 때 lable을 업데이트
             }
             .store(in: &cancellables)
         
@@ -132,18 +134,21 @@ class DeviceView: RideThisViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] unownedDevices in
                 self?.tableView.reloadData()
-                self?.updateEmptyLabelVisibility(isEmpty: unownedDevices.isEmpty)
             }
             .store(in: &cancellables)
 
+        viewModel.isEmptyState
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isEmpty in
+                self?.updateEmptyLabelVisibility(isEmpty: isEmpty)
+            }
+            .store(in: &cancellables)
     }
     
     // MARK: - Device Search
     
     /// 장치 검색 BottomSheet 표시
     private func presentDeviceSearchBottomSheet() {
-        print(UserService.shared.loginStatus)
-        print(UserService.shared.loginStatus == .appleLogin)
         if UserService.shared.loginStatus == .appleLogin {
             // 회원일 경우
             if viewModel.devices.count == 1 {
@@ -159,6 +164,7 @@ class DeviceView: RideThisViewController {
                             try await self.viewModel.deleteDeviceFromFirebase(deviceToDelete.name)
                             DispatchQueue.main.async {
                                 self.viewModel.deleteDevice(deviceToDelete.name)
+                                self.updateEmptyLabelVisibility(isEmpty: self.viewModel.devices.isEmpty)
                                 self.coordinator?.showDeviceSearchView()
                             }
                         } catch {
@@ -181,7 +187,11 @@ class DeviceView: RideThisViewController {
                     
                     // 비회원 장치 삭제
                     self.viewModel.deleteDeviceUnkownedUser(deviceToDelete.name)
-                    self.coordinator?.showDeviceSearchView()
+                    DispatchQueue.main.async {
+                        self.updateEmptyLabelVisibility(isEmpty: self.viewModel.unownedDevices.isEmpty)
+                        self.tableView.reloadData()
+                        self.coordinator?.showDeviceSearchView()
+                    }
                 }
             } else {
                 coordinator?.showDeviceSearchView()
@@ -194,6 +204,14 @@ class DeviceView: RideThisViewController {
     private func updateEmptyLabelVisibility(isEmpty: Bool) {
         emptyLabel.isHidden = !isEmpty
         tableView.isHidden = isEmpty
+    }
+    
+    func refreshDeviceList() {
+        if UserService.shared.loginStatus == .appleLogin {
+            viewModel.loadRegisteredDevices()
+        } else {
+            viewModel.loadUnkownedDevices()
+        }
     }
 }
 
@@ -213,13 +231,13 @@ extension DeviceView: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
 
+        let device: Device
         if UserService.shared.loginStatus == .appleLogin {
-            let device = viewModel.devices[indexPath.row]
-            cell.configure(with: device)
+            device = viewModel.devices[indexPath.row]
         } else {
-            let device = viewModel.unownedDevices[indexPath.row]
-            cell.configure(with: device)
+            device = viewModel.unownedDevices[indexPath.row]
         }
+        cell.configure(with: device)
 
         return cell
     }

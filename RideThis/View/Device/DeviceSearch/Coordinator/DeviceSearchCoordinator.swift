@@ -36,7 +36,11 @@ class DeviceSearchCoordinator: Coordinator {
     }
     
     /// 현재 뷰 닫기
-    func dismissView() {
-        navigationController.dismiss(animated: true)
+    func dismissViewAndRefreshDeviceView() {
+        navigationController.dismiss(animated: true) { [weak self] in
+            if let deviceView = self?.navigationController.viewControllers.last as? DeviceView {
+                deviceView.refreshDeviceList()
+            }
+        }
     }
 }

@@ -141,7 +141,7 @@ class DeviceSearchView: RideThisViewController {
     /// 버튼 액션 설정
     private func setupActions() {
         cancelButton.addAction(UIAction { [weak self] _ in
-            self?.coordinator?.dismissView()
+            self?.coordinator?.dismissViewAndRefreshDeviceView()
         }, for: .touchUpInside)
     }
     
@@ -194,7 +194,7 @@ extension DeviceSearchView: UITableViewDelegate, UITableViewDataSource {
                 do {
                     try await viewModel.addDeviceWithDefaultSettings(selectedDevice)
                     DispatchQueue.main.async {
-                        self.coordinator?.dismissView()
+                        self.coordinator?.dismissViewAndRefreshDeviceView()
                     }
                 } catch {
                     print("Error adding device: \(error)")
@@ -205,12 +205,10 @@ extension DeviceSearchView: UITableViewDelegate, UITableViewDataSource {
             self.viewModel.addDeviceUnkownedUser(selectedDevice)
             
             DispatchQueue.main.async {
-                self.coordinator?.dismissView()
+                self.coordinator?.dismissViewAndRefreshDeviceView()
             }
             
             isProcessingSelection = false
         }
-        
-        
     }
 }
