@@ -213,6 +213,16 @@ class HomeView: RideThisViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.refreshUserData()
+        
+        if let combineUser = UserService.shared.combineUser {
+            Task {
+                let alarmCount = await viewModel.getAlarmCount(userId: combineUser.user_id)
+                
+                let rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: alarmCount > 0 ? "bell.badge" : "bell"), style: .done, target: self, action: #selector(moveToAlarmView))
+                rightBarButtonItem.tintColor = .primaryColor
+                navigationItem.rightBarButtonItem = rightBarButtonItem
+            }
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -263,6 +273,11 @@ class HomeView: RideThisViewController {
         
         let leftBarButtonItem = UIBarButtonItem(customView: customTitleLabel)
         navigationItem.leftBarButtonItem = leftBarButtonItem
+    }
+    
+    @objc func moveToAlarmView() {
+        let alarmCoordinator = AlarmCoordinator(navigationController: self.navigationController!, childCoordinators: [])
+        alarmCoordinator.start()
     }
     
     /// 주간 기록 섹션 콘텐츠 뷰 설정
@@ -484,15 +499,21 @@ class HomeView: RideThisViewController {
         let valueLabel = RideThisLabel(fontType: .profileFont, fontColor: .black, text: value)
         valueLabel.textAlignment = .center
         
-        let weeklyRecordDataSetView = UIStackView(arrangedSubviews: [titleLabel, valueLabel])
+        let separator = RideThisSeparator()
+        separator.snp.makeConstraints { separator in
+            separator.width.equalTo(35)
+            separator.height.equalTo(3)
+        }
+        
+        let weeklyRecordDataSetView = UIStackView(arrangedSubviews: [titleLabel, separator, valueLabel])
         weeklyRecordDataSetView.axis = .vertical
         weeklyRecordDataSetView.alignment = .center
-        weeklyRecordDataSetView.spacing = 20
+        weeklyRecordDataSetView.spacing = 10
         
         containerView.addSubview(weeklyRecordDataSetView)
         
         weeklyRecordDataSetView.snp.makeConstraints { wrDataSet in
-            wrDataSet.center.equalToSuperview()
+            wrDataSet.edges.equalToSuperview()
         }
         
         return containerView

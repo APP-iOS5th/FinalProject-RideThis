@@ -164,7 +164,7 @@ class RecordSumUpView: RideThisViewController {
         )
     }
     
-    private func updateUI(with data: RecordViewModel.SummaryData) {
+    private func updateUI(with data: SummaryData) {
         timerRecord.updateRecordText(text: data.recordedTime)
         cadenceRecord.updateRecordText(text: "\(data.cadence.getTwoDecimal.formattedWithThousandsSeparator()) RPM")
         speedRecord.updateRecordText(text: "\(data.speed.getTwoDecimal.formattedWithThousandsSeparator()) km/h")

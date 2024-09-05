@@ -32,6 +32,7 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
 
     // MARK: 블루투스 초기화
     init(targetDeviceName: String, userWeight: Double, wheelCircumference: Double) {
+    
         self.targetDeviceName = targetDeviceName
         self.userWeight = userWeight
         self.wheelCircumference = wheelCircumference
@@ -49,12 +50,13 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
         if let peripheral = cadencePeripheral {
               centralManager.cancelPeripheralConnection(peripheral)
           }
-
     }
-
+    
+    deinit {
+        self.disConnect()
+    }
     
     // MARK: - CBCentralManagerDelegate Methods
-    
     // MARK: 블루투스 상태 변경
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         if central.state == .poweredOn {

@@ -167,4 +167,9 @@ class HomeViewModel: NSObject, CLLocationManagerDelegate {
             print("FCM token을 찾을 수 없습니다.")
         }
     }
+    
+    // MARK: 알람 개수 가져오기
+    func getAlarmCount(userId: String) async -> Int {
+        return await firebaseService.fetchAlarms(userId: userId).filter{ $0.alarm_status == false }.count
+    }
 }
