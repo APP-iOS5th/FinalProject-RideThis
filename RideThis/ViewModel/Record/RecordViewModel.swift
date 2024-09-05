@@ -148,6 +148,7 @@ class RecordViewModel: BluetoothManagerDelegate {
         calorie = 0
         onTimerUpdated?(formatTime(elapsedTime))
         delegate?.didResetRecording()
+        btManager?.resetTotalCalories()
     }
     
     func finishRecording() {
@@ -160,6 +161,7 @@ class RecordViewModel: BluetoothManagerDelegate {
         print("end time: \(String(describing: endTime))")
         self.btManager?.disConnect()
         delegate?.didFinishRecording()
+        btManager?.resetTotalCalories()
     }
     
     func pauseRecording() {

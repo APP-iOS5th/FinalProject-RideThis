@@ -1,7 +1,7 @@
 import Foundation
 
 /// 디바이스 속성.
-struct Device {
+struct Device: Codable {
     let name: String
     let serialNumber: String
     let firmwareVersion: String

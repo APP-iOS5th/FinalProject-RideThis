@@ -188,16 +188,29 @@ extension DeviceSearchView: UITableViewDelegate, UITableViewDataSource {
         isProcessingSelection = true
         
         let selectedDevice = viewModel.searchedDevices[indexPath.row]
-        Task {
-            do {
-                try await viewModel.addDeviceWithDefaultSettings(selectedDevice)
-                DispatchQueue.main.async {
-                    self.coordinator?.dismissView()
+        
+        if UserService.shared.loginStatus == .appleLogin {
+            Task {
+                do {
+                    try await viewModel.addDeviceWithDefaultSettings(selectedDevice)
+                    DispatchQueue.main.async {
+                        self.coordinator?.dismissView()
+                    }
+                } catch {
+                    print("Error adding device: \(error)")
                 }
-            } catch {
-                print("Error adding device: \(error)")
+                isProcessingSelection = false
             }
+        } else {
+            self.viewModel.addDeviceUnkownedUser(selectedDevice)
+            
+            DispatchQueue.main.async {
+                self.coordinator?.dismissView()
+            }
+            
             isProcessingSelection = false
         }
+        
+        
     }
 }

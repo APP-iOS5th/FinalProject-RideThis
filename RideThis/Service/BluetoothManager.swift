@@ -71,7 +71,7 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
     // MARK: 실제 연결 기기와 데이터베이스 기기와 확인
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         guard let peripheralName = peripheral.name else {
-            print("발견된 기기의 이름이 없습니다.")
+            // print("발견된 기기의 이름이 없습니다.")
             return
         }
         
@@ -81,7 +81,7 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
             cadencePeripheral = peripheral
             cadencePeripheral?.delegate = self
             centralManager.connect(peripheral, options: nil)
-            print("기기 이름이 일치하여 연결 시도 중입니다.")
+            // print("기기 이름이 일치하여 연결 시도 중입니다.")
         }
     }
     
@@ -221,12 +221,18 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
             
             let met = estimateMET(speed: speed)
             let calories = met * userWeight * timeInterval
-            totalCalories += calories
+            if speed > 0 {
+                totalCalories += calories
+            }
             
             delegate?.didUpdateDistance(totalDistance)
             delegate?.didUpdateCalories(totalCalories)
         }
         lastUpdateTime = currentTime
+    }
+    
+    func resetTotalCalories() {
+        self.totalCalories = 0
     }
 
     // MARK: 속도로 MET(운동 강도 측정)

@@ -17,16 +17,18 @@ class HomeCoordinator: Coordinator {
     }
     
     func showRecordListView() {
-        if let recordNav = tabBarController.viewControllers?[2] as? UINavigationController {
-            tabBarController.selectedIndex = 2
-            if recordNav.topViewController is RecordListView {
-                return
-            }
-            
-            let recordCoordinator = RecordCoordinator(navigationController: recordNav, tabBarController: tabBarController)
-            childCoordinators.append(recordCoordinator)
-            recordCoordinator.showRecordListView()
-        }
+        let recordListCoordinator = RecordListCoordinator(navigationController: self.navigationController)
+        recordListCoordinator.start()
+//        if let recordNav = tabBarController.viewControllers?[2] as? UINavigationController {
+//            tabBarController.selectedIndex = 2
+//            if recordNav.topViewController is RecordListView {
+//                return
+//            }
+//            
+//            let recordCoordinator = RecordCoordinator(navigationController: recordNav, tabBarController: tabBarController)
+//            childCoordinators.append(recordCoordinator)
+//            recordCoordinator.showRecordListView()
+//        }
     }
     
     func showRecordView() {

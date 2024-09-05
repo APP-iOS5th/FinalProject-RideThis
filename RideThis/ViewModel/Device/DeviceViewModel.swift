@@ -8,7 +8,9 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
     @Published private(set) var searchedDevices: [Device] = []
     @Published private(set) var selectedDevice: Device?
     @Published private(set) var filteredWheelCircumferences: [WheelCircumference]
-
+    // 비회원
+    @Published var unownedDevices: [Device] = []
+    
     // MARK: - Properties
     let wheelCircumferences: [WheelCircumference]
     private var centralManager: CBCentralManager!
@@ -26,13 +28,17 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
         super.init()
         self.centralManager = CBCentralManager(delegate: self, queue: nil)
     }
-
+    
     // MARK: - Public Methods
     
     /// 디바이스 이름으로 디바이스 선택
     /// - Parameter name: 선택할 디바이스 이름
     func selectDevice(name: String) {
-        selectedDevice = devices.first { $0.name == name }
+        if UserService.shared.loginStatus == .appleLogin {
+            selectedDevice = devices.first { $0.name == name }
+        } else {
+            selectedDevice = unownedDevices.first { $0.name == name }
+        }
     }
     
     /// 디바이스 이름으로 디바이스 삭제
@@ -89,7 +95,7 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
                 return
             }
         }
-
+        
         let newDevice = Device(
             name: device.name,
             serialNumber: device.serialNumber,
@@ -119,10 +125,76 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
         }
     }
     
+    // MARK: 비회원시 유저디폴트 데이터저장
+    func addDeviceUnkownedUser(_ device: Device) {
+            let defaults = UserDefaults.standard
+            let newDevice = Device(
+                name: device.name,
+                serialNumber: device.serialNumber,
+                firmwareVersion: device.firmwareVersion,
+                registrationStatus: true,
+                wheelCircumference: 2110
+            )
+            
+
+            if let savedDevicesData = defaults.data(forKey: "unkownedDevices"),
+               let savedDevices = try? JSONDecoder().decode([Device].self, from: savedDevicesData) {
+                var updatedDevices = savedDevices
+                updatedDevices.append(newDevice)
+                
+                if let updatedData = try? JSONEncoder().encode(updatedDevices) {
+                    defaults.set(updatedData, forKey: "unkownedDevices")
+                }
+                
+                DispatchQueue.main.async {
+                    self.unownedDevices = updatedDevices
+                }
+            } else {
+                let newDeviceArray = [newDevice]
+                if let newData = try? JSONEncoder().encode(newDeviceArray) {
+                    defaults.set(newData, forKey: "unkownedDevices")
+                }
+
+                DispatchQueue.main.async {
+                    self.unownedDevices = newDeviceArray
+                }
+            }
+        }
+    
+    func loadUnkownedDevices() {
+        let defaults = UserDefaults.standard
+        if let savedDevicesData = defaults.data(forKey: "unkownedDevices"),
+           let savedDevices = try? JSONDecoder().decode([Device].self, from: savedDevicesData) {
+            print("유저ㅏ디폴트 디바이스: \(savedDevices)")
+            DispatchQueue.main.async {
+                self.unownedDevices = savedDevices
+            }
+        }
+    }
+    
+    func deleteDeviceUnkownedUser(_ deviceName: String) {
+        let defaults = UserDefaults.standard
+        if let savedDevicesData = defaults.data(forKey: "unkownedDevices"),
+           var savedDevices = try? JSONDecoder().decode([Device].self, from: savedDevicesData) {
+            // 장치를 찾아서 삭제
+            savedDevices.removeAll { $0.name == deviceName }
+            
+            // 업데이트된 장치 목록을 다시 저장
+            if let updatedData = try? JSONEncoder().encode(savedDevices) {
+                defaults.set(updatedData, forKey: "unkownedDevices")
+            }
+            
+            // ViewModel의 unownedDevices 배열 업데이트
+            DispatchQueue.main.async {
+                self.unownedDevices = savedDevices
+            }
+        }
+    }
+    
     /// Firebase에서 등록된 디바이스 로드
     func loadRegisteredDevices() {
         guard let userId = UserService.shared.combineUser?.user_id else { return }
-
+        
         Task {
             do {
                 if let registeredDevice = try await FireBaseService().getRegisteredDevice(for: userId) {
@@ -156,10 +228,10 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
     func updateWheelCircumferenceInFirebase(_ circumference: Int) async throws {
         guard let userId = UserService.shared.combineUser?.user_id,
               let deviceName = selectedDevice?.name else { return }
-
+        
         let firebaseService = FireBaseService()
         try await firebaseService.updateDeviceWheelCircumference(userId: userId, deviceName: deviceName, circumference: circumference)
-
+        
         // 로컬 상태 업데이트
         try await self.updateWheelCircumference(circumference)
     }
@@ -168,11 +240,11 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
     /// - Parameter deviceName: 삭제할 디바이스 이름
     func deleteDeviceFromFirebase(_ deviceName: String) async throws {
         guard let userId = UserService.shared.combineUser?.user_id else { return }
-
+        
         let firebaseService = FireBaseService()
         try await firebaseService.deleteDevice(userId: userId, deviceName: deviceName)
     }
-
+    
     // MARK: - Bluetooth Scanning Methods
     
     /// 블루투스 장치 검색 시작
@@ -186,7 +258,7 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
     func stopDeviceSearch() {
         centralManager.stopScan()
     }
-
+    
     // MARK: - CBCentralManagerDelegate Methods
     
     /// 블루투스 상태 변경 시 호출되는 메서드
@@ -219,7 +291,7 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
             }
         }
     }
-
+    
     // MARK: - Private Methods
     
     /// 휠 둘레 목록 생성
