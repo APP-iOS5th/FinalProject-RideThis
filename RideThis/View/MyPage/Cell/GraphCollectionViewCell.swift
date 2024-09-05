@@ -31,7 +31,9 @@ class GraphCollectionViewCell: UICollectionViewCell {
 
         lineChartView.translatesAutoresizingMaskIntoConstraints = false
         lineChartView.isUserInteractionEnabled = true
+        lineChartView.legend.enabled = false
         lineChartView.delegate = self
+        lineChartView.extraBottomOffset = 20.0
 
         switch period {
         case .oneWeek:
@@ -65,9 +67,11 @@ class GraphCollectionViewCell: UICollectionViewCell {
         
         // 데이터 설정
         let dataEntries = generateLineChartDataEntries(type: type, records: records, periodCase: period)
-        lineChartDataSet = LineChartDataSet(entries: dataEntries, label: type.rawValue)
+//        lineChartDataSet = LineChartDataSet(entries: dataEntries, label: type.rawValue)
+        lineChartDataSet = LineChartDataSet(entries: dataEntries, label: "")
         
         // 데이터 스타일 설정
+        
         lineChartDataSet.colors = [.primaryColor]  // 선 색상
         lineChartDataSet.circleColors = [.primaryColor]  // 데이터 포인트 색상
         lineChartDataSet.circleRadius = 2.0  // 데이터 포인트 크기
@@ -144,7 +148,7 @@ class GraphCollectionViewCell: UICollectionViewCell {
             dataEntries.append(dataEntry)
         }
         
-        let dataSet = LineChartDataSet(entries: dataEntries, label: "My Data")
+        let dataSet = LineChartDataSet(entries: dataEntries, label: "")
         let data = LineChartData(dataSet: dataSet)
         lineChartView.data = data
         switch periodCase {
