@@ -40,6 +40,8 @@ class RecordView: RideThisViewController {
     private let recordsStackView = UIStackView()
     private let buttonStackView = UIStackView()
     
+    private var stopButtonTabbed: Bool = false
+    
     // MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,6 +63,7 @@ class RecordView: RideThisViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.stopButtonTabbed = false
         
         // RecordSumUpView에서 돌아올 때 타이머 초기화
         if !(viewModel.isRecording) {
@@ -71,8 +74,6 @@ class RecordView: RideThisViewController {
         Task {
             viewModel.deviceModel = try await viewModel.fetchDeviceData()
             viewModel.updateBTManager()
-            viewModel.btManager?.delegate = self
-            viewModel.btManager?.viewDelegate = self
         }
     }
     
@@ -204,11 +205,16 @@ class RecordView: RideThisViewController {
         
         // 버튼 액션
         resetButton.addAction(UIAction { [weak self] _ in
-            self?.showAlert(alertTitle: "기록을 리셋할까요?", msg: "지금까지의 기록이 초기화됩니다.", confirm: "리셋"
+            guard let self = self else { return }
+            self.viewModel.pauseRecording()
+            self.showAlert(alertTitle: "기록을 리셋할까요?", msg: "지금까지의 기록이 초기화됩니다.", confirm: "리셋"
             ) {
-                self?.viewModel.resetRecording()
-                self?.enableTabBar()
-                DeviceManager.shared.isRecordUse = false
+                self.viewModel.resetRecording()
+                self.enableTabBar()
+            } cancelAction: {
+                if self.stopButtonTabbed == false {
+                    self.viewModel.resumeRecording()
+                }
             }
         }, for: .touchUpInside)
         
@@ -216,20 +222,23 @@ class RecordView: RideThisViewController {
             guard let self = self else { return }
             // MARK: 카운트다운 modal 뷰 present -> 5초 후 dismiss -> 타이머 시작
             
+            
             let isConnected = self.viewModel.checkBluetoothConnection()
             if !isConnected {
                 self.showBluetoothDisconnectedAlert()
                 return
             }
-            
-            if !viewModel.isRecording {
-                if self.recordButton.title(for: .normal) == "시작" {
-                    DeviceManager.shared.isRecordUse = true
-                }
-                
-                let countDownCoordinator = RecordCountCoordinator(navigationController: self.coordinator!.navigationController)
+                                         
+            if !viewModel.isRecording && !viewModel.isPaused {
+                stopButtonTabbed = false
+                let countDownCoordinator = RecordCountCoordinator(navigationController: self.navigationController!)
                 countDownCoordinator.start()
-                
+            } else {
+                if viewModel.isRecording {
+                    stopButtonTabbed = true
+                } else {
+                    stopButtonTabbed = false
+                }
             }
             
 #if targetEnvironment(simulator)
@@ -244,23 +253,34 @@ class RecordView: RideThisViewController {
             }
             self.updateUI(isRecording: viewModel.isRecording)
 #else
-            if viewModel.isRecording {
+            if viewModel.isRecording || viewModel.isPaused {
                 startRecordProcess()
             } else {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                    self.viewModel.btManager?.delegate = self
+                    self.viewModel.btManager?.viewDelegate = self
                     self.startRecordProcess()
                 }
             }
 #endif
         }, for: .touchUpInside)
         
+        /*
+         MARK: 정지 -> 기록 종료 -> 취소 : recording: false / pause: true
+         MARK: 기록 종료 -> 취소: recording: false / pause: true
+         */
+        
         finishButton.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
-            self.showAlert(alertTitle: "기록을 종료할까요?", msg: "요약 화면으로 이동합니다.", confirm: "기록 종료"
-            ) {
+            viewModel.pauseRecording()
+            self.showAlert(alertTitle: "기록을 종료할까요?", msg: "요약 화면으로 이동합니다.", confirm: "기록 종료") {
                 self.viewModel.finishRecording()
                 self.enableTabBar() // 탭바 활성화
-                DeviceManager.shared.isRecordUse = false
+            } cancelAction: {
+                // MARK: 현재 기록중이었을 때만 종료버튼 후 alert에서 취소를 누르면 계속 기록이 진행되게 하기위해서
+                if self.stopButtonTabbed == false {
+                    self.viewModel.resumeRecording()
+                }
             }
         }, for: .touchUpInside)
     }
@@ -313,28 +333,28 @@ class RecordView: RideThisViewController {
         self.viewModel.$cadence
             .receive(on: DispatchQueue.main)
             .sink { [weak self] cadence in
-                self?.cadenceRecord.updateRecordText(text: "\(cadence.formattedWithThousandsSeparator()) RPM")
+                self?.cadenceRecord.updateRecordText(text: "\(cadence.getTwoDecimal.formattedWithThousandsSeparator()) RPM")
             }
             .store(in: &cancellables)
         
         self.viewModel.$speed
             .receive(on: DispatchQueue.main)
             .sink { [weak self] speed in
-                self?.speedRecord.updateRecordText(text: "\(speed.formattedWithThousandsSeparator()) Km/h")
+                self?.speedRecord.updateRecordText(text: "\(speed.getTwoDecimal.formattedWithThousandsSeparator()) Km/h")
             }
             .store(in: &cancellables)
         
         self.viewModel.$distance
             .receive(on: DispatchQueue.main)
             .sink { [weak self] distance in
-                self?.distanceRecord.updateRecordText(text: "\(distance.formattedWithThousandsSeparator()) Km")
+                self?.distanceRecord.updateRecordText(text: "\(distance.getTwoDecimal.formattedWithThousandsSeparator()) Km")
             }
             .store(in: &cancellables)
         
         self.viewModel.$calorie
             .receive(on: DispatchQueue.main)
             .sink { [weak self] calorie in
-                self?.calorieRecord.updateRecordText(text: "\(calorie.formattedWithThousandsSeparator()) Kcal")
+                self?.calorieRecord.updateRecordText(text: "\(calorie.getTwoDecimal.formattedWithThousandsSeparator()) Kcal")
             }
             .store(in: &cancellables)
     }

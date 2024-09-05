@@ -1,12 +1,13 @@
 import Foundation
 
+// MARK: - Nested Structs
+struct WeeklyRecord {
+    let runCount: Int
+    let runTime: String
+    let runDistance: Double
+}
+
 struct HomeModel {
-    // MARK: - Nested Structs
-    struct WeeklyRecord {
-        let runCount: Int
-        let runTime: String
-        let runDistance: Double
-    }
     
     // MARK: - Properties
     var weeklyRecord: WeeklyRecord

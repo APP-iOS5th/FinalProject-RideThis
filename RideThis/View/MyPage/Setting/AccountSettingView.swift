@@ -18,6 +18,18 @@ class AccountSettingView: RideThisViewController {
     }()
     private let loginAccountLabel = RideThisLabel(fontType: .defaultSize, text: "로그인 계정")
     private let loginAccount = RideThisLabel(fontType: .defaultSize, fontColor: .recordTitleColor)
+    private lazy var loginStack: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .horizontal
+        stack.addArrangedSubview(loginAccountLabel)
+        stack.addArrangedSubview(loginAccount)
+        stack.spacing = 5
+        stack.distribution = .fillProportionally
+        stack.alignment = .center
+        
+        return stack
+    }()
     private let accountSeparator = CustomSeparator()
     private let logoutButton: UIButton = {
         let btn = UIButton()
@@ -65,16 +77,11 @@ class AccountSettingView: RideThisViewController {
     }
     
     func setAccountLabel() {
-        [self.loginAccountLabel, self.loginAccount, self.accountSeparator].forEach{ self.view.addSubview($0) }
+        [loginStack, self.accountSeparator].forEach{ self.view.addSubview($0) }
         
-        self.loginAccountLabel.snp.makeConstraints {
+        loginStack.snp.makeConstraints {
+            $0.centerX.equalTo(view.snp.centerX)
             $0.top.equalTo(self.logoImage.snp.bottom).offset(30)
-            $0.left.equalTo(self.view.snp.left).offset(80)
-        }
-        
-        self.loginAccount.snp.makeConstraints {
-            $0.top.equalTo(self.loginAccountLabel.snp.top)
-            $0.left.equalTo(self.loginAccountLabel.snp.right).offset(25)
         }
         
         self.accountSeparator.snp.makeConstraints {

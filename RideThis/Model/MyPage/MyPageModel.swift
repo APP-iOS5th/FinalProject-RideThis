@@ -32,6 +32,7 @@ class User: Decodable {
     var user_following: [String]
     var user_follower: [String]
     var user_account_public: Bool
+    var user_alarm_status: Bool
     var tallStr: String {
         get {
             guard user_tall > 0 else { return "-" }
@@ -39,7 +40,7 @@ class User: Decodable {
         }
     }
     
-    init(user_id: String, user_image: String?, user_email: String, user_nickname: String, user_weight: Int, user_tall: Int, user_following: [String], user_follower: [String], user_account_public: Bool) {
+    init(user_id: String, user_image: String?, user_email: String, user_nickname: String, user_weight: Int, user_tall: Int, user_following: [String], user_follower: [String], user_account_public: Bool, user_alarm_status: Bool) {
         self.user_id = user_id
         self.user_image = user_image
         self.user_email = user_email
@@ -49,5 +50,6 @@ class User: Decodable {
         self.user_following = user_following
         self.user_follower = user_follower
         self.user_account_public = user_account_public
+        self.user_alarm_status = user_alarm_status
     }
 }

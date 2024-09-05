@@ -66,7 +66,7 @@ class SignUpInfoViewModel {
     func createUser(userInfo: [String: Any]) {
         firebaseService.createUser(userInfo: userInfo) { [weak self] user in
             guard let self = self else { return }
-            self.userService.combineUser = user
+            UserService.shared.signedUser = user
         }
     }
 }
