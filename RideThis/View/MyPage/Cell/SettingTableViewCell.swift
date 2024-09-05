@@ -3,7 +3,8 @@ import SnapKit
 
 enum SettingCellCase {
     case navigationLink
-    case toggleButton
+    case publicToggle
+    case alarmToggle
 }
 
 class SettingTableViewCell: UITableViewCell {
@@ -21,10 +22,19 @@ class SettingTableViewCell: UITableViewCell {
         return btn
     }()
     
-    private lazy var toggleSwitch: UISwitch = {
+    private lazy var publicToggleSwitch: UISwitch = {
         let toggle = UISwitch()
         toggle.translatesAutoresizingMaskIntoConstraints = false
         toggle.addTarget(self, action: #selector(toggleChanged(_:)), for: .valueChanged)
+        
+        return toggle
+    }()
+    
+    private lazy var alarmToggleSwitch: UISwitch = {
+        let toggle = UISwitch()
+        toggle.translatesAutoresizingMaskIntoConstraints = false
+        toggle.addTarget(self, action: #selector(alarmToggleChanged(_:)), for: .valueChanged)
+        
         return toggle
     }()
     
@@ -59,13 +69,23 @@ class SettingTableViewCell: UITableViewCell {
                 $0.centerY.equalTo(self.contentView.snp.centerY)
                 $0.right.equalTo(self.contentView.snp.right).offset(-10)
             }
-        case .toggleButton:
-            self.toggleSwitch.isHidden = false
+        case .publicToggle:
+            self.publicToggleSwitch.isHidden = false
             if let signedUser = UserService.shared.combineUser {
-                self.toggleSwitch.setOn(signedUser.user_account_public, animated: false)
+                self.publicToggleSwitch.setOn(signedUser.user_account_public, animated: false)
             }
-            self.contentView.addSubview(self.toggleSwitch)
-            self.toggleSwitch.snp.makeConstraints {
+            self.contentView.addSubview(self.publicToggleSwitch)
+            self.publicToggleSwitch.snp.makeConstraints {
+                $0.centerY.equalTo(self.contentView.snp.centerY)
+                $0.right.equalTo(self.contentView.snp.right).offset(-10)
+            }
+        case .alarmToggle:
+            self.alarmToggleSwitch.isHidden = false
+            if let signedUser = UserService.shared.combineUser {
+                self.alarmToggleSwitch.setOn(signedUser.user_alarm_status, animated: false)
+            }
+            self.contentView.addSubview(self.alarmToggleSwitch)
+            self.alarmToggleSwitch.snp.makeConstraints {
                 $0.centerY.equalTo(self.contentView.snp.centerY)
                 $0.right.equalTo(self.contentView.snp.right).offset(-10)
             }
@@ -82,7 +102,25 @@ class SettingTableViewCell: UITableViewCell {
                                user_tall: user.user_tall,
                                user_following: user.user_following,
                                user_follower: user.user_follower,
-                               user_account_public: sender.isOn)
+                               user_account_public: sender.isOn,
+                               user_alarm_status: user.user_alarm_status)
+        
+        let firebaseService = FireBaseService()
+        firebaseService.updateUserInfo(updated: changedUser, update: true)
+    }
+    
+    @objc func alarmToggleChanged(_ sender: UISwitch) {
+        guard let user = UserService.shared.combineUser else { return }
+        let changedUser = User(user_id: user.user_id,
+                               user_image: user.user_image,
+                               user_email: user.user_email,
+                               user_nickname: user.user_nickname,
+                               user_weight: user.user_weight,
+                               user_tall: user.user_tall,
+                               user_following: user.user_following,
+                               user_follower: user.user_follower,
+                               user_account_public: user.user_account_public,
+                               user_alarm_status: sender.isOn)
         
         let firebaseService = FireBaseService()
         firebaseService.updateUserInfo(updated: changedUser, update: true)
@@ -95,7 +133,9 @@ class SettingTableViewCell: UITableViewCell {
         
         navigationButton.isHidden = true
         
-        toggleSwitch.isOn = false
-        toggleSwitch.isHidden = true
+        publicToggleSwitch.isOn = false
+        publicToggleSwitch.isHidden = true
+        alarmToggleSwitch.isOn = false
+        alarmToggleSwitch.isHidden = true
     }
 }

@@ -16,7 +16,7 @@ class SettingView: RideThisViewController {
         return table
     }()
     
-    private let items: [String] = ["계정 설정", "비공개 설정"]
+    private let items: [String] = ["계정 설정", "비공개 설정", "알림 설정"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,7 +52,9 @@ extension SettingView: UITableViewDelegate, UITableViewDataSource {
         case 0:
             cell.configureCell(text: item, cellCase: .navigationLink)
         case 1:
-            cell.configureCell(text: item, cellCase: .toggleButton)
+            cell.configureCell(text: item, cellCase: .publicToggle)
+        case 2:
+            cell.configureCell(text: item, cellCase: .alarmToggle)
         default:
             break
         }

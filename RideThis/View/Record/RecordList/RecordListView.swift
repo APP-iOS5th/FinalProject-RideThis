@@ -15,6 +15,16 @@ class RecordListView: RideThisViewController, UIScrollViewDelegate {
     private let firebaseService = FireBaseService()
     private var cancellables = Set<AnyCancellable>()
     
+    private let noRecordLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "저장된 기록이 없습니다."
+//        label.textColor = .primaryColor
+        label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
+        
+        return label
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "기록 목록"
@@ -64,12 +74,22 @@ class RecordListView: RideThisViewController, UIScrollViewDelegate {
     
     private func loadMoreMonths() {
         let endIndex = min(loadedMonths + monthsToLoadPerBatch, viewModel.months.count)
-        for i in loadedMonths..<endIndex {
-            let month = viewModel.months[i]
-            let monthView = createMonthView(for: month, with: viewModel.getRecordsForMonth(month))
-            contentView.addArrangedSubview(monthView)
+        if endIndex > 0 {
+            noRecordLabel.removeFromSuperview()
+            for i in loadedMonths..<endIndex {
+                let month = viewModel.months[i]
+                let monthView = createMonthView(for: month, with: viewModel.getRecordsForMonth(month))
+                contentView.addArrangedSubview(monthView)
+            }
+            loadedMonths = endIndex
+        } else {
+            self.view.addSubview(noRecordLabel)
+            
+            noRecordLabel.snp.makeConstraints {
+                $0.centerX.equalTo(view.safeAreaLayoutGuide.snp.centerX)
+                $0.centerY.equalTo(view.safeAreaLayoutGuide.snp.centerY)
+            }
         }
-        loadedMonths = endIndex
     }
     
     private func createMonthView(for month: String, with records: [RecordModel]) -> UIView {
