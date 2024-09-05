@@ -50,8 +50,21 @@ extension Int {
             let minutes = (self % 3600) / 60
             
             if hours > 0 {
-//                return "\(hours)시간 \(minutes)분"
                 return "\(hours)시간"
+            } else if minutes > 0 {
+                return "\(minutes)분"
+            } else {
+                return "0분"
+            }
+        }
+    }
+    var secondsToRecordTimeForRecords: String {
+        get {
+            let hours = self / 3600
+            let minutes = (self % 3600) / 60
+            
+            if hours > 0 {
+                return "\(hours)시간 \(minutes)분"
             } else if minutes > 0 {
                 return "\(minutes)분"
             } else {

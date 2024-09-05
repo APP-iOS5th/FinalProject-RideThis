@@ -221,12 +221,18 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
             
             let met = estimateMET(speed: speed)
             let calories = met * userWeight * timeInterval
-            totalCalories += calories
+            if speed > 0 {
+                totalCalories += calories
+            }
             
             delegate?.didUpdateDistance(totalDistance)
             delegate?.didUpdateCalories(totalCalories)
         }
         lastUpdateTime = currentTime
+    }
+    
+    func resetTotalCalories() {
+        self.totalCalories = 0
     }
 
     // MARK: 속도로 MET(운동 강도 측정)
