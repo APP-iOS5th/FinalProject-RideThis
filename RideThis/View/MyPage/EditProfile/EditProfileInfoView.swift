@@ -32,6 +32,7 @@ class EditProfileInfoView: RideThisViewController, UITextFieldDelegate {
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 40
         imageView.clipsToBounds = true
+        imageView.backgroundColor = .white
         if let imageURL = self.user.user_image {
             if imageURL.isEmpty {
                 imageView.image = UIImage(named: "bokdonge")
