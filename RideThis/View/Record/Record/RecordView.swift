@@ -241,7 +241,7 @@ class RecordView: RideThisViewController {
                 }
             }
             
-#if targetEnvironment(simulator)
+    #if targetEnvironment(simulator)
             // 시뮬레이터에서는 블루투스 연결 확인을 건너뛰고 바로 기록을 시작합니다.
             if viewModel.isRecording {
                 viewModel.pauseRecording()
@@ -262,7 +262,7 @@ class RecordView: RideThisViewController {
                     self.startRecordProcess()
                 }
             }
-#endif
+    #endif
         }, for: .touchUpInside)
         
         /*
@@ -417,7 +417,6 @@ class RecordView: RideThisViewController {
         } else {
             showLoginAlert()
         }
-        print("기록 목록 출력")
     }
     
     private func showLoginAlert() {
