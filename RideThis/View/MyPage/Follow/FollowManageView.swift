@@ -68,7 +68,7 @@ class FollowManageView: RideThisViewController {
     func setSearchBar() {
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.delegate = self
-        searchController.searchBar.placeholder = "이메일 또는 닉네임을 검색해주세요."
+        searchController.searchBar.placeholder = "닉네임을 검색해주세요."
         searchController.searchBar.autocapitalizationType = .none
         searchController.searchBar.sizeToFit()
         navigationItem.hidesSearchBarWhenScrolling = false

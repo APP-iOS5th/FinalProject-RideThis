@@ -3,7 +3,7 @@ import Combine
 import SnapKit
 import Kingfisher
 
-class EditProfileInfoView: RideThisViewController {
+class EditProfileInfoView: RideThisViewController, UITextFieldDelegate {
     
     // MARK: Data Components
     private let firebaseService = FireBaseService()
@@ -82,6 +82,7 @@ class EditProfileInfoView: RideThisViewController {
         field.placeholder = self.user.user_nickname
         field.text = self.user.user_nickname
         field.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
+        field.delegate = self
         
         return field
     }()
@@ -92,6 +93,7 @@ class EditProfileInfoView: RideThisViewController {
         field.text = self.user.tallStr
         field.keyboardType = .numberPad
         field.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
+        field.delegate = self
         
         return field
     }()
@@ -117,6 +119,7 @@ class EditProfileInfoView: RideThisViewController {
         setNavigationComponents()
         setUIComponents()
         setBindingData()
+        setTextFields()
     }
     
     func setNavigationComponents() {
@@ -308,6 +311,28 @@ class EditProfileInfoView: RideThisViewController {
         imagePickerController.delegate = self
         imagePickerController.allowsEditing = false
         present(imagePickerController, animated: true, completion: nil)
+    }
+    
+    func setTextFields() {
+        [userNickNameTextField, userHeightTextField, userWeightTextField].forEach {
+            $0.autocorrectionType = .no
+        }
+    }
+    
+    // MARK: - UITextFieldDelegate Methods
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        // 현재 텍스트필드의 텍스트
+        guard let currentText = textField.text else { return true }
+        
+        // 변경될 텍스트
+        let updatedText = (currentText as NSString).replacingCharacters(in: range, with: string)
+        
+        // 텍스트가 비어있고 새로 입력되는 문자가 공백인 경우 거부
+        if currentText.isEmpty && string.trimmingCharacters(in: .whitespaces).isEmpty {
+            return false
+        }
+        
+        return true
     }
 }
 
