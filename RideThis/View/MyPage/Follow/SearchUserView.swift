@@ -33,13 +33,14 @@ class SearchUserView: RideThisViewController {
     }
     
     func configureUI() {
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         setNavigationComponents()
         setSearchBar()
         setSearchUserTable()
     }
     
     func setNavigationComponents() {
-        self.title = "팔로잉 추가"
+        self.title = "사용자 검색"
         let cancelButton = UIBarButtonItem(title: "취소", style: .plain, target: self, action: #selector(cancelAction))
         self.navigationItem.leftBarButtonItem = cancelButton
         self.sheetPresentationController?.prefersGrabberVisible = true
@@ -48,6 +49,7 @@ class SearchUserView: RideThisViewController {
     func setSearchBar() {
         searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.overrideUserInterfaceStyle = .light
         searchController.searchBar.placeholder = "이메일 또는 닉네임을 검색해주세요."
         searchController.searchBar.sizeToFit()
         searchController.searchBar.autocapitalizationType = .none
