@@ -60,6 +60,9 @@ class CompetitionView: RideThisViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(CompetitionTVCell.self, forCellReuseIdentifier: "CompetitionTVCell")
         tableView.rowHeight = 41
+        tableView.layer.cornerRadius = 10
+        tableView.clipsToBounds = true
+            
         
         return tableView
     }()
