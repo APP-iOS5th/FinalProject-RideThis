@@ -171,6 +171,7 @@ extension FollowManageView: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         // MARK: TODO - 선택한 유저의 프로필 보여주기
         let selectedUser = self.followViewModel.followDatas[indexPath.row]
         let profileCoordinator = UserProfileCoordinator(navigationController: self.navigationController!, selectedUser: selectedUser)

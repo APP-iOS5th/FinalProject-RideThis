@@ -66,6 +66,7 @@ extension SettingView: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row == 0 {
             let accountSettingCoordinator = AccountSettingCoordinator(navigationController: self.navigationController!)
             accountSettingCoordinator.start()
