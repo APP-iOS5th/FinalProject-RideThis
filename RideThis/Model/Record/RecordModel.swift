@@ -1,7 +1,7 @@
 import Foundation
 
 // MARK: - Summary Data
-struct SummaryData {
+struct SummaryData: Codable {
     let recordedTime: String
     let cadence: Double
     let speed: Double
