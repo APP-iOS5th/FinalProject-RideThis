@@ -34,6 +34,9 @@ class MyPageView: RideThisViewController {
         }
     }
     
+    // 커스텀 타이틀
+    private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "마이페이지")
+    
     init(viewModel: MyPageViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -87,9 +90,9 @@ class MyPageView: RideThisViewController {
     private lazy var profileEditButton: UIButton = {
         let btn = UIButton()
         btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.setTitle("편집", for: .normal)
+        btn.setTitle("정보 수정", for: .normal)
         btn.setTitleColor(.systemBlue, for: .normal)
-        btn.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+        btn.titleLabel?.font = UIFont.systemFont(ofSize: 13)
         btn.contentVerticalAlignment = .top
         
         return btn
@@ -124,7 +127,7 @@ class MyPageView: RideThisViewController {
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.setTitle("자세히 보기", for: .normal)
         btn.setTitleColor(.systemBlue, for: .normal)
-        btn.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+        btn.titleLabel?.font = UIFont.systemFont(ofSize: 13)
         btn.contentVerticalAlignment = .top
         btn.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
@@ -266,9 +269,29 @@ class MyPageView: RideThisViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "마이페이지"
+
         setTotalGrid()
         setCombineData()
+        setupNavigationBar()
+    }
+    
+    // MARK: Navigation Bar
+    private func setupNavigationBar() {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .systemBackground
+        
+        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationItem.largeTitleDisplayMode = .never
+        navigationController?.navigationBar.isTranslucent = false
+        
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.compactAppearance = appearance
+        
+        // 커스텀 타이틀 레이블을 왼쪽 바 버튼 아이템으로 설정
+        let leftBarButtonItem = UIBarButtonItem(customView: customTitleLabel)
+        navigationItem.leftBarButtonItem = leftBarButtonItem
     }
     
     func setTotalGrid() {
@@ -312,7 +335,8 @@ class MyPageView: RideThisViewController {
         loginButton.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
             
-            let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!, prevViewCase: .myPage)
+            let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!, prevViewCase: .myPage, backBtnTitle: "마이페이지")
+            
             loginCoordinator.start()
         }, for: .touchUpInside)
     }
@@ -453,8 +477,13 @@ class MyPageView: RideThisViewController {
         
         self.profileEditButton.addAction(UIAction { [weak self] _ in
             guard let self = self, let user = service.combineUser else { return }
-            let editCoordinator = EditProfileCoordinator(navigationController: self.navigationController!, user: user)
-            editCoordinator.start()
+            self.profileEditButton.isEnabled = false
+            
+            self.coordinator?.moveToEditView(user: user)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.profileEditButton.isEnabled = true
+            }
         }, for: .touchUpInside)
     }
     
@@ -485,7 +514,6 @@ class MyPageView: RideThisViewController {
             $0.top.equalTo(self.totalRunCount.snp.bottom).offset(8)
             $0.centerX.equalTo(self.totalRunCount.snp.centerX)
             $0.width.equalTo(35)
-            $0.height.equalTo(3)
         }
         
         self.totalRunCountData.snp.makeConstraints {
@@ -518,7 +546,6 @@ class MyPageView: RideThisViewController {
             $0.top.equalTo(self.totalRunCountSeparator.snp.top)
             $0.centerX.equalTo(self.totalRunDistance.snp.centerX)
             $0.width.equalTo(35)
-            $0.height.equalTo(3)
         }
         
         self.totalRunDistanceData.snp.makeConstraints {
@@ -799,7 +826,7 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
             followCoordinator.start()
         } else {
             self.showAlert(alertTitle: "알림", msg: "로그인이 필요한 기능입니다. 로그인 화면으로 이동할까요?", confirm: "예") {
-                let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!, prevViewCase: .myPage)
+                let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!, prevViewCase: .myPage, backBtnTitle: "마이페이지")
                 loginCoordinator.start()
             }
         }

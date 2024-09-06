@@ -68,6 +68,8 @@ extension SettingView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
             let accountSettingCoordinator = AccountSettingCoordinator(navigationController: self.navigationController!)
+            self.navigationController?.topViewController?.navigationItem.backButtonTitle = "설정"
+            
             accountSettingCoordinator.start()
         } else if indexPath.row == 3 {
             settingCoordinator?.showPrivacyPolicy()

@@ -148,7 +148,7 @@ class MonthView: UIView {
         if uniqueDays == 0 {
             return ((totalCount, Int(times), totalDistance), (0, 0, 0))
         }
-        print(uniqueDays)
+ 
         let avgCount = Float(totalCount) / Float(uniqueDays)
         let avgTime = Int(Double(times) / Double(uniqueDays))
         let avgDistance = totalDistance / Double(uniqueDays)

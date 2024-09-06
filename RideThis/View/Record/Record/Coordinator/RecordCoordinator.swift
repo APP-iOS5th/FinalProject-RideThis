@@ -33,11 +33,16 @@ class RecordCoordinator: Coordinator {
         let listCoordinator = RecordListCoordinator(navigationController: navigationController)
         childCoordinators.append(listCoordinator)
         listCoordinator.parentCoordinator = self
+        
+        self.navigationController.topViewController?.navigationItem.backButtonTitle = "기록"
+        
         listCoordinator.start()
     }
     
     func showLoginView() {
         let loginVC = LoginView()
+        self.navigationController.topViewController?.navigationItem.backButtonTitle = "기록"
+        
         self.navigationController.pushViewController(loginVC, animated: true)
     }
     
