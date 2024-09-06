@@ -163,7 +163,7 @@ class RecordSumUpView: RideThisViewController {
                     }
                 }
             } else {
-                self.showAlert(alertTitle: "로그인이 필요합니다.", msg: "기록 저장은 로그인이 필요한 서비스입니다.", confirm: "로그인") {
+                self.showAlert(alertTitle: "로그인이 필요합니다.", msg: "라이딩 저장은 로그인이 필요한 서비스입니다.", confirm: "로그인") {
                     // 미로그인 상태에서 요약 정보를 UserDefaults에 저장
                     self.updateViewModelWithRecordData()
                     let summaryData = self.viewModel.summaryData

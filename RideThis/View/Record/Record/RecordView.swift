@@ -21,7 +21,7 @@ class RecordView: RideThisViewController {
     private var cancellables = Set<AnyCancellable>()
     
     // 커스텀 타이틀
-    private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "기록")
+    private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "라이딩")
     private var recordListButton: UIBarButtonItem?
     
     // 기록 뷰 선언
@@ -34,7 +34,7 @@ class RecordView: RideThisViewController {
     // 버튼 선언
     let resetButton = RideThisButton(buttonTitle: "Reset")
     let recordButton = RideThisButton(buttonTitle: "시작")
-    let finishButton = RideThisButton(buttonTitle: "기록 종료")
+    let finishButton = RideThisButton(buttonTitle: "라이딩 종료")
     
     private let mainStackView = UIStackView()
     private let recordsStackView = UIStackView()
@@ -284,7 +284,7 @@ class RecordView: RideThisViewController {
         finishButton.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
             viewModel.pauseRecording()
-            self.showAlert(alertTitle: "기록을 종료할까요?", msg: "요약 화면으로 이동합니다.", confirm: "기록 종료") {
+            self.showAlert(alertTitle: "라이딩을 종료할까요?", msg: "요약 화면으로 이동합니다.", confirm: "라이딩 종료") {
                 self.viewModel.finishRecording()
             } cancelAction: {
                 // MARK: 현재 기록중이었을 때만 종료버튼 후 alert에서 취소를 누르면 계속 기록이 진행되게 하기위해서
@@ -428,7 +428,7 @@ class RecordView: RideThisViewController {
     private func showLoginAlert() {
         showAlert(
             alertTitle: "로그인 필요",
-            msg: "기록 목록을 보려면 로그인이 필요합니다. 로그인 하시겠습니까?",
+            msg: "라이딩 목록을 보려면 로그인이 필요합니다. 로그인 하시겠습니까?",
             confirm: "로그인"
         ) {
             self.coordinator?.showLoginView()

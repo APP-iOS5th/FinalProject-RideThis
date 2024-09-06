@@ -184,7 +184,7 @@ class DeviceDetailView: RideThisViewController {
     /// deleteDeviceButton을 눌렀을 때 실행
     private func deleteDeviceTapped() {
         if DeviceManager.shared.isCompetetionUse == true || DeviceManager.shared.isRecordUse == true {
-            showAlert(alertTitle: "기록 알림", msg: "기록 중에는 장치를 삭제하실 수 없습니다.", confirm: "확인") {
+            showAlert(alertTitle: "라이딩 알림", msg: "라이딩 중에는 장치를 삭제하실 수 없습니다.", confirm: "확인") {
                 // 기록 중 삭제 불가
             }
         } else {

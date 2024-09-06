@@ -51,7 +51,7 @@ class StartCompetitionViewController: RideThisViewController {
         return blurView
     }()
     
-    private let bottomLabel = RideThisLabel(fontType: .defaultSize, fontColor: .black, text: "기록 중에는 탭바를 사용하실 수 없습니다.")
+    private let bottomLabel = RideThisLabel(fontType: .defaultSize, fontColor: .black, text: "경쟁 중에는 탭바를 사용하실 수 없습니다.")
     
     // MARK: 초기화 및 데이터 바인딩
     init(goalDistance: String) {
