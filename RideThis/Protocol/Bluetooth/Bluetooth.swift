@@ -1,10 +1,3 @@
-//
-//  Bluetooth.swift
-//  RideThis
-//
-//  Created by SeongKook on 8/30/24.
-//
-
 import Foundation
 
 

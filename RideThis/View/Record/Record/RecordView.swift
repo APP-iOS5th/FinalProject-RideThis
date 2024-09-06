@@ -71,8 +71,17 @@ class RecordView: RideThisViewController {
             updateTimerDisplay()
             updateUI(isRecording: false)
         }
-        Task {
-            viewModel.deviceModel = try await viewModel.fetchDeviceData()
+        
+        if UserService.shared.loginStatus == .appleLogin {
+            Task {
+                do {
+                    viewModel.deviceModel = try await viewModel.fetchDeviceData()
+                    viewModel.updateBTManager()
+                } catch {
+                    print("장치 정보를 가져오는 중 오류 발생: \(error)")
+                }
+            }
+        } else {
             viewModel.updateBTManager()
         }
     }
@@ -220,50 +229,101 @@ class RecordView: RideThisViewController {
         
         recordButton.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
-            // MARK: 카운트다운 modal 뷰 present -> 5초 후 dismiss -> 타이머 시작
             
-            
-            let isConnected = self.viewModel.checkBluetoothConnection()
-            if !isConnected {
-                self.showBluetoothDisconnectedAlert()
-                return
-            }
-                                         
-            if !viewModel.isRecording && !viewModel.isPaused {
-                stopButtonTabbed = false
-                let countDownCoordinator = RecordCountCoordinator(navigationController: self.navigationController!)
-                countDownCoordinator.start()
-            } else {
-                if viewModel.isRecording {
-                    stopButtonTabbed = true
+            Task {
+                let isConnected = await self.viewModel.checkBluetoothConnection()
+                if !isConnected {
+                    if UserService.shared.loginStatus == .appleLogin {
+                        self.showBluetoothDisconnectedAlert()
+                    } else {
+                        self.showUnownedUserBluetoothAlert()
+                    }
+                    return
+                }
+                
+                if !self.viewModel.isRecording && !self.viewModel.isPaused {
+                    self.stopButtonTabbed = false
+                    let countDownCoordinator = RecordCountCoordinator(navigationController: self.navigationController!)
+                    countDownCoordinator.start()
                 } else {
-                    stopButtonTabbed = false
+                    if self.viewModel.isRecording {
+                        self.stopButtonTabbed = true
+                    } else {
+                        self.stopButtonTabbed = false
+                    }
                 }
-            }
-            
-    #if targetEnvironment(simulator)
-            // 시뮬레이터에서는 블루투스 연결 확인을 건너뛰고 바로 기록을 시작합니다.
-            if viewModel.isRecording {
-                viewModel.pauseRecording()
-            } else if viewModel.isPaused {
-                viewModel.resumeRecording()
-            } else {
-                viewModel.startRecording()
-                self.disableTabBar()
-            }
-            self.updateUI(isRecording: viewModel.isRecording)
+                
+#if targetEnvironment(simulator)
+                // 시뮬레이터에서는 블루투스 연결 확인을 건너뛰고 바로 기록을 시작합니다.
+                if viewModel.isRecording {
+                    viewModel.pauseRecording()
+                } else if viewModel.isPaused {
+                    viewModel.resumeRecording()
+                } else {
+                    viewModel.startRecording()
+                    self.disableTabBar()
+                }
+                self.updateUI(isRecording: viewModel.isRecording)
 #else
-            if viewModel.isRecording || viewModel.isPaused {
-                startRecordProcess()
-            } else {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                    self.viewModel.btManager?.delegate = self
-                    self.viewModel.btManager?.viewDelegate = self
+                if self.viewModel.isRecording || self.viewModel.isPaused {
                     self.startRecordProcess()
+                } else {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                        self.viewModel.btManager?.delegate = self
+                        self.viewModel.btManager?.viewDelegate = self
+                        self.startRecordProcess()
+                    }
                 }
+#endif
             }
-    #endif
         }, for: .touchUpInside)
+        
+//        recordButton.addAction(UIAction { [weak self] _ in
+//            guard let self = self else { return }
+//            // MARK: 카운트다운 modal 뷰 present -> 5초 후 dismiss -> 타이머 시작
+//
+//
+//            let isConnected = self.viewModel.checkBluetoothConnection()
+//            if !isConnected {
+//                self.showBluetoothDisconnectedAlert()
+//                return
+//            }
+//
+//            if !viewModel.isRecording && !viewModel.isPaused {
+//                stopButtonTabbed = false
+//                let countDownCoordinator = RecordCountCoordinator(navigationController: self.navigationController!)
+//                countDownCoordinator.start()
+//            } else {
+//                if viewModel.isRecording {
+//                    stopButtonTabbed = true
+//                } else {
+//                    stopButtonTabbed = false
+//                }
+//            }
+//
+//    #if targetEnvironment(simulator)
+//            // 시뮬레이터에서는 블루투스 연결 확인을 건너뛰고 바로 기록을 시작합니다.
+//            if viewModel.isRecording {
+//                viewModel.pauseRecording()
+//            } else if viewModel.isPaused {
+//                viewModel.resumeRecording()
+//            } else {
+//                viewModel.startRecording()
+//                self.disableTabBar()
+//            }
+//            self.updateUI(isRecording: viewModel.isRecording)
+//#else
+//            if viewModel.isRecording || viewModel.isPaused {
+//                startRecordProcess()
+//            } else {
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+//                    self.viewModel.btManager?.delegate = self
+//                    self.viewModel.btManager?.viewDelegate = self
+//                    self.startRecordProcess()
+//                }
+//            }
+//    #endif
+//        }, for: .touchUpInside)
         
         /*
          MARK: 정지 -> 기록 종료 -> 취소 : recording: false / pause: true
@@ -285,22 +345,31 @@ class RecordView: RideThisViewController {
         }, for: .touchUpInside)
     }
     
-    func startRecordProcess() {
-        let isConnected = self.viewModel.checkBluetoothConnection()
-        if isConnected {
-            if self.viewModel.isRecording {
-                self.viewModel.pauseRecording()
-            } else if self.viewModel.isPaused {
-                self.viewModel.resumeRecording()
-            } else {
-                self.viewModel.startRecording()
-                self.disableTabBar()
-            }
-            self.updateUI(isRecording: self.viewModel.isRecording)
-        } else {
-            self.showBluetoothDisconnectedAlert()
+    private func showUnownedUserBluetoothAlert() {
+        showAlert(alertTitle: "장치 연결 필요", msg: "기록을 시작하려면 먼저 장치를 연결해야 합니다.", confirm: "장치 연결") {
+            self.coordinator?.showDeviceConnectionView()
         }
     }
+    
+    func startRecordProcess() {
+        Task {
+            let isConnected = await self.viewModel.checkBluetoothConnection()
+            if isConnected {
+                if self.viewModel.isRecording {
+                    self.viewModel.pauseRecording()
+                } else if self.viewModel.isPaused {
+                    self.viewModel.resumeRecording()
+                } else {
+                    self.viewModel.startRecording()
+                    self.disableTabBar()
+                }
+                self.updateUI(isRecording: self.viewModel.isRecording)
+            } else {
+                self.showBluetoothDisconnectedAlert()
+            }
+        }
+    }
+
     
     private func showBluetoothDisconnectedAlert() {
         showAlert(alertTitle: "장치연결이 필요합니다.", msg: "사용하시려면 장치를 연결해주세요.", confirm: "장치연결") {

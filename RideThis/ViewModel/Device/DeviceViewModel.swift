@@ -8,6 +8,7 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
     @Published private(set) var searchedDevices: [Device] = []
     @Published private(set) var selectedDevice: Device?
     @Published private(set) var filteredWheelCircumferences: [WheelCircumference]
+    @Published private(set) var isEmptyState: CurrentValueSubject<Bool, Never> = CurrentValueSubject(true)
     // 비회원
     @Published var unownedDevices: [Device] = []
     
@@ -16,6 +17,8 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
     private var centralManager: CBCentralManager!
     private var cancellables = Set<AnyCancellable>()
     
+    private let cadenceServiceUUID = CBUUID(string: "1816")
+
     // MARK: - Initialization
     
     /// 초기화 메서드
@@ -46,6 +49,7 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
         if selectedDevice?.name == deviceName {
             selectedDevice = nil
         }
+        updateEmptyState()
     }
     
     /// 새 디바이스를 목록에 추가
@@ -120,6 +124,7 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
         // UI 업데이트는 메인 스레드에서 수행
         await MainActor.run {
             self.devices.append(newDevice)
+            self.updateEmptyState()
         }
     }
     
@@ -146,6 +151,7 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
                 
                 DispatchQueue.main.async {
                     self.unownedDevices = updatedDevices
+                    self.updateEmptyState()
                 }
             } else {
                 let newDeviceArray = [newDevice]
@@ -165,6 +171,12 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
            let savedDevices = try? JSONDecoder().decode([Device].self, from: savedDevicesData) {
             DispatchQueue.main.async {
                 self.unownedDevices = savedDevices
+                self.updateEmptyState()
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.unownedDevices = []
+                self.updateEmptyState()
             }
         }
     }
@@ -184,6 +196,7 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
             // ViewModel의 unownedDevices 배열 업데이트
             DispatchQueue.main.async {
                 self.unownedDevices = savedDevices
+                self.updateEmptyState()
             }
         }
     }
@@ -217,17 +230,30 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
     
     /// Firebase에서 등록된 디바이스 로드
     func loadRegisteredDevices() {
-        guard let userId = UserService.shared.combineUser?.user_id else { return }
+        guard let userId = UserService.shared.combineUser?.user_id else {
+            print("사용자 ID를 찾을 수 없습니다.")
+            return
+        }
         
         Task {
             do {
                 if let registeredDevice = try await FireBaseService().getRegisteredDevice(for: userId) {
                     DispatchQueue.main.async {
                         self.devices = [registeredDevice]
+                        self.updateEmptyState()
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self.devices = []
+                        self.updateEmptyState()
                     }
                 }
             } catch {
-                print("Error loading registered devices: \(error)")
+                print("디바이스 로딩 중 오류 발생: \(error)")
+                DispatchQueue.main.async {
+                    self.devices = []
+                    self.updateEmptyState()
+                }
             }
         }
     }
@@ -274,7 +300,7 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
     /// 블루투스 장치 검색 시작
     func startDeviceSearch() {
         if centralManager.state == .poweredOn {
-            centralManager.scanForPeripherals(withServices: nil, options: nil)
+            centralManager.scanForPeripherals(withServices: [cadenceServiceUUID], options: nil)
         }
     }
     
@@ -292,24 +318,43 @@ class DeviceViewModel: NSObject, CBCentralManagerDelegate {
         }
     }
     
-    /// 블루투스 장치 발견 시 호출되는 메서드
+    /// 블루투스 장치를 발견했을 때 호출되는 메서드
+    ///
+    /// 이 메서드는 주위에서 발견된 블루투스 장치를 처리하며, 새로운 장치가 이미 목록에 없으면
+    /// 해당 장치를 `searchedDevices` 배열에 추가합니다.
+    ///
     /// - Parameters:
-    ///   - central: CBCentralManager 인스턴스
-    ///   - peripheral: 발견된 CBPeripheral 인스턴스
-    ///   - advertisementData: 주변 장치에서 전송한 광고 데이터
-    ///   - RSSI: 신호 강도
+    ///   - central: 블루투스 연결을 관리하는 CBCentralManager 인스턴스
+    ///   - peripheral: 새로 발견된 주변 장치 (CBPeripheral 인스턴스)
+    ///   - advertisementData: 발견된 장치의 광고 데이터 (주변 장치가 전송하는 메타 정보)
+    ///   - RSSI: 신호 강도 (NSNumber 형식의 신호 세기)
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        let newDevice = Device(name: peripheral.name ?? "Unknown",
-                               serialNumber: peripheral.identifier.uuidString,
-                               firmwareVersion: "Unknown",
-                               registrationStatus: false,
-                               wheelCircumference: 0)
-        
-        if !searchedDevices.contains(where: { $0.name == newDevice.name }) {
-            searchedDevices.append(newDevice)
+        if peripheral.name != nil {
+            let newDevice = Device(name: peripheral.name ?? "Unknown",
+                                   serialNumber: peripheral.identifier.uuidString,
+                                   firmwareVersion: "Unknown",
+                                   registrationStatus: false,
+                                   wheelCircumference: 0)
+            
+            if !searchedDevices.contains(where: { $0.name == newDevice.name }) {
+                searchedDevices.append(newDevice)
+            }
         }
     }
     
+    /// 현재 기기 데이터를 기반 View의 빈 상태를 업데이트
+    /// - `devices`와 `unownedDevices` 배열이 모두 비어 있으면 뷰는 빈 상태로 간주됩니다.
+    /// - 현재 상태에 대한 정보를 뷰에 알리기 위해 `isEmptyState` 속성에 boolean 값(`true` 또는 `false`)을 전송합니다.
+    private func updateEmptyState() {
+        let isEmpty: Bool
+        if UserService.shared.loginStatus == .appleLogin {
+            isEmpty = self.devices.isEmpty
+        } else {
+            isEmpty = self.unownedDevices.isEmpty
+        }
+        self.isEmptyState.send(isEmpty)
+    }
+
     // MARK: - Private Methods
     
     /// 휠 둘레 목록 생성

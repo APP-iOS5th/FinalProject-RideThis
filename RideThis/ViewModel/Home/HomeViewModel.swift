@@ -17,6 +17,12 @@ class HomeViewModel: NSObject, CLLocationManagerDelegate {
     private let geocoder = CLGeocoder()
     private let weatherService = WeatherService.shared
     
+    // MARK: - Computed Properties
+    /// 사용자의 로그인 상태를 확인
+    var isUserLoggedIn: Bool {
+        return UserService.shared.loginStatus == .appleLogin
+    }
+    
     // MARK: - Initialization
     override init() {
         let initialWeeklyRecord = WeeklyRecord(runCount: 0, runTime: "0시간 0분", runDistance: 0.0)

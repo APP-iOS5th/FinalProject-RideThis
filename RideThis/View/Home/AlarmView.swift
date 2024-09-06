@@ -3,6 +3,8 @@ import UIKit
 import SnapKit
 import Combine
 
+// MARK: - Enums
+
 enum AlarmCase: String, CaseIterable {
     case follow = "Follow"
     
@@ -16,15 +18,21 @@ enum AlarmCase: String, CaseIterable {
     }
     
     func findCase(str: String) -> Self {
-        return AlarmCase.allCases.filter{ $0.rawValue == str }.first!
+        return AlarmCase.allCases.first { $0.rawValue == str }!
     }
 }
 
+// MARK: - AlarmView
+
 class AlarmView: RideThisViewController {
+    
+    // MARK: - Properties
     
     private let firebaseService = FireBaseService()
     private var cancellable = Set<AnyCancellable>()
     private lazy var viewModel = AlarmViewModel(firebaseService: self.firebaseService)
+    
+    // MARK: - UI Components
     
     private lazy var alarmTableView: UITableView = {
         let table = UITableView()
@@ -34,22 +42,41 @@ class AlarmView: RideThisViewController {
         table.register(AlarmTableViewCell.self, forCellReuseIdentifier: "AlarmTableViewCell")
         table.backgroundColor = .primaryBackgroundColor
         table.separatorStyle = .none
-        
         return table
     }()
+    
+    private let noAlarmLabel: RideThisLabel = {
+        let label = RideThisLabel(fontType: .defaultSize, fontColor: .gray, text: "알림이 없습니다")
+        label.textAlignment = .center
+        label.isHidden = true
+        return label
+    }()
+    
+    // MARK: - Lifecycle Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureUI()
         setCombineData()
+        setupNavigationBar()
     }
     
-    func configureUI() {
+    // MARK: - UI Setup
+    
+    /// UI 구성 요소 설정
+    private func configureUI() {
         setTableView()
+        setupNoAlarmLabel()
     }
     
-    func setTableView() {
+    /// NavigationBar 설정
+    private func setupNavigationBar() {
+        title = "알림 목록"
+    }
+    
+    /// TableView뷰 설정
+    private func setTableView() {
         view.addSubview(alarmTableView)
         
         alarmTableView.snp.makeConstraints {
@@ -60,19 +87,39 @@ class AlarmView: RideThisViewController {
         }
     }
     
-    func setCombineData() {
+    /// '알림 없음' 라벨 설정
+    private func setupNoAlarmLabel() {
+        view.addSubview(noAlarmLabel)
+        noAlarmLabel.snp.makeConstraints {
+            $0.center.equalToSuperview()
+        }
+    }
+    
+    // MARK: - Data Binding
+    
+    /// Combine을 사용하여 데이터 바인딩 설정
+    private func setCombineData() {
         viewModel.$alarams
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] alarm in
+            .sink { [weak self] alarms in
                 guard let self = self else { return }
                 
                 self.alarmTableView.reloadData()
+                self.updateNoAlarmLabelVisibility()
             }
             .store(in: &cancellable)
         
         viewModel.fetchAlarmDatas()
     }
+    
+    /// 알림 유무에 따라 '알림 없음' 라벨과 테이블 뷰의 가시성 업데이트
+    private func updateNoAlarmLabelVisibility() {
+        noAlarmLabel.isHidden = !viewModel.alarams.isEmpty
+        alarmTableView.isHidden = viewModel.alarams.isEmpty
+    }
 }
+
+// MARK: - UITableViewDelegate, UITableViewDataSource
 
 extension AlarmView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -96,7 +143,6 @@ extension AlarmView: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         let alarm = viewModel.alarams[indexPath.row]
         if !alarm.alarm_status {
             alarm.alarm_status = true

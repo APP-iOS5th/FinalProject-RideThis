@@ -14,7 +14,7 @@ class DeviceSearchView: RideThisViewController {
     private let cancelButton = UIButton(type: .system)
     private let contentView = UIView()
     private let imageView = UIImageView(image: UIImage(named: "deviceSearch"))
-    private let searchingLabel = RideThisLabel(fontType: .sectionTitle, text: "검색중...")
+    private let searchingLabel = RideThisLabel(fontType: .sectionTitle, text: "")
     private let deviceTableView = UITableView(frame: .zero, style: .insetGrouped)
     private var isProcessingSelection = false
     
@@ -141,7 +141,7 @@ class DeviceSearchView: RideThisViewController {
     /// 버튼 액션 설정
     private func setupActions() {
         cancelButton.addAction(UIAction { [weak self] _ in
-            self?.coordinator?.dismissView()
+            self?.coordinator?.dismissViewAndRefreshDeviceView()
         }, for: .touchUpInside)
     }
     
@@ -151,11 +151,23 @@ class DeviceSearchView: RideThisViewController {
     private func bindViewModel() {
         viewModel.$searchedDevices
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
+            .sink { [weak self] devices in
                 self?.deviceTableView.reloadData()
+                self?.updateSearchingLabel(devices.isEmpty)
             }
             .store(in: &cancellables)
     }
+    
+    /// 검색 상태에 따라 검색 레이블의 텍스트를 업데이트하는 메서드
+    /// - Parameter isEmpty: 기기 목록이 비어 있는지 여부를 나타내는 Bool 값
+    private func updateSearchingLabel(_ isEmpty: Bool) {
+        if isEmpty {
+            searchingLabel.text = "검색중..."
+        } else {
+            searchingLabel.text = "케이던스 기기를 선택해주세요"
+        }
+    }
+
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
@@ -182,7 +194,7 @@ extension DeviceSearchView: UITableViewDelegate, UITableViewDataSource {
                 do {
                     try await viewModel.addDeviceWithDefaultSettings(selectedDevice)
                     DispatchQueue.main.async {
-                        self.coordinator?.dismissView()
+                        self.coordinator?.dismissViewAndRefreshDeviceView()
                     }
                 } catch {
                     print("Error adding device: \(error)")
@@ -193,12 +205,10 @@ extension DeviceSearchView: UITableViewDelegate, UITableViewDataSource {
             self.viewModel.addDeviceUnkownedUser(selectedDevice)
             
             DispatchQueue.main.async {
-                self.coordinator?.dismissView()
+                self.coordinator?.dismissViewAndRefreshDeviceView()
             }
             
             isProcessingSelection = false
         }
-        
-        
     }
 }

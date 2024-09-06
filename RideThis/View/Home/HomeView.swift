@@ -48,7 +48,12 @@ class HomeView: RideThisViewController {
         button.setTitleColor(.primaryColor, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: FontCase.smallTitle.rawValue, weight: .regular)
         button.addAction(UIAction { [weak self] _ in
-            self?.coordinator?.showRecordListView()
+            if self?.viewModel.isUserLoggedIn == true {
+                self?.coordinator?.showRecordListView()
+            } else {
+                self?.showLoginAlert()
+            }
+            
         }, for: .touchUpInside)
         return button
     }()
@@ -100,7 +105,7 @@ class HomeView: RideThisViewController {
     }()
     
     private lazy var letsRideButton: RideThisButton = {
-        let button = RideThisButton(buttonTitle: "라이딩 고고씽", height: 50)
+        let button = RideThisButton(buttonTitle: "Let's RideThis", height: 50)
         button.addAction(UIAction { [weak self] _ in
             self?.coordinator?.showRecordView()
         }, for: .touchUpInside)
@@ -115,7 +120,7 @@ class HomeView: RideThisViewController {
     }()
     
     private lazy var weatherTitleLabel: UILabel = {
-        let label = RideThisLabel(fontType: .sectionTitle, fontColor: .black, text: "라이딩하기 따악 좋은 날이고만!")
+        let label = RideThisLabel(fontType: .sectionTitle, fontColor: .black, text: "날씨 정보")
         label.font = UIFont.boldSystemFont(ofSize: label.font.pointSize)
         
         return label
@@ -502,7 +507,7 @@ class HomeView: RideThisViewController {
         let separator = RideThisSeparator()
         separator.snp.makeConstraints { separator in
             separator.width.equalTo(35)
-            separator.height.equalTo(3)
+            separator.height.equalTo(1)
         }
         
         let weeklyRecordDataSetView = UIStackView(arrangedSubviews: [titleLabel, separator, valueLabel])
@@ -552,12 +557,24 @@ class HomeView: RideThisViewController {
         weeklyRecordDataView.addArrangedSubview(createRecordItemView(title: "달린 시간", value: model.weeklyRecord.runTime))
         weeklyRecordDataView.addArrangedSubview(createRecordItemView(title: "달린 거리", value: String(format: "%.2f Km", model.weeklyRecord.runDistance)))
         
-        letsRideTitleLabel.text = "\(model.userName)님, 라이딩 고고씽?"
+        let userNickName = viewModel.isUserLoggedIn ? model.userName : "비회원"
+        letsRideTitleLabel.text = "\(userNickName)님, Let's RideThis?"
     }
     
     /// 날씨 컨테이너 뷰에 그라디언트 적용
     private func applyGradientToWeatherContainer() {
         weatherContainer.setGradient(color1: UIColor(red: 12/255, green: 79/255, blue: 146/255, alpha: 1),
                                      color2: UIColor(red: 77/255, green: 143/255, blue: 209/255, alpha: 1))
+    }
+    
+    /// 로그인 필요 알림을 보여주고, 확인 시 로그인 화면으로 이동
+    private func showLoginAlert() {
+        showAlert(
+            alertTitle: "로그인 필요",
+            msg: "기록 목록을 보려면 로그인이 필요합니다. 로그인 하시겠습니까?",
+            confirm: "로그인"
+        ) {
+            self.coordinator?.showLoginView()
+        }
     }
 }
