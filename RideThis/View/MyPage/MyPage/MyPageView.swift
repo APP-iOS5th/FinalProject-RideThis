@@ -336,10 +336,17 @@ class MyPageView: RideThisViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-
         setTotalGrid()
         setCombineData()
         setupNavigationBar()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        Task {
+            await service.getUserInfo()
+        }
     }
     
     // MARK: Navigation Bar

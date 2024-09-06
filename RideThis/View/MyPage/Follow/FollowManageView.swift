@@ -52,6 +52,14 @@ class FollowManageView: RideThisViewController {
         setCombineData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        Task {
+            await followViewModel.fetchFollowData(user: user!, type: .follower)
+        }
+    }
+    
     func configureUI() {
         setNavigationComponents()
         setSearchBar()
@@ -79,7 +87,7 @@ class FollowManageView: RideThisViewController {
         view.addSubview(followPicker)
         
         followPicker.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(15)
             $0.left.equalTo(view.snp.left).offset(15)
             $0.right.equalTo(view.snp.right).offset(-15)
         }
