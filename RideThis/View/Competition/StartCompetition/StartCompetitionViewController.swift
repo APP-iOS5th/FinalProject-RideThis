@@ -247,7 +247,7 @@ class StartCompetitionViewController: RideThisViewController {
     // MARK: setupAction
     private func setupAction() {
         giveUpBtn.addAction(UIAction { [weak self] _ in
-            self?.showAlert(alertTitle: "경쟁중지", msg: "현재 경쟁기록 진행중입니다. 포기하시겠습니까?", confirm: "포기") {
+            self?.showAlert(alertTitle: "경쟁 포기", msg: "현재 경쟁기록 진행중입니다. 포기하시겠습니까?", confirm: "포기") {
                 self?.coordinator?.popToRootView()
             }
         }, for: .touchUpInside)

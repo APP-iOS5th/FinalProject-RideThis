@@ -38,20 +38,20 @@ class CompetitionTVCell: UITableViewCell {
     private func setupLayout() {
         numberImage.snp.makeConstraints { image in
             image.top.equalTo(self.contentView.snp.top).offset(10)
-            image.left.equalTo(self.contentView.snp.left).offset(10)
+            image.left.equalTo(self.contentView.snp.left).offset(20)
             image.bottom.equalTo(self.contentView.snp.bottom).offset(-10)
             image.width.equalTo(20)
         }
         
         userNameLabel.snp.makeConstraints { name in
             name.top.equalTo(self.contentView.snp.top).offset(10)
-            name.left.equalTo(numberImage.snp.right).offset(5)
+            name.left.equalTo(numberImage.snp.right).offset(6)
             name.bottom.equalTo(self.contentView.snp.bottom).offset(-10)
         }
         
         timeLabel.snp.makeConstraints { time in
             time.top.equalTo(self.contentView.snp.top).offset(10)
-            time.right.equalTo(self.contentView.snp.right).offset(-10)
+            time.right.equalTo(self.contentView.snp.right).offset(-20)
             time.bottom.equalTo(self.contentView.snp.bottom).offset(-10)
         }
     }
