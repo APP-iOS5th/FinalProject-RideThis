@@ -17,18 +17,15 @@ class MyPageCoordinator: Coordinator {
         navigationController.pushViewController(myPageVC, animated: true)
     }
     
+    func moveToEditView(user: User) {
+        let editProfileCoordinator = EditProfileCoordinator(navigationController: navigationController, user: user)
+        childCoordinators.append(editProfileCoordinator)
+        
+        editProfileCoordinator.start()
+    }
+    
     func showRecordListView() {
         let recordListCoordinator = RecordListCoordinator(navigationController: self.navigationController)
         recordListCoordinator.start()
-//        if let recordNav = tabBarController.viewControllers?[2] as? UINavigationController {
-//            tabBarController.selectedIndex = 2
-//            if recordNav.topViewController is RecordListView {
-//                return
-//            }
-//
-//            let recordCoordinator = RecordCoordinator(navigationController: recordNav, tabBarController: tabBarController)
-//            childCoordinators.append(recordCoordinator)
-//            recordCoordinator.showRecordListView()
-//        }
     }
 }

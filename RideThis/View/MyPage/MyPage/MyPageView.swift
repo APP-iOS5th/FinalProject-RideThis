@@ -87,9 +87,9 @@ class MyPageView: RideThisViewController {
     private lazy var profileEditButton: UIButton = {
         let btn = UIButton()
         btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.setTitle("편집", for: .normal)
+        btn.setTitle("정보 수정", for: .normal)
         btn.setTitleColor(.systemBlue, for: .normal)
-        btn.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+        btn.titleLabel?.font = UIFont.systemFont(ofSize: 13)
         btn.contentVerticalAlignment = .top
         
         return btn
@@ -124,7 +124,7 @@ class MyPageView: RideThisViewController {
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.setTitle("자세히 보기", for: .normal)
         btn.setTitleColor(.systemBlue, for: .normal)
-        btn.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+        btn.titleLabel?.font = UIFont.systemFont(ofSize: 13)
         btn.contentVerticalAlignment = .top
         btn.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
@@ -453,8 +453,13 @@ class MyPageView: RideThisViewController {
         
         self.profileEditButton.addAction(UIAction { [weak self] _ in
             guard let self = self, let user = service.combineUser else { return }
-            let editCoordinator = EditProfileCoordinator(navigationController: self.navigationController!, user: user)
-            editCoordinator.start()
+            self.profileEditButton.isEnabled = false
+            
+            self.coordinator?.moveToEditView(user: user)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.profileEditButton.isEnabled = true
+            }
         }, for: .touchUpInside)
     }
     
