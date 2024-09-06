@@ -345,7 +345,17 @@ class MyPageView: RideThisViewController {
         super.viewWillAppear(animated)
         
         Task {
-            await service.getUserInfo()
+            if case .user(let receivedUser) = try await firebaseService.fetchUser(at: UserService.shared.combineUser!.user_id, userType: true) {
+                guard let user = receivedUser else { return }
+                
+                followerCountLabel.text = "\(user.user_follower.count)"
+                followingCountLabel.text = "\(user.user_following.count)"
+                userNickName.text = user.user_nickname
+                userWeight.text = "\(user.user_weight)"
+                userHeight.text = user.tallStr
+                
+                followCoordinator.updateUser(user: user)
+            }
         }
     }
     
