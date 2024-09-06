@@ -53,35 +53,15 @@ class HomeViewModel: NSObject, CLLocationManagerDelegate {
     // MARK: - User Data Methods
     /// 사용자 데이터 가져오기
     func fetchUserData() {
-//        guard let combineUser = userService.combineUser else { return }
-        
-//        DispatchQueue.main.async {
-//            self.model.userName = combineUser.user_nickname
-//        }
-//        Task {
-//            await fetchUserRecords(userId: combineUser.user_id)
-//        }
-//        Task {
-//            do {
-//                if case .user(let userData) = try await firebaseService.fetchUser(at: combineUser.user_id, userType: true) {
-//                    guard let user = userData else { return }
-//                    
-//                    await MainActor.run {
-//                        self.model.userName = combineUser.user_nickname
-//                    }
-//                    
-//                }
-//            } catch {
-//                print("사용자 데이터 가져오기 실패: \(error)")
-//            }
-//        }
+
     }
     
     /// 사용자 기록 가져오기
     func fetchUserRecords(user: User) async {
         do {
             let allRecords = await firebaseService.findRecordsBy(userId: user.user_id)
-            let records = allRecords.filter{ !$0.record_competetion_status }
+            
+            let records = allRecords
             
             let sortedRecords = records.sorted { $0.record_start_time ?? Date() > $1.record_start_time ?? Date() }
             let recentRecords = Array(sortedRecords.prefix(7))
