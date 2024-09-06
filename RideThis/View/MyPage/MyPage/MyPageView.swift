@@ -335,7 +335,8 @@ class MyPageView: RideThisViewController {
         loginButton.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
             
-            let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!, prevViewCase: .myPage)
+            let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!, prevViewCase: .myPage, backBtnTitle: "마이페이지")
+            
             loginCoordinator.start()
         }, for: .touchUpInside)
     }
@@ -825,7 +826,7 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
             followCoordinator.start()
         } else {
             self.showAlert(alertTitle: "알림", msg: "로그인이 필요한 기능입니다. 로그인 화면으로 이동할까요?", confirm: "예") {
-                let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!, prevViewCase: .myPage)
+                let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!, prevViewCase: .myPage, backBtnTitle: "마이페이지")
                 loginCoordinator.start()
             }
         }

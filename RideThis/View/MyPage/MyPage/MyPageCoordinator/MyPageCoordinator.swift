@@ -21,11 +21,16 @@ class MyPageCoordinator: Coordinator {
         let editProfileCoordinator = EditProfileCoordinator(navigationController: navigationController, user: user)
         childCoordinators.append(editProfileCoordinator)
         
+        self.navigationController.topViewController?.navigationItem.backButtonTitle = "마이페이지"
+        
         editProfileCoordinator.start()
     }
     
     func showRecordListView() {
         let recordListCoordinator = RecordListCoordinator(navigationController: self.navigationController)
+        
+        self.navigationController.topViewController?.navigationItem.backButtonTitle = "마이페이지"
+        
         recordListCoordinator.start()
     }
 }

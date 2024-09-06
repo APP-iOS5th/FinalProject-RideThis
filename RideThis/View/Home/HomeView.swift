@@ -282,6 +282,8 @@ class HomeView: RideThisViewController {
     
     @objc func moveToAlarmView() {
         let alarmCoordinator = AlarmCoordinator(navigationController: self.navigationController!, childCoordinators: [])
+        self.navigationController?.topViewController?.navigationItem.backButtonTitle = "Home"
+        
         alarmCoordinator.start()
     }
     

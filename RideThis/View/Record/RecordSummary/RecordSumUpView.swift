@@ -145,6 +145,8 @@ class RecordSumUpView: RideThisViewController {
                     DataPersistenceService.shared.saveUnloginUserSummary(summaryData)
                     // TODO: - 로그인 후 유저디폴트 삭제 추가해야 함
                     let loginVC = LoginView()
+                    
+                    self.navigationController?.topViewController?.navigationItem.backButtonTitle = "운동기록 요약"
                     self.navigationController?.pushViewController(loginVC, animated: true)
                 }
             }
