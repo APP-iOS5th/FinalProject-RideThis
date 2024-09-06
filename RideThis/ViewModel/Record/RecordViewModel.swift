@@ -14,6 +14,12 @@ class RecordViewModel: BluetoothManagerDelegate {
     @Published var endTime: Date?
     @Published private(set) var isMeasuring: Bool = false
     
+    // 평균값 구하기
+    var averageCadence: Double = 0
+    var averageSpeed: Double = 0
+    private var cadenceValues: [Double] = []
+    private var speedValues: [Double] = []
+    
     private var timer: Timer?
     weak var delegate: RecordViewModelDelegate?
     var recordedTime: TimeInterval = 0.0
@@ -138,16 +144,21 @@ class RecordViewModel: BluetoothManagerDelegate {
         guard isMeasuring else { return }
         DispatchQueue.main.async {
             self.cadence = cadence
+            self.cadenceValues.append(cadence)
             self.isBluetoothConnected = true
         }
+        print("cadenceValues: \(cadenceValues)")
     }
     
     func didUpdateSpeed(_ speed: Double) {
         guard isMeasuring else { return }
         DispatchQueue.main.async {
             self.speed = speed
+            self.speedValues.append(speed)
             self.isBluetoothConnected = true
         }
+        
+        print("speedValues: \(speedValues)")
     }
     
     func didUpdateDistance(_ distance: Double) {
@@ -194,6 +205,12 @@ class RecordViewModel: BluetoothManagerDelegate {
     }
     
     func finishRecording() {
+        // 평균 계산
+        let averageCadence = self.cadenceValues.isEmpty ? 0 : self.cadenceValues.reduce(0, +) / Double(self.cadenceValues.count)
+        self.averageCadence = Double(averageCadence)
+        let averageSpeed = self.speedValues.isEmpty ? 0 : self.speedValues.reduce(0, +) / Double(self.speedValues.count)
+        self.averageSpeed = Double(averageSpeed)
+        
         isRecording = false
         isMeasuring = false
         recordedTime = elapsedTime
@@ -247,8 +264,8 @@ class RecordViewModel: BluetoothManagerDelegate {
     func getSummaryData() -> SummaryData {
         return SummaryData(
             recordedTime: formatTime(recordedTime),
-            cadence: cadence,
-            speed: speed,
+            cadence: averageCadence,
+            speed: averageSpeed,
             distance: distance,
             calorie: calorie,
             startTime: startTime ?? Date(),
