@@ -5,7 +5,7 @@ import SnapKit
 
 class NonMemberRecordSummaryViewController: RideThisViewController {
     
-
+    let prevViewCase: ViewCase = .record
     private let viewModel: NonMemberRecordSummaryViewModel
     
     private let scrollView = UIScrollView()
@@ -133,7 +133,9 @@ class NonMemberRecordSummaryViewController: RideThisViewController {
             }
             
             // 뷰이동 넣어야함 탭바 기록 처음 뷰로 이동
-            
+            if let scene = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate) {
+                scene.appCoordinator?.changeTabBarView(change: true, selectedCase: prevViewCase)
+            }
         }, for: .touchUpInside)
     }
     

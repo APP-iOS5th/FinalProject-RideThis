@@ -100,6 +100,7 @@
 		CD70006A2C6AF99F0071D4D2 /* GraphCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7000692C6AF99F0071D4D2 /* GraphCollectionViewCell.swift */; };
 		CD76A8C92C6E53FF003490B3 /* SignUpInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD76A8C82C6E53FF003490B3 /* SignUpInfoView.swift */; };
 		CD76A8CB2C6E5828003490B3 /* UITextField+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD76A8CA2C6E5828003490B3 /* UITextField+Extension.swift */; };
+		CD844CF62C8ADDEF007D8438 /* SignUpCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD844CF52C8ADDEF007D8438 /* SignUpCoordinator.swift */; };
 		CDAC668B2C6CF0CF005506FB /* AccountQuitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDAC668A2C6CF0CF005506FB /* AccountQuitView.swift */; };
 		CDB220082C7C19DD00973964 /* SignUpInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB220072C7C19DD00973964 /* SignUpInfoViewModel.swift */; };
 		CDB2200A2C7C4EF900973964 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB220092C7C4EF900973964 /* Date+Extension.swift */; };
@@ -254,6 +255,7 @@
 		CD7000692C6AF99F0071D4D2 /* GraphCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphCollectionViewCell.swift; sourceTree = "<group>"; };
 		CD76A8C82C6E53FF003490B3 /* SignUpInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpInfoView.swift; sourceTree = "<group>"; };
 		CD76A8CA2C6E5828003490B3 /* UITextField+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extension.swift"; sourceTree = "<group>"; };
+		CD844CF52C8ADDEF007D8438 /* SignUpCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpCoordinator.swift; sourceTree = "<group>"; };
 		CDAC668A2C6CF0CF005506FB /* AccountQuitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountQuitView.swift; sourceTree = "<group>"; };
 		CDB220072C7C19DD00973964 /* SignUpInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpInfoViewModel.swift; sourceTree = "<group>"; };
 		CDB220092C7C4EF900973964 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
@@ -1018,6 +1020,7 @@
 			isa = PBXGroup;
 			children = (
 				CDF7FCE92C8601BA00E11D52 /* LoginCoordinator.swift */,
+				CD844CF52C8ADDEF007D8438 /* SignUpCoordinator.swift */,
 			);
 			path = LoginCoordinator;
 			sourceTree = "<group>";
@@ -1206,6 +1209,7 @@
 				048EFDFD2C87496600261B21 /* FCMTokenManager.swift in Sources */,
 				CD4214672C649D7800F7C3AE /* SplashView.swift in Sources */,
 				CDB220082C7C19DD00973964 /* SignUpInfoViewModel.swift in Sources */,
+				CD844CF62C8ADDEF007D8438 /* SignUpCoordinator.swift in Sources */,
 				043E0C872C6F38F700F25AF7 /* SummaryRecordViewController.swift in Sources */,
 				78DBD01F2C7882C200B43A62 /* WheelCircumferenceTableViewCell.swift in Sources */,
 				0493F5CA2C7DB5FD00290A4C /* TabBarCoordinator.swift in Sources */,

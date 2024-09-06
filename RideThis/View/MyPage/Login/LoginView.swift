@@ -8,9 +8,11 @@ import FirebaseFirestore
 class LoginView: RideThisViewController {
     
     // MARK: Data Components
+    private let firebaseService = FireBaseService()
     let userService = UserService.shared
     let viewModel = LoginViewModel()
     var loginCoordinator: LoginCoordinator?
+    var btnChangeDelegate: ChangeRecordButtonVisible?
     fileprivate var currentNonce: String?
     
     // MARK: UI Components
@@ -95,16 +97,28 @@ extension LoginView: ASAuthorizationControllerDelegate {
                             if case .user(let userData) = try await service.fetchUser(at: userId, userType: true) {
                                 if userData == nil {
                                     // MARK: 추가정보 입력 화면으로 이동
-                                    if let scene = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate) {
-                                        scene.appCoordinator?.changeRootView(viewController: SignUpInfoView(userId: userId, userEmail: userEmail, prevViewCase: self.loginCoordinator!.prevViewCase))
-                                    }
+                                    let coordinator = SignUpCoordinator(navigationController: self.navigationController!,
+                                                                        childCoordinators: self.loginCoordinator!.childCoordinators,
+                                                                        userId: userId,
+                                                                        userEmail: userEmail)
+                                    coordinator.start()
                                 } else {
-                                    self.userService.signedUser = userData
-                                    guard let prevViewCase = self.loginCoordinator?.prevViewCase else {
+                                    UserService.shared.signedUser = userData
+                                    guard let coordinator = self.loginCoordinator else {
                                         scene.appCoordinator?.changeTabBarView(change: true)
                                         return
                                     }
-                                    scene.appCoordinator?.changeTabBarView(change: true, selectedCase: prevViewCase)
+                                    if coordinator.prevViewCase == .summary {
+                                        Task {
+                                            self.btnChangeDelegate?.changeButton(afterLogin: true)
+                                            await self.firebaseService.saveNoUserRecordData(user: userData!) {
+                                                DataPersistenceService.shared.clearUnloginUserSummary()
+                                            }
+                                            coordinator.navigationController.popViewController(animated: true)
+                                        }
+                                        return
+                                    }
+                                    scene.appCoordinator?.changeTabBarView(change: true, selectedCase: coordinator.prevViewCase)
                                 }
                             }
                         }

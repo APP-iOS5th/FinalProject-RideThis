@@ -128,7 +128,7 @@ class CompetitionView: RideThisViewController {
       override func viewWillAppear(_ animated: Bool) {
           super.viewWillAppear(animated)
           
-          self.viewModel = CompetitionViewModel(isLogin: UserService.shared.combineUser != nil, nickName: UserService.shared.combineUser?.user_nickname ?? "")
+          self.viewModel = CompetitionViewModel(isLogin: UserService.shared.signedUser != nil, nickName: UserService.shared.signedUser?.user_nickname ?? "")
           
           // 데이터를 새로고침
           self.viewModel.fetchAllRecords()
@@ -342,7 +342,7 @@ class CompetitionView: RideThisViewController {
             } else {
                 showAlert(alertTitle: "로그인이 필요합니다.", msg: "경쟁하기는 로그인이 필요한 서비스입니다.", confirm: "로그인") {
                     // 코디네이터 패턴(개발 예정)
-                    let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!, prevViewCase: .competition)
+                    let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!, childCoordinators: self.coordinator!.childCoordinators, prevViewCase: .competition)
                     
                     loginCoordinator.start()
                 }

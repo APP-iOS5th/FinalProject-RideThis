@@ -30,7 +30,7 @@ class CompetitionCoordinator: Coordinator {
     
     // 코디네이터 패턴(개발 예정)
     func moveToLoginView() {
-        let loginCoordinator = LoginCoordinator(navigationController: navigationController, prevViewCase: .competition)
+        let loginCoordinator = LoginCoordinator(navigationController: navigationController, childCoordinators: childCoordinators, prevViewCase: .competition)
         childCoordinators.append(loginCoordinator)
         
         loginCoordinator.start()
