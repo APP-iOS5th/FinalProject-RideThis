@@ -93,8 +93,15 @@ class FollowTableViewCell: UITableViewCell {
                         self.followButton.setTitle("Follow", for: .normal)
                         self.followButton.setTitleColor(.systemBlue, for: .normal)
                         
-                        self.firebaseService.updateUserInfo(updated: updatedCellUser, update: false)
-                        self.firebaseService.updateUserInfo(updated: updatedSignUser, update: true)
+                        Task {
+                            if case .user(let receivedUser) = try await self.firebaseService.fetchUser(at: cellUser.user_id, userType: true) {
+                                guard let user = receivedUser else { return }
+                                
+                                updatedCellUser.user_alarm_status = user.user_alarm_status
+                                self.firebaseService.updateUserInfo(updated: updatedCellUser, update: false)
+                                self.firebaseService.updateUserInfo(updated: updatedSignUser, update: true)
+                            }
+                        }
                     }
                 }
             }

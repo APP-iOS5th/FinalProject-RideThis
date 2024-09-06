@@ -345,7 +345,8 @@ class MyPageView: RideThisViewController {
         super.viewWillAppear(animated)
         
         Task {
-            if case .user(let receivedUser) = try await firebaseService.fetchUser(at: UserService.shared.combineUser!.user_id, userType: true) {
+            guard let signedUser = UserService.shared.combineUser else { return }
+            if case .user(let receivedUser) = try await firebaseService.fetchUser(at: signedUser.user_id, userType: true) {
                 guard let user = receivedUser else { return }
                 
                 followerCountLabel.text = "\(user.user_follower.count)"

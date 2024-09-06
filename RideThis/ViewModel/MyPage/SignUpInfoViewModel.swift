@@ -38,6 +38,7 @@ class SignUpInfoViewModel {
             .assign(to: &$weightTextIsFilled)
         
         self.$weightText
+            .removeDuplicates()
             .map { weightText -> String? in
                 if let weight = Int(weightText), weight <= 10 {
                     return "몸무게는 10kg 초과여야 합니다."
