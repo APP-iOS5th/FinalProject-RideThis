@@ -138,6 +138,7 @@
 		EB6B40872C81B125000DC914 /* RecordSumUpCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6B40862C81B125000DC914 /* RecordSumUpCoordinator.swift */; };
 		EB6B40892C81B15E000DC914 /* RecordListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6B40882C81B15E000DC914 /* RecordListCoordinator.swift */; };
 		EB6B408B2C81B6CA000DC914 /* RecordDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6B408A2C81B6CA000DC914 /* RecordDetailCoordinator.swift */; };
+		EB99242F2C8AF0D800A8ABD5 /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB99242E2C8AF0D800A8ABD5 /* PrivacyPolicyView.swift */; };
 		EBADE05D2C7F16CA0045E03B /* MonthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBADE05C2C7F16CA0045E03B /* MonthView.swift */; };
 		EBB1F4182C76CA75007B0E3C /* RecordListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB1F4172C76CA75007B0E3C /* RecordListView.swift */; };
 		EBDF95542C7C65940067EA93 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EBDF95532C7C65940067EA93 /* GoogleService-Info.plist */; };
@@ -291,6 +292,7 @@
 		EB6B40862C81B125000DC914 /* RecordSumUpCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordSumUpCoordinator.swift; sourceTree = "<group>"; };
 		EB6B40882C81B15E000DC914 /* RecordListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListCoordinator.swift; sourceTree = "<group>"; };
 		EB6B408A2C81B6CA000DC914 /* RecordDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetailCoordinator.swift; sourceTree = "<group>"; };
+		EB99242E2C8AF0D800A8ABD5 /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
 		EBADE05C2C7F16CA0045E03B /* MonthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthView.swift; sourceTree = "<group>"; };
 		EBB1F4172C76CA75007B0E3C /* RecordListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListView.swift; sourceTree = "<group>"; };
 		EBDF95532C7C65940067EA93 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -916,6 +918,7 @@
 				CD0E1E842C6A409F0080CFED /* SettingView.swift */,
 				CD66F5D32C6C887E00CDBB0B /* AccountSettingView.swift */,
 				CDAC668A2C6CF0CF005506FB /* AccountQuitView.swift */,
+				EB99242E2C8AF0D800A8ABD5 /* PrivacyPolicyView.swift */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -1256,6 +1259,7 @@
 				CD4214562C64994F00F7C3AE /* RecordViewModel.swift in Sources */,
 				CDE28F242C8497CC004FE443 /* AccountSettingCoordinator.swift in Sources */,
 				CD76A8CB2C6E5828003490B3 /* UITextField+Extension.swift in Sources */,
+				EB99242F2C8AF0D800A8ABD5 /* PrivacyPolicyView.swift in Sources */,
 				CD6662182C67900B005E2887 /* DeviceModel.swift in Sources */,
 				EBADE05D2C7F16CA0045E03B /* MonthView.swift in Sources */,
 				CD4214582C64996700F7C3AE /* MyPageViewModel.swift in Sources */,

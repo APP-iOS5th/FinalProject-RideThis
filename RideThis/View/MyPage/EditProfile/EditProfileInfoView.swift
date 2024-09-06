@@ -125,7 +125,7 @@ class EditProfileInfoView: RideThisViewController, UITextFieldDelegate {
     }
     
     func setNavigationComponents() {
-        self.title = "프로필 편집"
+        self.title = "정보 수정"
         let saveButton = UIBarButtonItem(title: "저장", style: .plain, target: self, action: #selector(saveProfileInfo))
         self.navigationItem.rightBarButtonItem = saveButton
     }
@@ -323,26 +323,26 @@ class EditProfileInfoView: RideThisViewController, UITextFieldDelegate {
     }
     
     func setTapGesture() {
-            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-            view.addGestureRecognizer(tapGesture)
-        }
-
-        @objc func dismissKeyboard() {
-            view.endEditing(true)
-        }
-
-        func createToolbar() -> UIToolbar {
-            let toolbar = UIToolbar()
-            toolbar.sizeToFit()
-            
-            toolbar.barTintColor = .systemGray5  // 연한 회색 배경
-                    toolbar.isTranslucent = false  // 불투명하게 설정
-            
-            let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-            let doneButton = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(dismissKeyboard))
-            toolbar.setItems([flexibleSpace, doneButton], animated: false)
-            return toolbar
-        }
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    func createToolbar() -> UIToolbar {
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        
+        toolbar.barTintColor = .systemGray5  // 연한 회색 배경
+        toolbar.isTranslucent = false  // 불투명하게 설정
+        
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(dismissKeyboard))
+        toolbar.setItems([flexibleSpace, doneButton], animated: false)
+        return toolbar
+    }
     
     // MARK: - UITextFieldDelegate Methods
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -350,7 +350,7 @@ class EditProfileInfoView: RideThisViewController, UITextFieldDelegate {
         guard let currentText = textField.text else { return true }
         
         // 변경될 텍스트
-        let updatedText = (currentText as NSString).replacingCharacters(in: range, with: string)
+        _ = (currentText as NSString).replacingCharacters(in: range, with: string)
         
         // 텍스트가 비어있고 새로 입력되는 문자가 공백인 경우 거부
         if currentText.isEmpty && string.trimmingCharacters(in: .whitespaces).isEmpty {
@@ -361,9 +361,28 @@ class EditProfileInfoView: RideThisViewController, UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            textField.resignFirstResponder()
-            return true
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    // MARK: Update User
+    func updateUser(user: User) {
+        self.user = user
+
+        userNickNameTextField.text = user.user_nickname
+        userHeightTextField.text = user.tallStr
+        userWeightTextField.text = "\(user.user_weight)"
+        if let imageURL = user.user_image {
+            if imageURL.isEmpty {
+                profileImageView.image = UIImage(named: "bokdonge")
+            } else {
+                profileImageView.kf.setImage(with: URL(string: imageURL))
+            }
         }
+
+        viewModel.nickName = user.user_nickname
+        viewModel.weight = user.tallStr
+    }
 }
 
 extension EditProfileInfoView: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -379,7 +398,7 @@ extension EditProfileInfoView: UIImagePickerControllerDelegate, UINavigationCont
         }
         picker.dismiss(animated: true, completion: nil)
     }
-
+    
     // 사용자가 취소했을 때 호출되는 함수
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)

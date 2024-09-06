@@ -6,10 +6,13 @@ class LoginCoordinator: Coordinator, ChangeRecordButtonVisible {
     var childCoordinators: [any Coordinator]
     var prevViewCase: ViewCase
     
-    init(navigationController: UINavigationController, childCoordinators: [any Coordinator], prevViewCase: ViewCase) {
+    var backBtnTitle: String
+    
+    init(navigationController: UINavigationController, childCoordinators: [any Coordinator], prevViewCase: ViewCase, backBtnTitle: String) {
         self.navigationController = navigationController
         self.childCoordinators = childCoordinators
         self.prevViewCase = prevViewCase
+        self.backBtnTitle = backBtnTitle
     }
     
     func start() {
@@ -17,6 +20,8 @@ class LoginCoordinator: Coordinator, ChangeRecordButtonVisible {
         loginView.btnChangeDelegate = self
         loginView.loginCoordinator = self
         childCoordinators.append(self)
+        
+        self.navigationController.topViewController?.navigationItem.backButtonTitle = backBtnTitle
         
         self.navigationController.pushViewController(loginView, animated: true)
     }
