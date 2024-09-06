@@ -267,9 +267,14 @@ class MyPageView: RideThisViewController {
         super.viewDidLoad()
         
         self.title = "마이페이지"
+        setTotalGrid()
+        setCombineData()
+    }
+    
+    func setTotalGrid() {
         setUIComponents()
         setUserData()
-        setCombineData()
+//        setCombineData()
     }
     
     func setUIComponents() {
@@ -307,7 +312,7 @@ class MyPageView: RideThisViewController {
         loginButton.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
             
-            let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!)
+            let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!, prevViewCase: .myPage)
             loginCoordinator.start()
         }, for: .touchUpInside)
     }
@@ -625,6 +630,7 @@ class MyPageView: RideThisViewController {
             .sink { [weak self] receivedUser in
                 guard let self = self, let combineUser = receivedUser else { return }
                 DispatchQueue.main.async {
+                    self.setTotalGrid()
                     if let imageUrl = combineUser.user_image {
                         if imageUrl.isEmpty {
                             self.profileImageView.image = UIImage(named: "bokdonge")
@@ -793,7 +799,7 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
             followCoordinator.start()
         } else {
             self.showAlert(alertTitle: "알림", msg: "로그인이 필요한 기능입니다. 로그인 화면으로 이동할까요?", confirm: "예") {
-                let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!)
+                let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!, prevViewCase: .myPage)
                 loginCoordinator.start()
             }
         }

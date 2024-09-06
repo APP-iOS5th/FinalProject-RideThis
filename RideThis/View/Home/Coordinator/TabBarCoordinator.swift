@@ -3,12 +3,14 @@ import UIKit
 class TabBarCoordinator: Coordinator {
     var navigationController: UINavigationController
     var tabBarController: UITabBarController
+    var prevSelectedTapIdx: ViewCase
     
     var childCoordinators: [Coordinator] = []
     
-    init(tabBarController: UITabBarController) {
+    init(tabBarController: UITabBarController, prevSelectedViewCase: ViewCase = .home) {
         self.tabBarController = tabBarController
         self.navigationController = UINavigationController()
+        self.prevSelectedTapIdx = prevSelectedViewCase
     }
     
     func start() {
@@ -49,6 +51,9 @@ class TabBarCoordinator: Coordinator {
         
         // 탭바 뷰 컨트롤러 설정
         tabBarController.viewControllers = [homeNavigationController, competetionNavigationController, recordNavigationController, deviceNavigationController, myPageNavigationController]
+        if prevSelectedTapIdx != .summary {        
+            tabBarController.selectedIndex = prevSelectedTapIdx.rawValue
+        }
         
         tabBarController.overrideUserInterfaceStyle = .light
         tabBarController.tabBar.tintColor = .primaryColor
