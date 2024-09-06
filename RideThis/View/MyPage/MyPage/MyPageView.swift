@@ -34,6 +34,9 @@ class MyPageView: RideThisViewController {
         }
     }
     
+    // 커스텀 타이틀
+    private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "마이페이지")
+    
     init(viewModel: MyPageViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -266,9 +269,29 @@ class MyPageView: RideThisViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "마이페이지"
+
         setTotalGrid()
         setCombineData()
+        setupNavigationBar()
+    }
+    
+    // MARK: Navigation Bar
+    private func setupNavigationBar() {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .systemBackground
+        
+        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationItem.largeTitleDisplayMode = .never
+        navigationController?.navigationBar.isTranslucent = false
+        
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.compactAppearance = appearance
+        
+        // 커스텀 타이틀 레이블을 왼쪽 바 버튼 아이템으로 설정
+        let leftBarButtonItem = UIBarButtonItem(customView: customTitleLabel)
+        navigationItem.leftBarButtonItem = leftBarButtonItem
     }
     
     func setTotalGrid() {
