@@ -32,7 +32,7 @@ class CompetitionCoordinator: Coordinator {
     }
     
     func moveToLoginView() {
-        let loginCoordinator = LoginCoordinator(navigationController: navigationController, prevViewCase: .competition, backBtnTitle: "경쟁")
+        let loginCoordinator = LoginCoordinator(navigationController: navigationController, childCoordinators: childCoordinators, prevViewCase: .competition, backBtnTitle: "경쟁")
         childCoordinators.append(loginCoordinator)
         
         

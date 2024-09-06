@@ -1,4 +1,4 @@
-import Foundation
+import UIKit
 
 // MARK: - Nested Structs
 struct WeeklyRecord {

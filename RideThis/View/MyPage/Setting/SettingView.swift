@@ -11,7 +11,8 @@ class SettingView: RideThisViewController {
         table.delegate = self
         table.dataSource = self
         table.register(SettingTableViewCell.self, forCellReuseIdentifier: "SettingTableViewCell")
-        table.backgroundColor = .primaryBackgroundColor
+        table.backgroundColor = .white
+        table.layer.cornerRadius = 13
         
         return table
     }()
@@ -29,10 +30,10 @@ class SettingView: RideThisViewController {
         self.view.addSubview(self.settingTableView)
         
         self.settingTableView.snp.makeConstraints {
-            $0.top.equalTo(self.view.snp.top)
-            $0.left.equalTo(self.view.snp.left)
-            $0.right.equalTo(self.view.snp.right)
-            $0.bottom.equalTo(self.view.snp.bottom)
+            $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(20)
+            $0.left.equalTo(self.view.snp.left).offset(20)
+            $0.right.equalTo(self.view.snp.right).offset(-20)
+            $0.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(-20)
         }
     }
 }
@@ -66,6 +67,7 @@ extension SettingView: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row == 0 {
             let accountSettingCoordinator = AccountSettingCoordinator(navigationController: self.navigationController!)
             self.navigationController?.topViewController?.navigationItem.backButtonTitle = "설정"

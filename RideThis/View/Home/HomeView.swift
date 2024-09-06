@@ -573,7 +573,7 @@ class HomeView: RideThisViewController {
     private func showLoginAlert() {
         showAlert(
             alertTitle: "로그인 필요",
-            msg: "기록 목록을 보려면 로그인이 필요합니다. 로그인 하시겠습니까?",
+            msg: "라이딩 목록을 보려면 로그인이 필요합니다. 로그인 하시겠습니까?",
             confirm: "로그인"
         ) {
             self.coordinator?.showLoginView()

@@ -23,6 +23,23 @@ class RecordSumUpView: RideThisViewController {
     // 버튼 선언
     let cancelButton = RideThisButton(buttonTitle: "취소")
     let saveButton = RideThisButton(buttonTitle: "저장")
+    lazy var confirmButton: UIButton = {
+        let btn = UIButton()
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        btn.setTitle("확인", for: .normal)
+        btn.setTitleColor(.white, for: .normal)
+        btn.backgroundColor = .primaryColor
+        btn.isEnabled = false
+        btn.isHidden = true
+        btn.layer.cornerRadius = 13
+        btn.addAction(UIAction { [weak self] _ in
+            guard let self = self else { return }
+            self.navigationController?.popViewController(animated: true)
+        }, for: .touchUpInside)
+        
+        return btn
+    }()
     
     init(viewModel: RecordSumUpViewModel) {
         self.viewModel = viewModel
@@ -61,7 +78,7 @@ class RecordSumUpView: RideThisViewController {
     }
     
     private func setupViews() {
-        [timerRecord, cadenceRecord, speedRecord, distanceRecord, calorieRecord, cancelButton, saveButton].forEach {
+        [timerRecord, cadenceRecord, speedRecord, distanceRecord, calorieRecord, cancelButton, saveButton, confirmButton].forEach {
             contentView.addSubview($0)
         }
     }
@@ -116,6 +133,13 @@ class RecordSumUpView: RideThisViewController {
             btn.height.equalTo(50)
             btn.bottom.equalTo(contentView).offset(-20) // 마지막 요소의 하단에 여백 추가
         }
+        
+        confirmButton.snp.makeConstraints {
+            $0.top.equalTo(calorieRecord.snp.bottom).offset(30)
+            $0.left.equalTo(contentView.snp.left).offset(20)
+            $0.right.equalTo(contentView.snp.right).offset(-20)
+            $0.bottom.equalTo(contentView.snp.bottom).offset(-20)
+        }
     }
     
     private func setupButtons() {
@@ -133,21 +157,24 @@ class RecordSumUpView: RideThisViewController {
                     self.updateViewModelWithRecordData()
                     
                     Task {
+                        await UserService.shared.getUserInfo()
                         await self.viewModel.saveRecording()
                         self.coordinator?.didSaveRecording()
                     }
                 }
             } else {
-                self.showAlert(alertTitle: "로그인이 필요합니다.", msg: "기록 저장은 로그인이 필요한 서비스입니다.", confirm: "로그인") {
+                self.showAlert(alertTitle: "로그인이 필요합니다.", msg: "라이딩 저장은 로그인이 필요한 서비스입니다.", confirm: "로그인") {
                     // 미로그인 상태에서 요약 정보를 UserDefaults에 저장
                     self.updateViewModelWithRecordData()
                     let summaryData = self.viewModel.summaryData
                     DataPersistenceService.shared.saveUnloginUserSummary(summaryData)
                     // TODO: - 로그인 후 유저디폴트 삭제 추가해야 함
-                    let loginVC = LoginView()
+                    let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!, childCoordinators: self.coordinator!.childCoordinators, prevViewCase: .summary, backBtnTitle: "운동기록 요약")
+                    loginCoordinator.start()
+                    // let loginVC = LoginView()
                     
-                    self.navigationController?.topViewController?.navigationItem.backButtonTitle = "운동기록 요약"
-                    self.navigationController?.pushViewController(loginVC, animated: true)
+                    // self.navigationController?.topViewController?.navigationItem.backButtonTitle = "운동기록 요약"
+                    // self.navigationController?.pushViewController(loginVC, animated: true)
                 }
             }
         }, for: .touchUpInside)
@@ -192,5 +219,18 @@ class RecordSumUpView: RideThisViewController {
         // 커스텀 타이틀 레이블을 왼쪽 바 버튼 아이템으로 설정
         let leftBarButtonItem = UIBarButtonItem(customView: customTitleLabel)
         navigationItem.leftBarButtonItem = leftBarButtonItem
+    }
+}
+
+extension RecordSumUpView {
+    func changeButton(afterLogin: Bool) {
+        if afterLogin {
+            DispatchQueue.main.async {
+                self.cancelButton.isHidden = true
+                self.saveButton.isHidden = true
+                self.confirmButton.isHidden = false
+                self.confirmButton.isEnabled = true
+            }
+        }
     }
 }

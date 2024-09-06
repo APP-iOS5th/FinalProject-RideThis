@@ -442,6 +442,47 @@ class FireBaseService {
         }
     }
     
+    func saveNoUserRecordData(user: User, completion: @escaping () -> Void) async {
+        guard let device = DataPersistenceService.shared.loadUnkownedDevices(),
+              let record = DataPersistenceService.shared.getUnloginUserSummary() else { return }
+        
+        do {
+            if let registeredDevice = try await getRegisteredDevice(for: user.user_id) {
+                var updatedDevice = registeredDevice
+                updatedDevice.registrationStatus = false
+                
+                try await upsertDeviceInFirebase(updatedDevice, for: user.user_id)
+            }
+            
+            try await updateAllDevicesStatus(for: user.user_id, exceptDevice: device.name)
+            
+            try await upsertDeviceInFirebase(device, for: user.user_id)
+            
+            if case .userSnapshot(let userSnapshot) = try await self.fetchUser(at: user.user_id, userType: false) {
+                guard let doc = userSnapshot else {
+                    print("유저를 찾을 수 없습니다.")
+                    return
+                }
+                let recordsCollection = self.fetchCollection(document: doc, collectionName: "RECORDS")
+                try await fetchRecord(collection: recordsCollection,
+                                      timer: record.recordedTime,
+                                      cadence: record.cadence,
+                                      speed: record.speed,
+                                      distance: record.distance,
+                                      calorie: record.calorie,
+                                      startTime: record.startTime,
+                                      endTime: record.endTime,
+                                      date: Date(),
+                                      competetionStatus: false,
+                                      tagetDistance: nil)
+                
+                completion()
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
     /// 사용자의 등록된 디바이스 가져오기
     /// - Parameter userId: 유저 ID
     /// - Returns: 등록된 Device 객체

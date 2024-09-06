@@ -20,6 +20,15 @@ class DataPersistenceService {
         return nil
     }
     
+    func loadUnkownedDevices() -> Device? {
+        let defaults = UserDefaults.standard
+        if let savedDevicesData = defaults.data(forKey: "unkownedDevices"),
+           let savedDevices = try? JSONDecoder().decode([Device].self, from: savedDevicesData) {
+            return savedDevices.last
+        }
+        return nil
+    }
+    
     func clearUnloginUserSummary() {
         UserDefaults.standard.removeObject(forKey: "UnloginUserSummary")
     }

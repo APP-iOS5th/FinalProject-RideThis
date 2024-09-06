@@ -27,7 +27,7 @@ class RecordListView: RideThisViewController, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "기록 목록"
+        self.title = "라이딩 목록"
         
         setupScrollView()
         setupContentView()
