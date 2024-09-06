@@ -81,7 +81,7 @@ class StartCometitionViewModel: BluetoothManagerDelegate {
                 let recordsCollection = firebaseService.fetchCollection(document: doc, collectionName: "RECORDS")
                 
                 // competitionStatus = true, goalDistance가 일치하는 데이터 찾기
-                let recordsSnapshot = try await firebaseService.fetchCompetitionSnapshot(collection: recordsCollection, competitionStatus: true, goalDistance: goalDistance)
+                _ = try await firebaseService.fetchCompetitionSnapshot(collection: recordsCollection, competitionStatus: true, goalDistance: goalDistance)
                 
                 // 경쟁기록 추가
                 try await firebaseService.fetchRecord(collection: recordsCollection, timer: timer, cadence: cadence, speed: speed, distance: distance, calorie: calorie, startTime: startTime ?? Date(), endTime: endTime ?? Date(), date: startTime ?? Date(), competetionStatus: true, tagetDistance: goalDistance)
