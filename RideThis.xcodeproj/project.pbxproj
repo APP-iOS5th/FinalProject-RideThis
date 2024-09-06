@@ -132,6 +132,7 @@
 		EB13A1D72C863DD80092F358 /* DailyRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB13A1D62C863DD80092F358 /* DailyRecordView.swift */; };
 		EB3A06852C870836008FDFD3 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3A06842C870836008FDFD3 /* ImageCache.swift */; };
 		EB3DFA3E2C77218A00FA366C /* RecordDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3DFA3D2C77218A00FA366C /* RecordDetailView.swift */; };
+		EB5476EA2C8A9568004622C3 /* DataPersistenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5476E92C8A9568004622C3 /* DataPersistenceService.swift */; };
 		EB6B40852C81847B000DC914 /* RecordSumUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6B40842C81847B000DC914 /* RecordSumUpViewModel.swift */; };
 		EB6B40872C81B125000DC914 /* RecordSumUpCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6B40862C81B125000DC914 /* RecordSumUpCoordinator.swift */; };
 		EB6B40892C81B15E000DC914 /* RecordListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6B40882C81B15E000DC914 /* RecordListCoordinator.swift */; };
@@ -283,6 +284,7 @@
 		EB13A1D62C863DD80092F358 /* DailyRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyRecordView.swift; sourceTree = "<group>"; };
 		EB3A06842C870836008FDFD3 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		EB3DFA3D2C77218A00FA366C /* RecordDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetailView.swift; sourceTree = "<group>"; };
+		EB5476E92C8A9568004622C3 /* DataPersistenceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataPersistenceService.swift; sourceTree = "<group>"; };
 		EB6B40842C81847B000DC914 /* RecordSumUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordSumUpViewModel.swift; sourceTree = "<group>"; };
 		EB6B40862C81B125000DC914 /* RecordSumUpCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordSumUpCoordinator.swift; sourceTree = "<group>"; };
 		EB6B40882C81B15E000DC914 /* RecordListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordListCoordinator.swift; sourceTree = "<group>"; };
@@ -800,6 +802,7 @@
 				04DEE5022C7C3FC300338A61 /* BluetoothManager.swift */,
 				048EFDFC2C87496600261B21 /* FCMTokenManager.swift */,
 				048EFE1B2C897BE200261B21 /* DeviceManager.swift */,
+				EB5476E92C8A9568004622C3 /* DataPersistenceService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -1261,6 +1264,7 @@
 				04E3C0D72C6B8C30006B844F /* DistanceSelectionViewModel.swift in Sources */,
 				0493F5E32C7E256B00290A4C /* ResultRankingCoordinator.swift in Sources */,
 				EB13A1D72C863DD80092F358 /* DailyRecordView.swift in Sources */,
+				EB5476EA2C8A9568004622C3 /* DataPersistenceService.swift in Sources */,
 				04DEE5012C7C1F0F00338A61 /* RecordDeviceModel.swift in Sources */,
 				048EFE072C874C9700261B21 /* DeviceDetailCoordinator.swift in Sources */,
 				0493F5DD2C7E1A2C00290A4C /* StartCompetetionCoordinator.swift in Sources */,

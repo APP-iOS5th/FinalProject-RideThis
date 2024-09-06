@@ -139,7 +139,11 @@ class RecordSumUpView: RideThisViewController {
                 }
             } else {
                 self.showAlert(alertTitle: "로그인이 필요합니다.", msg: "기록 저장은 로그인이 필요한 서비스입니다.", confirm: "로그인") {
-                    
+                    // 미로그인 상태에서 요약 정보를 UserDefaults에 저장
+                    self.updateViewModelWithRecordData()
+                    let summaryData = self.viewModel.summaryData
+                    DataPersistenceService.shared.saveUnloginUserSummary(summaryData)
+                    // TODO: - 로그인 후 유저디폴트 삭제 추가해야 함
                     let loginVC = LoginView()
                     self.navigationController?.pushViewController(loginVC, animated: true)
                 }
@@ -152,7 +156,7 @@ class RecordSumUpView: RideThisViewController {
         let speed = Double(speedRecord.recordLabel.text!.replacingOccurrences(of: " km/h", with: "").replacingOccurrences(of: ",", with: "")) ?? 0
         let distance = Double(distanceRecord.recordLabel.text!.replacingOccurrences(of: " km", with: "").replacingOccurrences(of: ",", with: "")) ?? 0
         let calorie = Double(calorieRecord.recordLabel.text!.replacingOccurrences(of: " kcal", with: "").replacingOccurrences(of: ",", with: "")) ?? 0
-
+        
         viewModel.updateSummaryData(
             cadence: cadence.getTwoDecimal,
             speed: speed.getTwoDecimal,
