@@ -84,7 +84,7 @@ class StartCometitionViewModel: BluetoothManagerDelegate {
                 _ = try await firebaseService.fetchCompetitionSnapshot(collection: recordsCollection, competitionStatus: true, goalDistance: goalDistance)
                 
                 // 경쟁기록 추가
-                try await firebaseService.fetchRecord(collection: recordsCollection, timer: timer, cadence: cadence, speed: speed, distance: distance, calorie: calorie, startTime: startTime ?? Date(), endTime: endTime ?? Date(), date: startTime ?? Date(), competetionStatus: true, tagetDistance: goalDistance)
+                try await firebaseService.fetchRecord(collection: recordsCollection, timer: timer, cadence: averageCadence, speed: averageSpeed, distance: distance, calorie: calorie, startTime: startTime ?? Date(), endTime: endTime ?? Date(), date: startTime ?? Date(), competetionStatus: true, tagetDistance: goalDistance)
             }
         } catch {
             print("경쟁 기록 처리 에러: \(error.localizedDescription)")
