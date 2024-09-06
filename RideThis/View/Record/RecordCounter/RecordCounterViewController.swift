@@ -9,7 +9,7 @@ class RecordCounterViewController: UIViewController {
     private var cancellables = Set<AnyCancellable>()
     
     private let countLabel = RideThisLabel(fontType: .countDownSize, fontColor: .primaryColor, text: "5")
-    private let countInfoLabel = RideThisLabel(fontType: .classification, fontColor: .black, text: "경쟁을 떠나 안전이 최우선입니다.")
+    private let countInfoLabel = RideThisLabel(fontType: .classification, fontColor: .black, text: "기록을 떠나 안전이 최우선입니다.")
 
 
     // MARK: ViewDidLoad
