@@ -31,6 +31,8 @@ class MyPageCoordinator: Coordinator {
         
         self.navigationController.topViewController?.navigationItem.backButtonTitle = "마이페이지"
         
+        childCoordinators.append(recordListCoordinator)
+        
         recordListCoordinator.start()
     }
 }

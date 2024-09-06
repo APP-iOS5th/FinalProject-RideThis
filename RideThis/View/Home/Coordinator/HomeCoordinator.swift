@@ -21,6 +21,8 @@ class HomeCoordinator: Coordinator {
         
         self.navigationController.topViewController?.navigationItem.backButtonTitle = "Home"
         
+        childCoordinators.append(recordListCoordinator)
+        
         recordListCoordinator.start()
     }
     
