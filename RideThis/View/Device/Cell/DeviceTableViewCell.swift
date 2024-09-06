@@ -49,8 +49,8 @@ class DeviceTableViewCell: UITableViewCell {
         deviceLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)
             make.centerY.equalToSuperview()
-            make.top.equalToSuperview().offset(10)   
-            make.bottom.equalToSuperview().offset(-10)
+            make.top.equalToSuperview().offset(20)
+            make.bottom.equalToSuperview().offset(-20)
         }
         
         chevronImageView.snp.makeConstraints { make in
