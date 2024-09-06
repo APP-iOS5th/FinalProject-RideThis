@@ -48,6 +48,12 @@ class NonMemberRecordSummaryViewModel {
         return nil
     }
     
+    // MARK: 유저디폴트 데이터 삭제하기
+    func deleteUnloginUserSummaryFromDefaults() {
+        let defaults = UserDefaults.standard
+        defaults.removeObject(forKey: "UnloginUserSummary")
+    }
+    
     // MARK: 데이터 저장
     func saveRecording() async {
         do {
@@ -64,6 +70,7 @@ class NonMemberRecordSummaryViewModel {
                 
                 try await firebaseService.fetchRecord(collection: recordsCollection, timer: self.recordedTime, cadence: self.cadence, speed: self.speed, distance: self.distance, calorie: self.calorie, startTime: self.startTime, endTime: self.endTime, date: Date(), competetionStatus: false, tagetDistance: nil)
                 
+                deleteUnloginUserSummaryFromDefaults()
             }
         } catch {
             print("기록 처리 에러: \(error.localizedDescription)")
