@@ -8,11 +8,11 @@ class MonthView: UIView {
     private let avgTitleLabel = RideThisLabel(fontType: .defaultSize, fontColor: .black, text: "평균")
     
     private let countLabel = RideThisLabel(fontType: .defaultSize, fontColor: .black)
-    private let timeLabel = RideThisLabel(fontType: .defaultSize, fontColor: .systemGreen)
+    private let timeLabel = RideThisLabel(fontType: .defaultSize, fontColor: UIColor(red: 0.0, green: 0.6, blue: 0.0, alpha: 1.0))
     private let distanceLabel = RideThisLabel(fontType: .defaultSize, fontColor: .systemRed)
     
     private let avgCountLabel = RideThisLabel(fontType: .defaultSize, fontColor: .black)
-    private let avgTimeLabel = RideThisLabel(fontType: .defaultSize, fontColor: .systemGreen)
+    private let avgTimeLabel = RideThisLabel(fontType: .defaultSize, fontColor: UIColor(red: 0.0, green: 0.6, blue: 0.0, alpha: 1.0))
     private let avgDistanceLabel = RideThisLabel(fontType: .defaultSize, fontColor: .systemRed)
     
     private let recordsStackView = UIStackView()
@@ -22,10 +22,22 @@ class MonthView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
+        setupFontUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupFontUI() {
+        self.titleLabel.font = UIFont.systemFont(ofSize: 17, weight: .medium)
+        self.avgTitleLabel.font = UIFont.systemFont(ofSize: 17, weight: .medium)
+        self.countLabel.font = UIFont.systemFont(ofSize: 17, weight: .medium)
+        self.timeLabel.font = UIFont.systemFont(ofSize: 17, weight: .medium)
+        self.distanceLabel.font = UIFont.systemFont(ofSize: 17, weight: .medium)
+        self.avgCountLabel.font = UIFont.systemFont(ofSize: 17, weight: .medium)
+        self.avgTimeLabel.font = UIFont.systemFont(ofSize: 17, weight: .medium)
+        self.avgDistanceLabel.font = UIFont.systemFont(ofSize: 17, weight: .medium)
     }
     
     private func setupViews() {
