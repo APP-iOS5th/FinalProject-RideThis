@@ -109,6 +109,15 @@ class EditProfileInfoView: RideThisViewController, UITextFieldDelegate {
         return field
     }()
     let imagePickerController = UIImagePickerController()
+    private let warningLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .red
+        label.font = .systemFont(ofSize: 12)
+        label.isHidden = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        return label
+    }()
     
     // Data Components
     private let editViewModel = EditProfileInfoViewModel()
@@ -134,6 +143,7 @@ class EditProfileInfoView: RideThisViewController, UITextFieldDelegate {
         setProfileImage()
         setProfileInfoView()
         setProfileImageTapEvent()
+        setWarningLabel()
     }
     
     func setProfileImage() {
@@ -248,6 +258,15 @@ class EditProfileInfoView: RideThisViewController, UITextFieldDelegate {
         self.profileImageView.addGestureRecognizer(tapGesture)
     }
     
+    func setWarningLabel() {
+        view.addSubview(warningLabel)
+        
+        warningLabel.snp.makeConstraints {
+            $0.top.equalTo(self.profileInfoContainer.snp.bottom).offset(15)
+            $0.left.equalTo(self.profileInfoContainer.snp.left).offset(5)
+        }
+    }
+    
     @objc func saveProfileInfo() {
         self.user.user_nickname = self.userNickNameTextField.text!
         self.user.user_weight = Int(self.userWeightTextField.text!)!
@@ -285,6 +304,20 @@ class EditProfileInfoView: RideThisViewController, UITextFieldDelegate {
                     userNickNameTextField.textColor = .systemRed
                 } else {
                     userNickNameTextField.textColor = .label
+                }
+            }
+            .store(in: &cancellable)
+        
+        viewModel.$warningMessage
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] msg in
+                guard let self = self else { return }
+                
+                if msg.count > 0 {
+                    self.warningLabel.isHidden = false
+                    self.warningLabel.text = msg
+                } else {
+                    self.warningLabel.isHidden = true
                 }
             }
             .store(in: &cancellable)
@@ -346,17 +379,23 @@ class EditProfileInfoView: RideThisViewController, UITextFieldDelegate {
     
     // MARK: - UITextFieldDelegate Methods
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        // 현재 텍스트필드의 텍스트
-        guard let currentText = textField.text else { return true }
-        
-        // 변경될 텍스트
-        _ = (currentText as NSString).replacingCharacters(in: range, with: string)
-        
-        // 텍스트가 비어있고 새로 입력되는 문자가 공백인 경우 거부
-        if currentText.isEmpty && string.trimmingCharacters(in: .whitespaces).isEmpty {
-            return false
+        if textField == userNickNameTextField {
+            let currentText = textField.text ?? ""
+            guard let stringRange = Range(range, in: currentText) else { return false }
+            _ = currentText.replacingCharacters(in: stringRange, with: string)
+            
+            if string.contains(" ") {
+                return false
+            }
+            
+            let text = (textField.text! as NSString).replacingCharacters(in: range, with: string)
+            if text.count > 7 {
+                textField.text = String(text.prefix(7))
+                return false
+            }
+            
+            return true
         }
-        
         return true
     }
     
