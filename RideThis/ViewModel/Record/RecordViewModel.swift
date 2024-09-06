@@ -196,6 +196,8 @@ class RecordViewModel: BluetoothManagerDelegate {
         speed = 0
         distance = 0
         calorie = 0
+        cadenceValues.removeAll()
+        speedValues.removeAll()
         onTimerUpdated?(formatTime(elapsedTime))
         delegate?.didResetRecording()
         btManager?.resetTotalCalories()
