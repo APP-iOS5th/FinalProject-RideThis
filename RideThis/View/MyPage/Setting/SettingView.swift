@@ -16,7 +16,7 @@ class SettingView: RideThisViewController {
         return table
     }()
     
-    private let items: [String] = ["계정 설정", "비공개 설정", "알림 설정"]
+    private let items: [String] = ["계정 설정", "비공개 설정", "알림 설정", "개인정보 처리방침"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,7 +49,7 @@ extension SettingView: UITableViewDelegate, UITableViewDataSource {
         }
         
         switch indexPath.row {
-        case 0:
+        case 0, 3:
             cell.configureCell(text: item, cellCase: .navigationLink)
         case 1:
             cell.configureCell(text: item, cellCase: .publicToggle)
@@ -69,6 +69,8 @@ extension SettingView: UITableViewDelegate, UITableViewDataSource {
         if indexPath.row == 0 {
             let accountSettingCoordinator = AccountSettingCoordinator(navigationController: self.navigationController!)
             accountSettingCoordinator.start()
+        } else if indexPath.row == 3 {
+            settingCoordinator?.showPrivacyPolicy()
         }
     }
 }
