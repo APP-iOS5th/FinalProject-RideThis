@@ -26,6 +26,8 @@
 		048EFE132C874CA600261B21 /* WheelCircumferenceCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048EFE0F2C874CA600261B21 /* WheelCircumferenceCoordinator.swift */; };
 		048EFE142C874CA600261B21 /* WheelCircumferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048EFE112C874CA600261B21 /* WheelCircumferenceView.swift */; };
 		048EFE1C2C897BE200261B21 /* DeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048EFE1B2C897BE200261B21 /* DeviceManager.swift */; };
+		048EFE1F2C8A8FE200261B21 /* NonMemberRecordSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048EFE1E2C8A8FE200261B21 /* NonMemberRecordSummaryViewController.swift */; };
+		048EFE212C8A922B00261B21 /* NonMemberRecordSummaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048EFE202C8A922B00261B21 /* NonMemberRecordSummaryViewModel.swift */; };
 		0493F5C52C7DACCC00290A4C /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5C42C7DACCC00290A4C /* Coordinator.swift */; };
 		0493F5C82C7DB39200290A4C /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5C72C7DB39200290A4C /* AppCoordinator.swift */; };
 		0493F5CA2C7DB5FD00290A4C /* TabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5C92C7DB5FD00290A4C /* TabBarCoordinator.swift */; };
@@ -179,6 +181,8 @@
 		048EFE0F2C874CA600261B21 /* WheelCircumferenceCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WheelCircumferenceCoordinator.swift; sourceTree = "<group>"; };
 		048EFE112C874CA600261B21 /* WheelCircumferenceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WheelCircumferenceView.swift; sourceTree = "<group>"; };
 		048EFE1B2C897BE200261B21 /* DeviceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceManager.swift; sourceTree = "<group>"; };
+		048EFE1E2C8A8FE200261B21 /* NonMemberRecordSummaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonMemberRecordSummaryViewController.swift; sourceTree = "<group>"; };
+		048EFE202C8A922B00261B21 /* NonMemberRecordSummaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonMemberRecordSummaryViewModel.swift; sourceTree = "<group>"; };
 		0493F5C42C7DACCC00290A4C /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		0493F5C72C7DB39200290A4C /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		0493F5C92C7DB5FD00290A4C /* TabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCoordinator.swift; sourceTree = "<group>"; };
@@ -414,6 +418,14 @@
 				048EFE112C874CA600261B21 /* WheelCircumferenceView.swift */,
 			);
 			path = WheelCircumference;
+			sourceTree = "<group>";
+		};
+		048EFE1D2C8A8FA800261B21 /* NonMemberRecordSummary */ = {
+			isa = PBXGroup;
+			children = (
+				048EFE1E2C8A8FE200261B21 /* NonMemberRecordSummaryViewController.swift */,
+			);
+			path = NonMemberRecordSummary;
 			sourceTree = "<group>";
 		};
 		0493F5C32C7DACBE00290A4C /* Coordinator */ = {
@@ -684,6 +696,7 @@
 				EBF2E3EF2C84E735003FE16C /* RecordListViewModel.swift */,
 				EBF2E3F12C84E7AD003FE16C /* RecordDetailViewModel.swift */,
 				CD642B6A2C88C16E002DD319 /* RecordCountViewModel.swift */,
+				048EFE202C8A922B00261B21 /* NonMemberRecordSummaryViewModel.swift */,
 			);
 			path = Record;
 			sourceTree = "<group>";
@@ -756,6 +769,7 @@
 		CD4213EB2C64988B00F7C3AE /* Record */ = {
 			isa = PBXGroup;
 			children = (
+				048EFE1D2C8A8FA800261B21 /* NonMemberRecordSummary */,
 				CD642B672C88C122002DD319 /* RecordCounter */,
 				EB6B408C2C81B704000DC914 /* Record */,
 				EB6B408D2C81B748000DC914 /* RecordSummary */,
@@ -1195,6 +1209,7 @@
 				CD642B6B2C88C16E002DD319 /* RecordCountViewModel.swift in Sources */,
 				041A673E2C6CF1E0000BA4C1 /* RecordContainer+Extension.swift in Sources */,
 				0493F5E02C7E22F100290A4C /* SummaryRecordCoordinator.swift in Sources */,
+				048EFE1F2C8A8FE200261B21 /* NonMemberRecordSummaryViewController.swift in Sources */,
 				048EFE082C874C9700261B21 /* DeviceDetailView.swift in Sources */,
 				CD6662122C678FF7005E2887 /* HomeModel.swift in Sources */,
 				CDE28F222C849658004FE443 /* SettingCoordinator.swift in Sources */,
@@ -1256,6 +1271,7 @@
 				CDE36A062C7DA12100B743B9 /* DeviceProtocol.swift in Sources */,
 				78DBD01B2C7882AD00B43A62 /* DeviceInfoTableViewCell.swift in Sources */,
 				CD0E1E852C6A409F0080CFED /* SettingView.swift in Sources */,
+				048EFE212C8A922B00261B21 /* NonMemberRecordSummaryViewModel.swift in Sources */,
 				CD66F5D02C6C837E00CDBB0B /* SettingTableViewCell.swift in Sources */,
 				CD42145A2C64997100F7C3AE /* HomeViewModel.swift in Sources */,
 				CD4214142C64988C00F7C3AE /* RecordView.swift in Sources */,
