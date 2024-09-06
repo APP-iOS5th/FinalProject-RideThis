@@ -255,15 +255,15 @@ class RecordView: RideThisViewController {
                 
 #if targetEnvironment(simulator)
                 // 시뮬레이터에서는 블루투스 연결 확인을 건너뛰고 바로 기록을 시작합니다.
-                if viewModel.isRecording {
-                    viewModel.pauseRecording()
-                } else if viewModel.isPaused {
-                    viewModel.resumeRecording()
+                if self.viewModel.isRecording {
+                    self.viewModel.pauseRecording()
+                } else if self.viewModel.isPaused {
+                    self.viewModel.resumeRecording()
                 } else {
-                    viewModel.startRecording()
+                    self.viewModel.startRecording()
                     self.disableTabBar()
                 }
-                self.updateUI(isRecording: viewModel.isRecording)
+                self.updateUI(isRecording: self.viewModel.isRecording)
 #else
                 if self.viewModel.isRecording || self.viewModel.isPaused {
                     self.startRecordProcess()
@@ -277,53 +277,6 @@ class RecordView: RideThisViewController {
 #endif
             }
         }, for: .touchUpInside)
-        
-//        recordButton.addAction(UIAction { [weak self] _ in
-//            guard let self = self else { return }
-//            // MARK: 카운트다운 modal 뷰 present -> 5초 후 dismiss -> 타이머 시작
-//
-//
-//            let isConnected = self.viewModel.checkBluetoothConnection()
-//            if !isConnected {
-//                self.showBluetoothDisconnectedAlert()
-//                return
-//            }
-//
-//            if !viewModel.isRecording && !viewModel.isPaused {
-//                stopButtonTabbed = false
-//                let countDownCoordinator = RecordCountCoordinator(navigationController: self.navigationController!)
-//                countDownCoordinator.start()
-//            } else {
-//                if viewModel.isRecording {
-//                    stopButtonTabbed = true
-//                } else {
-//                    stopButtonTabbed = false
-//                }
-//            }
-//
-//    #if targetEnvironment(simulator)
-//            // 시뮬레이터에서는 블루투스 연결 확인을 건너뛰고 바로 기록을 시작합니다.
-//            if viewModel.isRecording {
-//                viewModel.pauseRecording()
-//            } else if viewModel.isPaused {
-//                viewModel.resumeRecording()
-//            } else {
-//                viewModel.startRecording()
-//                self.disableTabBar()
-//            }
-//            self.updateUI(isRecording: viewModel.isRecording)
-//#else
-//            if viewModel.isRecording || viewModel.isPaused {
-//                startRecordProcess()
-//            } else {
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-//                    self.viewModel.btManager?.delegate = self
-//                    self.viewModel.btManager?.viewDelegate = self
-//                    self.startRecordProcess()
-//                }
-//            }
-//    #endif
-//        }, for: .touchUpInside)
         
         /*
          MARK: 정지 -> 기록 종료 -> 취소 : recording: false / pause: true
