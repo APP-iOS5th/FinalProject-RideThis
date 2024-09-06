@@ -44,6 +44,11 @@ class SearchUserView: RideThisViewController {
         let cancelButton = UIBarButtonItem(title: "취소", style: .plain, target: self, action: #selector(cancelAction))
         self.navigationItem.leftBarButtonItem = cancelButton
         self.sheetPresentationController?.prefersGrabberVisible = true
+        
+        // 네비게이션 바 아래에 추가 여백 설정
+        if let navigationController = self.navigationController {
+            navigationController.additionalSafeAreaInsets.top = 20 
+        }
     }
     
     func setSearchBar() {
