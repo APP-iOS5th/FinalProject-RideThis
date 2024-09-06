@@ -351,8 +351,9 @@ class CompetitionView: RideThisViewController {
         }, for: .touchUpInside)
         
         loginButton.addAction(UIAction { [weak self] _ in
-            let loginVC = LoginView()
-            self?.navigationController?.pushViewController(loginVC, animated: true)
+            guard let self = self else { return }
+            let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!, childCoordinators: [], prevViewCase: .competition, backBtnTitle: "경쟁")
+            loginCoordinator.start()
         }, for: .touchUpInside)
     }
 }
