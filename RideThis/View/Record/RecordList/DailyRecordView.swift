@@ -78,7 +78,7 @@ class DailyRecordView: UIView {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy.MM.dd"
         dateLabel.text = dateFormatter.string(from: record.record_start_time ?? Date())
-        distanceLabel.text = "\(String(format: "%.3f", record.record_distance)) Km"
+        distanceLabel.text = "\(String(format: "%.3f", record.record_distance)) Km (\(record.record_competetion_status == true ? "경쟁" : "기록"))"
         
         // 프로필 이미지 로드
         loadProfileImage(userId: record.user_id)
