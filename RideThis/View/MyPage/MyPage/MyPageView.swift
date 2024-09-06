@@ -77,8 +77,75 @@ class MyPageView: RideThisViewController {
     // MARK: TODO - 팔로워 / 팔로잉 숫자가 커질 때 잘 대비 해야함.
     private let followerLabel = RideThisLabel(fontType: .profileFont, text: "팔로워")
     private let followerCountLabel = RideThisLabel(fontType: .profileFont)
+    private lazy var followerStackView: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .vertical
+        stack.alignment = .center
+        stack.addArrangedSubview(followerLabel)
+        stack.addArrangedSubview(followerCountLabel)
+        stack.distribution = .fillEqually
+        stack.spacing = 0
+        
+        return stack
+    }()
+    private lazy var followerStackContainer: UIView = {
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(followerStackView)
+        followerStackView.snp.makeConstraints {
+            $0.top.equalTo(container.snp.top)
+            $0.left.equalTo(container.snp.left)
+            $0.right.equalTo(container.snp.right)
+            $0.bottom.equalTo(container.snp.bottom)
+        }
+        container.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        container.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        
+        return container
+    }()
     private let followingLabel = RideThisLabel(fontType: .profileFont, text: "팔로잉")
     private let followingCountLabel = RideThisLabel(fontType: .profileFont)
+    private lazy var followingStackView: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .vertical
+        stack.alignment = .center
+        stack.addArrangedSubview(followingLabel)
+        stack.addArrangedSubview(followingCountLabel)
+        stack.distribution = .fillEqually
+        stack.spacing = 0
+        
+        return stack
+    }()
+    private lazy var followingStackContainer: UIView = {
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(followingStackView)
+        followingStackView.snp.makeConstraints {
+            $0.top.equalTo(container.snp.top)
+            $0.left.equalTo(container.snp.left)
+            $0.right.equalTo(container.snp.right)
+            $0.bottom.equalTo(container.snp.bottom)
+        }
+        container.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        container.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        
+        return container
+    }()
+    private lazy var totalFollowStackView: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .horizontal
+        stack.spacing = 10
+        stack.alignment = .center
+        stack.distribution = .equalCentering
+        stack.addArrangedSubview(profileImageView)
+        stack.addArrangedSubview(followerStackContainer)
+        stack.addArrangedSubview(followingStackContainer)
+        
+        return stack
+    }()
     private let notLoginLabel = RideThisLabel(fontType: .recordInfoTitle, text: "로그인이 필요한 화면입니다.")
     private let loginButton = RideThisButton(buttonTitle: "로그인", height: 50)
     
@@ -356,33 +423,13 @@ class MyPageView: RideThisViewController {
     }
     
     func setLoginProfileView() {
-        [self.profileImageView, self.followerLabel, self.followerCountLabel,
-         self.followingLabel, self.followingCountLabel].forEach{ self.profileContainer.addSubview($0) }
+        self.profileContainer.addSubview(totalFollowStackView)
         
-        self.profileImageView.snp.makeConstraints {
-            $0.top.equalTo(self.profileContainer.snp.top).offset(10)
-            $0.left.equalTo(self.profileContainer.snp.left).offset(10)
-            $0.bottom.equalTo(self.profileContainer.snp.bottom).offset(-10)
-        }
-        
-        self.followerLabel.snp.makeConstraints {
-            $0.top.equalTo(self.profileImageView.snp.top).offset(8)
-            $0.centerX.equalTo(self.profileContainer.snp.centerX)
-        }
-        
-        self.followerCountLabel.snp.makeConstraints {
-            $0.bottom.equalTo(self.profileImageView.snp.bottom).offset(-8)
-            $0.centerX.equalTo(self.profileContainer.snp.centerX)
-        }
-        
-        self.followingLabel.snp.makeConstraints {
-            $0.top.equalTo(self.profileImageView.snp.top).offset(8)
-            $0.right.equalTo(self.profileContainer.snp.right).offset(-40)
-        }
-        
-        self.followingCountLabel.snp.makeConstraints {
-            $0.bottom.equalTo(self.profileImageView.snp.bottom).offset(-8)
-            $0.centerX.equalTo(self.followingLabel.snp.centerX)
+        totalFollowStackView.snp.makeConstraints {
+            $0.top.equalTo(profileContainer.snp.top)
+            $0.left.equalTo(profileContainer.snp.left).offset(30)
+            $0.right.equalTo(profileContainer.snp.right).offset(-30)
+            $0.bottom.equalTo(profileContainer.snp.bottom)
         }
     }
     
@@ -753,8 +800,10 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
     
     // MARK: 프로필 Container를 선택했을 때 팔로우 관리 페이지로 이동하는 event등록
     func setEventToProfileContainer() {
-        let profileContainerTapEvent = UITapGestureRecognizer(target: self, action: #selector(toFollowerView))
-        profileContainer.addGestureRecognizer(profileContainerTapEvent)
+        let followerTapEvent = UITapGestureRecognizer(target: self, action: #selector(toFollowerView))
+        let followingTapEvent = UITapGestureRecognizer(target: self, action: #selector(toFollowerView))
+        followerStackView.addGestureRecognizer(followerTapEvent)
+        followingStackView.addGestureRecognizer(followingTapEvent)
     }
     
     // MARK: 그래프 cell이동 후 UI업데이트
