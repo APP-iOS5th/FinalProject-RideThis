@@ -21,6 +21,7 @@ class SignUpInfoViewModel {
     @Published var nickNameTextIsFilled: Bool = false
     @Published var weightTextIsFilled: Bool = false
     
+    @Published var isExistEmail: Bool = false
     @Published var isExistNickName: Bool = false
     @Published var weightWarningText: String? = nil
     
@@ -58,15 +59,26 @@ class SignUpInfoViewModel {
             }
             .store(in: &cancellable)
         
-        Publishers.CombineLatest3($nickNameTextIsFilled, $weightTextIsFilled, $isExistNickName)
-            .map { $0 && $1 && !$2}
+        self.$emailText
+            .debounce(for: 0.3, scheduler: RunLoop.main)
+            .removeDuplicates()
+            .sink { [weak self] email in
+                guard let self = self else { return }
+                Task {
+                    let existCount = await self.firebaseService.findUserCountBy(email: email)
+                    self.isExistEmail = existCount > 0 && UserService.shared.combineUser?.user_email != email
+                }
+            }
+            .store(in: &cancellable)
+        
+        Publishers.CombineLatest4($nickNameTextIsFilled, $weightTextIsFilled, $isExistNickName, $isExistEmail)
+            .map { $0 && $1 && !$2 && !$3}
             .assign(to: &$allFieldFilled)
     }
     
-    func createUser(userInfo: [String: Any]) {
-        firebaseService.createUser(userInfo: userInfo) { [weak self] user in
-            guard let self = self else { return }
-            UserService.shared.signedUser = user
+    func createUser(userInfo: [String: Any], completion: @escaping (User) -> Void) {
+        firebaseService.createUser(userInfo: userInfo) { user in
+            completion(user)
         }
     }
 }

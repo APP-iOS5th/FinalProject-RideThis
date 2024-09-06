@@ -91,16 +91,20 @@ extension LoginView: ASAuthorizationControllerDelegate {
                     do {
                         if let scene = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate) {
                             // MARK: apple 로그인 정보 KeyChain에 저장
-                            self.userService.appleSignIn(userId: userId)
+                            UserService.shared.appleSignIn(userId: userId)
                             if case .user(let userData) = try await service.fetchUser(at: userId, userType: true) {
                                 if userData == nil {
                                     // MARK: 추가정보 입력 화면으로 이동
                                     if let scene = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate) {
-                                        scene.appCoordinator?.changeRootView(viewController: SignUpInfoView(userId: userId, userEmail: userEmail))
+                                        scene.appCoordinator?.changeRootView(viewController: SignUpInfoView(userId: userId, userEmail: userEmail, prevViewCase: self.loginCoordinator!.prevViewCase))
                                     }
                                 } else {
                                     self.userService.signedUser = userData
-                                    scene.appCoordinator?.changeTabBarView(change: true)
+                                    guard let prevViewCase = self.loginCoordinator?.prevViewCase else {
+                                        scene.appCoordinator?.changeTabBarView(change: true)
+                                        return
+                                    }
+                                    scene.appCoordinator?.changeTabBarView(change: true, selectedCase: prevViewCase)
                                 }
                             }
                         }

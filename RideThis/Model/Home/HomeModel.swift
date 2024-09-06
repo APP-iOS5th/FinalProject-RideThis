@@ -19,3 +19,12 @@ struct HomeModel {
         self.userName = userName
     }
 }
+
+enum ViewCase: Int {
+    case home = 0
+    case competition = 1
+    case record = 2
+    case device = 3
+    case myPage = 4
+    case summary = 5
+}
