@@ -16,7 +16,7 @@ class AppCoordinator: Coordinator {
         navigationController.pushViewController(splashVC, animated: true)
     }
     
-    func changeTabBarView(change immediately: Bool = false) {
+    func changeTabBarView(change immediately: Bool = false, selectedCase: ViewCase = .home) {
         let tabBarController = UITabBarController()
         tabBarController.tabBar.clipsToBounds = false
         let separatorView = UIView(frame: CGRect(x: 0, y: 0, width: tabBarController.tabBar.frame.width, height: 0.5))
@@ -28,7 +28,7 @@ class AppCoordinator: Coordinator {
         
         tabBarController.tabBar.standardAppearance = appearance
         tabBarController.tabBar.scrollEdgeAppearance = appearance
-        let tabBarCoordinator = TabBarCoordinator(tabBarController: tabBarController)
+        let tabBarCoordinator = TabBarCoordinator(tabBarController: tabBarController, prevSelectedViewCase: selectedCase)
         childCoordinators.append(tabBarCoordinator)
         tabBarCoordinator.start()
         

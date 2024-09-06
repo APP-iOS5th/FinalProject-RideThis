@@ -342,7 +342,7 @@ class CompetitionView: RideThisViewController {
             } else {
                 showAlert(alertTitle: "로그인이 필요합니다.", msg: "경쟁하기는 로그인이 필요한 서비스입니다.", confirm: "로그인") {
                     // 코디네이터 패턴(개발 예정)
-                    let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!)
+                    let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!, prevViewCase: .competition)
                     
                     loginCoordinator.start()
                 }

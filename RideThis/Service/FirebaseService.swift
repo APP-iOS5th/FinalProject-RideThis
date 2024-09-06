@@ -105,6 +105,19 @@ class FireBaseService {
         return 0
     }
     
+    func findUserCountBy(email: String) async -> Int {
+        do {
+            let querySnapshot = try await db.collection("USERS")
+                .whereField("user_email", isEqualTo: email)
+                .getDocuments()
+            
+            return querySnapshot.count
+        } catch {
+            print("error \(#function)")
+        }
+        return 0
+    }
+    
     // MARK: USERS 컬렉션의 모든 데이터 가져오기
     func fetchAllUsers() async throws -> [QueryDocumentSnapshot] {
         let querySnapshot = try await db.collection("USERS").getDocuments()

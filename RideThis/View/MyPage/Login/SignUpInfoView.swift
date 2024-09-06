@@ -8,12 +8,14 @@ class SignUpInfoView: RideThisViewController {
     // MARK: Data Components
     let userId: String
     let userEmail: String?
+    let prevViewCase: ViewCase
     private let viewModel = SignUpInfoViewModel()
     private lazy var cancellable = Set<AnyCancellable>()
     
-    init(userId: String, userEmail: String?) {
+    init(userId: String, userEmail: String?, prevViewCase: ViewCase = .home) {
         self.userId = userId
         self.userEmail = userEmail
+        self.prevViewCase = prevViewCase
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -283,6 +285,7 @@ class SignUpInfoView: RideThisViewController {
             
             let newUserInfo: [String: Any] = [
                 "user_account_public": false,
+                "user_alarm_status": true,
                 "user_email": enteredEmail,
                 "user_follower": [],
                 "user_following": [],
@@ -293,9 +296,14 @@ class SignUpInfoView: RideThisViewController {
                 "user_weight": Int(userWeight.text ?? "")!
             ]
             
-            self.viewModel.createUser(userInfo: newUserInfo)
-            if let scene = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate) {
-                scene.appCoordinator?.changeTabBarView(change: true)
+            self.viewModel.createUser(userInfo: newUserInfo) { [weak self] user in
+                guard let self = self else { return }
+                UserService.shared.checkPrevAppleLogin()
+                UserService.shared.signedUser = user
+                
+                if let scene = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate) {
+                    scene.appCoordinator?.changeTabBarView(change: true, selectedCase: self.prevViewCase)
+                }
             }
         }, for: .touchUpInside)
         
@@ -328,6 +336,19 @@ class SignUpInfoView: RideThisViewController {
                     userNickName.textColor = .systemRed
                 } else {
                     userNickName.textColor = .label
+                }
+            }
+            .store(in: &cancellable)
+        
+        viewModel.$isExistEmail
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] exist in
+                guard let self = self else { return }
+                
+                if exist {
+                    userEmailTextField.textColor = .systemRed
+                } else {
+                    userEmailTextField.textColor = .label
                 }
             }
             .store(in: &cancellable)
