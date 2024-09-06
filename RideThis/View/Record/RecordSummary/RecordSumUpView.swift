@@ -129,7 +129,7 @@ class RecordSumUpView: RideThisViewController {
             guard let self = self else { return }
             
             if UserService.shared.loginStatus == .appleLogin {
-                self.showAlert(alertTitle: "기록 저장", msg: "기록을 저장하시겠습니까?", confirm: "저장") {
+                self.showAlert(alertTitle: "기록이 저장되었습니다.", confirm: "확인", hideCancel: true) {
                     self.updateViewModelWithRecordData()
                     
                     Task {
