@@ -31,7 +31,7 @@ class CompetitionView: RideThisViewController {
         var config = UIButton.Configuration.filled()
         config.baseBackgroundColor = UIColor(red: 246/255, green: 246/255, blue: 245/255, alpha: 1)
         config.baseForegroundColor = .black
-        config.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 0)
+        config.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
         
         var titleAttr = AttributedString("선택한 거리: 5Km")
         titleAttr.font = .systemFont(ofSize: 17, weight: .semibold)
@@ -40,13 +40,15 @@ class CompetitionView: RideThisViewController {
         let image = UIImage(systemName: "chevron.down")?
             .withConfiguration(UIImage.SymbolConfiguration(pointSize: 12))
         config.image = image
-        config.imagePlacement = .leading
-        config.imagePadding = 8
+        config.imagePlacement = .trailing
+        config.imagePadding = 10
         
         button.configuration = config
         button.contentHorizontalAlignment = .left
         button.layer.borderColor = UIColor.gray.cgColor
         button.layer.borderWidth = 1.0
+        
+        button.layer.cornerRadius = 5
         
         button.translatesAutoresizingMaskIntoConstraints = false
         
@@ -193,7 +195,7 @@ class CompetitionView: RideThisViewController {
         dropdownButton.snp.makeConstraints { drop in
             drop.top.equalTo(segmentedControl.snp.bottom).offset(20)
             drop.left.equalTo(safeArea.snp.left).offset(20)
-            drop.width.equalTo(safeArea.snp.width).multipliedBy(0.5)
+//            drop.width.equalTo(safeArea.snp.width).multipliedBy(0.5)
             drop.height.equalTo(safeArea.snp.height).multipliedBy(0.05)
         }
         
