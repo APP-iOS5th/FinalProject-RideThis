@@ -147,7 +147,6 @@ class RecordViewModel: BluetoothManagerDelegate {
             self.cadenceValues.append(cadence)
             self.isBluetoothConnected = true
         }
-        print("cadenceValues: \(cadenceValues)")
     }
     
     func didUpdateSpeed(_ speed: Double) {
@@ -157,8 +156,6 @@ class RecordViewModel: BluetoothManagerDelegate {
             self.speedValues.append(speed)
             self.isBluetoothConnected = true
         }
-        
-        print("speedValues: \(speedValues)")
     }
     
     func didUpdateDistance(_ distance: Double) {
