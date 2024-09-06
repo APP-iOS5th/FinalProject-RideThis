@@ -6,8 +6,6 @@ class RecordCoordinator: Coordinator {
     var tabBarController: UITabBarController
     var childCoordinators: [Coordinator] = []
     
-    private var lastDataUpdateTime: Date?
-    
     init(navigationController: UINavigationController, tabBarController: UITabBarController) {
         self.navigationController = navigationController
         self.tabBarController = tabBarController
