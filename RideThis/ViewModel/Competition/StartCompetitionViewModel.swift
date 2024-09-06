@@ -45,7 +45,7 @@ class StartCometitionViewModel: BluetoothManagerDelegate {
     // MARK: 초기화
     init(startTime: Date, goalDistnace: Double, userWeight: Int) {
         self.startTime = startTime
-        self.goalDistance = goalDistnace
+        self.goalDistance = 0.02
         
         self.userWeight = service.combineUser?.user_weight ?? 0
     }
@@ -83,24 +83,8 @@ class StartCometitionViewModel: BluetoothManagerDelegate {
                 // competitionStatus = true, goalDistance가 일치하는 데이터 찾기
                 let recordsSnapshot = try await firebaseService.fetchCompetitionSnapshot(collection: recordsCollection, competitionStatus: true, goalDistance: goalDistance)
                 
-                // 기존 기록을 비교하고, 더 빠른 기록만 남김
-                for document in recordsSnapshot.documents {
-                    let existingTimer = document.data()["record_timer"] as? String ?? "00:00"
-                    
-                    if compareTimers(existingTimer, timer) {
-                        try await firebaseService.fetchDeleteDocument(at: nil, withId: nil, collection: recordsCollection, document: document)
-                        
-                    } else {
-                        shouldSaveNewRecord = false
-                    }
-                }
-                // 새로운 기록을 저장할지 여부 결정
-                if shouldSaveNewRecord {
-                    try await firebaseService.fetchRecord(collection: recordsCollection, timer: timer, cadence: cadence, speed: speed, distance: distance, calorie: calorie, startTime: startTime ?? Date(), endTime: endTime ?? Date(), date: startTime ?? Date(), competetionStatus: true, tagetDistance: goalDistance)
-                    print("경쟁 기록 추가")
-                } else {
-                    print("새로운 기록이 저장되지 않았습니다. 기존 기록이 더 빠릅니다.")
-                }
+                // 경쟁기록 추가
+                try await firebaseService.fetchRecord(collection: recordsCollection, timer: timer, cadence: cadence, speed: speed, distance: distance, calorie: calorie, startTime: startTime ?? Date(), endTime: endTime ?? Date(), date: startTime ?? Date(), competetionStatus: true, tagetDistance: goalDistance)
             }
         } catch {
             print("경쟁 기록 처리 에러: \(error.localizedDescription)")
@@ -190,23 +174,7 @@ class StartCometitionViewModel: BluetoothManagerDelegate {
             self.calorie = calories
         }
     }
-    
-    // MARK: 타이머 시간 비교
-    func compareTimers(_ timer1: String, _ timer2: String) -> Bool {
-        let components1 = timer1.split(separator: ":").compactMap { Int($0) }
-        let components2 = timer2.split(separator: ":").compactMap { Int($0) }
         
-        guard components1.count == 2, components2.count == 2 else {
-            return false
-        }
-        
-        let totalSeconds1 = components1[0] * 60 + components1[1]
-        let totalSeconds2 = components2[0] * 60 + components2[1]
-        
-        // 새로운 타이머가 더 빠르거나 같으면 true 반환
-        return totalSeconds2 <= totalSeconds1
-    }
-    
     func bluetoothDidConnect() {
     }
 }
