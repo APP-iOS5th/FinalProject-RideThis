@@ -232,6 +232,7 @@ class UserProfileView: RideThisViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.overrideUserInterfaceStyle = .light
         configureUI()
         setCombineData()
         setUserData()
@@ -249,6 +250,7 @@ class UserProfileView: RideThisViewController {
         if let user = selectedUser {
             self.title = "\(user.user_nickname)님 프로필"
         }
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         self.sheetPresentationController?.prefersGrabberVisible = true
         let cancelButton = UIBarButtonItem(title: "취소", style: .done, target: self, action: #selector(dismissUserView))
         self.navigationController?.navigationItem.leftBarButtonItem = cancelButton

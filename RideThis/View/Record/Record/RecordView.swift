@@ -21,7 +21,7 @@ class RecordView: RideThisViewController {
     private var cancellables = Set<AnyCancellable>()
     
     // 커스텀 타이틀
-    private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "기록")
+    private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "라이딩")
     private var recordListButton: UIBarButtonItem?
     
     // 기록 뷰 선언
@@ -34,7 +34,7 @@ class RecordView: RideThisViewController {
     // 버튼 선언
     let resetButton = RideThisButton(buttonTitle: "Reset")
     let recordButton = RideThisButton(buttonTitle: "시작")
-    let finishButton = RideThisButton(buttonTitle: "기록 종료")
+    let finishButton = RideThisButton(buttonTitle: "라이딩 종료")
     
     private let mainStackView = UIStackView()
     private let recordsStackView = UIStackView()
@@ -98,7 +98,7 @@ class RecordView: RideThisViewController {
         mainStackView.spacing = 20
         mainStackView.alignment = .fill
         mainStackView.distribution = .fill
-
+        
         mainStackView.snp.makeConstraints { make in
             if isLargeDevice() {
                 make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40) // 큰 기기에 대한 상단 여백
@@ -108,14 +108,14 @@ class RecordView: RideThisViewController {
             make.left.right.equalToSuperview().inset(20)
             make.bottom.lessThanOrEqualTo(view.safeAreaLayoutGuide.snp.bottom).offset(-120)
         }
-
+        
         mainStackView.addArrangedSubview(timerRecord)
         mainStackView.addArrangedSubview(recordsStackView)
-
+        
         timerRecord.snp.makeConstraints { make in
             make.height.equalTo(150)
         }
-
+        
         if isLargeDevice() {
             // 큰 기기에서 추가 여백을 주기 위한 빈 뷰
             let topSpacerView = UIView()
@@ -219,6 +219,7 @@ class RecordView: RideThisViewController {
             self.showAlert(alertTitle: "기록을 리셋할까요?", msg: "지금까지의 기록이 초기화됩니다.", confirm: "리셋"
             ) {
                 self.viewModel.resetRecording()
+                self.enableTabBar()
             } cancelAction: {
                 if self.stopButtonTabbed == false {
                     self.viewModel.resumeRecording()
@@ -260,6 +261,7 @@ class RecordView: RideThisViewController {
                     self.viewModel.resumeRecording()
                 } else {
                     self.viewModel.startRecording()
+                    self.disableTabBar()
                 }
                 self.updateUI(isRecording: self.viewModel.isRecording)
 #else
@@ -284,8 +286,9 @@ class RecordView: RideThisViewController {
         finishButton.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
             viewModel.pauseRecording()
-            self.showAlert(alertTitle: "기록을 종료할까요?", msg: "요약 화면으로 이동합니다.", confirm: "기록 종료") {
+            self.showAlert(alertTitle: "라이딩을 종료할까요?", msg: "요약 화면으로 이동합니다.", confirm: "라이딩 종료") {
                 self.viewModel.finishRecording()
+                self.enableTabBar()
             } cancelAction: {
                 // MARK: 현재 기록중이었을 때만 종료버튼 후 alert에서 취소를 누르면 계속 기록이 진행되게 하기위해서
                 if self.stopButtonTabbed == false {
@@ -311,6 +314,7 @@ class RecordView: RideThisViewController {
                     self.viewModel.resumeRecording()
                 } else {
                     self.viewModel.startRecording()
+                    self.disableTabBar()
                 }
                 self.updateUI(isRecording: self.viewModel.isRecording)
             } else {
@@ -318,13 +322,22 @@ class RecordView: RideThisViewController {
             }
         }
     }
-
+    
     
     private func showBluetoothDisconnectedAlert() {
         showAlert(alertTitle: "장치연결이 필요합니다.", msg: "사용하시려면 장치를 연결해주세요.", confirm: "장치연결") {
             self.coordinator?.showDeviceConnectionView()
         }
         hasShownBluetoothAlert = true
+    }
+    
+    // MARK: - 탭바 활성화 / 비활성화
+    private func enableTabBar() {
+        tabBarController?.tabBar.items?.forEach { $0.isEnabled = true }
+    }
+    
+    private func disableTabBar() {
+        tabBarController?.tabBar.items?.forEach { $0.isEnabled = false }
     }
     
     // 바인딩 설정
@@ -377,18 +390,21 @@ class RecordView: RideThisViewController {
                 self.resetButton.backgroundColor = .black
                 self.finishButton.backgroundColor = .black
                 self.recordButton.setTitle("정지", for: .normal)
+                self.recordListButton?.isEnabled = false
             } else if self.viewModel.isPaused == true { // 일시정지일 때
                 self.resetButton.isEnabled = true
                 self.finishButton.isEnabled = true
                 self.resetButton.backgroundColor = .black
                 self.finishButton.backgroundColor = .black
                 self.recordButton.setTitle("재시작", for: .normal)
+                self.recordListButton?.isEnabled = false
             } else { // 정지, 리셋, 종료 눌렸을 때
                 self.resetButton.isEnabled = false
                 self.finishButton.isEnabled = false
                 self.resetButton.backgroundColor = .systemGray
                 self.finishButton.backgroundColor = .systemGray
                 self.recordButton.setTitle("시작", for: .normal)
+                self.recordListButton?.isEnabled = true
             }
         }
     }
@@ -428,11 +444,17 @@ class RecordView: RideThisViewController {
     private func showLoginAlert() {
         showAlert(
             alertTitle: "로그인 필요",
-            msg: "기록 목록을 보려면 로그인이 필요합니다. 로그인 하시겠습니까?",
+            msg: "라이딩 목록을 보려면 로그인이 필요합니다. 로그인 하시겠습니까?",
             confirm: "로그인"
         ) {
             self.coordinator?.showLoginView()
         }
+    }
+    
+    // MARK: - 탭바 활성화
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        enableTabBar()
     }
 }
 
@@ -440,19 +462,23 @@ class RecordView: RideThisViewController {
 extension RecordView: RecordViewModelDelegate {
     func didFinishRecording() {
         coordinator?.showSummaryView(viewModel: viewModel)
+        enableTabBar()
     }
     
     func didPauseRecording() {
         updateUI(isRecording: false)
+        disableTabBar()
     }
     
     func didStartRecording() {
         updateUI(isRecording: true)
+        disableTabBar()
     }
     
     func didResetRecording() {
         updateUI(isRecording: false)
         updateTimerDisplay()
+        enableTabBar()
     }
 }
 
@@ -460,6 +486,11 @@ extension RecordView: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         if viewController == tabBarController.selectedViewController {
             return true
+        }
+        
+        // 기록 중이거나 일시정지 상태일 때 탭 전환 막기
+        if viewModel.isRecording == true || viewModel.isPaused == true {
+            return false
         }
         
         return true
@@ -484,22 +515,22 @@ extension RecordView: BluetoothManagerDelegate {
             recordView.resetBluetoothAlert()
         }
     }
-
+    
     func didUpdateCadence(_ cadence: Double) {
         lastDataUpdateTime = Date()
         viewModel.didUpdateCadence(cadence)
     }
-
+    
     func didUpdateSpeed(_ speed: Double) {
         lastDataUpdateTime = Date()
         viewModel.didUpdateSpeed(speed)
     }
-
+    
     func didUpdateDistance(_ distance: Double) {
         lastDataUpdateTime = Date()
         viewModel.didUpdateDistance(distance)
     }
-
+    
     func didUpdateCalories(_ calories: Double) {
         lastDataUpdateTime = Date()
         viewModel.didUpdateCalories(calories)

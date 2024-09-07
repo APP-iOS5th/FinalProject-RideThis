@@ -16,7 +16,7 @@ class AccountSettingView: RideThisViewController {
         
         return image
     }()
-    private let loginAccountLabel = RideThisLabel(fontType: .defaultSize, text: "로그인 계정")
+    private let loginAccountLabel = RideThisLabel(fontType: .defaultSize, text: "로그인 계정 : ")
     private let loginAccount = RideThisLabel(fontType: .defaultSize, fontColor: .recordTitleColor)
     private lazy var loginStack: UIStackView = {
         let stack = UIStackView()
@@ -24,7 +24,7 @@ class AccountSettingView: RideThisViewController {
         stack.axis = .horizontal
         stack.addArrangedSubview(loginAccountLabel)
         stack.addArrangedSubview(loginAccount)
-        stack.spacing = 5
+        stack.spacing = 10
         stack.distribution = .fillProportionally
         stack.alignment = .center
         
@@ -122,6 +122,6 @@ class AccountSettingView: RideThisViewController {
     
     func setUserData() {
         guard let user = service.combineUser else { return }
-        self.loginAccount.text = user.user_email
+        self.loginAccount.text = user.user_email.isEmpty ? user.user_nickname : user.user_email
     }
 }

@@ -39,6 +39,9 @@ class DeviceCoordinator: Coordinator {
     func showDeviceDetailView(for deviceName: String, viewModel: DeviceViewModel) {
         let deviceDetailCoordinator = DeviceDetailCoordinator(navigationController: navigationController, deviceName: deviceName, viewModel: viewModel)
         childCoordinators.append(deviceDetailCoordinator)
+        
+        self.navigationController.topViewController?.navigationItem.backButtonTitle = "장치연결"
+        
         deviceDetailCoordinator.start()
     }
 }

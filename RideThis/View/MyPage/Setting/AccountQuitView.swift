@@ -33,7 +33,7 @@ class AccountQuitView: RideThisViewController {
     }()
     private let nickNameLabel = RideThisLabel(fontType: .classification, text: "\(UserService.shared.combineUser!.user_nickname) 회원님,")
     private let nickNameLabel2 = RideThisLabel(fontType: .classification, text: "정말 탈퇴하시겠습니까?")
-    private let quitMessagelabel = RideThisLabel(fontType: .defaultSize, text: "탈퇴하시면 그동안의 랭킹, 기록, 장치연결 정보 및 친구 목록 등 모든 정보가 삭제됩니다.")
+    private let quitMessagelabel = RideThisLabel(fontType: .defaultSize, text: "탈퇴하시면 그동안의 랭킹, 라이딩, 장치연결 정보 및 친구 목록 등 모든 정보가 삭제됩니다.")
     private lazy var confirmCheckbox: UIButton = {
         let btn = UIButton()
         btn.translatesAutoresizingMaskIntoConstraints = false

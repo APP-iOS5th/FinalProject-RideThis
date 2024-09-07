@@ -64,24 +64,38 @@ class CompetitionViewModel {
             records = []
             return
         }
+
+        var filteredRecords: [RecordModel] = []
         
         if selectedSegment == .totalRanking {
-            records = allRecords.filter { record in
+            filteredRecords = allRecords.filter { record in
                 record.record_competetion_status == true && record.record_target_distance == targetDistance
             }
-            
         } else if selectedSegment == .followingRanking {
             if isLogin {
-                records = allRecords.filter { record in
+                filteredRecords = allRecords.filter { record in
                     record.record_competetion_status == true &&
                     record.record_target_distance == targetDistance &&
                     followingUserIds.contains(record.user_id)
                 }
             } else {
-                records = []
+                filteredRecords = []
             }
         }
         
+        var bestRecordsByUserId: [String: RecordModel] = [:]
+        
+        for record in filteredRecords {
+            if let existingRecord = bestRecordsByUserId[record.user_id] {
+                if timeInterval(from: record.record_timer) < timeInterval(from: existingRecord.record_timer) {
+                    bestRecordsByUserId[record.user_id] = record
+                }
+            } else {
+                bestRecordsByUserId[record.user_id] = record
+            }
+        }
+        
+        records = Array(bestRecordsByUserId.values)
         records.sort { first, second in
             return timeInterval(from: first.record_timer) < timeInterval(from: second.record_timer)
         }

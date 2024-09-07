@@ -11,12 +11,13 @@ class SettingView: RideThisViewController {
         table.delegate = self
         table.dataSource = self
         table.register(SettingTableViewCell.self, forCellReuseIdentifier: "SettingTableViewCell")
-        table.backgroundColor = .primaryBackgroundColor
+        table.backgroundColor = .white
+        table.layer.cornerRadius = 13
         
         return table
     }()
     
-    private let items: [String] = ["계정 설정", "비공개 설정", "알림 설정"]
+    private let items: [String] = ["계정 설정", "비공개 설정", "알림 설정", "개인정보 처리방침"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,10 +30,10 @@ class SettingView: RideThisViewController {
         self.view.addSubview(self.settingTableView)
         
         self.settingTableView.snp.makeConstraints {
-            $0.top.equalTo(self.view.snp.top)
-            $0.left.equalTo(self.view.snp.left)
-            $0.right.equalTo(self.view.snp.right)
-            $0.bottom.equalTo(self.view.snp.bottom)
+            $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(20)
+            $0.left.equalTo(self.view.snp.left).offset(20)
+            $0.right.equalTo(self.view.snp.right).offset(-20)
+            $0.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(-20)
         }
     }
 }
@@ -49,7 +50,7 @@ extension SettingView: UITableViewDelegate, UITableViewDataSource {
         }
         
         switch indexPath.row {
-        case 0:
+        case 0, 3:
             cell.configureCell(text: item, cellCase: .navigationLink)
         case 1:
             cell.configureCell(text: item, cellCase: .publicToggle)
@@ -66,9 +67,14 @@ extension SettingView: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row == 0 {
             let accountSettingCoordinator = AccountSettingCoordinator(navigationController: self.navigationController!)
+            self.navigationController?.topViewController?.navigationItem.backButtonTitle = "설정"
+            
             accountSettingCoordinator.start()
+        } else if indexPath.row == 3 {
+            settingCoordinator?.showPrivacyPolicy()
         }
     }
 }

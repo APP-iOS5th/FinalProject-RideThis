@@ -18,17 +18,12 @@ class HomeCoordinator: Coordinator {
     
     func showRecordListView() {
         let recordListCoordinator = RecordListCoordinator(navigationController: self.navigationController)
+        
+        self.navigationController.topViewController?.navigationItem.backButtonTitle = "Home"
+        
+        childCoordinators.append(recordListCoordinator)
+        
         recordListCoordinator.start()
-//        if let recordNav = tabBarController.viewControllers?[2] as? UINavigationController {
-//            tabBarController.selectedIndex = 2
-//            if recordNav.topViewController is RecordListView {
-//                return
-//            }
-//            
-//            let recordCoordinator = RecordCoordinator(navigationController: recordNav, tabBarController: tabBarController)
-//            childCoordinators.append(recordCoordinator)
-//            recordCoordinator.showRecordListView()
-//        }
     }
     
     func showRecordView() {
@@ -46,6 +41,8 @@ class HomeCoordinator: Coordinator {
     
     func showLoginView() {
         let loginVC = LoginView()
+        self.navigationController.topViewController?.navigationItem.backButtonTitle = "Home"
+        
         self.navigationController.pushViewController(loginVC, animated: true)
     }
 }

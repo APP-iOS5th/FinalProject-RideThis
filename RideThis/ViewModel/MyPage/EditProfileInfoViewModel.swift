@@ -14,6 +14,8 @@ class EditProfileInfoViewModel {
     
     @Published var isExistNickName: Bool = false
     
+    @Published var warningMessage: String = ""
+    
     init() {
         self.$nickName
             .removeDuplicates()
@@ -23,9 +25,18 @@ class EditProfileInfoViewModel {
             .assign(to: &$nickNameFilled)
         
         self.$weight
-            .removeDuplicates()
             .map{ !$0.isEmpty }
             .assign(to: &$weightFilled)
+        
+        self.$weight
+            .map { weightText -> String in
+                if let weight = Int(weightText), weight <= 10 {
+                    return "몸무게는 10kg 초과여야 합니다."
+                } else {
+                    return ""
+                }
+            }
+            .assign(to: &$warningMessage)
         
         self.$nickName
             .debounce(for: 0.3, scheduler: RunLoop.main)
@@ -39,8 +50,8 @@ class EditProfileInfoViewModel {
             }
             .store(in: &cancellable)
         
-        Publishers.CombineLatest3($nickNameFilled, $weightFilled, $isExistNickName)
-            .map { $0 && $1 && !$2 }
+        Publishers.CombineLatest4($nickNameFilled, $weightFilled, $isExistNickName, $warningMessage)
+            .map { $0 && $1 && !$2 && $3.isEmpty }
             .assign(to: &$allFieldFilled)
     }
 }

@@ -21,6 +21,9 @@ class CompetitionCoordinator: Coordinator {
     func moveToDistanceSelectionView() {
        let distanceCoordinator = DistanceSelectionCoordinator(navigationController: navigationController)
         childCoordinators.append(distanceCoordinator)
+        
+        self.navigationController.topViewController?.navigationItem.backButtonTitle = "경쟁"
+        
         distanceCoordinator.start()
     }
     
@@ -28,10 +31,10 @@ class CompetitionCoordinator: Coordinator {
         tabBarController.selectedIndex = 3
     }
     
-    // 코디네이터 패턴(개발 예정)
     func moveToLoginView() {
-        let loginCoordinator = LoginCoordinator(navigationController: navigationController, prevViewCase: .competition)
+        let loginCoordinator = LoginCoordinator(navigationController: navigationController, childCoordinators: childCoordinators, prevViewCase: .competition, backBtnTitle: "경쟁")
         childCoordinators.append(loginCoordinator)
+        
         
         loginCoordinator.start()
     }

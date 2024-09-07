@@ -73,7 +73,7 @@ class NonMemberRecordSummaryViewModel {
                 deleteUnloginUserSummaryFromDefaults()
             }
         } catch {
-            print("기록 처리 에러: \(error.localizedDescription)")
+            print("라이딩 처리 에러: \(error.localizedDescription)")
         }
     }
 }

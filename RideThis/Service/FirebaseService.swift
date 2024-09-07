@@ -246,6 +246,7 @@ class FireBaseService {
         let userInfo = db.collection("USERS").document(user.user_id)
         let updateData: [String: Any] = [
             "user_account_public": user.user_account_public,
+            "user_alarm_status": user.user_alarm_status,
             "user_email": user.user_email,
             "user_follower": user.user_follower,
             "user_following": user.user_following,
@@ -439,6 +440,47 @@ class FireBaseService {
                     "device_registration_status": false
                 ])
             }
+        }
+    }
+    
+    func saveNoUserRecordData(user: User, completion: @escaping () -> Void) async {
+        guard let device = DataPersistenceService.shared.loadUnkownedDevices(),
+              let record = DataPersistenceService.shared.getUnloginUserSummary() else { return }
+        
+        do {
+            if let registeredDevice = try await getRegisteredDevice(for: user.user_id) {
+                var updatedDevice = registeredDevice
+                updatedDevice.registrationStatus = false
+                
+                try await upsertDeviceInFirebase(updatedDevice, for: user.user_id)
+            }
+            
+            try await updateAllDevicesStatus(for: user.user_id, exceptDevice: device.name)
+            
+            try await upsertDeviceInFirebase(device, for: user.user_id)
+            
+            if case .userSnapshot(let userSnapshot) = try await self.fetchUser(at: user.user_id, userType: false) {
+                guard let doc = userSnapshot else {
+                    print("유저를 찾을 수 없습니다.")
+                    return
+                }
+                let recordsCollection = self.fetchCollection(document: doc, collectionName: "RECORDS")
+                try await fetchRecord(collection: recordsCollection,
+                                      timer: record.recordedTime,
+                                      cadence: record.cadence,
+                                      speed: record.speed,
+                                      distance: record.distance,
+                                      calorie: record.calorie,
+                                      startTime: record.startTime,
+                                      endTime: record.endTime,
+                                      date: Date(),
+                                      competetionStatus: false,
+                                      tagetDistance: nil)
+                
+                completion()
+            }
+        } catch {
+            print(error)
         }
     }
     

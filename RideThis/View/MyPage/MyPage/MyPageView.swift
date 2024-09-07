@@ -34,6 +34,9 @@ class MyPageView: RideThisViewController {
         }
     }
     
+    // 커스텀 타이틀
+    private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "마이페이지")
+    
     init(viewModel: MyPageViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -77,8 +80,75 @@ class MyPageView: RideThisViewController {
     // MARK: TODO - 팔로워 / 팔로잉 숫자가 커질 때 잘 대비 해야함.
     private let followerLabel = RideThisLabel(fontType: .profileFont, text: "팔로워")
     private let followerCountLabel = RideThisLabel(fontType: .profileFont)
+    private lazy var followerStackView: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .vertical
+        stack.alignment = .center
+        stack.addArrangedSubview(followerLabel)
+        stack.addArrangedSubview(followerCountLabel)
+        stack.distribution = .fillEqually
+        stack.spacing = 0
+        
+        return stack
+    }()
+    private lazy var followerStackContainer: UIView = {
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(followerStackView)
+        followerStackView.snp.makeConstraints {
+            $0.top.equalTo(container.snp.top)
+            $0.left.equalTo(container.snp.left)
+            $0.right.equalTo(container.snp.right)
+            $0.bottom.equalTo(container.snp.bottom)
+        }
+        container.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        container.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        
+        return container
+    }()
     private let followingLabel = RideThisLabel(fontType: .profileFont, text: "팔로잉")
     private let followingCountLabel = RideThisLabel(fontType: .profileFont)
+    private lazy var followingStackView: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .vertical
+        stack.alignment = .center
+        stack.addArrangedSubview(followingLabel)
+        stack.addArrangedSubview(followingCountLabel)
+        stack.distribution = .fillEqually
+        stack.spacing = 0
+        
+        return stack
+    }()
+    private lazy var followingStackContainer: UIView = {
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(followingStackView)
+        followingStackView.snp.makeConstraints {
+            $0.top.equalTo(container.snp.top)
+            $0.left.equalTo(container.snp.left)
+            $0.right.equalTo(container.snp.right)
+            $0.bottom.equalTo(container.snp.bottom)
+        }
+        container.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        container.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        
+        return container
+    }()
+    private lazy var totalFollowStackView: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .horizontal
+        stack.spacing = 10
+        stack.alignment = .center
+        stack.distribution = .equalCentering
+        stack.addArrangedSubview(profileImageView)
+        stack.addArrangedSubview(followerStackContainer)
+        stack.addArrangedSubview(followingStackContainer)
+        
+        return stack
+    }()
     private let notLoginLabel = RideThisLabel(fontType: .recordInfoTitle, text: "로그인이 필요한 화면입니다.")
     private let loginButton = RideThisButton(buttonTitle: "로그인", height: 50)
     
@@ -87,9 +157,9 @@ class MyPageView: RideThisViewController {
     private lazy var profileEditButton: UIButton = {
         let btn = UIButton()
         btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.setTitle("편집", for: .normal)
+        btn.setTitle("정보 수정", for: .normal)
         btn.setTitleColor(.systemBlue, for: .normal)
-        btn.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+        btn.titleLabel?.font = UIFont.systemFont(ofSize: 13)
         btn.contentVerticalAlignment = .top
         
         return btn
@@ -124,7 +194,7 @@ class MyPageView: RideThisViewController {
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.setTitle("자세히 보기", for: .normal)
         btn.setTitleColor(.systemBlue, for: .normal)
-        btn.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+        btn.titleLabel?.font = UIFont.systemFont(ofSize: 13)
         btn.contentVerticalAlignment = .top
         btn.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
@@ -266,9 +336,47 @@ class MyPageView: RideThisViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "마이페이지"
         setTotalGrid()
         setCombineData()
+        setupNavigationBar()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        Task {
+            guard let signedUser = UserService.shared.combineUser else { return }
+            if case .user(let receivedUser) = try await firebaseService.fetchUser(at: signedUser.user_id, userType: true) {
+                guard let user = receivedUser else { return }
+                
+                followerCountLabel.text = "\(user.user_follower.count)"
+                followingCountLabel.text = "\(user.user_following.count)"
+                userNickName.text = user.user_nickname
+                userWeight.text = "\(user.user_weight)"
+                userHeight.text = user.tallStr
+                
+                followCoordinator.updateUser(user: user)
+            }
+        }
+    }
+    
+    // MARK: Navigation Bar
+    private func setupNavigationBar() {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .systemBackground
+        
+        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationItem.largeTitleDisplayMode = .never
+        navigationController?.navigationBar.isTranslucent = false
+        
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.compactAppearance = appearance
+        
+        // 커스텀 타이틀 레이블을 왼쪽 바 버튼 아이템으로 설정
+        let leftBarButtonItem = UIBarButtonItem(customView: customTitleLabel)
+        navigationItem.leftBarButtonItem = leftBarButtonItem
     }
     
     func setTotalGrid() {
@@ -312,7 +420,8 @@ class MyPageView: RideThisViewController {
         loginButton.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
             
-            let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!, prevViewCase: .myPage)
+            let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!, childCoordinators: [], prevViewCase: .myPage, backBtnTitle: "마이페이지")
+            
             loginCoordinator.start()
         }, for: .touchUpInside)
     }
@@ -356,33 +465,13 @@ class MyPageView: RideThisViewController {
     }
     
     func setLoginProfileView() {
-        [self.profileImageView, self.followerLabel, self.followerCountLabel,
-         self.followingLabel, self.followingCountLabel].forEach{ self.profileContainer.addSubview($0) }
+        self.profileContainer.addSubview(totalFollowStackView)
         
-        self.profileImageView.snp.makeConstraints {
-            $0.top.equalTo(self.profileContainer.snp.top).offset(10)
-            $0.left.equalTo(self.profileContainer.snp.left).offset(10)
-            $0.bottom.equalTo(self.profileContainer.snp.bottom).offset(-10)
-        }
-        
-        self.followerLabel.snp.makeConstraints {
-            $0.top.equalTo(self.profileImageView.snp.top).offset(8)
-            $0.centerX.equalTo(self.profileContainer.snp.centerX)
-        }
-        
-        self.followerCountLabel.snp.makeConstraints {
-            $0.bottom.equalTo(self.profileImageView.snp.bottom).offset(-8)
-            $0.centerX.equalTo(self.profileContainer.snp.centerX)
-        }
-        
-        self.followingLabel.snp.makeConstraints {
-            $0.top.equalTo(self.profileImageView.snp.top).offset(8)
-            $0.right.equalTo(self.profileContainer.snp.right).offset(-40)
-        }
-        
-        self.followingCountLabel.snp.makeConstraints {
-            $0.bottom.equalTo(self.profileImageView.snp.bottom).offset(-8)
-            $0.centerX.equalTo(self.followingLabel.snp.centerX)
+        totalFollowStackView.snp.makeConstraints {
+            $0.top.equalTo(profileContainer.snp.top)
+            $0.left.equalTo(profileContainer.snp.left).offset(30)
+            $0.right.equalTo(profileContainer.snp.right).offset(-30)
+            $0.bottom.equalTo(profileContainer.snp.bottom)
         }
     }
     
@@ -453,8 +542,13 @@ class MyPageView: RideThisViewController {
         
         self.profileEditButton.addAction(UIAction { [weak self] _ in
             guard let self = self, let user = service.combineUser else { return }
-            let editCoordinator = EditProfileCoordinator(navigationController: self.navigationController!, user: user)
-            editCoordinator.start()
+            self.profileEditButton.isEnabled = false
+            
+            self.coordinator?.moveToEditView(user: user)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.profileEditButton.isEnabled = true
+            }
         }, for: .touchUpInside)
     }
     
@@ -485,7 +579,6 @@ class MyPageView: RideThisViewController {
             $0.top.equalTo(self.totalRunCount.snp.bottom).offset(8)
             $0.centerX.equalTo(self.totalRunCount.snp.centerX)
             $0.width.equalTo(35)
-            $0.height.equalTo(3)
         }
         
         self.totalRunCountData.snp.makeConstraints {
@@ -518,7 +611,6 @@ class MyPageView: RideThisViewController {
             $0.top.equalTo(self.totalRunCountSeparator.snp.top)
             $0.centerX.equalTo(self.totalRunDistance.snp.centerX)
             $0.width.equalTo(35)
-            $0.height.equalTo(3)
         }
         
         self.totalRunDistanceData.snp.makeConstraints {
@@ -753,8 +845,10 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
     
     // MARK: 프로필 Container를 선택했을 때 팔로우 관리 페이지로 이동하는 event등록
     func setEventToProfileContainer() {
-        let profileContainerTapEvent = UITapGestureRecognizer(target: self, action: #selector(toFollowerView))
-        profileContainer.addGestureRecognizer(profileContainerTapEvent)
+        let followerTapEvent = UITapGestureRecognizer(target: self, action: #selector(toFollowerView))
+        let followingTapEvent = UITapGestureRecognizer(target: self, action: #selector(toFollowerView))
+        followerStackView.addGestureRecognizer(followerTapEvent)
+        followingStackView.addGestureRecognizer(followingTapEvent)
     }
     
     // MARK: 그래프 cell이동 후 UI업데이트
@@ -799,7 +893,7 @@ extension MyPageView: UICollectionViewDataSource, UICollectionViewDelegate, UICo
             followCoordinator.start()
         } else {
             self.showAlert(alertTitle: "알림", msg: "로그인이 필요한 기능입니다. 로그인 화면으로 이동할까요?", confirm: "예") {
-                let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!, prevViewCase: .myPage)
+                let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!, childCoordinators: [], prevViewCase: .myPage, backBtnTitle: "마이페이지")
                 loginCoordinator.start()
             }
         }

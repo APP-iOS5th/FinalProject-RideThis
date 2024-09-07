@@ -8,14 +8,15 @@ class SignUpInfoView: RideThisViewController {
     // MARK: Data Components
     let userId: String
     let userEmail: String?
-    let prevViewCase: ViewCase
+//    let prevViewCase: ViewCase
+    var signUpCoordinator: SignUpCoordinator?
+    private let firebaseService = FireBaseService()
     private let viewModel = SignUpInfoViewModel()
     private lazy var cancellable = Set<AnyCancellable>()
     
-    init(userId: String, userEmail: String?, prevViewCase: ViewCase = .home) {
+    init(userId: String, userEmail: String?) {
         self.userId = userId
         self.userEmail = userEmail
-        self.prevViewCase = prevViewCase
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -301,8 +302,23 @@ class SignUpInfoView: RideThisViewController {
                 UserService.shared.checkPrevAppleLogin()
                 UserService.shared.signedUser = user
                 
-                if let scene = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate) {
-                    scene.appCoordinator?.changeTabBarView(change: true, selectedCase: self.prevViewCase)
+                self.dismiss(animated: true) {
+                    if let coor = self.signUpCoordinator, coor.childCoordinators.count > 0 {
+                        for coordinator in coor.childCoordinators {
+                            if let loginCoor = coordinator as? LoginCoordinator {
+                                if loginCoor.prevViewCase == .summary {
+                                    loginCoor.navigationController.popViewController(animated: false)
+                                    loginCoor.changeButton(afterLogin: true)
+                                    Task {
+                                        await self.firebaseService.saveNoUserRecordData(user: user) {}
+                                    }
+                                    break
+                                } else {
+                                    loginCoor.navigationController.popViewController(animated: false)
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }, for: .touchUpInside)

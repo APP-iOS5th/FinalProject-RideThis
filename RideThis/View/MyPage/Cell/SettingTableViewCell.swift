@@ -49,7 +49,7 @@ class SettingTableViewCell: UITableViewCell {
     }
     
     func configureTable() {
-        self.contentView.backgroundColor = .primaryBackgroundColor
+        self.contentView.backgroundColor = .white
         [self.settingLabel].forEach{ self.contentView.addSubview($0) }
         
         self.settingLabel.snp.makeConstraints {

@@ -52,6 +52,14 @@ class FollowManageView: RideThisViewController {
         setCombineData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        Task {
+            await followViewModel.fetchFollowData(user: user!, type: .follower)
+        }
+    }
+    
     func configureUI() {
         setNavigationComponents()
         setSearchBar()
@@ -79,7 +87,7 @@ class FollowManageView: RideThisViewController {
         view.addSubview(followPicker)
         
         followPicker.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(15)
             $0.left.equalTo(view.snp.left).offset(15)
             $0.right.equalTo(view.snp.right).offset(-15)
         }
@@ -171,6 +179,7 @@ extension FollowManageView: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         // MARK: TODO - 선택한 유저의 프로필 보여주기
         let selectedUser = self.followViewModel.followDatas[indexPath.row]
         let profileCoordinator = UserProfileCoordinator(navigationController: self.navigationController!, selectedUser: selectedUser)
