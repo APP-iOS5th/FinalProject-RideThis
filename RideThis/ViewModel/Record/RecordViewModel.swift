@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import UIKit
 
 class RecordViewModel: BluetoothManagerDelegate {
     // MARK: - Published properties
@@ -13,6 +14,8 @@ class RecordViewModel: BluetoothManagerDelegate {
     @Published var startTime: Date?
     @Published var endTime: Date?
     @Published private(set) var isMeasuring: Bool = false
+    
+    private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
     
     // 평균값 구하기
     var averageCadence: Double = 0
@@ -239,6 +242,7 @@ class RecordViewModel: BluetoothManagerDelegate {
     
     // MARK: - Timer Methods
     func startTimer() {
+        startBackgroundTask()
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             guard let self = self else { return }
             self.elapsedTime += 1
@@ -249,6 +253,21 @@ class RecordViewModel: BluetoothManagerDelegate {
     func stopTimer() {
         timer?.invalidate()
         timer = nil
+        endBackgroundTask()
+    }
+    
+    // MARK: - Background Task Handling
+    func startBackgroundTask() {
+        backgroundTask = UIApplication.shared.beginBackgroundTask(withName: "RecordTimer") {
+            self.endBackgroundTask()
+        }
+    }
+
+    func endBackgroundTask() {
+        if backgroundTask != .invalid {
+            UIApplication.shared.endBackgroundTask(backgroundTask)
+            backgroundTask = .invalid
+        }
     }
     
     func formatTime(_ time: TimeInterval) -> String {
