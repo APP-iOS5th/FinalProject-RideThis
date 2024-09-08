@@ -214,6 +214,8 @@ class RecordViewModel: BluetoothManagerDelegate {
         isMeasuring = false
         recordedTime = elapsedTime
         endTime = Date()
+        cadenceValues.removeAll()
+        speedValues.removeAll()
         self.btManager?.disConnect()
         delegate?.didFinishRecording()
         btManager?.resetTotalCalories()
