@@ -33,7 +33,7 @@ class FireBaseService {
                                        user_following: userInfo["user_following"] as! [String],
                                        user_follower: userInfo["user_follower"] as! [String],
                                        user_account_public: false,
-                                       user_alarm_status: true)
+                                       user_alarm_status: AlarmManager.shared.isUse ?? true)
                 
                 createComplete(createdUser)
             }
