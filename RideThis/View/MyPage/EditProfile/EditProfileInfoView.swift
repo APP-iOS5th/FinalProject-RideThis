@@ -131,6 +131,8 @@ class EditProfileInfoView: RideThisViewController, UITextFieldDelegate {
         setBindingData()
         setTextFields()
         setTapGesture()
+        
+        userHeightTextField.delegate = self
     }
     
     func setNavigationComponents() {
@@ -268,20 +270,35 @@ class EditProfileInfoView: RideThisViewController, UITextFieldDelegate {
     }
     
     @objc func saveProfileInfo() {
-        self.user.user_nickname = self.userNickNameTextField.text!
-        self.user.user_weight = Int(self.userWeightTextField.text!)!
-        self.user.user_tall = self.userHeightTextField.text! == "-" ? -1 : Int(self.userHeightTextField.text!)!
+        self.user.user_nickname = self.userNickNameTextField.text ?? ""
+        self.user.user_weight = Int(self.userWeightTextField.text ?? "") ?? self.user.user_weight
+        
+        if let heightText = self.userHeightTextField.text?.replacingOccurrences(of: "-", with: ""), !heightText.isEmpty {
+            self.user.user_tall = Int(heightText) ?? -1
+        } else {
+            self.user.user_tall = -1
+        }
         
         self.firebaseService.updateUserInfo(updated: self.user, update: true)
         if let img = selectedUserImage {
             updateImageDelegate?.imageUpdate(image: img)
-            // MARK: TODO - 만약 저장하던 중 에러가 발생했을 때 처리
             firebaseService.saveImage(image: img, userId: user.user_id) { imgUrl in
                 self.user.user_image = imgUrl.absoluteString
                 self.firebaseService.updateUserInfo(updated: self.user, update: false)
             }
         }
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        if textField == userHeightTextField {
+            if let text = textField.text {
+                let digitsOnly = text.replacingOccurrences(of: "-", with: "")
+                if digitsOnly != text {
+                    textField.text = digitsOnly
+                }
+            }
+        }
     }
     
     func setBindingData() {
@@ -395,6 +412,10 @@ class EditProfileInfoView: RideThisViewController, UITextFieldDelegate {
             }
             
             return true
+        } else if textField == userHeightTextField || textField == userWeightTextField {
+            let allowedCharacters = CharacterSet.decimalDigits
+            let characterSet = CharacterSet(charactersIn: string)
+            return allowedCharacters.isSuperset(of: characterSet)
         }
         return true
     }
