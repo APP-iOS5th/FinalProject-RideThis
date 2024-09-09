@@ -46,7 +46,7 @@ class AlarmView: RideThisViewController {
     }()
     
     private let noAlarmLabel: RideThisLabel = {
-        let label = RideThisLabel(fontType: .defaultSize, fontColor: .gray, text: "알림이 없습니다")
+        let label = RideThisLabel(fontType: .defaultSize, fontColor: .gray, text: "알림이 없습니다.")
         label.textAlignment = .center
         label.isHidden = true
         return label
