@@ -23,7 +23,7 @@ class HomeView: RideThisViewController {
     }()
     
     // MARK: - Custom Title
-    private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "Home")
+    private let customTitleLabel = RideThisLabel(fontType: .subTitle, fontColor: .black, text: "Home")
     
     // MARK: - Weekly Record Section
     private let weeklyRecordSectionView: UIView = {

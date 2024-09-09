@@ -51,6 +51,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
     
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.portrait
+    }
+    
     @objc func requestNotificationPermissionIfNeeded() {
         if userService.loginStatus == .appleLogin {
             let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
@@ -63,11 +67,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                     if granted {
                         print("알림 권한이 허용되었습니다.")
+                        AlarmManager.shared.isUse = true
                         DispatchQueue.main.async {
                             UIApplication.shared.registerForRemoteNotifications()
                         }
                     } else {
                         print("알림 권한이 거부되었습니다.")
+                        AlarmManager.shared.isUse = false
                     }
                 }
             )

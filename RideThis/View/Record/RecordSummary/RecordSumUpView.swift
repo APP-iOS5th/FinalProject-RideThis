@@ -9,7 +9,7 @@ class RecordSumUpView: RideThisViewController {
     private let contentView = UIView()
     
     // 커스텀 타이틀
-    private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "운동기록 요약")
+    private let customTitleLabel = RideThisLabel(fontType: .subTitle, fontColor: .black, text: "운동기록 요약")
     
     var recordedTime: String = "00:00"
     

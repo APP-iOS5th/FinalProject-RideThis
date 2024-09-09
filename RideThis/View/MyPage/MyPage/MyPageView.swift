@@ -35,7 +35,7 @@ class MyPageView: RideThisViewController {
     }
     
     // 커스텀 타이틀
-    private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "마이페이지")
+    private let customTitleLabel = RideThisLabel(fontType: .subTitle, fontColor: .black, text: "마이페이지")
     
     init(viewModel: MyPageViewModel) {
         self.viewModel = viewModel

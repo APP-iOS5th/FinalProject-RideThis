@@ -176,6 +176,10 @@ class AccountQuitView: RideThisViewController {
         quitButton.addAction(UIAction { [weak self] _ in
             guard let self = self else { return }
             showAlert(alertTitle: "확인", msg: "정말 탈퇴하시겠습니까?", confirm: "예") {
+                // 탈퇴 시 유저디폴트에 DEVICE정보를 삭제
+                let defaults = UserDefaults.standard
+                defaults.removeObject(forKey: "unkownedDevices")
+                
                 self.firebaseService.deleteUser(userId: UserService.shared.combineUser!.user_id)
             }
         }, for: .touchUpInside)

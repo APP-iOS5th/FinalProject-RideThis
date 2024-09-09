@@ -21,7 +21,7 @@ class RecordView: RideThisViewController {
     private var cancellables = Set<AnyCancellable>()
     
     // 커스텀 타이틀
-    private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "라이딩")
+    private let customTitleLabel = RideThisLabel(fontType: .subTitle, fontColor: .black, text: "라이딩")
     private var recordListButton: UIBarButtonItem?
     
     // 기록 뷰 선언
@@ -221,9 +221,7 @@ class RecordView: RideThisViewController {
                 self.viewModel.resetRecording()
                 self.enableTabBar()
             } cancelAction: {
-                if self.stopButtonTabbed == false {
-                    self.viewModel.resumeRecording()
-                }
+                self.stopButtonTabbed = true
             }
         }, for: .touchUpInside)
         
@@ -290,10 +288,7 @@ class RecordView: RideThisViewController {
                 self.viewModel.finishRecording()
                 self.enableTabBar()
             } cancelAction: {
-                // MARK: 현재 기록중이었을 때만 종료버튼 후 alert에서 취소를 누르면 계속 기록이 진행되게 하기위해서
-                if self.stopButtonTabbed == false {
-                    self.viewModel.resumeRecording()
-                }
+                self.stopButtonTabbed = true
             }
         }, for: .touchUpInside)
     }
