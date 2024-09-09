@@ -57,7 +57,7 @@ class FollowManageView: RideThisViewController {
         super.viewWillAppear(animated)
         
         Task {
-            await followViewModel.fetchFollowData(user: user!, type: .follower)
+            await followViewModel.fetchFollowData(user: user!, type: self.followPicker.selectedSegmentIndex == 0 ? .follower : .following)
         }
     }
     
