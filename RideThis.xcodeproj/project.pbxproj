@@ -1216,7 +1216,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
+			shellScript = "DSYM_PATH=${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}\nif [ -d \"$DSYM_PATH\" ]; then\n  ${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/upload-symbols -gsp ${PROJECT_DIR}/GoogleService-Info.plist -p ios $DSYM_PATH\nelse\n  echo \"dSYM not found: $DSYM_PATH\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
