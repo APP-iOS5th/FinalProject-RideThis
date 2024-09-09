@@ -2,6 +2,7 @@ import Foundation
 import AuthenticationServices
 import FirebaseFirestore
 import Combine
+import Photos
 
 enum UserStatus {
     case appleLogin
@@ -96,5 +97,18 @@ class UserService {
     func appleSignIn(userId: String) {
         keyChain.save(key: "appleUserId", value: userId)
         NotificationCenter.default.post(name: Notification.Name("UserDidLogin"), object: nil)
+    }
+    
+    func requestPhotoAccess(completion: ((PHAuthorizationStatus) -> Void)? = nil) {
+        switch PHPhotoLibrary.authorizationStatus(for: .readWrite) {
+        case .authorized:
+            completion?(.authorized)
+        case .limited:
+            completion?(.limited)
+        default:
+            PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
+                completion?(status)
+            }
+        }
     }
 }

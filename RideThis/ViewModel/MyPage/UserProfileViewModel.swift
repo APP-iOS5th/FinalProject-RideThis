@@ -14,8 +14,7 @@ class UserProfileViewModel {
     }
     
     func getRecords(userId: String) async {
-        let allRecords = await firebaseService.findRecordsBy(userId: userId)
-        recordsData = allRecords.filter { !$0.record_competetion_status }
+        recordsData = await firebaseService.findRecordsBy(userId: userId)
     }
     
     func getRecordTimeDiff(endDate: Date, startDate: Date) -> Int {
@@ -24,7 +23,7 @@ class UserProfileViewModel {
     }
     
     func getRecordsBy(period: RecordPeriodCase, dataCase: RecordDataCase? = nil) -> [RecordModel] {
-        let filteredData = recordsData.filter { $0.record_data! >= period.periodCondition && $0.record_data! <= Date() && !$0.record_competetion_status }
+        let filteredData = recordsData.filter { $0.record_data! >= period.periodCondition && $0.record_data! <= Date() }
                           .sorted(by: { $0.record_data! < $1.record_data! })
         
         if let dataCase = dataCase {
