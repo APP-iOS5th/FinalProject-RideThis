@@ -15,13 +15,10 @@ class RecordListView: RideThisViewController, UIScrollViewDelegate {
     private let firebaseService = FireBaseService()
     private var cancellables = Set<AnyCancellable>()
     
-    private let noRecordLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "저장된 기록이 없습니다."
-//        label.textColor = .primaryColor
-        label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
-        
+    private let noRecordLabel: RideThisLabel = {
+        let label = RideThisLabel(fontType: .defaultSize, fontColor: .gray, text: "저장된 기록이 없습니다.")
+        label.textAlignment = .center
+        label.isHidden = true
         return label
     }()
     
