@@ -10,6 +10,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let navigationController = UINavigationController()
         window = UIWindow(windowScene: windowScene)
         
+        UIApplication.shared.isIdleTimerDisabled = true
+        
         appCoordinator = AppCoordinator(navigationController: navigationController, window: window)
         appCoordinator?.start()
 

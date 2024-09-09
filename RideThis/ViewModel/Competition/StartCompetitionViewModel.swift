@@ -47,6 +47,9 @@ class StartCometitionViewModel: BluetoothManagerDelegate {
         self.startTime = startTime
         self.goalDistance = goalDistnace
         
+        cadenceValues.removeAll()
+        speedValues.removeAll()
+        
         self.userWeight = service.combineUser?.user_weight ?? 0
     }
     
