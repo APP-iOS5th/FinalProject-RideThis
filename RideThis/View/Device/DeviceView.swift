@@ -6,7 +6,7 @@ class DeviceView: RideThisViewController {
     
     var coordinator: DeviceCoordinator?
     
-    private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "장치연결")
+    private let customTitleLabel = RideThisLabel(fontType: .subTitle, fontColor: .black, text: "장치연결")
     private let tableView = UITableView(frame: .zero, style: .plain)
     private let findDeviceButton = RideThisButton(buttonTitle: "장치찾기")
     private let emptyLabel = RideThisLabel(fontType: .defaultSize, fontColor: .gray, text: "등록된 장치 없음")
