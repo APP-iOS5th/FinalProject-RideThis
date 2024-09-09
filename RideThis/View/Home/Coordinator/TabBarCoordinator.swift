@@ -32,7 +32,7 @@ class TabBarCoordinator: Coordinator {
         let recordNavigationController = UINavigationController()
         let recordCoordinator = RecordCoordinator(navigationController: recordNavigationController, tabBarController: tabBarController)
         recordCoordinator.start()
-        recordNavigationController.tabBarItem = UITabBarItem(title: "라이딩", image: UIImage(systemName: "flag.checkered"), selectedImage: nil)
+        recordNavigationController.tabBarItem = UITabBarItem(title: "라이딩", image: UIImage(systemName: "bicycle"), selectedImage: nil)
         childCoordinators.append(recordCoordinator)
         
         // Device

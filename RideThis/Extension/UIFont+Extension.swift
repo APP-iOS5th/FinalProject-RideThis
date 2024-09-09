@@ -6,6 +6,8 @@ enum FontCase: CGFloat {
     case defaultSize = 17
     /// size: 34, weight: .bold
     case title = 34
+    /// size: 26, weight: .bold
+    case subTitle = 26
     /// size: 22, weight: .medium
     case sectionTitle = 22
     /// size: 13, weight: .regular
@@ -35,7 +37,7 @@ enum FontCase: CGFloat {
             switch self {
             case .defaultSize, .smallTitle:
                 return .regular
-            case .title, .countDownSize, .timerText, .summaryInfo, .recordInfo, .signUpFont:
+            case .title, .subTitle, .countDownSize, .timerText, .summaryInfo, .recordInfo, .signUpFont:
                 return .bold
             case .sectionTitle:
                 return .medium
