@@ -3,6 +3,7 @@ import FirebaseCore
 import FirebaseAuth
 import FirebaseMessaging
 import UserNotifications
+import FirebaseCrashlytics
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if FirebaseApp.app() != nil {
             userService.checkPrevAppleLogin()
             print("Firebase Connect")
+            Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(true)
         } else {
             print("Firebase Failed Connect")
         }
