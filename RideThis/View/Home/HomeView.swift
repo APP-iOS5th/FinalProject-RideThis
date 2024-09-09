@@ -211,8 +211,6 @@ class HomeView: RideThisViewController {
         setupScrollView()
         setupContentView()
         setupBindings()
-        
-//        viewModel.fetchUserData()
     }
     
     override func viewWillAppear(_ animated: Bool) {

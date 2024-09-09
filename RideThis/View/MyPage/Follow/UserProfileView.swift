@@ -81,16 +81,7 @@ class UserProfileView: RideThisViewController {
     
     // MARK: Record By Period
     private let recordByPeriodLabel = RideThisLabel(fontType: .profileFont2, text: "기간별 기록")
-//    private lazy var recordByPeriodDetailButton: UIButton = {
-//        let btn = UIButton()
-//        btn.translatesAutoresizingMaskIntoConstraints = false
-//        btn.setTitle("자세히 보기", for: .normal)
-//        btn.setTitleColor(.systemBlue, for: .normal)
-//        btn.titleLabel?.font = UIFont.systemFont(ofSize: 18)
-//        btn.contentVerticalAlignment = .top
-//        
-//        return btn
-//    }()
+
     private let periodOptions: [RecordPeriodCase] = RecordPeriodCase.allCases
     private lazy var recordByPeriodPicker: UISegmentedControl = {
         let picker = UISegmentedControl(items: self.periodOptions.map{ $0.rawValue })
@@ -430,23 +421,10 @@ class UserProfileView: RideThisViewController {
             $0.bottom.equalTo(self.contentView.snp.bottom).offset(-20)
         }
         
-        [/*self.selectedPeriodTitle, self.selectedPeriodSeparator, */self.selectedPeriodData].forEach{ self.selectedPeriodTotalRecordContainer.addSubview($0) }
+        [self.selectedPeriodData].forEach{ self.selectedPeriodTotalRecordContainer.addSubview($0) }
         
-//        self.selectedPeriodTitle.snp.makeConstraints {
-//            $0.top.equalTo(self.selectedPeriodTotalRecordContainer.snp.top).offset(15)
-//            $0.centerX.equalTo(self.selectedPeriodTotalRecordContainer.snp.centerX)
-//        }
-        
-//        self.selectedPeriodSeparator.snp.makeConstraints {
-//            $0.top.equalTo(self.selectedPeriodTitle.snp.bottom).offset(12)
-//            $0.centerX.equalTo(self.selectedPeriodTitle.snp.centerX)
-//            $0.width.equalTo(60)
-//            $0.height.equalTo(5)
-//        }
         
         self.selectedPeriodData.snp.makeConstraints {
-//            $0.top.equalTo(self.selectedPeriodSeparator.snp.bottom).offset(15)
-//            $0.centerX.equalTo(self.selectedPeriodTitle.snp.centerX)
             $0.centerX.equalTo(self.selectedPeriodTotalRecordContainer.snp.centerX)
             $0.centerY.equalTo(self.selectedPeriodTotalRecordContainer.snp.centerY)
         }
@@ -605,15 +583,4 @@ extension UserProfileView: UICollectionViewDataSource, UICollectionViewDelegate,
             graphCell.lineChartView.notifyDataSetChanged()
         }
     }
-    
-    // MARK: 프로필 Container를 선택했을 때 팔로우 관리 페이지로 이동
-//    @objc func toFollowerView() {
-//        if let _ = service.combineUser {
-//            followCoordinator.start()
-//        } else {
-//            self.showAlert(alertTitle: "알림", msg: "로그인이 필요한 기능입니다. 로그인 화면으로 이동할까요?", confirm: "예") {
-//                self.navigationController?.pushViewController(LoginView(), animated: true)
-//            }
-//        }
-//    }
 }

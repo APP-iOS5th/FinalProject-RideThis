@@ -8,7 +8,7 @@ class SignUpInfoView: RideThisViewController {
     // MARK: Data Components
     let userId: String
     let userEmail: String?
-//    let prevViewCase: ViewCase
+
     var signUpCoordinator: SignUpCoordinator?
     private let firebaseService = FireBaseService()
     private let viewModel = SignUpInfoViewModel()
@@ -127,8 +127,6 @@ class SignUpInfoView: RideThisViewController {
         super.viewIsAppearing(animated)
         self.view.addGestureRecognizer(tapGesture)
         
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow),
-//                                               name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide),
                                                name: UIResponder.keyboardWillHideNotification, object: nil)
     }

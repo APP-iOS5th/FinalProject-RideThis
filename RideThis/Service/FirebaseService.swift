@@ -23,7 +23,6 @@ class FireBaseService {
             } else {
                 print("문서 생성 및 필드 추가 성공")
                 
-                // MARK: user_alarm_status는 지금은 모두 true 이지만 처음에 알림 허용을 한 사용자만 true로 해줘야함
                 let createdUser = User(user_id: userInfo["user_id"] as! String,
                                        user_image: userInfo["user_image"] as? String,
                                        user_email: userInfo["user_email"] as! String,

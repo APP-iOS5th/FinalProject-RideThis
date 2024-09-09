@@ -139,7 +139,6 @@ class MonthView: UIView {
                                                             avg: (count: Float, time: Int, distance: Double)) {
         let totalCount = records.count
         let times = records.map{ ($0.record_start_time, $0.record_end_time) }.map{ self.getRecordTimeDiff(endDate: $0.1!, startDate: $0.0!) }.reduce(0, +)
-//        let totalTime = records.reduce(0) { $0 + (Double($1.record_timer.split(separator: ":")[0]) ?? 0) * 60 + (Double($1.record_timer.split(separator: ":")[1]) ?? 0) }
         let totalDistance = records.reduce(0.0) { $0 + $1.record_distance }
         
         let uniqueDays = Set(records.compactMap { Calendar.current.dateComponents([.year, .month, .day], from: $0.record_start_time ?? Date()).day }).count
@@ -166,12 +165,10 @@ class MonthView: UIView {
         monthLabel.text = month
         
         countLabel.text = "횟수       \(stats.total.count)"
-//        timeLabel.text = "시간       \(formatTime(minutes: stats.total.time))"
         timeLabel.text = "시간       \(stats.total.time.secondsToRecordTimeForRecords)"
         distanceLabel.text = "거리       \(String(format: "%.3f Km", stats.total.distance))"
         
         avgCountLabel.text = stats.avg.count.isNaN ? "0" : String(format: "%.1f", stats.avg.count)
-//        avgTimeLabel.text = formatTime(minutes: stats.avg.time)
         avgTimeLabel.text = stats.avg.time.secondsToRecordTimeForRecords
         avgDistanceLabel.text = stats.avg.distance.isNaN ? "0 Km" : String(format: "%.3f Km", stats.avg.distance)
     }
