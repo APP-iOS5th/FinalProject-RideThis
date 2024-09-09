@@ -43,8 +43,8 @@ class SettingView: RideThisViewController {
     }
     
     @objc func appDidBecomeActive() {
-        AlarmManager.shared.checkCurrentAlarmStatus() { [weak self] status in
-            guard let self = self, let currentUser = UserService.shared.combineUser else { return }
+        AlarmManager.shared.checkCurrentAlarmStatus() { status in
+            guard let currentUser = UserService.shared.combineUser else { return }
             currentUser.user_alarm_status = status
             
             let firebaseService = FireBaseService()
