@@ -105,6 +105,7 @@ extension LoginView: ASAuthorizationControllerDelegate {
                                 } else {
                                     UserService.shared.signedUser = userData
                                     guard let coordinator = self.loginCoordinator else {
+                                        NotificationCenter.default.post(name: Notification.Name("UserDidLogin"), object: nil)
                                         scene.appCoordinator?.changeTabBarView(change: true)
                                         return
                                     }
@@ -118,6 +119,7 @@ extension LoginView: ASAuthorizationControllerDelegate {
                                         }
                                         return
                                     }
+                                    NotificationCenter.default.post(name: Notification.Name("UserDidLogin"), object: nil)
                                     scene.appCoordinator?.changeTabBarView(change: true, selectedCase: coordinator.prevViewCase)
                                 }
                             }
