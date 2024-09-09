@@ -70,7 +70,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     @objc func requestNotificationPermissionIfNeeded() {
-        if userService.loginStatus == .appleLogin {
+        if userService.signedUser != nil {
             let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
             UNUserNotificationCenter.current().requestAuthorization(
                 options: authOptions,
