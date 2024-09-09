@@ -221,9 +221,10 @@ class RecordView: RideThisViewController {
                 self.viewModel.resetRecording()
                 self.enableTabBar()
             } cancelAction: {
-                if self.stopButtonTabbed == false {
-                    self.viewModel.resumeRecording()
-                }
+//                if self.stopButtonTabbed == false {
+//                    self.viewModel.resumeRecording()
+//                }
+                self.stopButtonTabbed = true
             }
         }, for: .touchUpInside)
         
@@ -291,9 +292,10 @@ class RecordView: RideThisViewController {
                 self.enableTabBar()
             } cancelAction: {
                 // MARK: 현재 기록중이었을 때만 종료버튼 후 alert에서 취소를 누르면 계속 기록이 진행되게 하기위해서
-                if self.stopButtonTabbed == false {
-                    self.viewModel.resumeRecording()
-                }
+//                if self.stopButtonTabbed == false {
+//                    self.viewModel.resumeRecording()
+//                }
+                self.stopButtonTabbed = true
             }
         }, for: .touchUpInside)
     }
