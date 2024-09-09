@@ -622,7 +622,7 @@ class FireBaseService {
                 if let error = response.error {
                     print("FCM 통신 오류: \(error)")
                 } else if let httpResponse = response.response, httpResponse.statusCode != 200 {
-                    if let data = response.data, let responseBody = String(data: data, encoding: .utf8) {
+                    if let data = response.data, let _ = String(data: data, encoding: .utf8) {
                         print("FCM Status Error: \(httpResponse.statusCode)")
                     } else {
                         print("FCM notification failed with status code: \(httpResponse.statusCode), but no response body was returned.")
