@@ -35,7 +35,7 @@ class MyPageView: RideThisViewController {
     }
     
     // 커스텀 타이틀
-    private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "마이페이지")
+    private let customTitleLabel = RideThisLabel(fontType: .subTitle, fontColor: .black, text: "마이페이지")
     
     init(viewModel: MyPageViewModel) {
         self.viewModel = viewModel
@@ -345,7 +345,8 @@ class MyPageView: RideThisViewController {
         super.viewWillAppear(animated)
         
         Task {
-            if case .user(let receivedUser) = try await firebaseService.fetchUser(at: UserService.shared.combineUser!.user_id, userType: true) {
+            guard let signedUser = UserService.shared.combineUser else { return }
+            if case .user(let receivedUser) = try await firebaseService.fetchUser(at: signedUser.user_id, userType: true) {
                 guard let user = receivedUser else { return }
                 
                 followerCountLabel.text = "\(user.user_follower.count)"

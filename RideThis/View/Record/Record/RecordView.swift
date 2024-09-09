@@ -21,7 +21,7 @@ class RecordView: RideThisViewController {
     private var cancellables = Set<AnyCancellable>()
     
     // 커스텀 타이틀
-    private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "라이딩")
+    private let customTitleLabel = RideThisLabel(fontType: .subTitle, fontColor: .black, text: "라이딩")
     private var recordListButton: UIBarButtonItem?
     
     // 기록 뷰 선언

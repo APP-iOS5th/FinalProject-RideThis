@@ -12,7 +12,7 @@ class CompetitionView: RideThisViewController {
     private var cancellables = Set<AnyCancellable>()
     
     // 커스텀 타이틀
-    private let customTitleLabel = RideThisLabel(fontType: .title, fontColor: .black, text: "경쟁")
+    private let customTitleLabel = RideThisLabel(fontType: .subTitle, fontColor: .black, text: "경쟁")
     
     // Segment(전체 순위, 팔로잉 순위)
     private lazy var segmentedControl: UISegmentedControl = {
