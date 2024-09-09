@@ -335,7 +335,6 @@ class MyPageView: RideThisViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setTotalGrid()
         setCombineData()
         setupNavigationBar()
