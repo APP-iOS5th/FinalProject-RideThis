@@ -67,11 +67,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                     if granted {
                         print("알림 권한이 허용되었습니다.")
+                        AlarmManager.shared.isUse = true
                         DispatchQueue.main.async {
                             UIApplication.shared.registerForRemoteNotifications()
                         }
                     } else {
                         print("알림 권한이 거부되었습니다.")
+                        AlarmManager.shared.isUse = false
                     }
                 }
             )

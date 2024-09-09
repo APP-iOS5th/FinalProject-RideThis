@@ -28,6 +28,7 @@
 		048EFE1C2C897BE200261B21 /* DeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048EFE1B2C897BE200261B21 /* DeviceManager.swift */; };
 		048EFE1F2C8A8FE200261B21 /* NonMemberRecordSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048EFE1E2C8A8FE200261B21 /* NonMemberRecordSummaryViewController.swift */; };
 		048EFE212C8A922B00261B21 /* NonMemberRecordSummaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048EFE202C8A922B00261B21 /* NonMemberRecordSummaryViewModel.swift */; };
+		048EFE232C8EECDA00261B21 /* AlarmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048EFE222C8EECDA00261B21 /* AlarmManager.swift */; };
 		0493F5C52C7DACCC00290A4C /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5C42C7DACCC00290A4C /* Coordinator.swift */; };
 		0493F5C82C7DB39200290A4C /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5C72C7DB39200290A4C /* AppCoordinator.swift */; };
 		0493F5CA2C7DB5FD00290A4C /* TabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493F5C92C7DB5FD00290A4C /* TabBarCoordinator.swift */; };
@@ -187,6 +188,7 @@
 		048EFE1B2C897BE200261B21 /* DeviceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceManager.swift; sourceTree = "<group>"; };
 		048EFE1E2C8A8FE200261B21 /* NonMemberRecordSummaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonMemberRecordSummaryViewController.swift; sourceTree = "<group>"; };
 		048EFE202C8A922B00261B21 /* NonMemberRecordSummaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonMemberRecordSummaryViewModel.swift; sourceTree = "<group>"; };
+		048EFE222C8EECDA00261B21 /* AlarmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmManager.swift; sourceTree = "<group>"; };
 		0493F5C42C7DACCC00290A4C /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		0493F5C72C7DB39200290A4C /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		0493F5C92C7DB5FD00290A4C /* TabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCoordinator.swift; sourceTree = "<group>"; };
@@ -809,6 +811,7 @@
 				048EFDFC2C87496600261B21 /* FCMTokenManager.swift */,
 				048EFE1B2C897BE200261B21 /* DeviceManager.swift */,
 				EB5476E92C8A9568004622C3 /* DataPersistenceService.swift */,
+				048EFE222C8EECDA00261B21 /* AlarmManager.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -1253,6 +1256,7 @@
 				CD4214652C649D0100F7C3AE /* FirebaseService.swift in Sources */,
 				048EFE022C874C8F00261B21 /* DeviceCoordinator.swift in Sources */,
 				CD4214742C64A35400F7C3AE /* UIImage+Extension.swift in Sources */,
+				048EFE232C8EECDA00261B21 /* AlarmManager.swift in Sources */,
 				CDB71BA02C78A72400DC5D57 /* MyPageProtocol.swift in Sources */,
 				EBF2E3F02C84E735003FE16C /* RecordListViewModel.swift in Sources */,
 				041A672B2C6C400E000BA4C1 /* DistanceCase+Extension.swift in Sources */,
