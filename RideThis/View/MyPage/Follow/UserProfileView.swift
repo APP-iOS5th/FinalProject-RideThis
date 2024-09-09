@@ -498,7 +498,7 @@ class UserProfileView: RideThisViewController {
             .sink { [weak self] avg in
                 guard let self = self else { return }
                 
-                self.selectedPeriodData.text = "\(avg)\(self.selectedPeriodDataUnit)"
+                self.selectedPeriodData.text = "\(avg)RPM"
             }
             .store(in: &cancellable)
         
@@ -507,7 +507,7 @@ class UserProfileView: RideThisViewController {
             .sink { [weak self] avg in
                 guard let self = self else { return }
                 
-                self.selectedPeriodData.text = "\(avg)\(self.selectedPeriodDataUnit)"
+                self.selectedPeriodData.text = "\(avg)km"
             }
             .store(in: &cancellable)
         
@@ -516,7 +516,7 @@ class UserProfileView: RideThisViewController {
             .sink { [weak self] avg in
                 guard let self = self else { return }
                 
-                self.selectedPeriodData.text = "\(avg)\(self.selectedPeriodDataUnit)"
+                self.selectedPeriodData.text = "\(avg)km/h"
             }
             .store(in: &cancellable)
         
@@ -525,7 +525,7 @@ class UserProfileView: RideThisViewController {
             .sink { [weak self] avg in
                 guard let self = self else { return }
                 
-                self.selectedPeriodData.text = "\(avg)\(self.selectedPeriodDataUnit)"
+                self.selectedPeriodData.text = "\(avg)Kcal"
             }
             .store(in: &cancellable)
     }

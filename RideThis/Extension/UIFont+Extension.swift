@@ -31,6 +31,7 @@ enum FontCase: CGFloat {
     case summaryInfo = 33
     case recordTitle = 18.01
     case recordInfo = 24.01
+    case profileFont2 = 15
     
     var fontWeight: UIFont.Weight {
         get {
@@ -45,7 +46,7 @@ enum FontCase: CGFloat {
                 return .semibold
             case .buttonSize:
                 return .heavy
-            case .profileFont:
+            case .profileFont, .profileFont2:
                 return .bold
             }
         }
