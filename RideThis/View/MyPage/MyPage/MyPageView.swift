@@ -88,7 +88,7 @@ class MyPageView: RideThisViewController {
         stack.addArrangedSubview(followerLabel)
         stack.addArrangedSubview(followerCountLabel)
         stack.distribution = .fillEqually
-        stack.spacing = 0
+        stack.spacing = -10
         
         return stack
     }()
@@ -117,7 +117,7 @@ class MyPageView: RideThisViewController {
         stack.addArrangedSubview(followingLabel)
         stack.addArrangedSubview(followingCountLabel)
         stack.distribution = .fillEqually
-        stack.spacing = 0
+        stack.spacing = -10
         
         return stack
     }()
@@ -188,7 +188,7 @@ class MyPageView: RideThisViewController {
     private lazy var totalRunDistanceData = RideThisLabel(fontType: .classification)
     
     // MARK: Record By Period
-    private let recordByPeriodLabel = RideThisLabel(fontType: .profileFont, text: "기간별 기록")
+    private let recordByPeriodLabel = RideThisLabel(fontType: .profileFont2, text: "기간별 평균 기록")
     private lazy var recordByPeriodDetailButton: UIButton = {
         let btn = UIButton()
         btn.translatesAutoresizingMaskIntoConstraints = false
@@ -213,7 +213,7 @@ class MyPageView: RideThisViewController {
         
         return picker
     }()
-    private let dataLabel = RideThisLabel(fontType: .profileFont, text: "Cadence")
+    private let dataLabel = RideThisLabel(fontType: .profileFont2, text: "Cadence")
     private lazy var graphCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -623,9 +623,14 @@ class MyPageView: RideThisViewController {
         [self.recordByPeriodLabel, self.recordByPeriodDetailButton, self.recordByPeriodPicker, self.leftButton, self.rightButton,
          self.dataLabel, self.graphCollectionView, self.pagingIndicator, self.selectedPeriodTotalRecordContainer].forEach{ self.contentView.addSubview($0) }
         
-        self.recordByPeriodLabel.snp.makeConstraints {
+        self.dataLabel.snp.makeConstraints {
             $0.top.equalTo(self.totalRecordContainer.snp.bottom).offset(30)
             $0.left.equalTo(self.totalRecordContainer.snp.left)
+        }
+        
+        self.recordByPeriodLabel.snp.makeConstraints {
+            $0.top.equalTo(self.dataLabel.snp.top)
+            $0.left.equalTo(self.dataLabel.snp.right).offset(5)
         }
         
         self.recordByPeriodDetailButton.snp.makeConstraints {
@@ -639,13 +644,8 @@ class MyPageView: RideThisViewController {
             $0.right.equalTo(self.totalRecordContainer.snp.right)
         }
         
-        self.dataLabel.snp.makeConstraints {
-            $0.top.equalTo(self.recordByPeriodPicker.snp.bottom).offset(30)
-            $0.left.equalTo(self.recordByPeriodPicker.snp.left)
-        }
-        
         self.graphCollectionView.snp.makeConstraints {
-            $0.top.equalTo(self.dataLabel.snp.bottom).offset(8)
+            $0.top.equalTo(self.recordByPeriodPicker.snp.bottom).offset(15)
             $0.left.equalTo(self.recordByPeriodPicker.snp.left)
             $0.right.equalTo(self.recordByPeriodPicker.snp.right)
             $0.height.equalTo(400)

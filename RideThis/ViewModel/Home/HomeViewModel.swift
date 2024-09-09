@@ -61,7 +61,9 @@ class HomeViewModel: NSObject, CLLocationManagerDelegate {
         do {
             let allRecords = await firebaseService.findRecordsBy(userId: user.user_id)
             
-            let records = allRecords
+            var records = allRecords
+            let oneWeekAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
+            records = records.filter{ $0.record_data! >= oneWeekAgo }
             
             let sortedRecords = records.sorted { $0.record_start_time ?? Date() > $1.record_start_time ?? Date() }
             let recentRecords = Array(sortedRecords.prefix(7))
