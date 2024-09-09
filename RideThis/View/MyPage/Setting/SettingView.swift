@@ -73,8 +73,6 @@ extension SettingView: UITableViewDelegate, UITableViewDataSource {
             cell.configureCell(text: item, cellCase: .navigationLink)
         case 1:
             cell.configureCell(text: item, cellCase: .publicToggle)
-//        case 2:
-//            cell.configureCell(text: item, cellCase: .alarmToggle)
         default:
             break
         }

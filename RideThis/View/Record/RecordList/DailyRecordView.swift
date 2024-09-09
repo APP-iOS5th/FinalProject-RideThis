@@ -34,7 +34,7 @@ class DailyRecordView: UIView {
         
         profileImageView.contentMode = .scaleAspectFill
         profileImageView.clipsToBounds = true
-        profileImageView.layer.cornerRadius = 20 // 원형 이미지를 위해
+        profileImageView.layer.cornerRadius = 20 
         
         arrowImageView.image = UIImage(systemName: "chevron.right")
         arrowImageView.tintColor = .gray

@@ -101,9 +101,9 @@ class RecordView: RideThisViewController {
         
         mainStackView.snp.makeConstraints { make in
             if isLargeDevice() {
-                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40) // 큰 기기에 대한 상단 여백
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
             } else {
-                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20) // 작은 기기에 대한 상단 여백
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
             }
             make.left.right.equalToSuperview().inset(20)
             make.bottom.lessThanOrEqualTo(view.safeAreaLayoutGuide.snp.bottom).offset(-120)

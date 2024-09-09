@@ -89,7 +89,6 @@ class UserService {
         self.signedUser = nil
         self.combineUser = nil
         if let scene = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate) {
-//            scene.changeRootView(viewController: scene.getTabbarController(), animated: true)
             scene.appCoordinator?.changeTabBarView(change: true)
         }
     }

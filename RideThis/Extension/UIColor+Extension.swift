@@ -2,7 +2,6 @@ import UIKit
 
 extension UIColor {
     
-    /// 앱의 주 배경색 (튜나피셜 주색과 잘 어울리는 색)
     static var primaryBackgroundColor: UIColor {
         get {
             var rgbValue: UInt64 = 0
@@ -16,7 +15,6 @@ extension UIColor {
         }
     }
     
-    /// 앱의 주색 (쉽게 말해서 주황색)
     static var primaryColor: UIColor {
         get {
             var rgbValue: UInt64 = 0
@@ -30,7 +28,6 @@ extension UIColor {
         }
     }
     
-    /// 기록 / 경쟁에서 사용하는 Timer / Speed 등의 Title 색상
     static var recordTitleColor: UIColor {
         get {
             var rgbValue: UInt64 = 0
