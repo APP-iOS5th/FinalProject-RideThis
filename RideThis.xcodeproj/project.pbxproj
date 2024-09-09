@@ -101,6 +101,7 @@
 		CD76A8C92C6E53FF003490B3 /* SignUpInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD76A8C82C6E53FF003490B3 /* SignUpInfoView.swift */; };
 		CD76A8CB2C6E5828003490B3 /* UITextField+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD76A8CA2C6E5828003490B3 /* UITextField+Extension.swift */; };
 		CD844CF62C8ADDEF007D8438 /* SignUpCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD844CF52C8ADDEF007D8438 /* SignUpCoordinator.swift */; };
+		CD844CF82C8B77C3007D8438 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = CD844CF72C8B77C3007D8438 /* FirebaseCrashlytics */; };
 		CDAC668B2C6CF0CF005506FB /* AccountQuitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDAC668A2C6CF0CF005506FB /* AccountQuitView.swift */; };
 		CDB220082C7C19DD00973964 /* SignUpInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB220072C7C19DD00973964 /* SignUpInfoViewModel.swift */; };
 		CDB2200A2C7C4EF900973964 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB220092C7C4EF900973964 /* Date+Extension.swift */; };
@@ -317,6 +318,7 @@
 				CD42146F2C649F9200F7C3AE /* SnapKit in Frameworks */,
 				CDC0C1D82C65FD6A00349DC4 /* FirebaseFirestore in Frameworks */,
 				CDC0C1D62C65FD6A00349DC4 /* FirebaseAuth in Frameworks */,
+				CD844CF82C8B77C3007D8438 /* FirebaseCrashlytics in Frameworks */,
 				CD7000632C6AF6D90071D4D2 /* DGCharts in Frameworks */,
 				CDC0C1DA2C65FD6A00349DC4 /* FirebaseStorage in Frameworks */,
 			);
@@ -1120,6 +1122,7 @@
 				CD4213BC2C64982000F7C3AE /* Frameworks */,
 				CD4213BD2C64982000F7C3AE /* Resources */,
 				CD7000672C6AF6D90071D4D2 /* Embed Frameworks */,
+				CD9786042C8EBDD200861E92 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1135,6 +1138,7 @@
 				CDC0C1D92C65FD6A00349DC4 /* FirebaseStorage */,
 				CD7000622C6AF6D90071D4D2 /* DGCharts */,
 				048EFDF82C86AC9D00261B21 /* FirebaseMessaging */,
+				CD844CF72C8B77C3007D8438 /* FirebaseCrashlytics */,
 			);
 			productName = RideThis;
 			productReference = CD4213BF2C64982000F7C3AE /* RideThis.app */;
@@ -1192,6 +1196,29 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		CD9786042C8EBDD200861E92 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#\"${PROJECT_DIR}/FirebaseCrashlytics/run\"\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n#if [ \"${CONFIGURATION}\" != \"Debug\" ]; then\n#\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n#\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/FirebaseCrashlytics/upload-symbols\" -gsp ${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist -p ios ${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}\n#fi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		CD4213BB2C64982000F7C3AE /* Sources */ = {
@@ -1631,6 +1658,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = CDC881E72C6AE2780036154D /* XCRemoteSwiftPackageReference "Charts" */;
 			productName = DGCharts;
+		};
+		CD844CF72C8B77C3007D8438 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CDC0C1D42C65FD6A00349DC4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
 		};
 		CDC0C1D52C65FD6A00349DC4 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
