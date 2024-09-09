@@ -13,8 +13,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Firebase 초기화
         FirebaseApp.configure()
         
+        let defaults = UserDefaults.standard
+        let deleteStatus = defaults.data(forKey: "deleteStatus")
+        
         if FirebaseApp.app() != nil {
-            userService.checkPrevAppleLogin()
+            if deleteStatus != nil {
+                userService.checkPrevAppleLogin()
+            } else {
+                userService.logout()
+                do {
+                    let statusData: [String: Any] = ["status": false]
+                    let jsonData = try JSONSerialization.data(withJSONObject: statusData, options: [])
+                    UserDefaults.standard.set(jsonData, forKey: "deleteStatus")
+                } catch {
+                    print("error > \(error)")
+                }
+            }
             print("Firebase Connect")
         } else {
             print("Firebase Failed Connect")

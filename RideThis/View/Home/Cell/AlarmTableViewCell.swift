@@ -129,7 +129,7 @@ class AlarmTableViewCell: UITableViewCell {
             Task {
                 if case .user(let fetchedUser) = try await firebaseService.fetchUser(at: alarmInfo.alarm_user, userType: true), let user = fetchedUser {
                     self.bodyLabel.text = "\(user.user_nickname)님이 팔로우 했습니다."
-                    if let imgStr = user.user_image {
+                    if let imgStr = user.user_image, !imgStr.isEmpty {
                         DispatchQueue.main.async {
                             self.alarmImage.kf.setImage(with: URL(string: imgStr))
                         }
