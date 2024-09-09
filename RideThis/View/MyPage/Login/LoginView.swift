@@ -98,7 +98,7 @@ extension LoginView: ASAuthorizationControllerDelegate {
                                 if userData == nil {
                                     // MARK: 추가정보 입력 화면으로 이동
                                     let coordinator = SignUpCoordinator(navigationController: self.navigationController!,
-                                                                        childCoordinators: self.loginCoordinator!.childCoordinators,
+                                                                        childCoordinators: self.loginCoordinator?.childCoordinators ?? [],
                                                                         userId: userId,
                                                                         userEmail: userEmail)
                                     coordinator.start()
