@@ -70,6 +70,8 @@ class SignUpInfoViewModel {
                         let existCount = await self.firebaseService.findUserCountBy(email: email)
                         self.isExistEmail = existCount > 0 && UserService.shared.combineUser?.user_email != email
                     }
+                } else {
+                    self.isExistEmail = false
                 }
             }
             .store(in: &cancellable)
