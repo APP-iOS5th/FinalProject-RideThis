@@ -30,7 +30,6 @@ class HomeViewModel: NSObject, CLLocationManagerDelegate {
         super.init()
         
         setupLocationManager()
-        fetchUserData()
     }
     
     // MARK: - Location Methods
@@ -41,19 +40,9 @@ class HomeViewModel: NSObject, CLLocationManagerDelegate {
         requestLocation()
     }
     
-    func refreshUserData() {
-        fetchUserData()
-    }
-    
     /// 위치 정보 요청
     func requestLocation() {
         locationManager.requestLocation()
-    }
-    
-    // MARK: - User Data Methods
-    /// 사용자 데이터 가져오기
-    func fetchUserData() {
-
     }
     
     /// 사용자 기록 가져오기

@@ -41,7 +41,11 @@ class AppCoordinator: Coordinator {
                 // HomeView의 데이터 로드 트리거
                 if let homeNav = tabBarController.viewControllers?.first as? UINavigationController,
                    let homeView = homeNav.viewControllers.first as? HomeView {
-                    homeView.viewModel.fetchUserData()
+                    if let user = UserService.shared.combineUser {
+                        Task {
+                            await homeView.viewModel.fetchUserRecords(user: user)
+                        }
+                    }
                 }
             } else {
                 UIView.transition(with: window, duration: 0.5, options: .transitionCrossDissolve, animations: {
@@ -51,7 +55,11 @@ class AppCoordinator: Coordinator {
                     // HomeView의 데이터 로드 트리거
                     if let homeNav = tabBarController.viewControllers?.first as? UINavigationController,
                        let homeView = homeNav.viewControllers.first as? HomeView {
-                        homeView.viewModel.fetchUserData()
+                        if let user = UserService.shared.combineUser {
+                            Task {
+                                await homeView.viewModel.fetchUserRecords(user: user)
+                            }
+                        }
                     }
                 })
             }

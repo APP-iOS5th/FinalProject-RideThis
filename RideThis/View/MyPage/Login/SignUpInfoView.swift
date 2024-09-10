@@ -297,10 +297,16 @@ class SignUpInfoView: RideThisViewController {
             
             self.viewModel.createUser(userInfo: newUserInfo) { [weak self] user in
                 guard let self = self else { return }
-                UserService.shared.checkPrevAppleLogin()
+                Task {
+                    await self.firebaseService.saveNoUserRecordData(user: user) {
+                        DataPersistenceService.shared.clearUnloginUserSummary()
+                        UserService.shared.checkPrevAppleLogin()
+                    }
+                }
                 UserService.shared.signedUser = user
                 
                 self.dismiss(animated: true) {
+                    NotificationCenter.default.post(name: Notification.Name("UserDidLogin"), object: nil)
                     if let coor = self.signUpCoordinator, coor.childCoordinators.count > 0 {
                         for coordinator in coor.childCoordinators {
                             if let loginCoor = coordinator as? LoginCoordinator {
