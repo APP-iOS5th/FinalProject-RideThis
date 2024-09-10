@@ -117,10 +117,10 @@ extension LoginView: ASAuthorizationControllerDelegate {
                                             }
                                             coordinator.navigationController.popViewController(animated: true)
                                         }
-                                        return
+                                    } else {
+                                        scene.appCoordinator?.changeTabBarView(change: true, selectedCase: coordinator.prevViewCase)                                        
                                     }
                                     NotificationCenter.default.post(name: Notification.Name("UserDidLogin"), object: nil)
-                                    scene.appCoordinator?.changeTabBarView(change: true, selectedCase: coordinator.prevViewCase)
                                 }
                             }
                         }
