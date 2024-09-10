@@ -99,7 +99,7 @@ class HomeView: RideThisViewController {
     }()
     
     private let letsRideDescriptionLabel: UILabel = {
-        let label = RideThisLabel(fontType: .defaultSize, fontColor: .gray, text: "바로 운동을 시작하시려면 라이딩 고고씽 버튼을 눌러주세요.\n운동을 마치면 운동하신 통계를 보여드릴게요.")
+        let label = RideThisLabel(fontType: .defaultSize, fontColor: .gray, text: "바로 운동을 시작하시려면 Let's RideThis 버튼을 눌러주세요.\n라이딩을 마치면 운동하신 통계를 보여드릴게요.")
         label.numberOfLines = 0
         return label
     }()
@@ -215,7 +215,11 @@ class HomeView: RideThisViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel.refreshUserData()
+        if let user = UserService.shared.combineUser {
+            Task {
+                await viewModel.fetchUserRecords(user: user)
+            }
+        }
         
         if let combineUser = UserService.shared.combineUser {
             Task {
