@@ -300,9 +300,9 @@ class SignUpInfoView: RideThisViewController {
                 Task {
                     await self.firebaseService.saveNoUserRecordData(user: user) {
                         DataPersistenceService.shared.clearUnloginUserSummary()
-                        UserService.shared.checkPrevAppleLogin()
                     }
                 }
+                UserService.shared.checkPrevAppleLogin()
                 UserService.shared.signedUser = user
                 
                 self.dismiss(animated: true) {
