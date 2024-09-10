@@ -28,18 +28,48 @@ class RecordListView: RideThisViewController, UIScrollViewDelegate {
         
         setupScrollView()
         setupContentView()
+        setupNoRecordLabel()
         
         viewModel.$records
             .combineLatest(viewModel.$months)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] (_, _) in
+            .sink { [weak self] (records, months) in
                 self?.contentView.arrangedSubviews.forEach { $0.removeFromSuperview() }
                 self?.loadedMonths = 0
-                self?.loadMoreMonths()
+                self?.updateUI(records: records, months: months)
             }
             .store(in: &cancellables)
         
         viewModel.fetchRecordsFromFirebase()
+    }
+    
+    private func setupNoRecordLabel() {
+        view.addSubview(noRecordLabel)
+        noRecordLabel.snp.makeConstraints {
+            $0.centerX.equalTo(view.safeAreaLayoutGuide.snp.centerX)
+            $0.centerY.equalTo(view.safeAreaLayoutGuide.snp.centerY)
+        }
+    }
+    
+    private func updateUI(records: [String: [RecordModel]], months: [String]) {
+        if records.isEmpty {
+            noRecordLabel.isHidden = false
+            scrollView.isHidden = true
+        } else {
+            noRecordLabel.isHidden = true
+            scrollView.isHidden = false
+            loadMoreMonths()
+        }
+    }
+    
+    private func loadMoreMonths() {
+        let endIndex = min(loadedMonths + monthsToLoadPerBatch, viewModel.months.count)
+        for i in loadedMonths..<endIndex {
+            let month = viewModel.months[i]
+            let monthView = createMonthView(for: month, with: viewModel.getRecordsForMonth(month))
+            contentView.addArrangedSubview(monthView)
+        }
+        loadedMonths = endIndex
     }
     
     func setupScrollView() {
@@ -66,26 +96,6 @@ class RecordListView: RideThisViewController, UIScrollViewDelegate {
         contentView.snp.makeConstraints { make in
             make.edges.equalTo(scrollView.contentLayoutGuide)
             make.width.equalTo(scrollView.frameLayoutGuide)
-        }
-    }
-    
-    private func loadMoreMonths() {
-        let endIndex = min(loadedMonths + monthsToLoadPerBatch, viewModel.months.count)
-        if endIndex > 0 {
-            noRecordLabel.removeFromSuperview()
-            for i in loadedMonths..<endIndex {
-                let month = viewModel.months[i]
-                let monthView = createMonthView(for: month, with: viewModel.getRecordsForMonth(month))
-                contentView.addArrangedSubview(monthView)
-            }
-            loadedMonths = endIndex
-        } else {
-            self.view.addSubview(noRecordLabel)
-            
-            noRecordLabel.snp.makeConstraints {
-                $0.centerX.equalTo(view.safeAreaLayoutGuide.snp.centerX)
-                $0.centerY.equalTo(view.safeAreaLayoutGuide.snp.centerY)
-            }
         }
     }
     
