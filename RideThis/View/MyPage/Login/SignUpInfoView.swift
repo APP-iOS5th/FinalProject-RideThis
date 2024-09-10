@@ -297,7 +297,12 @@ class SignUpInfoView: RideThisViewController {
             
             self.viewModel.createUser(userInfo: newUserInfo) { [weak self] user in
                 guard let self = self else { return }
-                UserService.shared.checkPrevAppleLogin()
+                Task {
+                    await self.firebaseService.saveNoUserRecordData(user: user) {
+                        DataPersistenceService.shared.clearUnloginUserSummary()
+                        UserService.shared.checkPrevAppleLogin()
+                    }
+                }
                 UserService.shared.signedUser = user
                 
                 self.dismiss(animated: true) {
