@@ -14,8 +14,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Firebase 초기화
         FirebaseApp.configure()
         
+        let defaults = UserDefaults.standard
+        let deleteStatus = defaults.data(forKey: "deleteStatus")
+        
         if FirebaseApp.app() != nil {
-            userService.checkPrevAppleLogin()
+            if deleteStatus != nil {
+                userService.checkPrevAppleLogin()
+            } else {
+                userService.logout()
+                do {
+                    let statusData: [String: Any] = ["status": false]
+                    let jsonData = try JSONSerialization.data(withJSONObject: statusData, options: [])
+                    UserDefaults.standard.set(jsonData, forKey: "deleteStatus")
+                } catch {
+                    print("error > \(error)")
+                }
+            }
             print("Firebase Connect")
             Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(true)
         } else {
@@ -42,15 +56,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // MARK: UISceneSession Lifecycle
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
-        // Called when a new scene session is being created.
-        // Use this method to select a configuration to create the new scene with.
+
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
     
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
-        // Called when the user discards a scene session.
-        // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
-        // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
+
     }
     
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
@@ -58,7 +69,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     @objc func requestNotificationPermissionIfNeeded() {
-        if userService.loginStatus == .appleLogin {
+        if userService.signedUser != nil {
             let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
             UNUserNotificationCenter.current().requestAuthorization(
                 options: authOptions,
@@ -69,11 +80,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                     if granted {
                         print("알림 권한이 허용되었습니다.")
+                        AlarmManager.shared.isUse = true
                         DispatchQueue.main.async {
                             UIApplication.shared.registerForRemoteNotifications()
                         }
                     } else {
                         print("알림 권한이 거부되었습니다.")
+                        AlarmManager.shared.isUse = false
                     }
                 }
             )

@@ -80,17 +80,8 @@ class UserProfileView: RideThisViewController {
     private lazy var totalRunDistanceData = RideThisLabel(fontType: .classification)
     
     // MARK: Record By Period
-    private let recordByPeriodLabel = RideThisLabel(fontType: .profileFont, text: "기간별 기록")
-//    private lazy var recordByPeriodDetailButton: UIButton = {
-//        let btn = UIButton()
-//        btn.translatesAutoresizingMaskIntoConstraints = false
-//        btn.setTitle("자세히 보기", for: .normal)
-//        btn.setTitleColor(.systemBlue, for: .normal)
-//        btn.titleLabel?.font = UIFont.systemFont(ofSize: 18)
-//        btn.contentVerticalAlignment = .top
-//        
-//        return btn
-//    }()
+    private let recordByPeriodLabel = RideThisLabel(fontType: .profileFont2, text: "기간별 기록")
+
     private let periodOptions: [RecordPeriodCase] = RecordPeriodCase.allCases
     private lazy var recordByPeriodPicker: UISegmentedControl = {
         let picker = UISegmentedControl(items: self.periodOptions.map{ $0.rawValue })
@@ -100,7 +91,7 @@ class UserProfileView: RideThisViewController {
         
         return picker
     }()
-    private let dataLabel = RideThisLabel(fontType: .profileFont, text: "Cadence")
+    private let dataLabel = RideThisLabel(fontType: .profileFont2, text: "Cadence")
     private lazy var graphCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -385,9 +376,14 @@ class UserProfileView: RideThisViewController {
         [self.recordByPeriodLabel, self.recordByPeriodPicker, self.leftButton, self.rightButton,
          self.dataLabel, self.graphCollectionView, self.pagingIndicator, self.selectedPeriodTotalRecordContainer].forEach{ self.contentView.addSubview($0) }
         
-        self.recordByPeriodLabel.snp.makeConstraints {
+        self.dataLabel.snp.makeConstraints {
             $0.top.equalTo(self.totalRecordContainer.snp.bottom).offset(30)
             $0.left.equalTo(self.totalRecordContainer.snp.left)
+        }
+        
+        self.recordByPeriodLabel.snp.makeConstraints {
+            $0.top.equalTo(self.dataLabel.snp.top)
+            $0.left.equalTo(self.dataLabel.snp.right).offset(5)
         }
         
         self.recordByPeriodPicker.snp.makeConstraints {
@@ -396,13 +392,8 @@ class UserProfileView: RideThisViewController {
             $0.right.equalTo(self.totalRecordContainer.snp.right)
         }
         
-        self.dataLabel.snp.makeConstraints {
-            $0.top.equalTo(self.recordByPeriodPicker.snp.bottom).offset(30)
-            $0.left.equalTo(self.recordByPeriodPicker.snp.left)
-        }
-        
         self.graphCollectionView.snp.makeConstraints {
-            $0.top.equalTo(self.dataLabel.snp.bottom).offset(8)
+            $0.top.equalTo(self.recordByPeriodPicker.snp.bottom).offset(15)
             $0.left.equalTo(self.recordByPeriodPicker.snp.left)
             $0.right.equalTo(self.recordByPeriodPicker.snp.right)
             $0.height.equalTo(400)
@@ -430,23 +421,10 @@ class UserProfileView: RideThisViewController {
             $0.bottom.equalTo(self.contentView.snp.bottom).offset(-20)
         }
         
-        [/*self.selectedPeriodTitle, self.selectedPeriodSeparator, */self.selectedPeriodData].forEach{ self.selectedPeriodTotalRecordContainer.addSubview($0) }
+        [self.selectedPeriodData].forEach{ self.selectedPeriodTotalRecordContainer.addSubview($0) }
         
-//        self.selectedPeriodTitle.snp.makeConstraints {
-//            $0.top.equalTo(self.selectedPeriodTotalRecordContainer.snp.top).offset(15)
-//            $0.centerX.equalTo(self.selectedPeriodTotalRecordContainer.snp.centerX)
-//        }
-        
-//        self.selectedPeriodSeparator.snp.makeConstraints {
-//            $0.top.equalTo(self.selectedPeriodTitle.snp.bottom).offset(12)
-//            $0.centerX.equalTo(self.selectedPeriodTitle.snp.centerX)
-//            $0.width.equalTo(60)
-//            $0.height.equalTo(5)
-//        }
         
         self.selectedPeriodData.snp.makeConstraints {
-//            $0.top.equalTo(self.selectedPeriodSeparator.snp.bottom).offset(15)
-//            $0.centerX.equalTo(self.selectedPeriodTitle.snp.centerX)
             $0.centerX.equalTo(self.selectedPeriodTotalRecordContainer.snp.centerX)
             $0.centerY.equalTo(self.selectedPeriodTotalRecordContainer.snp.centerY)
         }
@@ -605,15 +583,4 @@ extension UserProfileView: UICollectionViewDataSource, UICollectionViewDelegate,
             graphCell.lineChartView.notifyDataSetChanged()
         }
     }
-    
-    // MARK: 프로필 Container를 선택했을 때 팔로우 관리 페이지로 이동
-//    @objc func toFollowerView() {
-//        if let _ = service.combineUser {
-//            followCoordinator.start()
-//        } else {
-//            self.showAlert(alertTitle: "알림", msg: "로그인이 필요한 기능입니다. 로그인 화면으로 이동할까요?", confirm: "예") {
-//                self.navigationController?.pushViewController(LoginView(), animated: true)
-//            }
-//        }
-//    }
 }

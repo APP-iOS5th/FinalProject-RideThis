@@ -23,7 +23,6 @@ class FireBaseService {
             } else {
                 print("문서 생성 및 필드 추가 성공")
                 
-                // MARK: user_alarm_status는 지금은 모두 true 이지만 처음에 알림 허용을 한 사용자만 true로 해줘야함
                 let createdUser = User(user_id: userInfo["user_id"] as! String,
                                        user_image: userInfo["user_image"] as? String,
                                        user_email: userInfo["user_email"] as! String,
@@ -33,7 +32,7 @@ class FireBaseService {
                                        user_following: userInfo["user_following"] as! [String],
                                        user_follower: userInfo["user_follower"] as! [String],
                                        user_account_public: false,
-                                       user_alarm_status: true)
+                                       user_alarm_status: AlarmManager.shared.isUse ?? true)
                 
                 createComplete(createdUser)
             }
@@ -622,7 +621,7 @@ class FireBaseService {
                 if let error = response.error {
                     print("FCM 통신 오류: \(error)")
                 } else if let httpResponse = response.response, httpResponse.statusCode != 200 {
-                    if let data = response.data, let responseBody = String(data: data, encoding: .utf8) {
+                    if let data = response.data, let _ = String(data: data, encoding: .utf8) {
                         print("FCM Status Error: \(httpResponse.statusCode)")
                     } else {
                         print("FCM notification failed with status code: \(httpResponse.statusCode), but no response body was returned.")

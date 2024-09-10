@@ -24,7 +24,7 @@ class AppCoordinator: Coordinator {
         tabBarController.tabBar.addSubview(separatorView)
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .primaryBackgroundColor // 원하는 배경색 설정
+        appearance.backgroundColor = .primaryBackgroundColor 
         
         tabBarController.tabBar.standardAppearance = appearance
         tabBarController.tabBar.scrollEdgeAppearance = appearance

@@ -24,6 +24,7 @@ class SettingView: RideThisViewController {
         
         self.title = "설정"
         setTableView()
+        setObserver()
     }
     
     func setTableView() {
@@ -35,6 +36,24 @@ class SettingView: RideThisViewController {
             $0.right.equalTo(self.view.snp.right).offset(-20)
             $0.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(-20)
         }
+    }
+    
+    func setObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.willEnterForegroundNotification, object: nil)
+    }
+    
+    @objc func appDidBecomeActive() {
+        AlarmManager.shared.checkCurrentAlarmStatus() { status in
+            guard let currentUser = UserService.shared.combineUser else { return }
+            currentUser.user_alarm_status = status
+            
+            let firebaseService = FireBaseService()
+            firebaseService.updateUserInfo(updated: currentUser, update: false)
+        }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
     }
 }
 
@@ -50,12 +69,10 @@ extension SettingView: UITableViewDelegate, UITableViewDataSource {
         }
         
         switch indexPath.row {
-        case 0, 3:
+        case 0, 2, 3:
             cell.configureCell(text: item, cellCase: .navigationLink)
         case 1:
             cell.configureCell(text: item, cellCase: .publicToggle)
-        case 2:
-            cell.configureCell(text: item, cellCase: .alarmToggle)
         default:
             break
         }
@@ -73,6 +90,8 @@ extension SettingView: UITableViewDelegate, UITableViewDataSource {
             self.navigationController?.topViewController?.navigationItem.backButtonTitle = "설정"
             
             accountSettingCoordinator.start()
+        } else if indexPath.row == 2 {
+            AlarmManager.shared.openAppSettings()
         } else if indexPath.row == 3 {
             settingCoordinator?.showPrivacyPolicy()
         }

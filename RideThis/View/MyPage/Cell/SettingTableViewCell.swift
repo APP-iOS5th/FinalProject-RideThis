@@ -30,13 +30,6 @@ class SettingTableViewCell: UITableViewCell {
         return toggle
     }()
     
-    private lazy var alarmToggleSwitch: UISwitch = {
-        let toggle = UISwitch()
-        toggle.translatesAutoresizingMaskIntoConstraints = false
-        toggle.addTarget(self, action: #selector(alarmToggleChanged(_:)), for: .valueChanged)
-        
-        return toggle
-    }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -80,15 +73,13 @@ class SettingTableViewCell: UITableViewCell {
                 $0.right.equalTo(self.contentView.snp.right).offset(-10)
             }
         case .alarmToggle:
-            self.alarmToggleSwitch.isHidden = false
-            if let signedUser = UserService.shared.combineUser {
-                self.alarmToggleSwitch.setOn(signedUser.user_alarm_status, animated: false)
-            }
-            self.contentView.addSubview(self.alarmToggleSwitch)
-            self.alarmToggleSwitch.snp.makeConstraints {
+            self.navigationButton.isHidden = false
+            self.contentView.addSubview(self.navigationButton)
+            self.navigationButton.snp.makeConstraints {
                 $0.centerY.equalTo(self.contentView.snp.centerY)
                 $0.right.equalTo(self.contentView.snp.right).offset(-10)
             }
+
         }
     }
     
@@ -109,22 +100,7 @@ class SettingTableViewCell: UITableViewCell {
         firebaseService.updateUserInfo(updated: changedUser, update: true)
     }
     
-    @objc func alarmToggleChanged(_ sender: UISwitch) {
-        guard let user = UserService.shared.combineUser else { return }
-        let changedUser = User(user_id: user.user_id,
-                               user_image: user.user_image,
-                               user_email: user.user_email,
-                               user_nickname: user.user_nickname,
-                               user_weight: user.user_weight,
-                               user_tall: user.user_tall,
-                               user_following: user.user_following,
-                               user_follower: user.user_follower,
-                               user_account_public: user.user_account_public,
-                               user_alarm_status: sender.isOn)
-        
-        let firebaseService = FireBaseService()
-        firebaseService.updateUserInfo(updated: changedUser, update: true)
-    }
+
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -135,7 +111,6 @@ class SettingTableViewCell: UITableViewCell {
         
         publicToggleSwitch.isOn = false
         publicToggleSwitch.isHidden = true
-        alarmToggleSwitch.isOn = false
-        alarmToggleSwitch.isHidden = true
+
     }
 }

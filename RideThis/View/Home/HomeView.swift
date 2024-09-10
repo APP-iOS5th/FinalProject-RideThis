@@ -211,8 +211,6 @@ class HomeView: RideThisViewController {
         setupScrollView()
         setupContentView()
         setupBindings()
-        
-//        viewModel.fetchUserData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -576,7 +574,8 @@ class HomeView: RideThisViewController {
             msg: "라이딩 목록을 보려면 로그인이 필요합니다. 로그인 하시겠습니까?",
             confirm: "로그인"
         ) {
-            self.coordinator?.showLoginView()
+            let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!, childCoordinators: [], prevViewCase: .home, backBtnTitle: "Home")
+            loginCoordinator.start()
         }
     }
 }
