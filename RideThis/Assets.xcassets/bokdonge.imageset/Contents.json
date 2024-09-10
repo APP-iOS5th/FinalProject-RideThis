@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "bokdonge.jpg",
+      "filename" : "bokdonge.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "bokdonge2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "bokdonge3.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
