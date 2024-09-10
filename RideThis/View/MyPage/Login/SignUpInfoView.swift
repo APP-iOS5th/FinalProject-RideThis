@@ -306,6 +306,7 @@ class SignUpInfoView: RideThisViewController {
                 UserService.shared.signedUser = user
                 
                 self.dismiss(animated: true) {
+                    NotificationCenter.default.post(name: Notification.Name("UserDidLogin"), object: nil)
                     if let coor = self.signUpCoordinator, coor.childCoordinators.count > 0 {
                         for coordinator in coor.childCoordinators {
                             if let loginCoor = coordinator as? LoginCoordinator {
