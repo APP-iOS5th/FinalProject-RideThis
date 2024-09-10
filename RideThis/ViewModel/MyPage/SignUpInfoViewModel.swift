@@ -65,9 +65,13 @@ class SignUpInfoViewModel {
             .removeDuplicates()
             .sink { [weak self] email in
                 guard let self = self else { return }
-                Task {
-                    let existCount = await self.firebaseService.findUserCountBy(email: email)
-                    self.isExistEmail = existCount > 0 && UserService.shared.combineUser?.user_email != email
+                if !email.isEmpty {
+                    Task {
+                        let existCount = await self.firebaseService.findUserCountBy(email: email)
+                        self.isExistEmail = existCount > 0 && UserService.shared.combineUser?.user_email != email
+                    }
+                } else {
+                    self.isExistEmail = false
                 }
             }
             .store(in: &cancellable)
