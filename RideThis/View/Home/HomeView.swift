@@ -194,6 +194,41 @@ class HomeView: RideThisViewController {
         return stack
     }()
     
+    // WeatherKit 상표
+    private let appleweatherLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
+        label.text = "Powered by  Weather"
+        label.textColor = .systemGray
+        
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        return label
+    }()
+    
+    private let appleweatherLinkButton: UIButton = {
+        let button = UIButton(type: .custom)
+        var config = UIButton.Configuration.plain()
+        
+        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        
+        let title = "[Link]"
+        let attributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor.systemGray,
+            .underlineStyle: NSUnderlineStyle.single.rawValue,
+            .font: UIFont.systemFont(ofSize: 12, weight: .semibold)
+        ]
+        
+        let attributedTitle = NSAttributedString(string: title, attributes: attributes)
+    
+        button.configuration = config
+        button.setAttributedTitle(attributedTitle, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        return button
+    }()
+    
+    
     // MARK: - Initialization
     init(viewModel: HomeViewModel = HomeViewModel()) {
         self.viewModel = viewModel
@@ -372,6 +407,25 @@ class HomeView: RideThisViewController {
             con.left.equalTo(weatherSectionView.snp.left).offset(20)
             con.right.equalTo(weatherSectionView.snp.right).offset(-20)
             con.height.equalTo(160)
+        }
+        
+        weatherSectionView.addSubview(appleweatherLinkButton)
+        appleweatherLinkButton.snp.makeConstraints { btn in
+            btn.trailing.equalToSuperview().inset(20)
+            btn.bottom.equalTo(weatherContainer.snp.top).offset(-5)
+        }
+        
+        appleweatherLinkButton.addAction(UIAction { [weak self] _ in
+            guard let self = self else { return }
+            if let url = URL(string: "https://weatherkit.apple.com/legal-attribution.html") {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+        }, for: .touchUpInside)
+        
+        weatherSectionView.addSubview(appleweatherLabel)
+        appleweatherLabel.snp.makeConstraints { label in
+            label.right.equalTo(appleweatherLinkButton.snp.left).offset(-2)
+            label.bottom.equalTo(appleweatherLinkButton.snp.bottom)
         }
         
         weatherContainer.addSubview(locationLabel)
