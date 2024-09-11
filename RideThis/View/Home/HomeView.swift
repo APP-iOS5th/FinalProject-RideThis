@@ -476,7 +476,11 @@ class HomeView: RideThisViewController {
         self.viewModel.$currentWeather
             .receive(on: DispatchQueue.main)
             .sink { [weak self] weather in
-                self?.currentTemp.text = "\(weather?.currentWeather.temperature.formatted() ?? "")"
+                var temp = ""
+                if let weather = weather {
+                    temp = "\(weather.currentWeather.temperature.value.getTwoDecimal.formatted())°C"
+                }
+                self?.currentTemp.text = temp
                 self?.weatherSymbol.image = UIImage(systemName: "\(weather?.currentWeather.symbolName ?? "")")
                 self?.weatherConditionLabel.text = "\(weather?.currentWeather.condition.description ?? "")"
                 
