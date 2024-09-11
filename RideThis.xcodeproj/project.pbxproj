@@ -1513,7 +1513,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RideThis/Info.plist;
-				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "앱의 원활한 사용을 위해서 블루투스 권한이 필요합니다.";
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "이 앱은 Bluetooth를 통해 케이던스 센서와 연결하여 실시간으로 사용자의 운동 데이터를 수집하고 분석합니다. 이 데이터는 운동 성과를 추적하고 맞춤형 피드백을 제공하는 데 사용됩니다.";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "현재 위치의 날씨 정보를 가져오기 위해 위치 접근이 필요합니다.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "현재 위치의 날씨 정보를 가져오기 위해 위치 접근이 필요합니다.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사용자의 사진첩에 접근 허용이 필요합니다.";
@@ -1552,7 +1552,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RideThis/Info.plist;
-				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "앱의 원활한 사용을 위해서 블루투스 권한이 필요합니다.";
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "이 앱은 Bluetooth를 통해 케이던스 센서와 연결하여 실시간으로 사용자의 운동 데이터를 수집하고 분석합니다. 이 데이터는 운동 성과를 추적하고 맞춤형 피드백을 제공하는 데 사용됩니다.";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "현재 위치의 날씨 정보를 가져오기 위해 위치 접근이 필요합니다.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "현재 위치의 날씨 정보를 가져오기 위해 위치 접근이 필요합니다.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사용자의 사진첩에 접근 허용이 필요합니다.";
