@@ -1,0 +1,143 @@
+
+
+import UIKit
+import SnapKit
+
+class NonMemberRecordSummaryViewController: RideThisViewController {
+    
+    let prevViewCase: ViewCase = .record
+    private let viewModel: NonMemberRecordSummaryViewModel
+    
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
+    
+    private let timerRecord = RecordContainer(title: "Timer", recordText: "00:00", view: "summary")
+    private let cadenceRecord = RecordContainer(title: "Cadence", recordText: "0 RPM", view: "summary")
+    private let speedRecord = RecordContainer(title: "Speed", recordText: "0 km/h", view: "summary")
+    private let distanceRecord = RecordContainer(title: "Distance", recordText: "0 km", view: "summary")
+    private let calorieRecord = RecordContainer(title: "Calories", recordText: "0 kcal", view: "summary")
+    
+    private let confirmButton = RideThisButton(buttonTitle: "저장", height: 50)
+    
+    // MARK: 초기화 및 데이터 바인딩
+    init(viewModel: NonMemberRecordSummaryViewModel = NonMemberRecordSummaryViewModel()) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: ViewDidLoad
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        DeviceManager.shared.isCompetetionUse = false
+        
+        setupUI()
+        setupBinding()
+        setupAction()
+    }
+    
+    // MARK: SetupUI
+    private func setupUI() {
+        self.title = "기록요약"
+        self.navigationItem.hidesBackButton = true
+        
+        setupLayout()
+    }
+    
+    // MARK: SetupBinding Data
+    private func setupBinding() {
+        timerRecord.updateRecordText(text: viewModel.recordedTime)
+        cadenceRecord.updateRecordText(text: "\(viewModel.cadence.formattedWithThousandsSeparator()) RPM")
+        speedRecord.updateRecordText(text: "\(viewModel.speed.formattedWithThousandsSeparator()) Km/h")
+        distanceRecord.updateRecordText(text: "\(viewModel.distance.formattedWithThousandsSeparator()) Km")
+        calorieRecord.updateRecordText(text: "\(viewModel.calorie.formattedWithThousandsSeparator()) Kcal")
+    }
+    
+    // MARK: Setup Layout
+    private func setupLayout() {
+        self.view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        
+        contentView.addSubview(timerRecord)
+        contentView.addSubview(cadenceRecord)
+        contentView.addSubview(speedRecord)
+        contentView.addSubview(distanceRecord)
+        contentView.addSubview(calorieRecord)
+        self.view.addSubview(confirmButton)
+        
+        let safeArea = self.view.safeAreaLayoutGuide
+        
+        scrollView.snp.makeConstraints { make in
+            make.top.left.right.equalTo(safeArea)
+            make.bottom.equalTo(confirmButton.snp.top).offset(-19)
+        }
+
+        contentView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+            make.width.equalToSuperview()
+            make.bottom.equalTo(calorieRecord.snp.bottom)
+        }
+        
+        timerRecord.snp.makeConstraints { timer in
+            timer.top.equalTo(contentView.snp.top).offset(20)
+            timer.left.equalToSuperview().offset(20)
+            timer.right.equalToSuperview().offset(-20)
+            timer.height.equalTo(100)
+        }
+        
+        cadenceRecord.snp.makeConstraints { cadence in
+            cadence.top.equalTo(timerRecord.snp.bottom).offset(13)
+            cadence.left.equalToSuperview().offset(20)
+            cadence.right.equalToSuperview().offset(-20)
+            cadence.height.equalTo(100)
+        }
+        
+        speedRecord.snp.makeConstraints { speed in
+            speed.top.equalTo(cadenceRecord.snp.bottom).offset(13)
+            speed.left.equalToSuperview().offset(20)
+            speed.right.equalToSuperview().offset(-20)
+            speed.height.equalTo(100)
+        }
+
+        distanceRecord.snp.makeConstraints { distance in
+            distance.top.equalTo(speedRecord.snp.bottom).offset(13)
+            distance.left.equalToSuperview().offset(20)
+            distance.right.equalToSuperview().offset(-20)
+            distance.height.equalTo(100)
+        }
+
+        calorieRecord.snp.makeConstraints { calorie in
+            calorie.top.equalTo(distanceRecord.snp.bottom).offset(13)
+            calorie.left.equalToSuperview().offset(20)
+            calorie.right.equalToSuperview().offset(-20)
+            calorie.height.equalTo(100)
+        }
+        
+        confirmButton.snp.makeConstraints { btn in
+            btn.bottom.equalTo(safeArea.snp.bottom).offset(-19)
+            btn.centerX.equalTo(self.view.snp.centerX)
+            btn.width.equalTo(210)
+        }
+    }
+    
+    // MARK: Setup Action
+    private func setupAction() {
+        confirmButton.addAction(UIAction { [weak self] _ in
+            guard let self = self else { return }
+            
+            Task {
+                await self.viewModel.saveRecording()
+            }
+            
+            // 뷰이동 넣어야함 탭바 기록 처음 뷰로 이동
+            if let scene = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate) {
+                scene.appCoordinator?.changeTabBarView(change: true, selectedCase: prevViewCase)
+            }
+        }, for: .touchUpInside)
+    }
+    
+}
+
