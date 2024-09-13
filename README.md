@@ -1,12 +1,11 @@
 # 🚲 블루투스 라이딩 측정앱 RideThis
 
-![이미지 들어갈 자리](이미지 링크)
+![playstore](https://github.com/user-attachments/assets/5ac2493c-40e3-4695-9ce0-bee2f82c1ac0)
+
 
 <br>
 
 ## 1. 프로젝트 소개
-
-[여기 영상 가시져ㄱㄱ]
 
 - RideThis는 자전거에 부착된 케이던스 기기를 통해 라이딩 데이터를 실시간으로 기록하고, 다양한 통계 정보를 제공하는 플랫폼입니다.
 - 라이딩 동안의 케이던스, 속도, 거리, 칼로리 데이터를 편리하게 확인할 수 있습니다.
@@ -29,7 +28,7 @@
 
 | **황규상** | **김성국** | **최광우** | **황승혜** |
 | :------: |  :------: | :------: | :------: |
-| [이미지 <br/> @깃헙](깃헙링크) | [이미지 <br/> @깃헙](깃헙링크) | [이미지 <br/> @깃헙](깃헙링크) | [이미지 <br/> @깃헙](깃헙링크) |
+| [<img src="https://avatars.githubusercontent.com/u/51147673?v=4"/> <br/> @황규상](https://github.com/kyuSangHwang) | [<img src="https://avatars.githubusercontent.com/u/114292187?v=4"/> <br/> @김성국](https://github.com/SeongKookKIM) | [<img src="https://avatars.githubusercontent.com/u/78129823?v=4"/> <br/> @최광우](https://github.com/madcow95) | [<img src="https://avatars.githubusercontent.com/u/55075762?v=4"/> <br/> @황승혜](https://github.com/Seunghye-Hwang) |
 
 </div>
 
