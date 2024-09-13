@@ -1,7 +1,6 @@
 # 🚲 블루투스 라이딩 측정앱 RideThis
 
-![playstore](https://github.com/user-attachments/assets/5ac2493c-40e3-4695-9ce0-bee2f82c1ac0)
-
+![image](https://github.com/user-attachments/assets/435fcaa2-dbb1-4777-b088-98d993306591)
 
 <br>
 
