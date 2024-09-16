@@ -199,18 +199,14 @@ extension FollowManageView: UpdateUserDelegate {
 
 extension FollowManageView: UserUnfollowDelegate {
     func unfollowUser(cellUser: User, signedUser: User, completion: @escaping ((User, User) -> Void)) {
-        
-        Task {
-            if case .user(let receivedUser) = try await self.firebaseService.fetchUser(at: cellUser.user_id, userType: true) {
-                guard let cellUser = receivedUser, let idx = cellUser.user_follower.firstIndex(of: signedUser.user_id) else { return }
-                self.showAlert(alertTitle: "알림", msg: "\(cellUser.user_nickname)님을 언팔로우 하시겠습니까?", confirm: "예") {
-                    cellUser.user_follower.remove(at: idx)
-                    signedUser.user_following.remove(at: signedUser.user_following.firstIndex(of: cellUser.user_id)!)
-                    
-                    completion(cellUser, signedUser)
-                } cancelAction: {
-                    return
-                }
+        if let idx = cellUser.user_follower.firstIndex(of: signedUser.user_id) {
+            self.showAlert(alertTitle: "알림", msg: "\(cellUser.user_nickname)님을 언팔로우 하시겠습니까?", confirm: "예") {
+                cellUser.user_follower.remove(at: idx)
+                signedUser.user_following.remove(at: signedUser.user_following.firstIndex(of: cellUser.user_id)!)
+                
+                completion(cellUser, signedUser)
+            } cancelAction: {
+                return
             }
         }
     }
