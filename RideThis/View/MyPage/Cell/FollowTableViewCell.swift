@@ -71,33 +71,28 @@ class FollowTableViewCell: UITableViewCell {
                   let cellUser = self.cellUser,
                   let signedUser = self.signedUser else { return }
             
-            if let title = btnLabel.text {
-                if title == "Follow" {
-                    self.followButton.setTitle("Unfollow", for: .normal)
-                    self.followButton.setTitleColor(.systemRed, for: .normal)
-                    cellUser.user_follower.append(signedUser.user_id)
-                    signedUser.user_following.append(cellUser.user_id)
-                    
-                    Task {
-                        if case .user(let receivedUser) = try await self.firebaseService.fetchUser(at: cellUser.user_id, userType: true) {
-                            guard let user = receivedUser else { return }
-                            if user.user_alarm_status {
-                                self.firebaseService.fetchFCM(signedUser: signedUser, cellUser: cellUser, alarmCase: .follow)
+            Task {
+                if case .user(var currentUser) = try await self.firebaseService.fetchUser(at: signedUser.user_id, userType: true),
+                   case .user(var selectedUser) = try await self.firebaseService.fetchUser(at: cellUser.user_id, userType: true),
+                   let currentUser = currentUser, let selectedUser = selectedUser {
+                    if let title = btnLabel.text {
+                        if title == "Follow" {
+                            self.followButton.setTitle("Unfollow", for: .normal)
+                            self.followButton.setTitleColor(.systemRed, for: .normal)
+                            currentUser.user_following.append(selectedUser.user_id)
+                            selectedUser.user_follower.append(currentUser.user_id)
+                            
+                            if selectedUser.user_alarm_status {
+                                self.firebaseService.fetchFCM(signedUser: currentUser, cellUser: selectedUser, alarmCase: .follow)
                             }
-                        }
-                    }
-                    firebaseService.updateUserInfo(updated: cellUser, update: false)
-                    firebaseService.updateUserInfo(updated: signedUser, update: true)
-                } else {
-                    unfollowDelegate?.unfollowUser(cellUser: cellUser, signedUser: signedUser) { (updatedCellUser, updatedSignUser) in
-                        self.followButton.setTitle("Follow", for: .normal)
-                        self.followButton.setTitleColor(.systemBlue, for: .normal)
-                        
-                        Task {
-                            if case .user(let receivedUser) = try await self.firebaseService.fetchUser(at: cellUser.user_id, userType: true) {
-                                guard let user = receivedUser else { return }
+                            
+                            self.firebaseService.updateUserInfo(updated: selectedUser, update: false)
+                            self.firebaseService.updateUserInfo(updated: currentUser, update: true)
+                        } else {
+                            self.unfollowDelegate?.unfollowUser(cellUser: selectedUser, signedUser: currentUser) { (updatedCellUser, updatedSignUser) in
+                                self.followButton.setTitle("Follow", for: .normal)
+                                self.followButton.setTitleColor(.systemBlue, for: .normal)
                                 
-                                updatedCellUser.user_alarm_status = user.user_alarm_status
                                 self.firebaseService.updateUserInfo(updated: updatedCellUser, update: false)
                                 self.firebaseService.updateUserInfo(updated: updatedSignUser, update: true)
                             }
