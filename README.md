@@ -2,9 +2,9 @@
 
 ![image](https://github.com/user-attachments/assets/435fcaa2-dbb1-4777-b088-98d993306591)
 
-앱 스토어 URL:
+앱 스토어 URL: https://apps.apple.com/kr/app/ridethis/id6648762961
 <br/>
-시연영상 URL:
+시연영상 URL: https://firebasestorage.googleapis.com/v0/b/authtest-b4883.appspot.com/o/6To4_시연영상.mp4?alt=media&token=e2f6db9f-4991-48e0-8873-bb5611a22c4a
 <br/>
 노션URL:
 
@@ -15,6 +15,13 @@
 이 서비스는 **케이던스 기기**와 스마트폰 **앱 간의 블루투스 통신**을 통해 자전거 라이딩 데이터를 실시간으로 기록하고, 다양한 통계 정보를 제공하는 플랫폼입니다. 자전거에 부착된 케이던스 기기로부터 **케이던스(분당 회전수) 데이터 정보를** 앱이 받아와, 사용자는 라이딩 동안의 케이던스, 속도, 거리, 칼로리 데이터를 편리하게 확인할 수 있습니다. 이러한 데이터는 라이딩의 성과를 분석하고 향후 운동 계획을 세우는 데 큰 도움을 줍니다.
 
 특히, 이 서비스는 단순한 기록 측정에서 그치지 않고, **게임 요소**를 도입하여 운동의 재미를 더했습니다. 사용자는 특정 거리(Km)를 목표로 다른 사용자들과 **경쟁**할 수 있으며, 이를 통해 운동의 동기를 부여받고, 더 적극적으로 자전거 라이딩을 즐길 수 있습니다.
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/42842c4c-2dd7-438c-95d8-681b4e1d54d2" alt="이미지1 설명" width="23%" />
+  <img src="https://github.com/user-attachments/assets/6ba1a8ca-6b75-41e3-83a2-9e282a7508f4" alt="이미지2 설명" width="23%" />
+  <img src="https://github.com/user-attachments/assets/e2a94468-1d81-464b-825a-58dafec36261" alt="이미지3 설명" width="23%" />
+  <img src="https://github.com/user-attachments/assets/5740605c-f0c2-4b44-8a7f-e269e749626c" alt="이미지4 설명" width="23%" />
+</p>
 
 ### **케이던스 기기와 앱의 블루투스 연결**
 
@@ -35,13 +42,6 @@
 
 - 사용자들은 자신의 라이딩 기록을 서버에 등록하여, 친구나 전체 사용자들과 기록을 **비교할 수 있습니다.**
 - 이를 통해 사용자 간에 자연스러운 경쟁이 형성되며, 운동의 재미를 더하고 서로 동기 부여가 됩니다.
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/42842c4c-2dd7-438c-95d8-681b4e1d54d2" alt="이미지1 설명" width="23%" />
-  <img src="https://github.com/user-attachments/assets/6ba1a8ca-6b75-41e3-83a2-9e282a7508f4" alt="이미지2 설명" width="23%" />
-  <img src="https://github.com/user-attachments/assets/e2a94468-1d81-464b-825a-58dafec36261" alt="이미지3 설명" width="23%" />
-  <img src="https://github.com/user-attachments/assets/5740605c-f0c2-4b44-8a7f-e269e749626c" alt="이미지4 설명" width="23%" />
-</p>
 
 이 서비스는 단순한 기록 기능을 넘어, 사용자들이 자전거 라이딩을 더 흥미롭게 즐길 수 있도록 지원합니다. **운동 데이터 기록**과 **소셜 경쟁** 요소가 결합되어, 건강한 라이프스타일을 유지하는 데 도움을 주는 동시에, 더 즐겁게 운동할 수 있는 환경을 제공합니다.
 
@@ -87,7 +87,7 @@
 
 ### 서버 설정 및 배포
 
-- **서버 설치**: `yarn install`
+- **서버 설치**: yarn install
 - **배포 환경**: Vercel
 
 ### 협업 도구
