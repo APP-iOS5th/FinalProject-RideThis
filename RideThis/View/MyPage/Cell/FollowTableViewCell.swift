@@ -72,8 +72,8 @@ class FollowTableViewCell: UITableViewCell {
                   let signedUser = self.signedUser else { return }
             
             Task {
-                if case .user(var currentUser) = try await self.firebaseService.fetchUser(at: signedUser.user_id, userType: true),
-                   case .user(var selectedUser) = try await self.firebaseService.fetchUser(at: cellUser.user_id, userType: true),
+                if case .user(let currentUser) = try await self.firebaseService.fetchUser(at: signedUser.user_id, userType: true),
+                   case .user(let selectedUser) = try await self.firebaseService.fetchUser(at: cellUser.user_id, userType: true),
                    let currentUser = currentUser, let selectedUser = selectedUser {
                     if let title = btnLabel.text {
                         if title == "Follow" {
