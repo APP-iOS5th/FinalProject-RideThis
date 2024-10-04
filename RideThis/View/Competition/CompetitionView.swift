@@ -378,5 +378,26 @@ extension CompetitionView: UITableViewDelegate, UITableViewDataSource {
         
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let userId = viewModel.records[indexPath.row].user_id
+        let currentUserId = UserService.shared.combineUser?.user_id
+        
+        // 현재 사용자와 선택된 사용자가 같지 않은 경우에만 프로필을 표시
+        if userId != currentUserId {
+            Task {
+                do {
+                    let user = try await self.viewModel.getUserData(userId: userId)
+                    await MainActor.run {
+                        let vc = UserProfileView(selectedUser: user)
+                        let navigationVC = UINavigationController(rootViewController: vc)
+                        self.present(navigationVC, animated: true)
+                    }
+                } catch {
+                    print("Error fetching user data: \(error)")
+                }
+            }
+        }
+    }
 }
 

@@ -28,6 +28,7 @@ class UserProfileView: RideThisViewController {
             }
         }
     }
+    private var followTitle = "Follow"
     
     // MARK: UIComponents
     // MARK: ScrollView
@@ -240,11 +241,21 @@ class UserProfileView: RideThisViewController {
     func setNavigationComponents() {
         if let user = selectedUser {
             self.title = "\(user.user_nickname)님 프로필"
+            if let currentUser = UserService.shared.combineUser {
+                if currentUser.user_following.contains(user.user_id) {
+                    followTitle = "UnFollow"
+                }
+            }
         }
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         self.sheetPresentationController?.prefersGrabberVisible = true
         let cancelButton = UIBarButtonItem(title: "취소", style: .done, target: self, action: #selector(dismissUserView))
-        self.navigationController?.navigationItem.leftBarButtonItem = cancelButton
+        let followButton = UIBarButtonItem(title: followTitle, style: .done, target: self, action: #selector(followUser))
+        navigationItem.leftBarButtonItem = cancelButton
+        if UserService.shared.combineUser != nil {
+            followButton.tintColor = followTitle == "Follow" ? .none : .systemRed
+            navigationItem.rightBarButtonItem = followButton
+        }
     }
     
     func setScrollView() {
@@ -514,6 +525,47 @@ class UserProfileView: RideThisViewController {
     
     @objc func dismissUserView() {
         self.dismiss(animated: true)
+    }
+    
+    @objc func followUser() {
+        guard let selectedUser = self.selectedUser else { return }
+        Task {
+            if case .user(let recentSelectedUser) = try await firebaseService.fetchUser(at: selectedUser.user_id, userType: true),
+               let recentSelectedUser = recentSelectedUser, let currentUser = UserService.shared.combineUser {
+                if followTitle == "Follow" {
+                    self.navigationItem.rightBarButtonItem?.title = "UnFollow"
+                    self.navigationItem.rightBarButtonItem?.tintColor = .systemRed
+                    followTitle = "UnFollow"
+                    recentSelectedUser.user_follower.append(currentUser.user_id)
+                    currentUser.user_following.append(recentSelectedUser.user_id)
+                    
+                    if recentSelectedUser.user_alarm_status {
+                        self.firebaseService.fetchFCM(signedUser: currentUser, cellUser: recentSelectedUser, alarmCase: .follow)
+                    }
+                    
+                    let currentFollower = Int(self.followerCountLabel.text!)! + 1
+                    DispatchQueue.main.async {
+                        self.followerCountLabel.text = "\(currentFollower)"
+                    }
+                } else {
+                    self.navigationItem.rightBarButtonItem?.title = "Follow"
+                    self.navigationItem.rightBarButtonItem?.tintColor = .none
+                    followTitle = "Follow"
+                    if let index = recentSelectedUser.user_follower.firstIndex(of: currentUser.user_id) {
+                        recentSelectedUser.user_follower.remove(at: index)
+                    }
+                    if let index = currentUser.user_following.firstIndex(of: recentSelectedUser.user_id) {
+                        currentUser.user_following.remove(at: index)
+                    }
+                    let currentFollower = Int(self.followerCountLabel.text!)! - 1
+                    DispatchQueue.main.async {
+                        self.followerCountLabel.text = "\(currentFollower)"
+                    }
+                }
+                firebaseService.updateUserInfo(updated: recentSelectedUser, update: false)
+                firebaseService.updateUserInfo(updated: currentUser, update: true)
+            }
+        }
     }
 }
 
