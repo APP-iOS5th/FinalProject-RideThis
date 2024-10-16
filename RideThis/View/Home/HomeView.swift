@@ -416,7 +416,7 @@ class HomeView: RideThisViewController {
         }
         
         appleweatherLinkButton.addAction(UIAction { [weak self] _ in
-            guard let self = self else { return }
+            guard self != nil else { return }
             if let url = URL(string: "https://weatherkit.apple.com/legal-attribution.html") {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
