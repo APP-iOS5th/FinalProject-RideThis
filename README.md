@@ -2,7 +2,7 @@
 
 ![image](https://github.com/user-attachments/assets/435fcaa2-dbb1-4777-b088-98d993306591)
 
-앱 스토어 URL:
+앱 스토어 URL: https://github.com/APP-iOS5th/FinalProject-RideThis/tree/main
 <br/>
 시연영상 URL:
 <br/>

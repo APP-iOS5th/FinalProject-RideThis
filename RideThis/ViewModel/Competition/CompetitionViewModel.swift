@@ -171,4 +171,12 @@ class CompetitionViewModel {
         
         return false
     }
+    
+    func getUserData(userId: String) async throws -> User? {
+        if case .user(let user) = try await firebaseService.fetchUser(at: userId, userType: true) {
+            return user
+        }
+        
+        return nil
+    }
 }
